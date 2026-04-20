@@ -58,7 +58,6 @@ Learn about everything in the Prisma ecosystem and community from January to Mar
 
 Our engineers have been working hard, issuing new [releases](https://github.com/prisma/prisma/releases/) with many improvements and new features. This quarter, we adjusted our release cadence to every three weeks. Here is an overview of the most exciting features we've launched in the last three months.
 
-
 You can stay up-to-date about all upcoming features on our [roadmap](https://pris.ly/roadmap).
 
 ### MongoDB is now Generally Available
@@ -90,6 +89,7 @@ type Photo {
   url    String
 }
 ```
+
 Given the schema above, you can now read and write to the embedded `photos` array:
 
 ```ts
@@ -103,8 +103,9 @@ const product = await prisma.product.create({
       { height: 300, width: 400, url: "2.png" },
     ],
   },
-})
+});
 ```
+
 #### Introspection of embedded documents
 
 In `3.4.0`, we added preview support for the introspection of embedded documents. Running `prisma db pull` against your MongoDB database will generate `type` definitions within your Prisma schema.
@@ -135,6 +136,7 @@ model User {
   @@fulltext([email, address.street])
 }
 ```
+
 #### Embedded document filters support
 
 In `3.11.0`, we added the ability to filter embedded documents.
@@ -165,6 +167,7 @@ type Address {
   zip    String
 }
 ```
+
 You can now add filters within an embedded document:
 
 ```ts
@@ -176,11 +179,12 @@ const orders = await prisma.order.findMany({
         street: "555 Candy Cane Lane",
         city: "Wonderland",
         zip: "52337",
-      },  
+      },
     },
   },
-})
+});
 ```
+
 You can also add a filter on a "contains many" relationship:
 
 ```ts
@@ -188,11 +192,12 @@ You can also add a filter on a "contains many" relationship:
 const product = prisma.product.findMany({
   where: {
     photos: {
-      isEmpty: true
-    }
+      isEmpty: true,
+    },
   },
-})
+});
 ```
+
 This is just the tip of the iceberg of what's possible. To learn more, refer to our [documentation](https://www.prisma.io/docs/concepts/components/prisma-client/composite-types) for a complete list of available operations.
 
 #### Ordering by embedded documents
@@ -209,8 +214,9 @@ const orders = await prisma.order.findMany({
       zip: "asc",
     },
   },
-})
+});
 ```
+
 #### Raw query support
 
 Raw queries in MongoDB help in writing queries Prisma doesn't support yet, such as:
@@ -220,26 +226,27 @@ Raw queries in MongoDB help in writing queries Prisma doesn't support yet, such 
 const result = await prisma.user.findRaw({
   filter: { age: { $gt: 25 } },
   options: { projection: { _id: false } },
-})
+});
 
 // To perform aggregation operations on a collection
 await prisma.user.aggregateRaw({
   pipeline: [
-    { $match: { status: 'registered' } },
-    { $group: { _id: '$country', total: { $sum: 1 } } },
+    { $match: { status: "registered" } },
+    { $group: { _id: "$country", total: { $sum: 1 } } },
   ],
-})
+});
 
 // To run a command against the database
 await prisma.$runCommandRaw({
-  aggregate: 'User',
+  aggregate: "User",
   pipeline: [
-    { $match: { name: 'Bob' } },
+    { $match: { name: "Bob" } },
     { $project: { email: true, _id: false } },
   ],
   explain: false,
-})
+});
 ```
+
 The raw query API for MongoDB differs from Prisma's `$queryRaw` SQL API to handle some low-level differences between databases to give you a better API and developer experience.
 
 #### Support for query logging
@@ -250,22 +257,23 @@ You can enable query logging in Prisma Client when working with MongoDB from ver
 const prisma = new PrismaClient({
   log: [
     {
-      emit: 'event',
-      level: 'query',
+      emit: "event",
+      level: "query",
     },
-  ]
-})
+  ],
+});
 
-prisma.$on('query', (e) => console.log(e.query))
+prisma.$on("query", (e) => console.log(e.query));
 ```
+
 Prisma Client logs queries in the same format as the `mongosh` console. You can use the queries from your logs directly into your shell.
 
 #### Filters no longer return `undefined` fields by default
 
 In [`3.11.1`](https://github.com/prisma/prisma/releases/tag/3.11.1), we've changed the data returned when filtering MongoDB documents on `undefined` fields. The new rule is that `undefined` fields are excluded by default unless explicitly filtered for. This allows you to query for `undefined` and `null` values separately.
 
-
 For example, given the following Prisma schema:
+
 ```prisma
 model Address {
     id     Int    @id @map("_id")
@@ -273,6 +281,7 @@ model Address {
     street String? // Note that street is optional
 }
 ```
+
 For MongoDB, optional fields can either be `null` or `undefined` (absent). The following documents are all valid for the schema above:
 
 ```ts
@@ -280,10 +289,12 @@ For MongoDB, optional fields can either be `null` or `undefined` (absent). The f
 { "_id": 2, "city": "Seattle", "street": null }
 { "_id": 3, "city": "Chicago" }
 ```
+
 Prior to `3.11.1`, if you queried for `where: { street: null }`, you'd get `_id: 2` and `_id: 3`. In `3.11.1`, you'll only get `_id: 2`. The ability to _also_ query for the missing fields has also been added. Refer to the new `isSet` below to learn more.
 
 There are a few exceptions to this new default:
-- A `having` filter on an aggregated field *will* return `undefined` fields. This is because aggregation on undefined fields yields `null`, not `undefined`, thus matching the filter.
+
+- A `having` filter on an aggregated field _will_ return `undefined` fields. This is because aggregation on undefined fields yields `null`, not `undefined`, thus matching the filter.
 - Filters on undefined to-many relations (e.g., the backing array of a many-to-many is `undefined`) will currently include those relations in the result set.
 
 #### New `isSet` filter operation
@@ -297,16 +308,14 @@ Using the example above, to include the `undefined` fields, you can use an `OR`:
 ```ts
 await prisma.address.findMany({
   where: {
-    OR: [
-      { street: { isSet: false } },
-      { street: null }
-    ]
-  }
-})
+    OR: [{ street: { isSet: false } }, { street: null }],
+  },
+});
 ```
+
 #### New `unset` operation
 
-From `3.11.1`, you can also remove a field with the `unset` operation. 
+From `3.11.1`, you can also remove a field with the `unset` operation.
 
 Using the example above, let's write a query to remove the street field:
 
@@ -321,11 +330,12 @@ await prisma.address.update({
       unset: true,
     },
   },
-})
+});
 ```
+
 #### New `updateMany` operation
 
-Prisma now supports updating embedded documents that match specific criteria. 
+Prisma now supports updating embedded documents that match specific criteria.
 
 For example, given the following schema:
 
@@ -342,6 +352,7 @@ type Photo {
   url    String
 }
 ```
+
 You would then update photo with a `url` of `1.png` to `2.png`:
 
 ```ts
@@ -353,16 +364,17 @@ const product = prisma.product.update({
     photos: {
       updateMany: {
         where: {
-          url: '1.png',
+          url: "1.png",
         },
         data: {
-          url: '2.png',
+          url: "2.png",
         },
       },
     },
   },
-})
+});
 ```
+
 #### New `deleteMany` operation
 
 Similar to `updateMany`, you can also remove embedded documents that match specific criteria.
@@ -383,8 +395,9 @@ const product = prisma.product.update({
       },
     },
   },
-})
+});
 ```
+
 #### Many-to-Many relations require a reference argument
 
 From `3.10.0`, Prisma now enforces all the arguments in a MongoDB many-to-many relation. A `@relation` attribute must define `fields` and `references` argument to both sides.
@@ -398,7 +411,7 @@ model Post {
 - categories   Category[] @relation(fields: [category_ids])
 + categories   Category[] @relation(fields: [category_ids], references: [id])
 }
-    
+
 model Category {
   id       String   @id @map("_id") @default(auto()) @db.ObjectId
   post_ids String[] @db.ObjectId
@@ -406,7 +419,9 @@ model Category {
 + posts    Post[]   @relation(fields: [post_ids], references: [id])
 }
 ```
+
 #### `@default(dbgenerated())` is now replaced with `@default(auto())`
+
 The original purpose of dbgenerated is to support SQL expressions Prisma doesn’t understand yet. However, MongoDB doesn’t have a concept of default value expressions like SQL does. We took this opportunity to simplify how we handle the default values in MongoDB:
 
 ```diff
@@ -415,6 +430,7 @@ model Post {
 +  id String @id @default(auto()) @map("_id") @db.ObjectId
 }
 ```
+
 #### `@db.Array(ObjectId)` is now updated to `@db.ObjectId`
 
 We've adjusted the Prisma schema format for scalar lists with native types (like lists of Object IDs). This will likely affect those with many-to-many relationships in MongoDB. We made this change to align MongoDB with our existing SQL databases better:
@@ -434,6 +450,7 @@ model Category {
   posts   Post[]   @relation(fields: [postIDs], references: [id])
 }
 ```
+
 ### Improved connection pooling resiliency
 
 In [`3.12.0`](https://github.com/prisma/prisma/releases/tag/3.12.0), we busted a ghost that has been bugging teams since the early days of the Prisma ORM. Under certain amounts of load, some people reported that the connection pool would sometimes drop connections or deadlock and not recover.
@@ -450,14 +467,14 @@ Please give it a spin and [let us know what you think](https://github.com/prisma
 
 ### Prisma Client logger revamp
 
-We rewrote our internal logger in `3.11.0` to reduce [lock contention](https://en.wikipedia.org/wiki/Lock_(computer_science)#:~:text=lock%20contention%3A%20this%20occurs%20whenever,lock%20held%20by%20the%20other.) and enable future features like tracing. This is the first of many upcoming changes to improve Prisma Client's throughput.
-
+We rewrote our internal logger in `3.11.0` to reduce [lock contention](<https://en.wikipedia.org/wiki/Lock_(computer_science)#:~:text=lock%20contention%3A%20this%20occurs%20whenever,lock%20held%20by%20the%20other.>) and enable future features like tracing. This is the first of many upcoming changes to improve Prisma Client's throughput.
 
 ### Prisma Migrate improvements
 
 #### Troubleshooting migrations
 
 We introduced 2 new CLI commands into Preview to improve the experience of troubleshooting migrations:
+
 - `prisma migrate diff`
 - `prisma db execute`
 
@@ -481,7 +498,9 @@ npx prisma migrate diff --preview-feature \
 --from-[...] \
 --to-[...]
 ```
+
 These are the default and changed behaviour of the error codes:
+
 ```shell
 ## Default behavior of exit codes
 0: Returned when the diff is empty or non-empty
@@ -492,6 +511,7 @@ These are the default and changed behaviour of the error codes:
 1: Returned on error
 2: Returned when the diff is non-empty
 ```
+
 ### Full-text search for MySQL is now in Preview
 
 In `3.8.0` we added Preview support for full-text search in MySQL. You can enable full-text support by adding the `fullTextIndex` and `fullTextSearch` Preview flags in your Prisma schema and defining `@@fulltext()` indexes on fields you'd like to use full-text search on.
@@ -513,6 +533,7 @@ model Post {
   @@fulltext([title])
 }
 ```
+
 Running `prisma db push` or `prisma migrate dev` will update your database schema, then running `prisma generate` will re-generate your Prisma Client, enabling you to use full-text search in your application.
 
 ```ts
@@ -523,11 +544,13 @@ await prisma.post.findMany({
       search: "+cat -fox",
     },
   },
-})
+});
 ```
+
 ### `dataProxy` and `interactiveTransactions` Preview features are now mutually exclusive
 
 Before `3.8.0`, Prisma `$transaction` queries would fail whenever the Data Proxy and Interactive Transactions Preview features were used together. The `interactiveTransactions` and `dataProxy` Preview flags cannot be used together in this release. Generating the Prisma Client when both Preview features are enabled will throw an error.
+
 ### Interactive transactions concurrency
 
 We fixed a [number of issues](https://github.com/prisma/prisma/issues/8707) in version `3.9.0` around timeouts and rollbacks when there were concurrent reads and writes.
@@ -545,71 +568,70 @@ We wouldn't be where we are today without our amazing [community](https://www.pr
 
 <MeetupList>
 
- <Meetup
-    title="Prisma Meetup Online #9: Remix edition"
-    meetupLink="https://www.meetup.com/Berlin-Prisma-Meetup/events/283400662/"
-    youtubeLink="https://youtu.be/D5XIMOzm3YE"
-    talks={[
-      {
-        title: 'Up and Running with Remix and the Prisma Data Proxy',
-        author: 'Austin Crim',
-      },
-      {
-        title: 'Update While you Wait: Optimistic UI with Remix and Prisma',
-        author: 'Chance Strickland',
-      },
-      {
-        title: 'Wrecking Remix Resource Routes',
-        author: 'Alex Anderson',
-      }
-    ]}
-    imagePath="/blog/posts/meetup-prisma.png"
-  />
+<Meetup
+  title="Prisma Meetup Online #9: Remix edition"
+  meetupLink="https://www.meetup.com/Berlin-Prisma-Meetup/events/283400662/"
+  youtubeLink="https://youtu.be/D5XIMOzm3YE"
+  talks={[
+    {
+      title: "Up and Running with Remix and the Prisma Data Proxy",
+      author: "Austin Crim",
+    },
+    {
+      title: "Update While you Wait: Optimistic UI with Remix and Prisma",
+      author: "Chance Strickland",
+    },
+    {
+      title: "Wrecking Remix Resource Routes",
+      author: "Alex Anderson",
+    },
+  ]}
+  imagePath="/blog/posts/meetup-prisma.png"
+/>
 
-  <Meetup
-    title="Serverless Berlin Meetup – an online edition"
-    meetupLink="https://www.meetup.com/Serverless-Berlin/events/283616972/"
-    youtubeLink="https://youtu.be/jE4fk-rSGPw"
-    talks={[
-      {
-        title: 'Lessons from running AppSync in production',
-        author: 'Yan Cui',
-      },
-      {
-        title: 'Designing Testable Serverless Applications',
-        author: 'Aleksandar Simović',
-      },
-        {
-        title: 'Lambda Powertools',
-        author: 'Heitor Lessa',
-      },
-    ]}
-    imagePath="/blog/posts/meetup-prisma.png"
-  />
+<Meetup
+  title="Serverless Berlin Meetup – an online edition"
+  meetupLink="https://www.meetup.com/Serverless-Berlin/events/283616972/"
+  youtubeLink="https://youtu.be/jE4fk-rSGPw"
+  talks={[
+    {
+      title: "Lessons from running AppSync in production",
+      author: "Yan Cui",
+    },
+    {
+      title: "Designing Testable Serverless Applications",
+      author: "Aleksandar Simović",
+    },
+    {
+      title: "Lambda Powertools",
+      author: "Heitor Lessa",
+    },
+  ]}
+  imagePath="/blog/posts/meetup-prisma.png"
+/>
 
-  <Meetup
-    title="GraphQL Berlin Meetup #25"
-    meetupLink="https://www.meetup.com/graphql-berlin/events/283094727/"
-    youtubeLink="https://youtu.be/srkTmlFNOyw"
-    talks={[
-      {
-        title: 'GraphQL caching demystified',
-        author: 'Matteo Collina',
-      },
-      {
-        title: 'Diving into the new Nexus Prisma',
-        author: 'Jason Kuhrt',
-      },
-        {
-        title: 'Federating the Content Layer with GraphCMS',
-        author: 'Jamie Barton',
-      },
-    ]}
-    imagePath="/blog/posts/meetup-graphql.png"
-  />
+<Meetup
+  title="GraphQL Berlin Meetup #25"
+  meetupLink="https://www.meetup.com/graphql-berlin/events/283094727/"
+  youtubeLink="https://youtu.be/srkTmlFNOyw"
+  talks={[
+    {
+      title: "GraphQL caching demystified",
+      author: "Matteo Collina",
+    },
+    {
+      title: "Diving into the new Nexus Prisma",
+      author: "Jason Kuhrt",
+    },
+    {
+      title: "Federating the Content Layer with GraphCMS",
+      author: "Jamie Barton",
+    },
+  ]}
+  imagePath="/blog/posts/meetup-graphql.png"
+/>
 
 </MeetupList>
-
 
 ## Videos, livestreams & more
 
@@ -641,7 +663,6 @@ We also published several videos showcasing how to work with Prisma and Planetsc
 
 <Youtube videoId="hPa2UaLV5jU" />
 
-
 Be sure to subscribe to our YouTube channel to not miss any videos in the future:
 
 <br />
@@ -666,7 +687,6 @@ During this quarter, we published several technical articles on the [Data Guide]
 - [Profiling and optimizing slow queries in MySQL](https://www.prisma.io/dataguide/mysql/reading-and-querying-data/optimizing-slow-queries)
 - [How to create and delete users in PostgreSQL](https://www.prisma.io/dataguide/postgresql/short-guides/creating-deleting-users)
 - [The United States' Most Popular Databases by state going into 2022](https://www.prisma.io/dataguide/just-for-fun/us-most-popular-databases-by-states)
-
 
 We also published several useful articles on our blog:
 
@@ -695,15 +715,18 @@ Also, **we're hiring** for various roles! If you're interested in joining us, ch
 [Explore Jobs](https://www.prisma.io/careers)
 
 ---
+
 ## Stickers
 
 We love seeing laptops decorated with Prisma stickers, so we're shipping them for free to our community members! In this quarter, **we've sent out over 500(!) sticker packs** to developers that are excited about Prisma!
 
 <br />
-[Order Stickers](https://gist.github.com/nikolasburk/5b64014d41bc21594808cea82621df83)
+[Order
+Stickers](https://gist.github.com/nikolasburk/5b64014d41bc21594808cea82621df83)
 
 ---
-## What's next? 
+
+## What's next?
 
 [Prisma Day](https://www.prisma.io/day) is back this year, and it'll be on June 15 - 16 at the James&June Sommergarten in Berlin. Join us in-person or online for talks and workshops on modern application development and databases. If you'd like to share your project or give a talk, feel free to [submit a CFP](https://prisma-data.typeform.com/to/Gm9zMrKA).
 
@@ -712,4 +735,3 @@ The best places to stay up-to-date about what we're currently working on are [Gi
 You can also engage in conversations in our [Slack channel](https://slack.prisma.io), and start a discussion on [GitHub](https://github.com/prisma/prisma/discussions) or join one of the many [Prisma meetups](https://www.prisma.io/community) around the world.
 
 If you never want to miss any news from the Prisma community, [follow us on X/Twitter](https://pris.ly/x).
-

@@ -1,9 +1,9 @@
 ---
 title: Working with Json fields
-description: 'How to read, write, and filter by Json fields'
+description: "How to read, write, and filter by Json fields"
 url: /orm/prisma-client/special-fields-and-types/working-with-json-fields
 metaTitle: Working with Json fields (Concepts)
-metaDescription: 'How to read, write, and filter by Json fields.'
+metaDescription: "How to read, write, and filter by Json fields."
 ---
 
 Use the [`Json`](/orm/reference/prisma-schema-reference#json) Prisma ORM field type to read, write, and perform basic filtering on JSON types in the underlying database. In the following example, the `User` model has an optional `Json` field named `extendedPetsData`:
@@ -36,7 +36,13 @@ Example field value:
 The `Json` field supports a few additional types, such as `string` and `boolean`. These additional types exist to match the types supported by [`JSON.parse()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse):
 
 ```ts
-export type JsonValue = string | number | boolean | null | JsonObject | JsonArray;
+export type JsonValue =
+  | string
+  | number
+  | boolean
+  | null
+  | JsonObject
+  | JsonArray;
 ```
 
 ## Use cases for JSON fields
@@ -80,7 +86,10 @@ See also: [Advanced example: Update a nested JSON key value](#advanced-example-u
 The following example writes a JSON object to the `extendedPetsData` field:
 
 ```ts
-var json = [{ name: "Bob the dog" }, { name: "Claudine the cat" }] as Prisma.JsonArray;
+var json = [
+  { name: "Bob the dog" },
+  { name: "Claudine the cat" },
+] as Prisma.JsonArray;
 
 const createUser = await prisma.user.create({
   data: {
@@ -481,6 +490,7 @@ const checkJson = await prisma.user.findMany({
 
   ```json5
   [{ status: "expired", insuranceID: 92 }]
+
   // PostgreSQL
   ```
 
@@ -488,6 +498,7 @@ const checkJson = await prisma.user.findMany({
 
   ```json5
   { status: "expired", insuranceID: 92 }
+
   // MySQL
   ```
 
@@ -702,7 +713,11 @@ getUsers.forEach((user) => {
 
     if (Array.isArray(insuranceList)) {
       insuranceList.forEach((insuranceItem) => {
-        if (insuranceItem && typeof insuranceItem === "object" && !Array.isArray(insuranceItem)) {
+        if (
+          insuranceItem &&
+          typeof insuranceItem === "object" &&
+          !Array.isArray(insuranceItem)
+        ) {
           insuranceItem["status"] = "expired"; // is a  Prisma.JsonObject
         }
       });

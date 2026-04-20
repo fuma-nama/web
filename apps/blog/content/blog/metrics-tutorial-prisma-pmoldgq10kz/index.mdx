@@ -15,8 +15,8 @@ tags:
 ---
 
 Prisma's [metrics feature](https://www.prisma.io/docs/concepts/components/prisma-client/metrics) gives you detailed
- insights into how Prisma interacts with your database. In this tutorial, you will learn how to use metrics to monitor
- your database using Prisma, Prometheus and Grafana.
+insights into how Prisma interacts with your database. In this tutorial, you will learn how to use metrics to monitor
+your database using Prisma, Prometheus and Grafana.
 
 ## Table Of Contents
 
@@ -104,8 +104,6 @@ To follow along with this tutorial, you will be expected to:
 - ... _optionally_ have the [Prisma VS Code Extension](https://marketplace.visualstudio.com/items?itemName=Prisma.prisma) installed. The Prisma VS Code extension adds some really nice IntelliSense and syntax highlighting for Prisma.
 - ... _optionally_ have access to a Unix shell (like the terminal/shell in Linux and macOS) to run the commands provided in this series.
 
-
-
 If you don't have a Unix shell (for example, you are on a Windows machine), you can still follow along, but the shell commands may need to be modified for your machine.
 
 ## Clone the repository
@@ -115,31 +113,47 @@ You will be using an existing [Express](https://expressjs.com/) web application 
 To get started, perform the following actions:
 
 1. Clone the [repository](https://github.com/prisma/metrics-tutorial-prisma/tree/metrics-begin):
-  ```shell   git clone -b metrics-begin git@github.com:prisma/metrics-tutorial-prisma.git
-  ```
-2. Navigate to the cloned directory:
-  ```shell   cd metrics-tutorial-prisma
-  ```
-3. Install dependencies:
-  ```shell   npm install
-  ```
-4. Start the PostgreSQL database on port 5432 with Docker:
-  ```shell   docker-compose up
-  ```
-  > **Note**: If you close the terminal window running the Docker container, it will also stop the container. You can avoid this if you add a `-d` option to the end of the command, like this: `docker-compose up -d`.
-5. Apply database migrations from the `prisma/migrations` directory:
 
-  ```shell   npx prisma migrate dev
-  ```
-  > **Note**: This command will also generate Prisma Client and seed the database.
-6. Start the server:
-  ```shell   npm run dev
-  ```
-  > **Note**: You should keep the server running as you develop the application. The `dev` script should restart the server any time there is a change in the code.
+```shell git clone -b metrics-begin git@github.com:prisma/metrics-tutorial-prisma.git
+
+```
+
+2. Navigate to the cloned directory:
+
+```shell cd metrics-tutorial-prisma
+
+```
+
+3. Install dependencies:
+
+```shell npm install
+
+```
+
+4. Start the PostgreSQL database on port 5432 with Docker:
+
+```shell docker-compose up
+
+```
+
+> **Note**: If you close the terminal window running the Docker container, it will also stop the container. You can avoid this if you add a `-d` option to the end of the command, like this: `docker-compose up -d`. 5. Apply database migrations from the `prisma/migrations` directory:
+
+```shell npx prisma migrate dev
+
+```
+
+> **Note**: This command will also generate Prisma Client and seed the database. 6. Start the server:
+
+```shell npm run dev
+
+```
+
+> **Note**: You should keep the server running as you develop the application. The `dev` script should restart the server any time there is a change in the code.
 
 ### Project structure and files
 
 The repository you cloned has the following structure:
+
 ```
 metrics-tutorial-prisma
   ├── README.md
@@ -158,6 +172,7 @@ metrics-tutorial-prisma
   ├── loadtest.js
   └── tsconfig.json
 ```
+
 The repository contains the code for a REST API. It contains a `/articles` endpoint where you can run various CRUD (Create, Read, Update & Delete) operations. There is also an `/articles/audit` endpoint which can be queried to get logs of changes that have been made to various articles.
 
 The notable files and directories in this repository are:
@@ -221,11 +236,13 @@ enum Actions {
   Delete
 }
 ```
+
 Now, regenerate Prisma Client:
 
 ```shell
 npx prisma generate
 ```
+
 With the metrics feature enabled, Prisma will allow you to retrieve metrics about your database operations using the `prisma.$metrics` API. You can expose metrics in [JSON format](https://www.prisma.io/docs/concepts/components/prisma-client/metrics#retrieve-metrics-in-json-format) or [Prometheus format](https://www.prisma.io/docs/concepts/components/prisma-client/metrics#retrieve-metrics-in-prometheus-format).
 
 ### Expose metrics from your web server
@@ -253,6 +270,7 @@ app.use((error, request, response, next) => {
 
 // ...
 ```
+
 Make sure the server is running and then go to [`http://localhost:4000/metrics`](http://localhost:4000/metrics) to see the generated metrics.
 
 > **Note**: You can start the server by running `npm run dev`.
@@ -273,21 +291,23 @@ First, create a new folder called `prometheus` at the root of your project. Then
 mkdir prometheus
 touch prometheus/prometheus.yml
 ```
+
 Update the file with the configuration for Prometheus:
 
 ```yaml
 # prometheus/prometheus.yml
 
 scrape_configs:
-  - job_name: 'prometheus'
+  - job_name: "prometheus"
     scrape_interval: 1s
 
     static_configs:
-      - targets: ['host.docker.internal:4000']
+      - targets: ["host.docker.internal:4000"]
         labels:
-          service: 'prisma-metrics'
-          group: 'production'
+          service: "prisma-metrics"
+          group: "production"
 ```
+
 Some of the important options to keep in mind are:
 
 - `job_name` is metadata used to identify metrics from a specific configuration.
@@ -295,17 +315,14 @@ Some of the important options to keep in mind are:
 - `targets` contain a list of endpoints to scrape. Prometheus, by default, will scrape the `/metrics` endpoint. So it does not have to be explicitly mentioned.
   > **Note**: `host.docker.internal` is a special DNS name that resolves to the internal IP address of the host machine running Docker. As Prometheus is running inside Docker, this special DNS name is used so that it can resolve `http://localhost` of the host machine (your computer).
 
-
 ### Start a Prometheus instance
 
 Now that the configuration file is ready, you need to run Prometheus. You will set up Prometheus inside a Docker container by extending your `docker-compose.yml` file. Add the `prometheus` image to the `docker-compose.yml` file by replacing the current file contents with the following:
 
-
-
 ```yaml
 # docker-compose.yml
 
-version: '3.8'
+version: "3.8"
 services:
   postgres:
     image: postgres:13.5
@@ -315,15 +332,15 @@ services:
     volumes:
       - postgres:/var/lib/postgresql/data
     ports:
-      - '5432:5432'
+      - "5432:5432"
   prometheus:
     image: prom/prometheus
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
       - prometheus-storage:/prometheus
     command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--storage.tsdb.path=/prometheus'
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
     ports:
       - 9090:9090
     extra_hosts:
@@ -331,8 +348,8 @@ services:
 volumes:
   postgres:
   prometheus-storage:
-
 ```
+
 The new `prometheus` image is set up to use the `prometheus/prometheus.yml` configuration file you created earlier. It will also expose port 9090 to the host machine, which you can use to access the Prometheus user interface (UI). The image will use a [volume](https://docs.docker.com/storage/volumes/) called `prometheus-storage` to store data for Prometheus.
 
 > **Note**: The `extra_hosts` option is needed to resolve `host.docker.internal` on Linux machines. If you are on Linux, make sure you're using Docker version 20.10.0 or higher. You can check this [Github comment](https://github.com/docker/for-linux/issues/264#issuecomment-965465879) for more information.
@@ -342,6 +359,7 @@ Now you need to restart the containers you are running in Docker Compose. You ca
 ```shell
 docker-compose up --force-recreate
 ```
+
 If the command is successful, you should be able to see the Prometheus UI in [`http://localhost:9090`](http://localhost:9090).
 
 ![Prometheus UI](/metrics-tutorial-prisma-pmoldgq10kz/imgs/prometheus-ui.png)
@@ -354,8 +372,6 @@ In the **Expression** input field, you can enter a [PromQL (Prometheus Query Lan
 
 ![Query execution result in Prometheus UI expression browser](/metrics-tutorial-prisma-pmoldgq10kz/imgs/prom-ui-execute-query-table.png)
 
-
-
 The interface you are seeing is called the _expression browser_. It allows you to see the result of any PromQL expression in a table or graph format.
 
 Currently, the number of queries is 0 or empty because you have not yet made any API requests. Instead of manually making lots of requests to generate metrics data, you will use the load testing tool [k6](https://k6.io/). A load testing script called `loadtest.js` is already provided in the project. You can run this script by executing the following command:
@@ -363,6 +379,7 @@ Currently, the number of queries is 0 or empty because you have not yet made any
 ```shell
 npm run loadtest
 ```
+
 This command will first pull the [k6 Docker image](https://hub.docker.com/r/loadimpact/k6) and then start making many requests to your Express API. After k6 has begun making requests, you can go back to the Prometheus UI and execute the previous query again. You should now see the number of queries increase rapidly.
 
 The Prometheus UI also provides a way to see metrics in a time series graph. You can do this by clicking on the **Graph** tab. In the **Expression** input field, enter the same query as before and click the **Execute** button. You should see a graph showing the number of Prisma Client queries executed over time.
@@ -387,13 +404,12 @@ Once fully configured, your application will look like this:
 
 ### Start a Grafana instance
 
-
 To start a Grafana instance, you need to add a new `grafana` image to your Docker Compose file. Replace the current contents of `docker-compose.yml` with the following configuration:
 
 ```yaml
 # docker-compose.yml
 
-version: '3.8'
+version: "3.8"
 services:
   postgres:
     image: postgres:13.5
@@ -403,15 +419,15 @@ services:
     volumes:
       - postgres:/var/lib/postgresql/data
     ports:
-      - '5432:5432'
+      - "5432:5432"
   prometheus:
     image: prom/prometheus
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
       - prometheus-storage:/prometheus
     command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--storage.tsdb.path=/prometheus'
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
     ports:
       - 9090:9090
     extra_hosts:
@@ -426,8 +442,8 @@ volumes:
   postgres:
   prometheus-storage:
   grafana-storage:
-
 ```
+
 The `grafana` image is configured to use a volume called `grafana-storage` to store data. This volume will be used to persist Grafana's data across restarts. The `grafana` image is also configured to expose port `3000` to the host machine, which you can use to access the Grafana UI.
 
 Restart the containers again by running the following command:
@@ -435,6 +451,7 @@ Restart the containers again by running the following command:
 ```shell
 docker-compose up --force-recreate
 ```
+
 If you go to [`http://localhost:3000`](http://localhost:3000) you will be greeted with the Grafana login screen. The default username and password are both `admin`, which you can use to login. You can skip creating a new password.
 
 You should now see the Grafana landing page.
@@ -473,11 +490,9 @@ To create your first dashboard, do the following:
 6. Press **Save** at the top, and you will be asked to name the dashboard.
 7. Change the **Dashboard name** to "Prisma Metrics Dashboard" and press **Save**.
 
-
 `prisma_client_queries_total` represents the total number of Prisma Client queries executed. `prisma_datasource_queries_total` represents the total number of database queries executed at the datasource level. The two metrics are visualized in the same graph, which allows you to compare the two.
 
 ![Creating a dashboard in Grafana](/metrics-tutorial-prisma-pmoldgq10kz/imgs/dashboard-grafana.gif)
-
 
 Congratulations! You just created a dashboard that visualizes the number of queries made by Prisma Client and the Prisma Datasource. Your dashboard should now be accessible inside Grafana.
 
@@ -514,4 +529,3 @@ For further reading, you can check out the following resources:
 We would love to get your thoughts on the metrics feature! Please give us feedback about metrics on this [Github issue](https://github.com/prisma/prisma/issues/13579).
 
 You can find the source code for this project on [GitHub](https://github.com/prisma/metrics-tutorial-prisma). Please feel free to raise an issue in the repository or submit a PR if you notice a problem. You can also reach out to me directly on [Twitter](https://twitter.com/tasinishmam).
-

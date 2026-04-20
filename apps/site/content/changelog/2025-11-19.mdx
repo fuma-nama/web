@@ -53,7 +53,7 @@ Update your code to import PrismaClient from this generated output:
 
 ```typescript
 // Import from the generated prisma client
-import { PrismaClient } from './generated/prisma/client';
+import { PrismaClient } from "./generated/prisma/client";
 ```
 
 For developers who still need to stay on `prisma-client-js` but are using the new output option, there’s a new required package, `@prisma/client-runtime-utils`, which needs to be installed:
@@ -82,10 +82,10 @@ As part of the move to a Rust-free Prisma Client, we moved away from embedding t
 
 ```typescript
 // Import from the generated prisma client
-import { PrismaClient } from './generated/prisma/client';
+import { PrismaClient } from "./generated/prisma/client";
 
 // Driver Adapter for Postgres
-import { PrismaPg } from '@prisma/adapter-pg';
+import { PrismaPg } from "@prisma/adapter-pg";
 
 const adapter = new PrismaPg({
   connectionString: process.env.DATABASE_URL!,
@@ -98,17 +98,17 @@ For other databases:
 
 ```typescript
 // If using SQLite
-import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3';
+import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
 const adapter = new PrismaBetterSqlite3({
-  url: process.env.DATABASE_URL || 'file:./dev.db'
-})
+  url: process.env.DATABASE_URL || "file:./dev.db",
+});
 
 // If using MySql
-import { PrismaMariaDb } from '@prisma/adapter-mariadb';
+import { PrismaMariaDb } from "@prisma/adapter-mariadb";
 const adapter = new PrismaMariaDb({
   host: "localhost",
   port: 3306,
-  connectionLimit: 5
+  connectionLimit: 5,
 });
 ```
 
@@ -158,10 +158,10 @@ datasource db {
 // ./prisma.config.ts
 export default defineConfig({
   datasource: {
-    url: '..',
-    shadowDatabaseUrl: '..',
-  }
-})
+    url: "..",
+    shadowDatabaseUrl: "..",
+  },
+});
 ```
 
 **Explicit loading of environment variables**
@@ -184,12 +184,12 @@ In previous releases, users could configure their schema entry point and seed sc
 ```
 
 ```typescript
-import 'dotenv/config'
+import "dotenv/config";
 import { defineConfig, env } from "prisma/config";
 export default defineConfig({
   schema: "prisma/schema.prisma",
   migrations: {
-      seed: "tsx prisma/seed.ts"
+    seed: "tsx prisma/seed.ts",
   },
   datasource: {
     url: env("DATABASE_URL"),
@@ -226,10 +226,10 @@ enum PaymentProvider {
 
 ```typescript
 export const PaymentProvider: {
-  MixplatSMS: 'mixplat/sms'
-  InternalToken: 'internal/token'
-  Offline: 'offline'
-}
+  MixplatSMS: "mixplat/sms";
+  InternalToken: "internal/token";
+  Offline: "offline";
+};
 ```
 
 **Miscellaneous**
@@ -265,12 +265,12 @@ export const PaymentProvider: {
 We’ve changed how to configure Prisma ORM to use Prisma Accelerate. In conjunction with some more Prisma Postgres updates (more on that later), you now use the new `accelerateUrl` option when instantiating the Prisma Client.
 
 ```typescript
-import { PrismaClient } from "./generated/prisma/client"
-import { withAccelerate } from "@prisma/extension-accelerate"
+import { PrismaClient } from "./generated/prisma/client";
+import { withAccelerate } from "@prisma/extension-accelerate";
 
 const prisma = new PrismaClient({
   accelerateUrl: process.env.DATABASE_URL,
-}).$extends(withAccelerate())
+}).$extends(withAccelerate());
 ```
 
 ## New Prisma Studio comes to the CLI

@@ -1,9 +1,9 @@
 ---
 title: Relation queries
-description: 'Prisma Client provides convenient queries for working with relations, such as a fluent API, nested writes (transactions), nested reads and relation filters.'
+description: "Prisma Client provides convenient queries for working with relations, such as a fluent API, nested writes (transactions), nested reads and relation filters."
 url: /v6/orm/prisma-client/queries/relation-queries
 metaTitle: Relation queries (Concepts)
-metaDescription: 'Prisma Client provides convenient queries for working with relations, such as a fluent API, nested writes (transactions), nested reads and relation filters.'
+metaDescription: "Prisma Client provides convenient queries for working with relations, such as a fluent API, nested writes (transactions), nested reads and relation filters."
 ---
 
 A key feature of Prisma Client is the ability to query [relations](/v6/orm/prisma-schema/data-model/relations) between two or more models. Relation queries include:
@@ -408,7 +408,10 @@ const result = await prisma.user.create({
     name: "Elsa Prisma",
     posts: {
       // [!code highlight]
-      create: [{ title: "How to make an omelette" }, { title: "How to eat an omelette" }], // [!code highlight]
+      create: [
+        { title: "How to make an omelette" },
+        { title: "How to eat an omelette" },
+      ], // [!code highlight]
     }, // [!code highlight]
   },
   include: {
@@ -459,10 +462,10 @@ In most cases, a nested `create` will be preferable unless the [`skipDuplicates`
 
 | Feature                               | `create` | `createMany` | Notes                                                                                                                                                                                           |
 | :------------------------------------ | :------- | :----------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Supports nesting additional relations | ✔        | ✘ \*         | For example, you can create a user, several posts, and several comments per post in one query.<br />\* You can manually set a foreign key in a has-one relation - for example: `{ authorId: 9}` |
-| Supports 1-n relations                | ✔        | ✔            | For example, you can create a user and multiple posts (one user has many posts)                                                                                                                 |
-| Supports m-n relations                | ✔        | ✘            | For example, you can create a post and several categories (one post can have many categories, and one category can have many posts)                                                             |
-| Supports skipping duplicate records   | ✘        | ✔            | Use `skipDuplicates` query option.                                                                                                                                                              |
+| Supports nesting additional relations | ✔       | ✘ \*         | For example, you can create a user, several posts, and several comments per post in one query.<br />\* You can manually set a foreign key in a has-one relation - for example: `{ authorId: 9}` |
+| Supports 1-n relations                | ✔       | ✔           | For example, you can create a user and multiple posts (one user has many posts)                                                                                                                 |
+| Supports m-n relations                | ✔       | ✘            | For example, you can create a post and several categories (one post can have many categories, and one category can have many posts)                                                             |
+| Supports skipping duplicate records   | ✘        | ✔           | Use `skipDuplicates` query option.                                                                                                                                                              |
 
 #### Using nested `create`
 
@@ -635,7 +638,8 @@ const posts = await prisma.post.createManyAndReturn({
     },
     {
       title: "Linux or macOS — what's better?",
-      categoryId: categories.find((category) => category.name === "Technology")!.id,
+      categoryId: categories.find((category) => category.name === "Technology")!
+        .id,
     },
     {
       title: "Who will win the next soccer championship?",

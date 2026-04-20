@@ -169,8 +169,17 @@ export default function CommunityPage() {
                   </p>
                 </div>
               </div>
-              <Button asChild variant="orm" size="lg" className="shrink-0 w-fit">
-                <a href="https://pris.ly/discord" target="_blank" rel="noopener noreferrer">
+              <Button
+                asChild
+                variant="orm"
+                size="lg"
+                className="shrink-0 w-fit"
+              >
+                <a
+                  href="https://pris.ly/discord"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   Join Discord
                   <i className="fa-regular fa-arrow-up-right" aria-hidden />
                 </a>
@@ -378,7 +387,11 @@ export default function CommunityPage() {
             </div>
             <div className="flex flex-col md:flex-row gap-6">
               <Button asChild variant="orm" size="2xl">
-                <a href="https://pris.ly/discord" target="_blank" rel="noopener noreferrer">
+                <a
+                  href="https://pris.ly/discord"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   Join Discord
                   <i className="fa-brands fa-discord" aria-hidden />
                 </a>

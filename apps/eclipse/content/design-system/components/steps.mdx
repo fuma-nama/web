@@ -17,15 +17,9 @@ import { Steps, Step } from "@prisma/eclipse";
 export function GettingStarted() {
   return (
     <Steps>
-      <Step>
-        ### Install dependencies
-      </Step>
-      <Step>
-        ### Configure environment
-      </Step>
-      <Step>
-        ### Start the server
-      </Step>
+      <Step>### Install dependencies</Step>
+      <Step>### Configure environment</Step>
+      <Step>### Start the server</Step>
     </Steps>
   );
 }
@@ -34,15 +28,9 @@ export function GettingStarted() {
 ### Live example
 
 <Steps>
-  <Step>
-    #### Install dependencies
-  </Step>
-  <Step>
-    #### Configure environment
-  </Step>
-  <Step active>
-    #### Start the server
-  </Step>
+  <Step>#### Install dependencies</Step>
+  <Step>#### Configure environment</Step>
+  <Step active>#### Start the server</Step>
 </Steps>
 
 ### With Code Blocks
@@ -51,28 +39,16 @@ Steps can contain code blocks and other rich content:
 
 <Steps>
   <Step>
-    #### Create a new project
-    
-    Initialize a new Next.js project with TypeScript:
-    
-    ```bash
-    npx create-next-app@latest my-app --typescript
-    ```
+    #### Create a new project Initialize a new Next.js project with TypeScript:
+    ```bash npx create-next-app@latest my-app --typescript ```
   </Step>
   <Step>
-    #### Install Prisma
-    
-    Add Prisma to your project:
-    
-    ```bash
-    npm install prisma --save-dev
-    npx prisma init
-    ```
+    #### Install Prisma Add Prisma to your project: ```bash npm install prisma
+    --save-dev npx prisma init ```
   </Step>
   <Step>
-    #### Configure database
-    
-    Update your `schema.prisma` file with your database configuration.
+    #### Configure database Update your `schema.prisma` file with your database
+    configuration.
   </Step>
 </Steps>
 
@@ -82,30 +58,21 @@ Perfect for onboarding flows and tutorials:
 
 <Steps>
   <Step>
-    #### Welcome to Prisma
-    
-    Prisma is a next-generation ORM that makes database access easy and type-safe.
+    #### Welcome to Prisma Prisma is a next-generation ORM that makes database
+    access easy and type-safe.
   </Step>
   <Step>
-    #### Connect your database
-    
-    Configure your database connection in the `.env` file.
+    #### Connect your database Configure your database connection in the `.env`
+    file.
   </Step>
   <Step>
-    #### Define your schema
-    
-    Create your data models in `schema.prisma`.
+    #### Define your schema Create your data models in `schema.prisma`.
   </Step>
   <Step>
-    #### Generate Prisma Client
-    
-    Run `npx prisma generate` to create your type-safe database client.
+    #### Generate Prisma Client Run `npx prisma generate` to create your
+    type-safe database client.
   </Step>
-  <Step>
-    #### Start building
-    
-    You're ready to start building with Prisma!
-  </Step>
+  <Step>#### Start building You're ready to start building with Prisma!</Step>
 </Steps>
 
 ### With Checked Steps
@@ -119,20 +86,14 @@ export function CompletedSteps() {
   return (
     <Steps>
       <Step checked active>
-        #### Create account
-        Account created successfully.
+        #### Create account Account created successfully.
       </Step>
-      <Step active>
-        #### Verify email
-        Email verified.
-      </Step>
+      <Step active>#### Verify email Email verified.</Step>
       <Step checked active>
-        #### Complete profile
-        Currently filling out profile information.
+        #### Complete profile Currently filling out profile information.
       </Step>
       <Step>
-        #### Start using the app
-        Ready to begin after profile completion.
+        #### Start using the app Ready to begin after profile completion.
       </Step>
     </Steps>
   );
@@ -145,21 +106,13 @@ export function CompletedSteps() {
 
 <Steps>
   <Step checked active>
-    #### Create account
-    Account created successfully.
+    #### Create account Account created successfully.
   </Step>
-  <Step active>
-    #### Verify email
-    Email verified.
-  </Step>
+  <Step active>#### Verify email Email verified.</Step>
   <Step checked active>
-    #### Complete profile
-    Currently filling out profile information.
+    #### Complete profile Currently filling out profile information.
   </Step>
-  <Step>
-    #### Start using the app
-    Ready to begin after profile completion.
-  </Step>
+  <Step>#### Start using the app Ready to begin after profile completion.</Step>
 </Steps>
 
 ### With Active Steps
@@ -173,21 +126,13 @@ export function ProgressIndicator() {
   return (
     <Steps>
       <Step active>
-        #### Create account
-        Your account has been created successfully.
+        #### Create account Your account has been created successfully.
       </Step>
-      <Step active>
-        #### Verify email
-        Email verification in progress...
-      </Step>
+      <Step active>#### Verify email Email verification in progress...</Step>
       <Step>
-        #### Complete profile
-        Add your personal information (upcoming).
+        #### Complete profile Add your personal information (upcoming).
       </Step>
-      <Step>
-        #### Start using the app
-        Begin exploring features (upcoming).
-      </Step>
+      <Step>#### Start using the app Begin exploring features (upcoming).</Step>
     </Steps>
   );
 }
@@ -199,24 +144,16 @@ export function ProgressIndicator() {
 
 <Steps>
   <Step active>
-    #### Create account
-    
-    Sign up for a new account with your email.
+    #### Create account Sign up for a new account with your email.
   </Step>
   <Step active>
-    #### Verify email
-    
-    Check your inbox and click the verification link.
+    #### Verify email Check your inbox and click the verification link.
   </Step>
   <Step>
-    #### Complete profile
-    
-    Add your personal information and preferences.
+    #### Complete profile Add your personal information and preferences.
   </Step>
   <Step>
-    #### Start using the app
-    
-    You're all set! Begin exploring features.
+    #### Start using the app You're all set! Begin exploring features.
   </Step>
 </Steps>
 
@@ -230,15 +167,9 @@ import { Steps, Step } from "@prisma/eclipse";
 export function VerticalSteps() {
   return (
     <Steps variant="vertical">
-      <Step variant="vertical">
-        #### Install dependencies
-      </Step>
-      <Step variant="vertical">
-        #### Configure environment
-      </Step>
-      <Step variant="vertical">
-        #### Start the server
-      </Step>
+      <Step variant="vertical">#### Install dependencies</Step>
+      <Step variant="vertical">#### Configure environment</Step>
+      <Step variant="vertical">#### Start the server</Step>
     </Steps>
   );
 }
@@ -249,12 +180,8 @@ export function VerticalSteps() {
 </div>
 
 <Steps variant="vertical">
-  <Step variant="vertical">
-    #### Install dependencies
-  </Step>
-  <Step variant="vertical">
-    #### Configure environment
-  </Step>
+  <Step variant="vertical">#### Install dependencies</Step>
+  <Step variant="vertical">#### Configure environment</Step>
   <Step variant="vertical" active>
     #### Start the server
   </Step>
@@ -275,15 +202,18 @@ export function VerticalSteps() {
 ### Prop Details
 
 The `variant` prop controls the layout direction:
+
 - **`"horizontal"`** (default) - Horizontal progress indicator layout with separators between steps
 - **`"vertical"`** - Traditional vertical timeline layout with connector lines
 
 The `checked` prop replaces the step number with a checkmark (✓) icon to indicate completion. This is useful for:
+
 - **Progress tracking** - Show which steps have been completed
 - **Onboarding flows** - Guide users through setup with visual feedback
 - **Form wizards** - Indicate completed sections
 
 The `active` prop visually highlights the step indicator and content to show that it's the current step, a completed step, or an important step. Steps without this prop appear dimmed to indicate they are future, optional, or not yet completed. This is useful for:
+
 - **Progress indicators** - Show which steps are active/completed vs. upcoming
 - **Conditional workflows** - Highlight required steps while dimming optional ones
 - **Multi-stage processes** - Indicate current and completed stages in a process

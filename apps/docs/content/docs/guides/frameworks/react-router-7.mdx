@@ -31,7 +31,7 @@ You'll be prompted to select the following, select `Yes` for both:
 
 - _Initialize a new git repository?_ `Yes`
 - _Install dependencies with npm?_ `Yes`
-:::
+  :::
 
 Now, navigate to the project directory:
 
@@ -393,7 +393,9 @@ import prisma from "~/lib/prisma";
 export default function Home() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center -mt-16">
-      <h1 className="text-4xl font-bold mb-8 font-[family-name:var(--font-geist-sans)]">Posts</h1>
+      <h1 className="text-4xl font-bold mb-8 font-[family-name:var(--font-geist-sans)]">
+        Posts
+      </h1>
       <ul className="font-[family-name:var(--font-geist-sans)] max-w-2xl space-y-4">
         <li>My first post</li>
       </ul>
@@ -435,7 +437,9 @@ export default function Posts({ loaderData }: Route.ComponentProps) {
   const { posts } = loaderData; // [!code ++]
   return (
     <div className="min-h-screen flex flex-col items-center justify-center -mt-16">
-      <h1 className="text-4xl font-bold mb-8 font-[family-name:var(--font-geist-sans)]">Posts</h1>
+      <h1 className="text-4xl font-bold mb-8 font-[family-name:var(--font-geist-sans)]">
+        Posts
+      </h1>
       <ul className="font-[family-name:var(--font-geist-sans)] max-w-2xl space-y-4">
         {posts.map(
           (
@@ -535,7 +539,8 @@ export default function Post({ loaderData }: Route.ComponentProps) {
     <div className="min-h-screen flex flex-col items-center justify-center -mt-16">
       <article className="max-w-2xl space-y-4 font-[family-name:var(--font-geist-sans)]">
         <h1 className="text-4xl font-bold mb-8">{post.title}</h1> // [!code ++]
-        <p className="text-gray-600 text-center">by {post.author.name}</p> // [!code ++]
+        <p className="text-gray-600 text-center">by {post.author.name}</p> //
+        [!code ++]
         <div className="prose prose-gray mt-8">
           {" "}
           // [!code ++]

@@ -48,18 +48,21 @@ Background colors are used for surfaces, containers, and backgrounds throughout 
 #### Semantic: Status Colors
 
 **Error**
+
 - `background-error-strong` - Strong error background
 - `background-error` - Default error background
 - `background-error-reverse-strong` - Strong reverse error background
 - `background-error-reverse` - Reverse error background
 
 **Success**
+
 - `background-success-strong` - Strong success background
 - `background-success` - Default success background
 - `background-success-reverse-strong` - Strong reverse success background
 - `background-success-reverse` - Reverse success background
 
 **Warning**
+
 - `background-warning-strong` - Strong warning background
 - `background-warning` - Default warning background
 - `background-warning-reverse-strong` - Strong reverse warning background
@@ -68,6 +71,7 @@ Background colors are used for surfaces, containers, and backgrounds throughout 
 #### Additional Color Backgrounds
 
 Each of these follows the same pattern (`strong` and default variants):
+
 - Cyan: `background-cyan-strong`, `background-cyan`
 - Fuchsia: `background-fuchsia-strong`, `background-fuchsia`
 - Lime: `background-lime-strong`, `background-lime`
@@ -82,6 +86,7 @@ Each of these follows the same pattern (`strong` and default variants):
 Foreground colors are used for text, icons, and other foreground elements.
 
 Each color has multiple strength variants:
+
 - `strong` - Highest contrast
 - Default (no suffix) - Standard contrast
 - `weak` - Lower contrast
@@ -89,6 +94,7 @@ Each color has multiple strength variants:
 - `reverse-weak` - Lower contrast on colored backgrounds
 
 **Available foreground colors:**
+
 - `foreground-neutral-*`
 - `foreground-ppg-*`
 - `foreground-orm-*`
@@ -311,11 +317,13 @@ All color tokens automatically adjust for dark mode:
 ## Token Organization
 
 All tokens are defined in:
+
 - **TypeScript constants**: `src/tokens/index.ts`
 - **Tailwind configuration**: `tailwind.config.ts`
 - **CSS custom properties**: `src/styles/globals.css`
 
 This three-layer approach ensures:
+
 1. Type safety in TypeScript
 2. Tailwind utility class generation
 3. Runtime theme switching via CSS variables

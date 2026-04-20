@@ -215,7 +215,6 @@ For using types in your frontend (i.e. code that runs in the browser).
 - Contains all model and enum types and values.
 - Provides access to various utilities like `Prisma.JsonNull` and `Prisma.Decimal`.
 
-
 Example:
 
 ```ts title="src/index.ts"
@@ -278,7 +277,11 @@ The plain model type is exposed here as `<ModelName>Model` (e.g. `PostModel`).
 Example:
 
 ```ts title="src/index.ts"
-import type { UserModel, UserWhereInput, UserUpdateInput } from "./generated/prisma/models/User";
+import type {
+  UserModel,
+  UserWhereInput,
+  UserUpdateInput,
+} from "./generated/prisma/models/User";
 ```
 
 #### `commonInputTypes.ts`

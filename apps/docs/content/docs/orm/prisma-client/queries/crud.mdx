@@ -104,7 +104,10 @@ const users = await prisma.user.findMany({
 // Multiple conditions with OR/AND
 const users = await prisma.user.findMany({
   where: {
-    OR: [{ name: { startsWith: "E" } }, { AND: { profileViews: { gt: 0 }, role: "ADMIN" } }],
+    OR: [
+      { name: { startsWith: "E" } },
+      { AND: { profileViews: { gt: 0 }, role: "ADMIN" } },
+    ],
   },
 });
 

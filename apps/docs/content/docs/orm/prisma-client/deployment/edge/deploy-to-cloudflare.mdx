@@ -41,8 +41,6 @@ This command:
 - Creates a `prisma` directory containing a `schema.prisma` file for your database models.
 - Creates a `.env` file with your `DATABASE_URL`.
 
-
-
 ### Using an edge-compatible driver
 
 When deploying a Cloudflare Worker that uses Prisma ORM, you need to use an [edge-compatible driver](/orm/prisma-client/deployment/edge/overview#edge-compatibility-of-database-drivers) and its respective [driver adapter](/orm/core-concepts/supported-databases/database-drivers#driver-adapters) for Prisma ORM.
@@ -58,7 +56,6 @@ The edge-compatible drivers for Cloudflare Workers and Pages are:
 There's [also work being done](https://github.com/sidorares/node-mysql2/pull/2289) on the `node-mysql2` driver which will enable access to traditional MySQL databases from Cloudflare Workers and Pages in the future as well.
 
 If your application uses PostgreSQL, we recommend using [Prisma Postgres](/postgres). It is fully supported on edge runtimes and does not require a specialized edge-compatible driver. Review the [Prisma Postgres serverless driver limitations](/postgres/database/serverless-driver#limitations) to understand current constraints.
-
 
 ### Setting your database connection URL as an environment variable
 

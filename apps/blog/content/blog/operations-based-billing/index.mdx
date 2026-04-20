@@ -24,15 +24,13 @@ Let’s dive into how operations-based pricing works and how to calculate your c
 
 ### What is an operation?
 
-At it’s core, an operation is an action you perform against your Prisma Postgres database, whether that’s a create, a read, an update or a delete, or even a cached read. 
+At it’s core, an operation is an action you perform against your Prisma Postgres database, whether that’s a create, a read, an update or a delete, or even a cached read.
 
 We count these as the [queries](https://www.prisma.io/docs/orm/prisma-client/queries) you issue via the Prisma ORM (a “Prisma Query” for short), as the Prisma ORM is the primary client you use to interact with your database. This is similar to how other database providers provide their own clients, though the Prisma ORM goes a few steps further with a superior, type-safe developer experience and additional features, like migrations, to simplify working with your database. In short, it’s a big part of what gives you a great DX when working with Prisma Postgres, and every query you run through it counts as an operation.
 
 The reason we chose this approach is because it’s so simple. Behind the scenes, a complex Prisma Query may result in multiple SQL statements, but for billing purposes, it remains one operation, so you never have to think about it. A simple create and a complex read with multiple JOINs may also take different durations to complete, but that’s another thing you don’t have to reason about, nor the data transfer bandwidth they use.
 
 Let’s take a look at a single operation through an example. The following Prisma Query is billed as one operation, yet it translates to several (8, in the case of the example below) SQL statements.
-
-
 
 ```javascript
 // create a new user, assigning 2 posts to them, or creating them on the fly
@@ -54,6 +52,7 @@ prisma.user.create({
   },
 });
 ```
+
 ```sql
 BEGIN;                                            -- start transaction
 
@@ -85,10 +84,9 @@ WHERE t0."id"=$1 LIMIT $2;                        -- fetch user
 COMMIT;                                           -- commit transaction
 ```
 
-
 ### Why is an operations-based pricing model better?
 
-In practice, this shifts your mental model, and we think it does so in a good way. Instead of asking *“How much compute time will this endpoint use?”* or *“What if this launch creates traffic that maxes out the CPU or RAM we have?”*, you ask, *“How many operations will this user interaction generate?”* It’s easier to reason about, easier to predict, and keeps your team focused on product behavior, not infra behavior.
+In practice, this shifts your mental model, and we think it does so in a good way. Instead of asking _“How much compute time will this endpoint use?”_ or _“What if this launch creates traffic that maxes out the CPU or RAM we have?”_, you ask, _“How many operations will this user interaction generate?”_ It’s easier to reason about, easier to predict, and keeps your team focused on product behavior, not infra behavior.
 
 Basing pricing on operations means:
 
@@ -106,7 +104,7 @@ Here are the base assumptions and facts our calculation will be based on:
 
 - 4M operations per month (a typical application with 3K monthly active users)
 - 1M operations are free every month for the Starter plan (as per our pricing plan)
-- $8 per million operations (above the 1M *free operations*)
+- $8 per million operations (above the 1M _free operations_)
 - 1.2GB storage used (typical for a medium-sized application)
 - 10GB storage is free every month (as per our pricing plan)
 - $10 base plan fee
@@ -116,7 +114,7 @@ Based on these assumptions, the billing calculation would be as follows:
 > 1 million no-cost operations + (3M operations at $8/M) + (10GB no-cost storage) + $10 base plan fee
 >
 > = (3.0 × $8) + $10
-> 
+>
 > = $34.00 per month
 
 Note: This calculation is based on our Starter plan. Pricing per million operations progressively decreases as you upgrade to higher plans, plus what’s included for free continues to increase as well. This means that you pay less per million operations on Business than on Starter, and you get more storage included for free. More plan differentiating features are on our [pricing page.](https://prisma.io/pricing)

@@ -93,6 +93,7 @@ Another benefit: The CPU footprint of the Rust-free Prisma ORM is notably reduce
 If you read this and have become curious, here are the steps you need to follow to try out the Rust-free version of Prisma ORM:
 
 1. Enable the `queryCompiler` and `driverAdapters` Preview feature flags in your Prisma schema:
+
    ```prisma
    generator client {
      provider        = "prisma-client-js" // or `prisma-client`
@@ -100,15 +101,18 @@ If you read this and have become curious, here are the steps you need to follow 
      previewFeatures = ["queryCompiler", "driverAdapters"]
    }
    ```
+
    > **Note**: The new internal component replacing the query engine is called _query compiler_, hence the name of the Preview feature flag.
 
 2. Run `prisma generate` to re-generate Prisma Client
 3. Install a [driver adapter](https://www.prisma.io/docs/orm/overview/databases/database-drivers#driver-adapters) for your database (e.g. `@prisma/adapter-pg` if you’re using PostgreSQL):
+
    ```shell
    npm install @prisma/adapter-pg
    ```
 
 4. You can instantiate `PrismaClient` as follows:
+
    ```ts
    import { PrismaClient } from "./generated/prisma";
    import { PrismaPg } from "@prisma/adapter-pg";
@@ -132,4 +136,3 @@ Follow the instructions above or try one of our [ready-to-run example projects](
 - [Deno Deploy](https://github.com/prisma/prisma-examples/tree/latest/generator-prisma-client/deno-deploy)
 
 Share your feedback [on Discord](https://pris.ly/discord) or ping us [on X](https://pris.ly/x).
-

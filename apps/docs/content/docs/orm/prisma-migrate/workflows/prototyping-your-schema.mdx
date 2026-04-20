@@ -13,13 +13,14 @@ The Prisma CLI has a dedicated command for prototyping schemas: [`db push`](/orm
 - Introspects the database to infer and executes the changes required to make your database schema reflect the state of your Prisma schema.
 - Does not automatically trigger generators (for example, Prisma Client). You need to manually invoke `prisma generate` after making schema changes.
 - If `db push` anticipates that the changes could result in data loss, it will:
-   - Throw an error
-   - Require the `--accept-data-loss` option if you still want to make the changes
+  - Throw an error
+  - Require the `--accept-data-loss` option if you still want to make the changes
 
 :::info[Notes]
- - `db push` does not interact with or rely on migrations. The migrations table `_prisma_migrations` will not be created or updated, and no migration files will be generated.
- - When working with PlanetScale, we recommend that you use `db push` instead of `migrate`. For details refer to our Getting started documentation, either [Start from scratch guide](/prisma-orm/quickstart/planetscale) or [Add to existing project guide](/prisma-orm/add-to-existing-project/planetscale) depending on your situation.
-:::
+
+- `db push` does not interact with or rely on migrations. The migrations table `_prisma_migrations` will not be created or updated, and no migration files will be generated.
+- When working with PlanetScale, we recommend that you use `db push` instead of `migrate`. For details refer to our Getting started documentation, either [Start from scratch guide](/prisma-orm/quickstart/planetscale) or [Add to existing project guide](/prisma-orm/add-to-existing-project/planetscale) depending on your situation.
+  :::
 
 ## Choosing `db push` or Prisma Migrate
 
@@ -49,103 +50,103 @@ Yes, you can [use `db push` and Prisma Migrate together in your development work
 
 The following scenario demonstrates how to use `db push` to synchronize a new schema with an empty database, and evolve that schema - including what happens when `db push` detects that a change will result in data loss.
 
--  Create a first draft of your schema:
+- Create a first draft of your schema:
 
-    ```prisma title="schema.prisma"
-    generator client {
-      provider = "prisma-client"
-      output   = "./generated"
-    }
+  ```prisma title="schema.prisma"
+  generator client {
+    provider = "prisma-client"
+    output   = "./generated"
+  }
 
-    datasource db {
-      provider = "postgresql"
-    }
+  datasource db {
+    provider = "postgresql"
+  }
 
-    model User {
-      id       Int      @id @default(autoincrement())
-      name     String
-      jobTitle String
-      posts    Post[]
-      profile  Profile?
-    }
+  model User {
+    id       Int      @id @default(autoincrement())
+    name     String
+    jobTitle String
+    posts    Post[]
+    profile  Profile?
+  }
 
-    model Profile {
-      id       Int    @id @default(autoincrement())
-      biograpy String // Intentional typo!
-      userId   Int    @unique
-      user     User   @relation(fields: [userId], references: [id])
-    }
+  model Profile {
+    id       Int    @id @default(autoincrement())
+    biograpy String // Intentional typo!
+    userId   Int    @unique
+    user     User   @relation(fields: [userId], references: [id])
+  }
 
-    model Post {
-      id         Int        @id @default(autoincrement())
-      title      String
-      published  Boolean    @default(true)
-      content    String     @db.VarChar(500)
-      authorId   Int
-      author     User       @relation(fields: [authorId], references: [id])
-      categories Category[]
-    }
+  model Post {
+    id         Int        @id @default(autoincrement())
+    title      String
+    published  Boolean    @default(true)
+    content    String     @db.VarChar(500)
+    authorId   Int
+    author     User       @relation(fields: [authorId], references: [id])
+    categories Category[]
+  }
 
-    model Category {
-      id    Int    @id @default(autoincrement())
-      name  String @db.VarChar(50)
-      posts Post[]
+  model Category {
+    id    Int    @id @default(autoincrement())
+    name  String @db.VarChar(50)
+    posts Post[]
 
-      @@unique([name])
-    }
-    ```
+    @@unique([name])
+  }
+  ```
 
--  Use `db push` to push the initial schema to the database:
+- Use `db push` to push the initial schema to the database:
 
-    ```npm
-    npx prisma db push
-    ```
+  ```npm
+  npx prisma db push
+  ```
 
--  Create some example content:
+- Create some example content:
 
-    ```ts title="main.ts"
-    const add = await prisma.user.create({
-      data: {
-        name: "Eloise",
-        jobTitle: "Programmer",
-        posts: {
-          create: {
-            title: "How to create a MySQL database",
-            content: "Some content",
-          },
+  ```ts title="main.ts"
+  const add = await prisma.user.create({
+    data: {
+      name: "Eloise",
+      jobTitle: "Programmer",
+      posts: {
+        create: {
+          title: "How to create a MySQL database",
+          content: "Some content",
         },
       },
-    });
-    ```
+    },
+  });
+  ```
 
--  Make an additive change - for example, create a new required field:
+- Make an additive change - for example, create a new required field:
 
-    ```prisma highlight=6;add title="schema.prisma"
-    model Post {
-      id          Int        @id @default(autoincrement())
-      title       String
-      description String // [!code ++]
-      published   Boolean    @default(true)
-      content     String     @db.VarChar(500)
-      authorId    Int
-      author      User       @relation(fields: [authorId], references: [id])
-      categories  Category[]
-    }
-    ```
+  ```prisma highlight=6;add title="schema.prisma"
+  model Post {
+    id          Int        @id @default(autoincrement())
+    title       String
+    description String // [!code ++]
+    published   Boolean    @default(true)
+    content     String     @db.VarChar(500)
+    authorId    Int
+    author      User       @relation(fields: [authorId], references: [id])
+    categories  Category[]
+  }
+  ```
 
--  Push the changes:
+- Push the changes:
 
-    ```npm
-    npx prisma db push
-    ```
+  ```npm
+  npx prisma db push
+  ```
 
-    `db push` will fail because you cannot add a required field to a table with existing content unless you provide a default value.
+  `db push` will fail because you cannot add a required field to a table with existing content unless you provide a default value.
 
--  Reset **all data** in your database and re-apply migrations.
+- Reset **all data** in your database and re-apply migrations.
 
-    ```npm
-    npx prisma migrate reset
-    ```
+  ```npm
+  npx prisma migrate reset
+  ```
 
 :::info[Note]
 Unlike Prisma Migrate, `db push` does not generate migrations that you can modify to preserve data, and is therefore best suited for prototyping in a development environment.
@@ -153,15 +154,15 @@ Unlike Prisma Migrate, `db push` does not generate migrations that you can modif
 
 - Continue to evolve your schema until it reaches a relatively stable state.
 
--  Initialize a migration history:
+- Initialize a migration history:
 
-    ```npm
-    npx prisma migrate dev --name initial-state
-    ```
+  ```npm
+  npx prisma migrate dev --name initial-state
+  ```
 
-    The steps taken to reach the initial prototype are not preserved - `db push` does not generate a history.
+  The steps taken to reach the initial prototype are not preserved - `db push` does not generate a history.
 
--  Push your migration history and Prisma schema to source control (e.g. Git).
+- Push your migration history and Prisma schema to source control (e.g. Git).
 
 At this point, the final draft of your prototyping is preserved in a migration and can be pushed to other environments (testing, production, or other members of your team).
 
@@ -171,93 +172,94 @@ The following scenario demonstrates how to use `db push` to prototype a change t
 
 - Check out the latest Prisma schema and migration history:
 
-   ```prisma title="schema.prisma"
-   generator client {
-     provider = "prisma-client"
-     output   = "./generated"
-   }
+  ```prisma title="schema.prisma"
+  generator client {
+    provider = "prisma-client"
+    output   = "./generated"
+  }
 
-   datasource db {
-     provider = "postgresql"
-   }
+  datasource db {
+    provider = "postgresql"
+  }
 
-   model User {
-     id       Int      @id @default(autoincrement())
-     name     String
-     jobTitle String
-     posts    Post[]
-     profile  Profile?
-   }
+  model User {
+    id       Int      @id @default(autoincrement())
+    name     String
+    jobTitle String
+    posts    Post[]
+    profile  Profile?
+  }
 
-   model Profile {
-     id       Int    @id @default(autoincrement())
-     biograpy String // Intentional typo!
-     userId   Int    @unique
-     user     User   @relation(fields: [userId], references: [id])
-   }
+  model Profile {
+    id       Int    @id @default(autoincrement())
+    biograpy String // Intentional typo!
+    userId   Int    @unique
+    user     User   @relation(fields: [userId], references: [id])
+  }
 
-   model Post {
-     id         Int        @id @default(autoincrement())
-     title      String
-     published  Boolean    @default(true)
-     content    String     @db.VarChar(500)
-     authorId   Int
-     author     User       @relation(fields: [authorId], references: [id])
-     categories Category[]
-   }
+  model Post {
+    id         Int        @id @default(autoincrement())
+    title      String
+    published  Boolean    @default(true)
+    content    String     @db.VarChar(500)
+    authorId   Int
+    author     User       @relation(fields: [authorId], references: [id])
+    categories Category[]
+  }
 
-   model Category {
-     id    Int    @id @default(autoincrement())
-     name  String @db.VarChar(50)
-     posts Post[]
+  model Category {
+    id    Int    @id @default(autoincrement())
+    name  String @db.VarChar(50)
+    posts Post[]
 
-     @@unique([name])
-   }
-   ```
+    @@unique([name])
+  }
+  ```
 
 - Prototype your new feature, which can involve any number of steps. For example, you might:
-   - Create a `tags String[]` field, then run `db push`
-   - Change the field type to `tags Tag[]` and add a new model named `Tag`, then run `db push`
-   - Change your mind and restore the original `tags String[]` field, then call `db push`
-   - Make a manual change to the `tags` field in the database - for example, adding a constraint
 
-   After experimenting with several solutions, the final schema change looks like this:
+  - Create a `tags String[]` field, then run `db push`
+  - Change the field type to `tags Tag[]` and add a new model named `Tag`, then run `db push`
+  - Change your mind and restore the original `tags String[]` field, then call `db push`
+  - Make a manual change to the `tags` field in the database - for example, adding a constraint
 
-   ```prisma title="schema.prisma"
-   model Post {
-     id          Int        @id @default(autoincrement())
-     title       String
-     description String
-     published   Boolean    @default(true)
-     content     String     @db.VarChar(500)
-     authorId    Int
-     author      User       @relation(fields: [authorId], references: [id])
-     categories  Category[]
-     tags        String[]
-   }
-   ```
+  After experimenting with several solutions, the final schema change looks like this:
+
+  ```prisma title="schema.prisma"
+  model Post {
+    id          Int        @id @default(autoincrement())
+    title       String
+    description String
+    published   Boolean    @default(true)
+    content     String     @db.VarChar(500)
+    authorId    Int
+    author      User       @relation(fields: [authorId], references: [id])
+    categories  Category[]
+    tags        String[]
+  }
+  ```
 
 - To create a migration that adds the new `tags` field, run the `migrate dev` command:
 
-   ```npm
-   npx prisma migrate dev --name added-tags
-   ```
+  ```npm
+  npx prisma migrate dev --name added-tags
+  ```
 
-   Prisma Migrate will prompt you to reset because the changes you made manually and with `db push` while prototyping are not part of the migration history:
+  Prisma Migrate will prompt you to reset because the changes you made manually and with `db push` while prototyping are not part of the migration history:
 
-   ```bash
-   √ Drift detected: Your database schema is not in sync with your migration history.
+  ```bash
+  √ Drift detected: Your database schema is not in sync with your migration history.
 
-   We need to reset the PostgreSQL database "prototyping" at "localhost:5432".
-   ```
+  We need to reset the PostgreSQL database "prototyping" at "localhost:5432".
+  ```
 
- :::warning
- This will result in total data loss.
- :::
+:::warning
+This will result in total data loss.
+:::
 
-   ```npm
-   npx prisma migrate reset
-   ```
+```npm
+npx prisma migrate reset
+```
 
 - Prisma Migrate replays the existing migration history, generates a new migration based on your schema changes, and applies those changes to the database.
 

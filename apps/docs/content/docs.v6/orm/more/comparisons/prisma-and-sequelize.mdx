@@ -239,17 +239,17 @@ const user = await prisma.user.create({
 
 ```ts tab="Using save"
 const user = User.build({
-  name: 'Alice',
-  email: 'alice@prisma.io',
-})
-await user.save()
+  name: "Alice",
+  email: "alice@prisma.io",
+});
+await user.save();
 ```
 
 ```ts tab="Using create"
 const user = await User.create({
-  name: 'Alice',
-  email: 'alice@prisma.io',
-})
+  name: "Alice",
+  email: "alice@prisma.io",
+});
 ```
 
 ### Updating objects
@@ -270,20 +270,23 @@ const user = await prisma.user.update({
 **Sequelize**
 
 ```ts tab="Using save"
-user.name = 'James'
-user.email = 'alice@prisma.com'
-await user.save()
+user.name = "James";
+user.email = "alice@prisma.com";
+await user.save();
 ```
 
 ```ts tab="Using update"
-await User.update({
-  name: 'James',
-  email: 'james@prisma.io',
-}, {
-  where: {
-    id: 2,
+await User.update(
+  {
+    name: "James",
+    email: "james@prisma.io",
   },
-})
+  {
+    where: {
+      id: 2,
+    },
+  },
+);
 ```
 
 ### Deleting objects
@@ -370,7 +373,10 @@ const user = await prisma.user.create({
     email: "bob.rufus@prisma.io",
     name: "Bob Rufus",
     Post: {
-      create: [{ title: "Working at Prisma" }, { title: "All about databases" }],
+      create: [
+        { title: "Working at Prisma" },
+        { title: "All about databases" },
+      ],
     },
   },
 });
@@ -382,49 +388,49 @@ const user = await prisma.user.create({
 return sequelize.$transaction(async (t) => {
   const user = await User.create(
     {
-      name: 'Alice',
-      email: 'alice@prisma,io',
+      name: "Alice",
+      email: "alice@prisma,io",
     },
     {
       transaction: t,
-    }
-  )
+    },
+  );
   const post1 = await Post.create(
     {
-      title: 'Join us for GraphQL Conf in 2019',
+      title: "Join us for GraphQL Conf in 2019",
     },
     {
       transaction: t,
-    }
-  )
+    },
+  );
   const post2 = await Post.create(
     {
-      title: 'Subscribe to GraphQL Weekly for GraphQL news',
+      title: "Subscribe to GraphQL Weekly for GraphQL news",
     },
     {
       transaction: t,
-    }
-  )
-  await user.setPosts([post1, post2])
-})
+    },
+  );
+  await user.setPosts([post1, post2]);
+});
 ```
 
 ```ts tab="Automatic"
 return sequelize.$transaction(async (transaction) => {
   try {
     const user = await User.create({
-      name: 'Alice',
-      email: 'alice@prisma,io',
-    })
+      name: "Alice",
+      email: "alice@prisma,io",
+    });
     const post1 = await Post.create({
-      title: 'Join us for GraphQL Conf in 2019',
-    })
+      title: "Join us for GraphQL Conf in 2019",
+    });
     const post2 = await Post.create({
-      title: 'Subscribe to GraphQL Weekly for GraphQL news',
-    })
-    await user.setPosts([post1, post2])
+      title: "Subscribe to GraphQL Weekly for GraphQL news",
+    });
+    await user.setPosts([post1, post2]);
   } catch (e) {
-    return transaction.rollback()
+    return transaction.rollback();
   }
-})
+});
 ```

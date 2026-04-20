@@ -40,9 +40,11 @@ Try the new Prisma Client in 5 minutes by following the [**Quickstart**](https:/
 The new version of Prisma Client is a modern database access library for Node.js and TypeScript. It can be used as an alternative to traditional ORMs and SQL query builders to read and write data in your database.
 
 To set it up, you need a [Prisma schema file](https://www.prisma.io/docs/concepts/components/prisma-schema) and must add Prisma Client as a dependency to your project:
+
 ```
 npm install @prisma/client
 ```
+
 Prisma Client can be used in _any_ Node.js or TypeScript backend application (including serverless applications and microservices). This can be a [REST API](https://www.prisma.io/docs/concepts/overview/prisma-in-your-stack/rest), a [GraphQL API](https://www.prisma.io/docs/concepts/overview/prisma-in-your-stack/graphql), a gRPC API, or anything else that needs a database.
 
 ### Be more productive with your database
@@ -86,8 +88,6 @@ A major benefit of Prisma Client compared to other ORMs and database tools is th
 
 As an example, consider this Prisma Client query (you can switch the tab to view the corresponding [Prisma models](https://www.prisma.io/docs/concepts/components/prisma-schema/data-model)):
 
-
-
 ```ts
 const usersWithPartialPosts = await prisma.user.findMany({
   include: {
@@ -98,8 +98,9 @@ const usersWithPartialPosts = await prisma.user.findMany({
       },
     },
   },
-})
+});
 ```
+
 ```prisma
 model Post {
   id        Int     @id @default(autoincrement())
@@ -117,22 +118,22 @@ model User {
 }
 ```
 
-
 Note that the resulting `usersWithPartialPosts` will be _statically typed_ to:
 
 ```ts
 export type User = {
-  id: number
-  email: string
-  name: string | null
-}
+  id: number;
+  email: string;
+  name: string | null;
+};
 const usersWithPartialPosts: (User & {
   posts: {
-    title: string
-    published: boolean
-  }[]
-})[]
+    title: string;
+    published: boolean;
+  }[];
+})[];
 ```
+
 This means that TypeScript will catch any errors when you make a typo or accidentally access a property that was not requested from the database!
 
 ### Getting started
@@ -182,6 +183,7 @@ Also, note that the installation of the npm packages changes:
 ### A note for current Prisma 1 users
 
 If you're currently using Prisma 1 with the `prisma` command, you can keep using it as before. **If you want to upgrade to Prisma 2.0**, it is recommended to uninstall your current `prisma` installation and install the new CLI versions locally in the projects where they are needed:
+
 ```
 # Remove global installation
 npm uninstall -g prisma
@@ -193,9 +195,11 @@ npm install prisma1 --save-dev
 # Invoke `prisma1` by prefixing it with `npx`
 npx prisma1
 ```
+
 ### The `prisma2` npm package is deprecated
 
 The `prisma2` npm package is now deprecated. To prevent confusions during installation, it now outputs the following when you try to install it:
+
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                                                             │
@@ -217,6 +221,7 @@ The `prisma2` npm package is now deprecated. To prevent confusions during instal
 │                                                             │
 └─────────────────────────────────────────────────────────────┘
 ```
+
 ---
 
 ## I currently use Prisma 1; what should I do?
@@ -305,6 +310,7 @@ Here is a high-level overview of the steps needed to upgrade:
 If you want to switch to a [code-first](https://www.prisma.io/blog/the-problems-of-schema-first-graphql-development-x1mn4cb0tyl3) approach, check out [GraphQL Nexus](https://nexusjs.org/).
 
 > **Note**: You can find your database credentials in the Docker Compose file that you used to deploy the Prisma server. These credentials are needed to compose the [connection URL](https://www.prisma.io/docs/reference/database-reference/connection-urls) for Prisma 2.0.
+
   </Accordion>
 </Accordions>
 
@@ -313,7 +319,7 @@ If you want to switch to a [code-first](https://www.prisma.io/blog/the-problems-
 We are really excited to finally share the Beta version of Prisma 2.0 and can't wait to see what you all build with it.
 
 <br />
-[Get started with Prisma 2.0](https://www.prisma.io/docs/getting-started/quickstart)
+[Get started with Prisma
+2.0](https://www.prisma.io/docs/getting-started/quickstart)
 
 If you want to leave feedback, share ideas, create feature requests or submit bug reports, please do so in the (renamed) [`prisma`](https://github.com/prisma/prisma) repository on GitHub and join the (renamed) [`#prisma2-beta`](https://app.slack.com/client/T0MQBS8JG/CKQTGR6T0) channel on the [Prisma Slack](https://slack.prisma.io)!
-

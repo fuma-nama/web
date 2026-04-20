@@ -1,4 +1,11 @@
-type ContentArea = "ppg" | "orm" | "accelerate" | "console" | "guides" | "ai" | "other";
+type ContentArea =
+  | "ppg"
+  | "orm"
+  | "accelerate"
+  | "console"
+  | "guides"
+  | "ai"
+  | "other";
 
 const PREFIX_MAP: [string, ContentArea][] = [
   ["/postgres", "ppg"],

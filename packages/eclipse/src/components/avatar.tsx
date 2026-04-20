@@ -42,10 +42,8 @@ const avatarContentVariants = cva("", {
 /**
  * Avatar component props
  */
-export interface AvatarProps extends Omit<
-  React.HTMLAttributes<HTMLDivElement>,
-  "children"
-> {
+export interface AvatarProps
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, "children"> {
   /**
    * The format of the avatar content
    */

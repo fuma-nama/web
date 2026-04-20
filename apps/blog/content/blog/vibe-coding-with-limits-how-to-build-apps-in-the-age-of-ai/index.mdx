@@ -16,7 +16,7 @@ Software development is evolving fast with the rise of AI coding tools. This art
 
 The concept of "vibe coding" – describing what you want to an AI and letting it generate the code – has captured developers' imagination. The results can be impressive: functioning prototypes materialized from simple descriptions, complex algorithms implemented without wrestling with syntax, and UIs assembled without painstaking CSS tweaks.
 
-<TweetEmbedComp tweets={['1901357103731847605']}/>
+<TweetEmbedComp tweets={["1901357103731847605"]} />
 
 But any developer who has experimented with this approach inevitably runs into its limitations. After a few rounds of prompts, what started as a clean implementation often becomes unwieldy. Subtle bugs creep in that become increasingly difficult to resolve. The promise of effortless development gives way to a familiar frustration — now compounded by code you didn't write yourself.
 
@@ -81,9 +81,11 @@ This is where solutions like [Prisma Postgres](https://www.prisma.io/postgres) p
 It offers the reliability developers need without the operational complexity that AI can't abstract away. When AI helps you move faster on code generation, you need infrastructure that keeps pace – scalable, on-demand, and requiring minimal configuration.
 
 To try out Prisma Postgres, simply run this command in your terminal:
+
 ```
 npx prisma init --db
 ```
+
 Prisma Postgres also integrates directly with your favorite LLM and AI coding environment via the Model Context Protocol (MCP).
 
 Simply add it to the MCP configuration of your desired AI tool using this JSON snippet:
@@ -98,6 +100,7 @@ Simply add it to the MCP configuration of your desired AI tool using this JSON s
   }
 }
 ```
+
 Learn more about this in the [Prisma Postgres documentation](https://www.prisma.io/docs/postgres/mcp-server).
 
 ## When to use AI?

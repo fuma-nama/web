@@ -1,9 +1,9 @@
 ---
 title: Working with scalar lists
-description: 'How to read, write, and filter by scalar lists / arrays'
+description: "How to read, write, and filter by scalar lists / arrays"
 url: /orm/prisma-client/special-fields-and-types/working-with-scalar-lists-arrays
 metaTitle: Working with scalar lists/arrays (Concepts)
-metaDescription: 'How to read, write, and filter by scalar lists / arrays.'
+metaDescription: "How to read, write, and filter by scalar lists / arrays."
 ---
 
 [Scalar lists](/orm/reference/prisma-schema-reference#-modifier) are represented by the `[]` modifier and are only available if the underlying database supports scalar lists. The following example has one scalar `String` list named `pets`:
@@ -169,6 +169,7 @@ This means that records you might expect to see are not returned. Consider the f
   - ✔ Empty arrays, such as `[]`
 
   The query does not return:
+
   - ✘ `NULL` arrays, even though they do not contain `"databases"`
 
 The following query returns all posts where `tags` is empty:

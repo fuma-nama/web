@@ -66,7 +66,13 @@ export function CardWithHeader() {
 **Card with Description**
 
 ```tsx
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@prisma/eclipse";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from "@prisma/eclipse";
 
 export function CardWithDescription() {
   return (
@@ -75,8 +81,9 @@ export function CardWithDescription() {
         <CardTitle>Prisma ORM</CardTitle>
       </CardHeader>
       <CardContent>
-        Prisma unlocks a new level of developer experience when working with databases thanks to its
-        intuitive data model, automated migrations, type-safety & auto-completion.
+        Prisma unlocks a new level of developer experience when working with
+        databases thanks to its intuitive data model, automated migrations,
+        type-safety & auto-completion.
       </CardContent>
     </Card>
   );
@@ -91,8 +98,9 @@ export function CardWithDescription() {
       <CardTitle>Prisma ORM</CardTitle>
     </CardHeader>
     <CardContent>
-      Prisma unlocks a new level of developer experience when working with databases thanks to its
-      intuitive data model, automated migrations, type-safety & auto-completion.
+      Prisma unlocks a new level of developer experience when working with
+      databases thanks to its intuitive data model, automated migrations,
+      type-safety & auto-completion.
     </CardContent>
   </Card>
 </div>
@@ -117,7 +125,8 @@ export function CardWithFooter() {
         <CardTitle>Deploy your project</CardTitle>
       </CardHeader>
       <CardContent>
-        Your project is ready to be deployed to production. Click the button below to get started.
+        Your project is ready to be deployed to production. Click the button
+        below to get started.
       </CardContent>
       <CardFooter>
         <Button variant="default-strong">Deploy</Button>
@@ -138,7 +147,8 @@ export function CardWithFooter() {
       <CardTitle>Deploy your project</CardTitle>
     </CardHeader>
     <CardContent>
-      Your project is ready to be deployed to production. Click the button below to get started.
+      Your project is ready to be deployed to production. Click the button below
+      to get started.
     </CardContent>
     <CardFooter>
       <Button variant="default-strong">Deploy</Button>
@@ -152,7 +162,13 @@ export function CardWithFooter() {
 **Multiple Cards in Grid**
 
 ```tsx
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@prisma/eclipse";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from "@prisma/eclipse";
 
 export function CardGrid() {
   return (
@@ -161,13 +177,17 @@ export function CardGrid() {
         <CardHeader>
           <CardTitle>Prisma ORM</CardTitle>
         </CardHeader>
-        <CardContent>Build with confidence using auto-completion and type safety.</CardContent>
+        <CardContent>
+          Build with confidence using auto-completion and type safety.
+        </CardContent>
       </Card>
       <Card>
         <CardHeader>
           <CardTitle>Prisma Accelerate</CardTitle>
         </CardHeader>
-        <CardContent>Speed up your queries with intelligent caching.</CardContent>
+        <CardContent>
+          Speed up your queries with intelligent caching.
+        </CardContent>
       </Card>
       <Card>
         <CardHeader>
@@ -187,7 +207,9 @@ export function CardGrid() {
     <CardHeader>
       <CardTitle>Prisma ORM</CardTitle>
     </CardHeader>
-    <CardContent>Build with confidence using auto-completion and type safety.</CardContent>
+    <CardContent>
+      Build with confidence using auto-completion and type safety.
+    </CardContent>
   </Card>
   <Card>
     <CardHeader>
@@ -332,8 +354,8 @@ export function CustomCard() {
     <CardTitle>Getting Started with Prisma</CardTitle>
   </CardHeader>
   <CardContent>
-    Learn how to set up Prisma ORM in your Next.js application and start building type-safe database
-    queries.
+    Learn how to set up Prisma ORM in your Next.js application and start
+    building type-safe database queries.
   </CardContent>
   <CardFooter>
     <Button variant="link">Read More →</Button>

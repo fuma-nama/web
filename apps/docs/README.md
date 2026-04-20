@@ -48,12 +48,12 @@ Turbo runs `dev` for every app in parallel (site on 3000, docs on 3001, blog on 
 
 ## Content and structure
 
-| Path | Purpose |
-|------|---------|
-| `apps/docs/content/docs/` | Latest version docs (MDX) |
-| `apps/docs/content/docs.v6/` | V6 versioned docs |
+| Path                         | Purpose                                      |
+| ---------------------------- | -------------------------------------------- |
+| `apps/docs/content/docs/`    | Latest version docs (MDX)                    |
+| `apps/docs/content/docs.v6/` | V6 versioned docs                            |
 | `apps/docs/source.config.ts` | Fumadocs config (collections, meta, plugins) |
-| `apps/docs/cli.json` | CLI reference data |
+| `apps/docs/cli.json`         | CLI reference data                           |
 
 Sidebar and structure come from `meta.json` in each folder. See [Fumadocs collections](https://fumadocs.dev/docs/mdx/collections) for details.
 
@@ -63,12 +63,12 @@ Sidebar and structure come from `meta.json` in each folder. See [Fumadocs collec
 
 Run these from the repo root with `pnpm --filter docs <script>`:
 
-| Script | Description |
-|--------|-------------|
-| `lint:links` | Validate internal and external links |
-| `lint:code` | Lint code blocks in MDX |
-| `lint:spellcheck` | Spell-check content |
-| `fetch-openapi` | Fetch Management API OpenAPI spec (runs automatically before build) |
+| Script            | Description                                                         |
+| ----------------- | ------------------------------------------------------------------- |
+| `lint:links`      | Validate internal and external links                                |
+| `lint:code`       | Lint code blocks in MDX                                             |
+| `lint:spellcheck` | Spell-check content                                                 |
+| `fetch-openapi`   | Fetch Management API OpenAPI spec (runs automatically before build) |
 
 ---
 

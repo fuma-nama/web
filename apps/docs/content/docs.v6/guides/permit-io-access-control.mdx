@@ -487,7 +487,11 @@ export interface AuthRequest extends Request {
   prisma?: typeof prisma;
 }
 
-export const authenticate = (req: AuthRequest, res: Response, next: NextFunction): void => {
+export const authenticate = (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction,
+): void => {
   const userEmail = req.headers["x-user-email"] as string;
 
   if (!userEmail) {

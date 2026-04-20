@@ -12,9 +12,9 @@ export const privacySections: PrivacySection[] = [
     title: "1. Websites Covered",
     content: (
       <p>
-        This privacy policy applies to the following Prisma websites:
-        prisma.io, console.prisma.io, cloud.prisma.io,
-        cloudprojects.prisma.io, optimize.prisma.io, and graph.cool.
+        This privacy policy applies to the following Prisma websites: prisma.io,
+        console.prisma.io, cloud.prisma.io, cloudprojects.prisma.io,
+        optimize.prisma.io, and graph.cool.
       </p>
     ),
   },
@@ -131,9 +131,8 @@ export const privacySections: PrivacySection[] = [
           All third parties undergo vetting and must maintain privacy standards
           consistent with the Data Privacy Framework. Prisma complies with DPF
           notice and choice principles; individuals may limit data use by
-          contacting{" "}
-          <a href="mailto:dpo@prisma.io">dpo@prisma.io</a>. Free Tier abuse
-          detection employs automated systems monitoring usage trends.
+          contacting <a href="mailto:dpo@prisma.io">dpo@prisma.io</a>. Free Tier
+          abuse detection employs automated systems monitoring usage trends.
         </p>
       </>
     ),
@@ -172,9 +171,7 @@ export const privacySections: PrivacySection[] = [
           <a href="mailto:dpo@prisma.io">dpo@prisma.io</a> with questions or to
           limit data use.
         </p>
-        <p>
-          Binding arbitration is available under DPF Principles conditions.
-        </p>
+        <p>Binding arbitration is available under DPF Principles conditions.</p>
       </>
     ),
   },

@@ -39,17 +39,19 @@ type Query {
   posts: [Post]!
 }
 ```
+
 ```ts
 const Query = {
   posts: () => [
     {
-      id: '1',
-      title: 'My first GraphQL server',
-      body: 'How I wrote my first GraphQL server',
+      id: "1",
+      title: "My first GraphQL server",
+      body: "How I wrote my first GraphQL server",
     },
   ],
-}
+};
 ```
+
 While the schema-first approach is easy to get started with, it comes with some inherent drawbacks that can make development difficult when applications start getting bigger.
 
 Nexus takes a different approach to building GraphQL APIs. Instead of keeping a separate schema and set of resolvers, with Nexus, schemas and resolvers are written in the same spot using code.
@@ -57,34 +59,35 @@ Nexus takes a different approach to building GraphQL APIs. Instead of keeping a 
 Refactoring the Post example above to Nexus would look like this:
 
 ```ts
-import { objectType, queryType, makeSchema } from 'nexus'
+import { objectType, queryType, makeSchema } from "nexus";
 
 const Post = objectType({
-  name: 'Post',
+  name: "Post",
   definition(t) {
-    t.id('id')
-    t.string('title')
-    t.string('body')
+    t.id("id");
+    t.string("title");
+    t.string("body");
   },
-})
+});
 
 const Query = queryType({
   definition(t) {
-    t.list.field('posts', {
+    t.list.field("posts", {
       resolve: () => [
         {
-          id: '1',
-          title: 'My first GraphQL server',
-          body: 'How I wrote my first GraphQL server',
+          id: "1",
+          title: "My first GraphQL server",
+          body: "How I wrote my first GraphQL server",
         },
       ],
-    })
+    });
   },
-})
+});
 const schema = makeSchema({
   types: [Post, Query],
-})
+});
 ```
+
 There are numerous benefits to taking a code-first approach with Nexus, including:
 
 - Schema and resolver co-location
@@ -106,15 +109,16 @@ One major benefit of using Nexus is its ability to automatically generate TypeSc
 Type and SDL generation comes for free with Nexus and can be enabled by supplying some configuration in the `makeSchema` call.
 
 ```ts
-import path from 'path'
+import path from "path";
 const schema = makeSchema({
   types: [Post, Query],
   outputs: {
-    schema: path.join(__dirname, 'generated/schema.gen.graphql'),
-    typegen: path.join(__dirname, 'generated/nexusTypes.gen.ts'),
+    schema: path.join(__dirname, "generated/schema.gen.graphql"),
+    typegen: path.join(__dirname, "generated/nexusTypes.gen.ts"),
   },
-})
+});
 ```
+
 ## What's New at Nexus 1.0?
 
 There are a number of changes to Nexus at 1.0. Read the [full changelog](https://github.com/graphql-nexus/nexus/releases/tag/1.0.0) and follow along below to see what's new!
@@ -124,9 +128,10 @@ There are a number of changes to Nexus at 1.0. Read the [full changelog](https:/
 Nexus 1.0 is now available under the `nexus` package name. All imports now come from `nexus` and not `@nexus/schema`.
 
 ```ts
-import { makeSchema } from 'nexus'
+import { makeSchema } from "nexus";
 // ...
 ```
+
 ### Changes to Nullability
 
 In previous versions of Nexus, fields were treated as non-nullable by default. This differed from other GraphQL API frameworks which would treat fields as nullable unless otherwise specified. The Nexus authors took this approach because allowing fields to be non-nullable by default posed some long-term risks for API development.
@@ -137,14 +142,15 @@ At Nexus 1.0, you need to explicitly make fields non-null:
 
 ```ts
 const Post = objectType({
-  name: 'Post',
+  name: "Post",
   definition(t) {
-    t.nonNull.id('id')
-    t.nonNull.string('title')
-    t.nonNull.string('body')
+    t.nonNull.id("id");
+    t.nonNull.string("title");
+    t.nonNull.string("body");
   },
-})
+});
 ```
+
 The SDL for this type would look like this:
 
 ```graphql
@@ -154,6 +160,7 @@ type Post {
   body: String!
 }
 ```
+
 The code for the `Post` object type above uses a property called `nonNull` which offers a bit more flexibility for specifying that fields should be non-null. It's useful for situations where the chaining API is not ideal, such as expressing deeply-nested types and when programmatically creating non-nullable types.
 
 ```ts
@@ -173,11 +180,10 @@ queryType({
   }
 })
 ```
+
 The `nonNull` function accepts an argument which can be used to specify the type for a type or argument.
 
 While fields are now nullable by default, it's possible to change this behavior either globally or at the type level in your Nexus API.
-
-
 
 ```ts
 queryType({
@@ -185,25 +191,24 @@ queryType({
     output: true,
   },
   definition(t) {
-    t.string('echo', {
+    t.string("echo", {
       args: {
-        message: 'String',
+        message: "String",
       },
       resolve(_root, args) {
-        return args.message
+        return args.message;
       },
-    })
+    });
   },
-})
+});
 ```
-
 
 In this example, Nexus now expects that fields should be non-null for all query type fields.
 
 If you choose to change a type to be non-null by default, you can use the `nullable` function to specify that certain fields should be nullable.
 
 ```ts
-import { queryType, stringArg, nullable } from 'nexus'
+import { queryType, stringArg, nullable } from "nexus";
 
 queryType({
   nonNullDefaults: {
@@ -211,18 +216,19 @@ queryType({
     output: true,
   },
   definition(t) {
-    t.field('echo', {
-      type: nullable('String'),
+    t.field("echo", {
+      type: nullable("String"),
       args: {
         message: nullable(stringArg()),
       },
       resolve(_root, args) {
-        return args.message
+        return args.message;
       },
-    })
+    });
   },
-})
+});
 ```
+
 To find out more about how Nexus handles nullability, including other ways to interact with the API, read the [Nullability guide](https://nexusjs.org/docs/guides/nullability).
 
 ### Changes to the List API
@@ -246,6 +252,7 @@ queryType({
   }
 })
 ```
+
 The same chaining API for creating lists still remain, but the `list` function exist to help for situations where chaining is not ideal.
 
 ### Abstract Types
@@ -266,19 +273,28 @@ The [Centralized strategy](https://nexusjs.org/docs/guides/abstract-types#centra
 
 ```ts
 const SearchResult = unionType({
-  name: 'SearchResult',
+  name: "SearchResult",
   resolveType(data) {
-    const __typename = data.album ? 'Song' : data.rating ? 'Movie' : data.width ? 'Photo' : null
+    const __typename = data.album
+      ? "Song"
+      : data.rating
+        ? "Movie"
+        : data.width
+          ? "Photo"
+          : null;
     if (!__typename) {
-      throw new Error(`Could not resolve the type of data passed to union type "SearchResult"`)
+      throw new Error(
+        `Could not resolve the type of data passed to union type "SearchResult"`,
+      );
     }
-    return __typename
+    return __typename;
   },
   definition(t) {
-    t.members('Photo', 'Movie', 'Song')
+    t.members("Photo", "Movie", "Song");
   },
-})
+});
 ```
+
 #### Discriminant Model Field Strategy (`__typename`)
 
 The [Discriminant Model Field (DMF) strategy](https://nexusjs.org/docs/guides/abstract-types#discriminant-model-field-dmf-strategy-__typename) allows you to discriminate your union member types in a potentialy modular way. It is based on supplying at \_\_typename field in the model data returned by resolvers of fields typed as an abstract type. Here is an example:
@@ -286,66 +302,76 @@ The [Discriminant Model Field (DMF) strategy](https://nexusjs.org/docs/guides/ab
 ```ts
 const Query = queryType({
   definition(t) {
-    t.field('search', {
-      type: 'SearchResult',
+    t.field("search", {
+      type: "SearchResult",
       args: {
         pattern: stringArg(),
       },
       resolve(root, args, ctx) {
-        return ctx.db.search(args.pattern).map(result => {
-          const __typename = result.album ? 'Song' : result.rating ? 'Movie' : result.width ? 'Photo' : null
+        return ctx.db.search(args.pattern).map((result) => {
+          const __typename = result.album
+            ? "Song"
+            : result.rating
+              ? "Movie"
+              : result.width
+                ? "Photo"
+                : null;
           if (!__typename) {
-            throw new Error(`Could not resolve the type of data passed to union type "SearchResult"`)
+            throw new Error(
+              `Could not resolve the type of data passed to union type "SearchResult"`,
+            );
           }
           return {
             ...result,
             __typename,
-          }
-        })
+          };
+        });
       },
-    })
+    });
   },
-})
+});
 ```
+
 #### Modular Strategy (`isTypeOf`)
 
 The [Modular strategy](https://nexusjs.org/docs/guides/abstract-types#modular-strategy-istypeof) allows you to discriminate your union member types in a modular way (surprise). It uses a predicate function that you implement that allows Nexus (actually GraphQL.js under the hood) to know at runtime if data being sent to the client is of a respective type or not. Here is an example:
 
 ```ts
 const Movie = objectType({
-  name: 'Movie',
+  name: "Movie",
   isTypeOf(data) {
-    return Boolean(data.rating)
+    return Boolean(data.rating);
   },
   definition(t) {
-    t.string('url')
-    t.field('rating', {
-      type: 'MovieRating',
-    })
+    t.string("url");
+    t.field("rating", {
+      type: "MovieRating",
+    });
   },
-})
+});
 const Photo = objectType({
-  name: 'Photo',
+  name: "Photo",
   isTypeOf(data) {
-    return Boolean(data.width)
+    return Boolean(data.width);
   },
   definition(t) {
-    t.string('url')
-    t.int('width')
-    t.int('height')
+    t.string("url");
+    t.int("width");
+    t.int("height");
   },
-})
+});
 const Song = objectType({
-  name: 'Song',
+  name: "Song",
   isTypeOf(data) {
-    return Boolean(data.album)
+    return Boolean(data.album);
   },
   definition(t) {
-    t.string('url')
-    t.string('album')
+    t.string("url");
+    t.string("album");
   },
-})
+});
 ```
+
 Read the [Abstract Types guide](https://nexusjs.org/docs/guides/abstract-types) for details on how strategies work, are enabled or disabled, are type safe, and more.
 
 ### Changes to Backing Types
@@ -384,4 +410,3 @@ The Nexus playground has been converted to a set of prepared Codesandbox example
 Nexus 1.0 represents a significant milestone in the library's evolution. The community has played a crucial role in the its formation and success over the past 2+ years. We'd like to thank everyone who has tried out Nexus, submitted issues and pull requests, and has put it into production!
 
 Follow [@nexusgql on Twitter](https://twitter.com/nexusgql) and watch [the repo](https://github.com/graphql-nexus/nexus) to get future updates on what's happening with Nexus.
-

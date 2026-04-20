@@ -1,10 +1,10 @@
 ---
 title: Serverless driver
-description: 'A lightweight PostgreSQL driver for Prisma Postgres optimized for serverless and edge environments with HTTP/WebSocket support, result streaming, and minimal memory footprint.'
+description: "A lightweight PostgreSQL driver for Prisma Postgres optimized for serverless and edge environments with HTTP/WebSocket support, result streaming, and minimal memory footprint."
 badge: early-access
 url: /v6/postgres/database/serverless-driver
 metaTitle: Serverless driver
-metaDescription: 'A lightweight PostgreSQL driver for Prisma Postgres optimized for serverless and edge environments with HTTP/WebSocket support, result streaming, and minimal memory footprint.'
+metaDescription: "A lightweight PostgreSQL driver for Prisma Postgres optimized for serverless and edge environments with HTTP/WebSocket support, result streaming, and minimal memory footprint."
 ---
 
 The Prisma Postgres serverless driver ([`@prisma/ppg`](https://www.npmjs.com/package/@prisma/ppg)) is a lightweight client for connecting to Prisma Postgres using raw SQL. It uses HTTP and WebSocket protocols instead of traditional TCP connections, enabling database access in constrained environments where native PostgreSQL drivers cannot run.
@@ -67,7 +67,9 @@ Use the `prismaPostgres()` high-level API with SQL template literals and automat
 ```ts
 import { prismaPostgres, defaultClientConfig } from "@prisma/ppg";
 
-const ppg = prismaPostgres(defaultClientConfig(process.env.PRISMA_DIRECT_TCP_URL!));
+const ppg = prismaPostgres(
+  defaultClientConfig(process.env.PRISMA_DIRECT_TCP_URL!),
+);
 
 type User = { id: number; name: string; email: string };
 
@@ -139,7 +141,12 @@ With 100ms network latency, 3 sequential queries take 300ms (3 x RTT), but pipel
 Parameters over 1KB are automatically streamed without buffering in memory. For large binary parameters, you must use `boundedByteStreamParameter()` which creates a `BoundedByteStreamParameter` object that carries the total byte size, required by the PostgreSQL protocol:
 
 ```ts
-import { client, defaultClientConfig, boundedByteStreamParameter, BINARY } from "@prisma/ppg";
+import {
+  client,
+  defaultClientConfig,
+  boundedByteStreamParameter,
+  BINARY,
+} from "@prisma/ppg";
 
 const cl = client(defaultClientConfig(process.env.PRISMA_DIRECT_TCP_URL!));
 
@@ -157,7 +164,12 @@ await cl.query("INSERT INTO files (data) VALUES ($1)", streamParam);
 For `Uint8Array` data, use `byteArrayParameter()`:
 
 ```ts
-import { client, defaultClientConfig, byteArrayParameter, BINARY } from "@prisma/ppg";
+import {
+  client,
+  defaultClientConfig,
+  byteArrayParameter,
+  BINARY,
+} from "@prisma/ppg";
 
 const cl = client(defaultClientConfig(process.env.PRISMA_DIRECT_TCP_URL!));
 
@@ -176,7 +188,8 @@ Transactions automatically handle BEGIN, COMMIT, and ROLLBACK:
 ```ts
 const result = await ppg.transaction(async (tx) => {
   await tx.sql.exec`INSERT INTO users (name) VALUES ('Alice')`;
-  const users = await tx.sql<User>`SELECT * FROM users WHERE name = 'Alice'`.collect();
+  const users =
+    await tx.sql<User>`SELECT * FROM users WHERE name = 'Alice'`.collect();
   return users[0].name;
 });
 ```
@@ -197,7 +210,9 @@ When using `defaultClientConfig()`, common PostgreSQL types are automatically pa
 ```ts
 import { prismaPostgres, defaultClientConfig } from "@prisma/ppg";
 
-const ppg = prismaPostgres(defaultClientConfig(process.env.PRISMA_DIRECT_TCP_URL!));
+const ppg = prismaPostgres(
+  defaultClientConfig(process.env.PRISMA_DIRECT_TCP_URL!),
+);
 
 // JSON/JSONB automatically parsed
 const rows = await ppg.sql<{ data: { key: string } }>`

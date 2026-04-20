@@ -29,6 +29,7 @@ deno run -A npm:prisma@latest init --db
 Enter a name for your project and choose a database region.
 
 This command:
+
 - Connects to the [Prisma Data Platform](https://console.prisma.io) (opens browser for authentication)
 - Creates a `prisma/schema.prisma` file for your database models
 - Creates a `.env` file with your `DATABASE_URL`
@@ -105,6 +106,7 @@ deno task db:push
 ```
 
 This command:
+
 1. Creates the `Task` table in your Prisma Postgres database
 2. Generates the Prisma Client with full type safety
 
@@ -216,14 +218,14 @@ Deno.serve({ port: 8000 }, handler);
 
 This creates a full CRUD API with the following endpoints:
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/` | API info |
-| GET | `/tasks` | List all tasks |
-| POST | `/tasks` | Create a new task |
-| GET | `/tasks/:id` | Get a specific task |
-| PATCH | `/tasks/:id` | Update a task |
-| DELETE | `/tasks/:id` | Delete a task |
+| Method | Endpoint     | Description         |
+| ------ | ------------ | ------------------- |
+| GET    | `/`          | API info            |
+| GET    | `/tasks`     | List all tasks      |
+| POST   | `/tasks`     | Create a new task   |
+| GET    | `/tasks/:id` | Get a specific task |
+| PATCH  | `/tasks/:id` | Update a task       |
+| DELETE | `/tasks/:id` | Delete a task       |
 
 ## 6. Test your application locally
 

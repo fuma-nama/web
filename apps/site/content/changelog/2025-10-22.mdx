@@ -26,11 +26,11 @@ If you’re adopting the new `prisma.config.ts` setup in your projects, version 
 ```typescript
 import { defineConfig, env } from "prisma/config";
 export default defineConfig({
-  // The Rust-compiled schema engine 
+  // The Rust-compiled schema engine
   engine: "classic",
   datasource: {
-       url: env('DATABASE_URL'),
-  }
+    url: env("DATABASE_URL"),
+  },
 });
 ```
 

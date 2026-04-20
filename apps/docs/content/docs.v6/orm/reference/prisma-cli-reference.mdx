@@ -1,9 +1,9 @@
 ---
 title: Prisma CLI reference
-description: 'This page gives an overview of all available Prisma CLI commands, explains their options and shows numerous usage examples.'
+description: "This page gives an overview of all available Prisma CLI commands, explains their options and shows numerous usage examples."
 url: /v6/orm/reference/prisma-cli-reference
 metaTitle: Prisma CLI reference
-metaDescription: 'This page gives an overview of all available Prisma CLI commands, explains their options and shows numerous usage examples.'
+metaDescription: "This page gives an overview of all available Prisma CLI commands, explains their options and shows numerous usage examples."
 ---
 
 This document describes the Prisma CLI commands, arguments, and options.
@@ -90,16 +90,16 @@ By default, the project sets up a [local Prisma Postgres](/v6/postgres/database/
 
 #### Arguments
 
-| Argument                 | Required | Description                                                                                                                                                                                             | Default               |
-| ------------------------ | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
-| `--datasource-provider`  | No       | Specifies the value for the `provider` field in the `datasource` block. Options are `prisma+postgres`, `sqlite`, `postgresql`, `mysql`, `sqlserver`, `mongodb` and `cockroachdb`.                       | `postgresql`          |
+| Argument                 | Required | Description                                                                                                                                                                                        | Default               |
+| ------------------------ | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
+| `--datasource-provider`  | No       | Specifies the value for the `provider` field in the `datasource` block. Options are `prisma+postgres`, `sqlite`, `postgresql`, `mysql`, `sqlserver`, `mongodb` and `cockroachdb`.                  | `postgresql`          |
 | `--db`                   | No       | Shorthand syntax for `--datasource-provider prisma+postgres`; creates a new [Prisma Postgres](/v6/postgres) instance. Requires authentication in the [PDP Console](https://console.prisma.io).     |                       |
-| `--prompt` (or `--vibe`) | No       | Scaffolds a Prisma schema based on the prompt and deploys it to a fresh Prisma Postgres instance. Requires authentication in the [PDP Console](https://console.prisma.io).                              |                       |
-| `--url`                  | No       | Define a custom `datasource` url.                                                                                                                                                                       |                       |
-| `--generator-provider`   | No       | Define the generator provider to use.                                                                                                                                                                   | `prisma-client`       |
+| `--prompt` (or `--vibe`) | No       | Scaffolds a Prisma schema based on the prompt and deploys it to a fresh Prisma Postgres instance. Requires authentication in the [PDP Console](https://console.prisma.io).                         |                       |
+| `--url`                  | No       | Define a custom `datasource` url.                                                                                                                                                                  |                       |
+| `--generator-provider`   | No       | Define the generator provider to use.                                                                                                                                                              | `prisma-client`       |
 | `--preview-feature`      | No       | Define the [Preview features](/v6/orm/reference/preview-features) to use. To define multiple Preview features, you have to provide the flag multiple times for each Preview feature. See examples. |                       |
 | `--output`               | No       | Specifies the [output location for the generated client](/v6/orm/prisma-client/setup-and-configuration/generating-prisma-client#using-a-custom-output-path).                                       | `../generated/prisma` |
-| `--with-model`           | No       | Adds a simple `User` model to the initial Prisma schema. Available since version `5.14.0`.                                                                                                              |                       |
+| `--with-model`           | No       | Adds a simple `User` model to the initial Prisma schema. Available since version `5.14.0`.                                                                                                         |                       |
 
 #### Examples
 
@@ -393,14 +393,14 @@ generator client {
 
 #### Options
 
-| Option              | Required | Description                                                                                                                                                                                                                                 | Default |
-| ------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| Option              | Required | Description                                                                                                                                                                                                                            | Default |
+| ------------------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
 | `--data-proxy`      | No       | The `generate` command will generate Prisma Client for use with [Prisma Accelerate](/v6/accelerate) prior to Prisma 5.0.0. Mutually exclusive with `--accelerate` and `--no-engine`.                                                   |
 | `--accelerate`      | No       | The `generate` command will generate Prisma Client for use with [Prisma Accelerate](/v6/accelerate). Mutually exclusive with `--data-proxy` and `--no-engine`. Available in Prisma 5.1.0 and later.                                    |
 | `--no-engine`       | No       | The `generate` command will generate Prisma Client without an accompanied engine for use with [Prisma Accelerate](/v6/accelerate). Mutually exclusive with `--data-proxy` and `--accelerate`. Available in Prisma ORM 5.2.0 and later. |
-| `--no-hints`        | No       | The `generate` command will generate Prisma Client without usage hints, surveys or info banners being printed to the terminal. Available in Prisma ORM 5.16.0 and later.                                                                    |
-| `--allow-no-models` | No       | The `generate` command will generate Prisma Client without generating any models.                                                                                                                                                           |
-| `--watch`           | No       | The `generate` command will continue to watch the `schema.prisma` file and re-generate Prisma Client on file changes.                                                                                                                       |
+| `--no-hints`        | No       | The `generate` command will generate Prisma Client without usage hints, surveys or info banners being printed to the terminal. Available in Prisma ORM 5.16.0 and later.                                                               |
+| `--allow-no-models` | No       | The `generate` command will generate Prisma Client without generating any models.                                                                                                                                                      |
+| `--watch`           | No       | The `generate` command will continue to watch the `schema.prisma` file and re-generate Prisma Client on file changes.                                                                                                                  |
 
 :::warning
 
@@ -681,13 +681,13 @@ The `dev` command starts a [local Prisma Postgres](/v6/postgres/database/local-d
 
 ### Arguments
 
-| Argument              | Required | Description                                                                                                                                                 | Default |
-| --------------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| Argument              | Required | Description                                                                                                                                            | Default |
+| --------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | ------- |
 | `--name` (or `-n`)    | No       | Enables targeting a specific database instance. [Learn more](/v6/postgres/database/local-development#using-different-local-prisma-postgres-instances). |         |
-| `--port` (or `-p`)    | No       | Main port number the local Prisma Postgres HTTP server will listen on.                                                                                      | `51213` |
-| `--db-port` (or `-P`) | No       | Port number the local Prisma Postgres database server will listen on.                                                                                       | `51214` |
-| `--shadow-db-port`    | No       | Port number the shadow database server will listen on.                                                                                                      | `51215` |
-| `--debug`             | No       | Enable debug logging.                                                                                                                                       | `false` |
+| `--port` (or `-p`)    | No       | Main port number the local Prisma Postgres HTTP server will listen on.                                                                                 | `51213` |
+| `--db-port` (or `-P`) | No       | Port number the local Prisma Postgres database server will listen on.                                                                                  | `51214` |
+| `--shadow-db-port`    | No       | Port number the shadow database server will listen on.                                                                                                 | `51215` |
+| `--debug`             | No       | Enable debug logging.                                                                                                                                  | `false` |
 
 ### Examples
 

@@ -14,7 +14,7 @@ tags:
   - "orm"
 ---
 
-We are excited to share that today's Prisma ORM [release](https://github.com/prisma/prisma/releases/tag/3.12.0)  adds stable and production-ready support for MongoDB! Join our celebrations during the [launch week](https://www.prisma.io/mongodb?utm_source=website&utm_medium=blogpost&utm_campaign=mongodblaunch) **April 25-29**.
+We are excited to share that today's Prisma ORM [release](https://github.com/prisma/prisma/releases/tag/3.12.0) adds stable and production-ready support for MongoDB! Join our celebrations during the [launch week](https://www.prisma.io/mongodb?utm_source=website&utm_medium=blogpost&utm_campaign=mongodblaunch) **April 25-29**.
 
 ## Prisma + MongoDB = 💚
 
@@ -68,6 +68,7 @@ enum Department {
   Engineering
 }
 ```
+
 Prisma's data model makes it particularly easy to work with _relations_. In the schema example above, you see a one-to-many relation from `User` to `Post` via a [_reference_](https://www.mongodb.com/docs/manual/tutorial/model-referenced-one-to-many-relationships-between-documents/) as well as the `Profile` type which represent an [_embedded document_](https://www.mongodb.com/docs/manual/tutorial/model-embedded-one-to-one-relationships-between-documents/) on the `User` model.
 
 ### Auto-completing database queries
@@ -90,8 +91,6 @@ Prisma especially starts to shine when it's used in a TypeScript application as 
 
 For example, consider this query where we specify via the `select` option which fields of the `User` model (and its relations) should be returned in the response:
 
-
-
 ```ts
 const userData = await prisma.user.findFirst({
   select: {
@@ -100,40 +99,40 @@ const userData = await prisma.user.findFirst({
     profile: {
       select: {
         firstName: true,
-        lastName: true
-      }
+        lastName: true,
+      },
     },
     posts: {
       select: {
-        title: true
-      }
-    }
-  }
-})
+        title: true,
+      },
+    },
+  },
+});
 ```
+
 ```ts
 const userData: {
   id: string;
   email: string | null;
   profile: {
-      firstName: string;
-      lastName: string;
+    firstName: string;
+    lastName: string;
   } | null;
   posts: {
-      title: string;
+    title: string;
   }[];
-} | null
+} | null;
 ```
-
 
 If you select the **Generated Type** tab in the code snippet above, you see that the type of the resulting `userData` constant is now tailored to the fields that are selected in the query.
 
 This has two main benefits:
+
 - The TypeScript compiler will catch cases where you accidentally access a field that was not returned from the query.
   ![](/mongodb-general-availability-pixnun6mffmu/imgs/compiler-error.png)
 - Your auto-completion suggestions are tailored to the given type.
   ![](/mongodb-general-availability-pixnun6mffmu/imgs/autocomplete.png)
-
 
 ## Try out MongoDB with Prisma today
 
@@ -144,7 +143,8 @@ We are excited to see what you're going to build with MongoDB and Prisma! You ca
 To get started with MongoDB and Prisma, you can follow our guide to set up a new project from scratch.
 
 <br />
-[Start from scratch with MongoDB](https://www.prisma.io/docs/getting-started/prisma-orm/quickstart/mongodb?utm_source=website&utm_medium=blogpost&utm_campaign=mongodblaunch)
+[Start from scratch with
+MongoDB](https://www.prisma.io/docs/getting-started/prisma-orm/quickstart/mongodb?utm_source=website&utm_medium=blogpost&utm_campaign=mongodblaunch)
 
 ### ... or use Prisma with your existing MongoDB database
 
@@ -153,7 +153,8 @@ If you already have an existing project that uses a MongoDB database, you can ea
 Prisma has an _introspection_ features that reads the structures of the documents you have stored in your MongoDB collections and creates according Prisma models. We are also going to publish a migration guide from Mongoose [soon](https://github.com/prisma/web/issues/2793).
 
 <br />
-[Add Prisma to existing MongoDB project](https://www.prisma.io/docs/getting-started/prisma-orm/add-to-existing-project/mongodb?utm_source=website&utm_medium=blogpost&utm_campaign=mongodblaunch)
+[Add Prisma to existing MongoDB
+project](https://www.prisma.io/docs/getting-started/prisma-orm/add-to-existing-project/mongodb?utm_source=website&utm_medium=blogpost&utm_campaign=mongodblaunch)
 
 ## Join us for a week of celebrations 🎉
 

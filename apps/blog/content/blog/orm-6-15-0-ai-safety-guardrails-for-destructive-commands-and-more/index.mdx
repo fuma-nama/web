@@ -24,9 +24,7 @@ In Prisma ORM v6.15.0, we’ve added extra guardrails that will prevent an AI co
 
 The `prisma migrate` CLI now detects the environment from which it has been executed. If it’s being executed by popular AI agents such as Claude Code, Gemini CLI, Qwen Code, Cursor, Aider and Replit, it will request an explicit confirmation before executing the command against the database.
 
-
 ![](/orm-6-15-0-ai-safety-guardrails-for-destructive-commands-and-more/imgs/6e96adf6edf9a2019424eba3ab11054927abc353-1668x1080.gif)
-
 
 This feature ensures that irreversible operations which drop and recreate the database are not executed automatically by an AI tool. Prisma ORM is the first ORM to provide this level of protection, making it safer to use AI-assisted development while working with your databases.
 
@@ -53,7 +51,7 @@ Here is the full list of with all updated values for the supported runtimes: `no
 
 _Ever ran into trouble when connecting to your database from a serverless function?_
 
-[Fluid compute](https://vercel.com/fluid) is a new compute model from Vercel that combines the flexibility of serverless with the stability of servers, making it ideal for dynamic workloads such as streaming data and AI APIs. 
+[Fluid compute](https://vercel.com/fluid) is a new compute model from Vercel that combines the flexibility of serverless with the stability of servers, making it ideal for dynamic workloads such as streaming data and AI APIs.
 
 A [common challenge in traditional serverless platforms](https://vercel.com/blog/the-real-serverless-compute-to-database-connection-problem-solved) is that when functions are suspended, database connection pools can’t close idle connections. This leads to leaked connections that stay open until the database times them out, which can exhaust the pool.
 
@@ -74,11 +72,12 @@ const prisma = new PrismaClient({
   adapter: new PrismaPg(pool),
 });
 ```
+
 ## Prisma Postgres Management API is ready for production
 
-_Do you want to programmatically provisioning and manage Prisma Postgres, e.g. during CI/CD?_ 
+_Do you want to programmatically provisioning and manage Prisma Postgres, e.g. during CI/CD?_
 
-The [Prisma Postgres Management API](https://www.prisma.io/docs/postgres/introduction/management-api) for programmatically managing database instances is now Generally Available! 
+The [Prisma Postgres Management API](https://www.prisma.io/docs/postgres/introduction/management-api) for programmatically managing database instances is now Generally Available!
 
 It’s the perfect fit for CI/CD workflows, or any time you need a database on demand, check out these example GitHub Actions to see how it works:
 
@@ -89,7 +88,7 @@ You can also use it to provision databases in your own product! Take it for a sp
 
 ## Integrate Prisma Postgres with 2800+ apps to automate workflows via Pipedream
 
-_Love automating workflows? You can now integrate Prisma Postgres with all kinds of apps—from ChatGPT, to Telegram, to Zendesk. The options are limitless!_ 
+_Love automating workflows? You can now integrate Prisma Postgres with all kinds of apps—from ChatGPT, to Telegram, to Zendesk. The options are limitless!_
 
 Prisma Postgres can now be used directly in your [Pipedream](https://pipedream.com/) workflows 🎉
 
@@ -102,7 +101,7 @@ This makes it easier than ever to use Prisma Postgres in your automation pipelin
 
 ## New `--json` flag for `npx create-db`
 
-_Need a quick database without the hassle of manual setup or authenticating with a 3rd party service?_ 
+_Need a quick database without the hassle of manual setup or authenticating with a 3rd party service?_
 
 The [`npx create-db`](https://create-db.prisma.io/) command lets you spin up a temporary, production-ready Prisma Postgres database that you can later claim for continued use. With this release, you can now add the `--json` flag to return the database details in JSON format.
 

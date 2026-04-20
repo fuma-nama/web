@@ -22,7 +22,8 @@ export const stackCategories: StackCategory[] = [
   {
     id: "languages",
     title: "Languages",
-    description: "Prisma can be used in any Node.js or TypeScript backend application.",
+    description:
+      "Prisma can be used in any Node.js or TypeScript backend application.",
     items: [
       {
         id: "typescript",
@@ -35,7 +36,8 @@ export const stackCategories: StackCategory[] = [
   {
     id: "databases",
     title: "Databases",
-    description: "Prisma works seamlessly across most popular databases and service providers.",
+    description:
+      "Prisma works seamlessly across most popular databases and service providers.",
     items: [
       {
         id: "mongodb",
@@ -61,11 +63,27 @@ export const stackCategories: StackCategory[] = [
   {
     id: "frameworks",
     title: "Frameworks",
-    description: "Here is a non-exhaustive list of libraries and frameworks you can use with Prisma.",
+    description:
+      "Here is a non-exhaustive list of libraries and frameworks you can use with Prisma.",
     items: [
-      { id: "nextjs", name: "Next.js", href: "/nextjs", icon: "/icons/technologies/nextjs.svg" },
-      { id: "nestjs", name: "NestJS", href: "/nestjs", icon: "/icons/technologies/nestjs.svg" },
-      { id: "react", name: "React", href: "/react", icon: "/icons/technologies/react.svg" },
+      {
+        id: "nextjs",
+        name: "Next.js",
+        href: "/nextjs",
+        icon: "/icons/technologies/nextjs.svg",
+      },
+      {
+        id: "nestjs",
+        name: "NestJS",
+        href: "/nestjs",
+        icon: "/icons/technologies/nestjs.svg",
+      },
+      {
+        id: "react",
+        name: "React",
+        href: "/react",
+        icon: "/icons/technologies/react.svg",
+      },
       {
         id: "express",
         name: "Express",
@@ -73,8 +91,18 @@ export const stackCategories: StackCategory[] = [
         icon: "/icons/technologies/express.svg",
         invertInDark: true,
       },
-      { id: "hapi", name: "Hapi", href: "/hapi", icon: "/icons/technologies/hapi.svg" },
-      { id: "graphql", name: "GraphQL", href: "/graphql", icon: "/icons/technologies/graphql.svg" },
+      {
+        id: "hapi",
+        name: "Hapi",
+        href: "/hapi",
+        icon: "/icons/technologies/hapi.svg",
+      },
+      {
+        id: "graphql",
+        name: "GraphQL",
+        href: "/graphql",
+        icon: "/icons/technologies/graphql.svg",
+      },
       {
         id: "fastify",
         name: "Fastify",
@@ -82,7 +110,12 @@ export const stackCategories: StackCategory[] = [
         icon: "/icons/technologies/fastify.svg",
         invertInDark: true,
       },
-      { id: "apollo", name: "Apollo", href: "/apollo", icon: "/icons/technologies/apollo.svg" },
+      {
+        id: "apollo",
+        name: "Apollo",
+        href: "/apollo",
+        icon: "/icons/technologies/apollo.svg",
+      },
     ],
   },
 ];

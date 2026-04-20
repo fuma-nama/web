@@ -274,7 +274,8 @@ const isSecureDb = !process.env.DATABASE_URL.includes("@127.0.0.1");
 
 export const db = new PrismaClient({
   adapter: new PrismaPg({
-    connectionString: process.env.DATABASE_URL + (isSecureDb ? `?sslmode=no-verify` : ""),
+    connectionString:
+      process.env.DATABASE_URL + (isSecureDb ? `?sslmode=no-verify` : ""),
   }),
 });
 ```

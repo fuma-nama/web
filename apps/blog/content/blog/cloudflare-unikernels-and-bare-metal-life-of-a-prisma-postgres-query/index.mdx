@@ -48,11 +48,11 @@ In the next sections, we'll take a closer look at each stage and explain what's 
 
 ### Stage 1: It all starts with Prisma ORM
 
-[Prisma ORM](https://www.prisma.io/orm) is where the journey of a Prisma Postgres query naturally starts. 
+[Prisma ORM](https://www.prisma.io/orm) is where the journey of a Prisma Postgres query naturally starts.
 
 #### No query engine needed on the application server with Prisma Postgres
 
-If you've used Prisma ORM in the past, you may be aware that it uses a _Query Engine_ that's implemented in Rust and which runs as a binary on your application server. 
+If you've used Prisma ORM in the past, you may be aware that it uses a _Query Engine_ that's implemented in Rust and which runs as a binary on your application server.
 
 > Note that while we're still talking about the Query Engine being written in Rust in this context, it is currently being rewritten in TypeScript. Learn more [here](https://t.co/JJnKm2Fs7y).
 
@@ -75,15 +75,16 @@ const users = await prisma.post.findMany({
   cacheStrategy: {
     ttl: 60,
     swr: 30,
-  }
-})
+  },
+});
 ```
+
 This query fetches all published posts from the database and additionally specifies two parameters that will be relevant for the Prisma Postgres cache:
 
-- [Time-To-Live](https://www.prisma.io/docs/accelerate/caching#time-to-live-ttl) (`ttl`):  Determines how long cached data is considered _fresh_. When you set a TTL value, Prisma Postgres will serve the cached data for that duration without querying the database.
+- [Time-To-Live](https://www.prisma.io/docs/accelerate/caching#time-to-live-ttl) (`ttl`): Determines how long cached data is considered _fresh_. When you set a TTL value, Prisma Postgres will serve the cached data for that duration without querying the database.
 - [Stale-While-Revalidate](https://www.prisma.io/docs/accelerate/caching#stale-while-revalidate-swr) (`swr`): Allows Prisma Postgres to serve _stale_ cached data while fetching fresh data in the background. When you set an SWR value, Prisma Postgres will continue to serve the cached data for that duration, even if it's past the TTL, while simultaneously updating the cache with new data from the database.
 
-In this example, the data will be considered fresh for 30 seconds (TTL). After that, for the next 60 seconds (SWR), Prisma Postgres's cache will serve the stale data while fetching fresh data in the background. 
+In this example, the data will be considered fresh for 30 seconds (TTL). After that, for the next 60 seconds (SWR), Prisma Postgres's cache will serve the stale data while fetching fresh data in the background.
 
 Prisma Postgres serves cached data from an edge location close to your application. If you deploy your app to multiple locations, this global cache can dramatically improve the performance of your app!
 
@@ -107,17 +108,20 @@ So, when the query above is executed in an application, what happens next? Becau
   }
 }
 ```
-Note that the `selection` argument specifies the fields that should be fetched from the database. Since we didn't use a `select` or `include` option on our query, its value simply is `"$scalars": true` which means that all scalar fields of the target model will be return from the database. 
+
+Note that the `selection` argument specifies the fields that should be fetched from the database. Since we didn't use a `select` or `include` option on our query, its value simply is `"$scalars": true` which means that all scalar fields of the target model will be return from the database.
 
 The next step for the request to be evaluated by Prisma Postgres' authentication and cache layers.
 
 ### Stage 2: Authenticating the request
 
 Before hitting the cache to check if the query result can be served from there, the query needs to be authenticated. A Prisma Postgres URL always contains an `apiKey` argument that encodes the user credentials:
+
 ```
 prisma+postgres://accelerate.prisma-data.net/?api_key=ey...
 ```
-The auth layer is implemented using Cloudflare Workers, and therefore in close physical proximity to the origin of the query. It uses the `apiKey` value to identify the user, validate the access permissions and route the request to the next stage. 
+
+The auth layer is implemented using Cloudflare Workers, and therefore in close physical proximity to the origin of the query. It uses the `apiKey` value to identify the user, validate the access permissions and route the request to the next stage.
 
 ### Stage 3: To cache or not to cache
 
@@ -132,9 +136,9 @@ The main purpose of this routing layer is to determine whether the Prisma Postgr
 
 So, let's investigate the path through Prisma Postgres' caching layer.
 
-Being built on top of Cloudflare Workers, the Prisma Postgres cache takes advantage of the official [Cloudflare Cache API](https://developers.cloudflare.com/workers/runtime-apis/cache/). 
+Being built on top of Cloudflare Workers, the Prisma Postgres cache takes advantage of the official [Cloudflare Cache API](https://developers.cloudflare.com/workers/runtime-apis/cache/).
 
-As a cache key, it uses a hash that's computed based on the _entire_ Prisma ORM query (including values for the query parameters, such as `published: true` in the case above). This approach errs on the side of cache misses and only returns data from the cache if there's a 100% certainty that this exact query was sent to the database and that its result was cached before. 
+As a cache key, it uses a hash that's computed based on the _entire_ Prisma ORM query (including values for the query parameters, such as `published: true` in the case above). This approach errs on the side of cache misses and only returns data from the cache if there's a 100% certainty that this exact query was sent to the database and that its result was cached before.
 
 You can see the statistics of your caching behavior in the Prisma Postgres dashboard:
 
@@ -154,7 +158,7 @@ These VMs host the Query Engine that was moved out of the application server (as
 
 ### Stage 5: Entering the unikernel database
 
-Prisma Postgres is based on _unikernels_ (think: "hyper-specialized operating systems") running as ultra-lightweight microVMs on our own bare metal servers. 
+Prisma Postgres is based on *unikernels* (think: "hyper-specialized operating systems") running as ultra-lightweight microVMs on our own bare metal servers.
 
 > Check out the [Early Access announcement](https://www.prisma.io/blog/announcing-prisma-postgres-early-access#building-a-managed-postgresql-service-on-millisecond-cloud-infrastructure) to learn about the details of that architecture, our collaboration with [Unikraft](https://unikraft.cloud/), and the millisecond cloud stack that enables the performance benefits of Prisma Postgres.
 
@@ -172,7 +176,7 @@ Thanks to this highly efficient stack, a database instance incurs costs only whe
 
 Back to our query: After the initial JSON representation of the query has been transformed into an efficient SQL statement, the query finally reaches the database layer via TCP. The PostgreSQL instances are deployed using Unikraft's millisecond cloud stack on our own bare metal servers in close proximity to the connection pool.
 
-The first stop here is the [Unikraft proxy](https://unikraft.cloud/how-it-works/#control-plane) which is responsible for maintaining the TCP connections to the connection pool. 
+The first stop here is the [Unikraft proxy](https://unikraft.cloud/how-it-works/#control-plane) which is responsible for maintaining the TCP connections to the connection pool.
 
 The proxy now talks to the Unikraft controller which is responsible for managing the _actual_ Prisma Postgres instances. At this point, there are two possible states:
 
@@ -183,13 +187,13 @@ Don't get confused by the "pause" and "wake up" terminology here. Thanks to the 
 
 ## What's next for the Prisma Postgres architecture?
 
-While we've seen a lot of excitement about the current technology stack and the benefits it provides to developers already, we are not going to stop here! 
+While we've seen a lot of excitement about the current technology stack and the benefits it provides to developers already, we are not going to stop here!
 
 There are a number of additional optimizations that we see possible in future iterations of Prisma Postgres, most notably: We are going to move the connection pool onto the _same machines_ that are running the Prisma Postgres instances:
 
 ![Prisma Postgres components](/cloudflare-unikernels-and-bare-metal-life-of-a-prisma-postgres-query/imgs/b38aa9235dab3c4bbef178b0944da6f97a9c2c2f-660x852.png)
 
-The TCP connection is the most expensive part in the entire stack, due to the three-way handshake that needs to be done every time a connection is established. By reducing this TCP connection to a merely local one happening between two processes on the same machine, the latency caused by the physical distance between the connection pool and database instance would become entirely negligible. 
+The TCP connection is the most expensive part in the entire stack, due to the three-way handshake that needs to be done every time a connection is established. By reducing this TCP connection to a merely local one happening between two processes on the same machine, the latency caused by the physical distance between the connection pool and database instance would become entirely negligible.
 
 This is the core advantage of Prisma Postgres compared to other providers that are based on AWS (or another cloud provider's) infrastructure: When using a cloud provider, there's no guarantee that the connection pool and database instance are running on the same host but there's always going to be a network hop.
 
@@ -198,6 +202,7 @@ This is the core advantage of Prisma Postgres compared to other providers that a
 In this article, we looked under the covers of Prisma Postgres and the next-generation technology stack it's built on.
 
 If you are already using Prisma ORM, give Prisma Postgres a try [by importing the data from your existing database](https://www.prisma.io/docs/getting-started/prisma-postgres/import-from-existing-database) in . Otherwise, try out Prisma Postgres from scratch by running this command in your terminal:
+
 ```
 npx prisma@latest init --db
 ```

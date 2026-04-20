@@ -16,14 +16,12 @@ The shadow database is a second, _temporary_ database that is **created and dele
 The shadow database is **not** required in production, and is not used by production-focused commands such as `prisma migrate resolve` and `prisma migrate deploy`.
 :::
 
-
 ## How the shadow database works
 
 When you run `prisma migrate dev` to create a new migration, Prisma Migrate uses the shadow database to:
 
 - [Detect schema drift](#detecting-schema-drift), which means checking that no **unexpected changes** have been made to the development database
 - [Generate new migrations](#generating-new-migrations) and evaluate if those could lead to **data loss** when applied
-
 
 ### Detecting schema drift
 
@@ -68,7 +66,6 @@ In some cases it might make sense (e.g. when [creating and dropping databases is
 2. Add the connection string of that database your environment variable `SHADOW_DATABASE_URL` (or `.env` file)
 3. Configure the `shadowDatabaseUrl` field in `prisma.config.ts` under the `datasource` object. In Prisma 6 and below, add the `shadowDatabaseUrl` field to the `datasource` block in your `schema.prisma` file.
 
-
 ```ts title="prisma.config.ts"
 import "dotenv/config";
 import { defineConfig, env } from "prisma/config";
@@ -84,7 +81,6 @@ export default defineConfig({
   },
 });
 ```
-
 
 :::warn[Important]
 Do not use the exact same values for `url` and `shadowDatabaseUrl` as that might delete all the data in your database.
@@ -128,7 +124,6 @@ In order to create and delete the shadow database when using `migrate dev`, Pris
 | MySQL/MariaDB        | Database user must have `CREATE, ALTER, DROP, REFERENCES ON *.*` privileges                                                                                                                                            |
 | PostgreSQL           | The user must be a super user or have `CREATEDB` privilege. See `CREATE ROLE` ([PostgreSQL official documentation](https://www.postgresql.org/docs/12/sql-createrole.html))                                            |
 | Microsoft SQL Server | The user must be a site admin or have the `SERVER` securable. See the [official documentation](https://learn.microsoft.com/en-us/sql/relational-databases/security/permissions-database-engine?view=sql-server-ver15). |
-
 
 Prisma Migrate throws the following error if it cannot create the shadow database with the credentials your connection URL supplied:
 

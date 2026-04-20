@@ -23,19 +23,19 @@ From Prisma [4.8.0](https://github.com/prisma/prisma/releases/tag/4.8.0), we hav
 
 In our quest to improve Prisma's performance, we unearthed a few inefficiencies, which we tackled.
 
-To illustrate the difference since we began investing our efforts in improving performance, consider the following graphs below. 
+To illustrate the difference since we began investing our efforts in improving performance, consider the following graphs below.
 
 The first graph represents the startup performance of an app deployed to AWS Lambda with a comparatively large Prisma schema (with 500 models) before we began our efforts to improve it:
 
 ![](/prisma-5-f66prwkjx72s/imgs/before.png)
 
-*Before*
+_Before_
 
 The following graph shows Prisma 5's performance after our work on performance improvements:
 
 ![](/prisma-5-f66prwkjx72s/imgs/prisma-5-upgrade.png)
 
-*After*
+_After_
 
 As you can see, there is a _significant_ improvement in Prisma's startup performance. We'll now dig in and discuss the various changes that got us to this much improved state.
 
@@ -43,7 +43,7 @@ As you can see, there is a _significant_ improvement in Prisma's startup perform
 
 Prior to Prisma 4.11.0, Prisma used a GraphQL-like protocol to communicate between Prisma Client and the query engine. This came with a few quirks that impacted Prisma Client's performance — especially on _cold starts_ in serverless environments.
 
-During our performance exploration, we noticed that the current implementation added a considerable CPU and memory overhead, especially for larger schemas. 
+During our performance exploration, we noticed that the current implementation added a considerable CPU and memory overhead, especially for larger schemas.
 
 One of our solutions to alleviate this issue was a complete redesign of our wire protocol. Using JSON, we were able to make communication between Prisma Client and the query engine significantly more efficient. We released this feature behind the `jsonProtocol` Preview feature flag in version [4.11.0](https://github.com/prisma/prisma/releases/tag/4.11.0).
 
@@ -51,13 +51,13 @@ Before we began any work on performance improvements, an average "cold start" re
 
 ![](/prisma-5-f66prwkjx72s/imgs/before.png)
 
-*Before*
+_Before_
 
 After enabling the `jsonProtocol` Preview feature, the graph looked like this:
 
 ![](/prisma-5-f66prwkjx72s/imgs/after-schema-builder.png)
 
-*After*
+_After_
 
 After _a lot_ of great feedback from our users and extensive testing, we're excited to announce that `jsonProtocol` is now Generally Available and is the default wire protocol that Prisma Client will use under the hood.
 
@@ -77,27 +77,27 @@ Before we made these three changes, the graph looked like this with the `jsonPro
 
 ![](/prisma-5-f66prwkjx72s/imgs/after-schema-builder.png)
 
-*Before*
+_Before_
 
 After making these three changes, the response time was **cut by two-thirds**:
 
 ![](/prisma-5-f66prwkjx72s/imgs/prisma-5-upgrade.png)
 
-*After*
+_After_
 
-The request now leaves a very small footprint. 
+The request now leaves a very small footprint.
 
 For a _zoomed-in_ comparison on how these changes impact Prisma Client, the first graph shows the impact of the JSON-based wire protocol:
 
 ![](/prisma-5-f66prwkjx72s/imgs/json-protocol.png)
 
-*Before: JSON-based wire protocol impact*
+_Before: JSON-based wire protocol impact_
 
 The following graph shows Prisma Client's performance after we optimized its internals and reduced the size of the JavaScript runtime:
 
 ![](/prisma-5-f66prwkjx72s/imgs/prisma-5-zoom-in.png)
 
-*After: Smaller JavaScript runtime and optimized internals impact*
+_After: Smaller JavaScript runtime and optimized internals impact_
 
 ## Try out Prisma 5 and share your feedback
 

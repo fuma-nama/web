@@ -82,6 +82,7 @@ alwaysApply: false
 ## 1) Dependencies
 
 - Upgrade/install:
+
   - Dev: `prisma@latest` (7.0.0), `tsx`, `dotenv` (skip if Bun).
   - Runtime: `@prisma/client@latest` (7.0.0).
   - **One** database adapter that matches the datasource:
@@ -112,6 +113,7 @@ alwaysApply: false
 ## 2) Prisma Schema Changes
 
 - In `schema.prisma`:
+
   - `generator client`:
 
     ```diff
@@ -123,9 +125,11 @@ alwaysApply: false
   - Remove any `previewFeatures = ["driverAdapters"]` and any `engineType` attributes.
 
   - Update the `datasource db` block:
+
     - **Goal:** keep the existing `provider` value, but **remove any `url = …` entry**.
 
     - Example (for illustration only — do not insert comments into the user's schema):
+
       - Before:
 
         ```prisma

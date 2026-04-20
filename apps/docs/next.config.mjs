@@ -1,7 +1,4 @@
 import { withSentryConfig } from "@sentry/nextjs";
-import { createMDX } from "fumadocs-mdx/next";
-
-const withMDX = createMDX();
 
 const ContentSecurityPolicy = `
   default-src 'self';
@@ -249,7 +246,7 @@ const config = {
   },
 };
 
-export default withSentryConfig(withMDX(config), {
+export default withSentryConfig(config, {
   org: "prisma-ch",
   project: "javascript-nextjs",
   authToken: process.env.SENTRY_AUTH_TOKEN,

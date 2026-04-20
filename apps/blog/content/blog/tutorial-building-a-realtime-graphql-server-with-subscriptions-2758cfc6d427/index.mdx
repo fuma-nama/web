@@ -31,7 +31,7 @@ The major difference between subscriptions and queries/mutations lies in the _ex
 With that request, the client expressed interest in data that’s related to a specific _event_, for example a specific user liking a picture. The corresponding subscription might look like this:
 
 ```graphql
-subscription($userId: ID!) {
+subscription ($userId: ID!) {
   likeCreated(userId: $userId) {
     user {
       name
@@ -42,6 +42,7 @@ subscription($userId: ID!) {
   }
 }
 ```
+
 When the user in question now likes a picture, the server pushes the requested data to the subscribed client via their connection:
 
 ```json
@@ -58,6 +59,7 @@ When the user in question now likes a picture, the server pushes the requested d
   }
 }
 ```
+
 ### Implementing subscriptions with WebSockets
 
 Subscriptions are commonly implemented with [WebSockets](https://en.wikipedia.org/wiki/WebSocket). Apart from the realtime logic (which is typically handled via pub/sub-systems), you need to implement the official [communication protocol](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md) for GraphQL subscriptions. Only if your server follows the flow defined in the protocol, clients will be able to properly initiate requests and receive event data.
@@ -79,6 +81,7 @@ curl https://codeload.github.com/nikolasburk/subscriptions/tar.gz/starter | tar 
 cd subscriptions-starter
 yarn install # or npm install
 ```
+
 The project contains a very simple GraphQL API with the following schema:
 
 ```graphql
@@ -94,6 +97,7 @@ type Mutation {
   deletePost(id: ID!): Post
 }
 ```
+
 The Post type is defined via the [Prisma data model](https://github.com/nikolasburk/subscriptions/blob/starter/database/datamodel.graphql) and looks as follows:
 
 ```graphql
@@ -102,6 +106,7 @@ type Post {
   title: String!
 }
 ```
+
 The goal for this project will be to add two subscriptions to the API:
 
 - A subscription that fires when a new Post is _created_ or the title of an existing Post is _updated_.
@@ -119,19 +124,21 @@ Once the API is deployed, the CLI prints the `HTTP endpoint` for the Prisma data
 
 ```js
 const server = new GraphQLServer({
-  typeDefs: './src/schema.graphql',
+  typeDefs: "./src/schema.graphql",
   resolvers,
-  context: req => ({
+  context: (req) => ({
     ...req,
     db: new Prisma({
-      typeDefs: 'src/generated/prisma.graphql',
-      endpoint: 'https://eu1.prisma.sh/public-scytheeater-265/subscriptions-example/dev',
-      secret: 'mysecret123',
+      typeDefs: "src/generated/prisma.graphql",
+      endpoint:
+        "https://eu1.prisma.sh/public-scytheeater-265/subscriptions-example/dev",
+      secret: "mysecret123",
       debug: true,
     }),
   }),
-})
+});
 ```
+
 ### 1.3. Open a GraphQL Playground
 
 You can now start the server and open up a [GraphQL Playground](https://github.com/prismagraphql/graphql-playground) by running the `yarn dev` command:
@@ -163,6 +170,7 @@ type Subscription {
   post(where: PostSubscriptionWhereInput): PostSubscriptionPayload
 }
 ```
+
 If not further constrained through the `where` argument, the `post` subscription will fire for all of the events mentioned above.
 
 ### 2.2. Filtering for specific events
@@ -188,6 +196,7 @@ input PostSubscriptionWhereInput {
   OR: [PostSubscriptionWhereInput!]
 }
 ```
+
 The two examples mentioned above could be expressed with the following subscriptions in the Prisma API:
 
 ```graphql
@@ -212,6 +221,7 @@ subscription {
   }
 }
 ```
+
 ### 2.3. Exploring the selection set of a subscription
 
 You now have a good understanding how you can subscribe to the events that interest you. But how can you now ask for the data related to an event?
@@ -226,6 +236,7 @@ type PostSubscriptionPayload {
   previousValues: PostPreviousValues
 }
 ```
+
 Let’s discuss each of these fields in a bit more detail.
 
 **2.3.1 `mutation: MutationType!`**
@@ -239,6 +250,7 @@ enum MutationType {
   DELETED
 }
 ```
+
 The `mutation` field on the `PostSubscriptionPayload` type therefore carries the information what _kind_ of mutation happened.
 
 **2.3.2 `node: Post`**
@@ -262,15 +274,20 @@ subscription {
   }
 }
 ```
+
 Now, assume the server receives the following mutation to update the `title` of a given `Post`:
 
 ```graphql
 mutation {
-  updatePost(where: { id: "..." }, data: { title: "Prisma is the best way to build GraphQL servers" }) {
+  updatePost(
+    where: { id: "..." }
+    data: { title: "Prisma is the best way to build GraphQL servers" }
+  ) {
     id
   }
 }
 ```
+
 The subscribed client will then receive the following payload:
 
 ```json
@@ -282,6 +299,7 @@ The subscribed client will then receive the following payload:
   }
 }
 ```
+
 This is because the mutation only updated the Post’s title field - nothing else.
 
 **2.3.4 `previousValues: PostPreviousValues`**
@@ -294,6 +312,7 @@ type PostPreviousValues {
   title: String!
 }
 ```
+
 It basically is a _helper_ type that simply mirrors the fields from `Post`.
 
 `previousValues` is only used for `UPDATED`- and `DELETED`-mutations. For `CREATED`-mutations, it will always be `null` (for the same reason that node is `null` for `DELETED`-mutations).
@@ -316,6 +335,7 @@ subscription {
   }
 }
 ```
+
 Here’s what the payload will look like that the server pushes to the client after it performed the mutation from before:
 
 ```json
@@ -334,6 +354,7 @@ Here’s what the payload will look like that the server pushes to the client af
   }
 }
 ```
+
 Note that this assumes the updated `Post` had the following `title` before the mutation was performed: “GraphQL servers are best built with conventional ORMs”.
 
 ## 3. Add the `publication` subscription
@@ -351,11 +372,13 @@ type Subscription {
   publications: PostSubscriptionPayload
 }
 ```
+
 The referenced `PostSubscriptionPayload` is directly taken from the Prisma GraphQL schema. It thus also needs to be imported at the top of the file:
 
 ```graphql
 # import Post, PostSubscriptionPayload from "./generated/prisma.graphql"
 ```
+
 > **Note:** The comment-based import syntax is used by the `[graphql-import](https://github.com/prismagraphql/graphql-import)` package. As of today, GraphQL SDL does not have an official way to import types across files. [This might change soon](https://github.com/graphql/graphql-wg/blob/master/notes/2018-02-01.md#present-graphql-import).
 
 ### 3.2. Implement the subscription resolver
@@ -380,16 +403,17 @@ const resolvers = {
         return ctx.db.subscription.post(
           {
             where: {
-              mutation_in: ['CREATED', 'UPDATED'],
+              mutation_in: ["CREATED", "UPDATED"],
             },
           },
           info,
-        )
+        );
       },
     },
   },
-}
+};
 ```
+
 Prisma bindings are doing the work for you here since `db.subscription.post(...)` returns the `AsyncIterator` that emits a new value upon every event on the `Post` type.
 
 Note that you’re specifically filtering for `CREATED`- and `UPDATED`-mutations to ensure the publications subscription only fires for those events.
@@ -410,6 +434,7 @@ subscription {
   }
 }
 ```
+
 > **Note: **The GraphQL Playground sometimes shows this [bug](https://github.com/prismagraphql/graphql-playground/issues/646) where the subscription directly returns a payload of `null`. If this happens to you, try this [workaround](https://github.com/prismagraphql/graphql-playground/issues/646#issuecomment-382614189).
 
 Once the subscription is running, you'll see a loading indicator in the response pane and the **Play**-button turns into a red **Stop**-button for you to stop the subscription.
@@ -425,6 +450,7 @@ mutation {
   }
 }
 ```
+
 Navigating back to the initial tab, you’ll see that the subscription data now appeared in the response pane 🙌
 
 ![](/tutorial-building-a-realtime-graphql-server-with-subscriptions-2758cfc6d427/imgs/1*c6bexq2J0bTeT5UioGjl_A.png)
@@ -447,6 +473,7 @@ type Subscription {
   postDeleted: Post
 }
 ```
+
 Instead of returning the `PostSubscriptionPayload` for `postDeleted`, you simply return the `Post` object that was deleted.
 
 ### 4.2. Implement the subscription resolver
@@ -469,23 +496,24 @@ const resolvers = {
     },
     postDeleted: {
       subscribe: (parent, args, ctx, info) => {
-        const selectionSet = `{ previousValues { id title } }`
+        const selectionSet = `{ previousValues { id title } }`;
         return ctx.db.subscription.post(
           {
             where: {
-              mutation_in: ['DELETED'],
+              mutation_in: ["DELETED"],
             },
           },
           selectionSet,
-        )
+        );
       },
       resolve: (payload, args, context, info) => {
-        return payload ? payload.post.previousValues : payload
+        return payload ? payload.post.previousValues : payload;
       },
     },
   },
-}
+};
 ```
+
 The most important thing to realize about combining the `subscribe` and `resolve` functions is that the values emitted by the `AsyncIterator` (which is returned by `subscribe`) correspond to the `payload` argument that’s passed into `resolve`! This means you can use `resolve` to transform and/or filter the event data emitted by the `AsyncIterator` according to your needs.
 
 Note that in this scenario, you’re also passing a _hardcoded_ selection set to the `post` binding function instead of passing the `info` object along as you’re doing most of the time. The invocation of the binding function thus corresponds to the following subscription request against the Prisma API:
@@ -500,6 +528,7 @@ subscription {
   }
 }
 ```
+
 The info object carries the [AST](https://medium.com/@cjoudrey/life-of-a-graphql-query-lexing-parsing-ca7c5045fad8) (and therefore the _selection set_) of the incoming GraphQL operations (queries, mutations and subscriptions alike). In this case however, the incoming selection set can’t be applied to the `post` subscription from the Prisma API. The reasons for that are the following:
 
 - The return type of the incoming subscription is simply `Post` as you defined in `schema.graphql`.
@@ -524,6 +553,7 @@ In any case, by hardcoding the selection you’re guaranteed that the payload ar
   }
 }
 ```
+
 That’s why inside `resolve` you can simply return `payload.post.previousValues` and what you get is an object that adheres to the structure of the `Post` type 💡 (Note that checking for payload with the _ternary operator_ is just a sanity check to ensure it’s not `undefined`, since this might break the subscription.)
 
 ### 4.3. Test the subscription
@@ -541,6 +571,7 @@ mutation {
   }
 }
 ```
+
 Navigating back to the subscription tab, you’ll see that the `id` and `title` have been pushed in the response pane, as requested by the active subscription.
 
 ![](/tutorial-building-a-realtime-graphql-server-with-subscriptions-2758cfc6d427/imgs/1*1vMUL8w54yIAxOPVSR0UjQ.png)
@@ -552,4 +583,3 @@ In this tutorial, you learned how to add realtime subscriptions to a GraphQL API
 Similar to implementing queries and mutations with Prisma, you are piggybacking on Prisma’s GraphQL API, leaving the heavy-lifting of database access and pub/sub logic to the powerful Prisma query engine.
 
 If you want to play around with the project yourself, you can check out the final result of the tutorial on [GitHub](https://github.com/nikolasburk/subscriptions).
-

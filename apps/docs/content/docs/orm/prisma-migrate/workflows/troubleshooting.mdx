@@ -69,11 +69,11 @@ If you made manual changes to the database that you want to keep, you can:
 
 - Introspect the database:
 
- ```npm
- npx prisma db pull
- ```
+```npm
+npx prisma db pull
+```
 
- Prisma will update your schema with the changes made directly in the database.
+Prisma will update your schema with the changes made directly in the database.
 
 - Generate a new migration to include the introspected changes in your migration history:
 
@@ -107,15 +107,17 @@ npx prisma migrate reset
 ```
 
 - If you introduced a change in the Prisma schema that cannot be applied to a database with data (for example, a mandatory column in a table with data):
+
   - Delete the `migration.sql` file.
   - Modify the schema - for example, add a default value to the mandatory field.
   - Migrate:
-     ```npm
-     npx prisma migrate dev
-     ```
- Prisma Migrate will prompt you to reset the database and re-apply all migrations.
+    `npm
+    npx prisma migrate dev
+    `
+    Prisma Migrate will prompt you to reset the database and re-apply all migrations.
 
 - If something interrupted the migration process, reset the database:
+
 ```npm
 npx prisma migrate reset
 ```

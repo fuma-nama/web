@@ -155,7 +155,9 @@ Update `app.vue` to display users:
   <div>
     <h1>Users</h1>
     <ul v-if="users?.length">
-      <li v-for="user in users" :key="user.id">{{ user.name }} ({{ user.email }})</li>
+      <li v-for="user in users" :key="user.id">
+        {{ user.name }} ({{ user.email }})
+      </li>
     </ul>
     <p v-else>No users yet.</p>
   </div>
@@ -235,6 +237,7 @@ You can deploy your Nuxt application to Vercel using one of two methods:
    ```
 
 3. Set the `DATABASE_URL` environment variable:
+
    - Go to your [Vercel Dashboard](https://vercel.com/dashboard)
    - Select your project
    - Navigate to **Settings** → **Environment Variables**
@@ -262,6 +265,7 @@ You can deploy your Nuxt application to Vercel using one of two methods:
    ```
 
 3. Import your project in Vercel:
+
    - Go to [Vercel Dashboard](https://vercel.com/dashboard)
    - Click **Add New** → **Project**
    - Import your Git repository

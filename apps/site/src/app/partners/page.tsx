@@ -159,7 +159,8 @@ const twoCol = [
 
 export const metadata = createPageMetadata({
   title: "Prisma | Partner network",
-  description: "Join our partner network designed for affiliates, technology partners, and resellers.",
+  description:
+    "Join our partner network designed for affiliates, technology partners, and resellers.",
   path: "/partners",
   ogImage: "/og/og-partners.png",
 });

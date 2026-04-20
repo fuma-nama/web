@@ -1,8 +1,8 @@
 ---
 title: Best practices
-description: 'Learn production-ready patterns for schema design, query optimization, type safety, security, and deployment with Prisma ORM.'
+description: "Learn production-ready patterns for schema design, query optimization, type safety, security, and deployment with Prisma ORM."
 metaTitle: Best practices
-metaDescription: 'Learn production-ready patterns for schema design, query optimization, type safety, security, and deployment with Prisma ORM.'
+metaDescription: "Learn production-ready patterns for schema design, query optimization, type safety, security, and deployment with Prisma ORM."
 url: /orm/more/best-practices
 ---
 
@@ -52,6 +52,7 @@ model Comment {
   @@index([postId])
 }
 ```
+
 :::
 
 ### Index strategy
@@ -112,14 +113,14 @@ The `schema.prisma` file (containing the `generator` block) and `migrations/` di
 Create one global `PrismaClient` instance and reuse it throughout your application. Creating multiple instances creates multiple connection pools, which can exhaust your database's connection limit and slow down queries.
 
 ```ts title="lib/prisma.ts"
-import { PrismaClient } from '../generated/prisma/client'
-import { PrismaPg } from '@prisma/adapter-pg'
+import { PrismaClient } from "../generated/prisma/client";
+import { PrismaPg } from "@prisma/adapter-pg";
 
 const adapter = new PrismaPg({
-  connectionString: process.env.DATABASE_URL
-})
+  connectionString: process.env.DATABASE_URL,
+});
 
-export const prisma = new PrismaClient({ adapter })
+export const prisma = new PrismaClient({ adapter });
 ```
 
 **Serverless environments:**
@@ -133,23 +134,23 @@ The N+1 problem occurs when you run 1 query to fetch a list, then 1 additional q
 
 ```ts title="n-plus-one.ts"
 // ❌ Bad: N+1 queries (1 + N queries)
-const users = await prisma.user.findMany()
+const users = await prisma.user.findMany();
 for (const user of users) {
   const posts = await prisma.post.findMany({
-    where: { authorId: user.id }
-  })
+    where: { authorId: user.id },
+  });
 }
 
 // ✅ Good: Single query with include
 const users = await prisma.user.findMany({
-  include: { posts: true }
-})
+  include: { posts: true },
+});
 
 // ✅ Good: Batch with IN filter
-const users = await prisma.user.findMany()
+const users = await prisma.user.findMany();
 const posts = await prisma.post.findMany({
-  where: { authorId: { in: users.map(u => u.id) } }
-})
+  where: { authorId: { in: users.map((u) => u.id) } },
+});
 ```
 
 ### Select only needed fields
@@ -161,27 +162,27 @@ const user = await prisma.user.findFirst({
   select: {
     id: true,
     email: true,
-    role: true
-  }
-})
+    role: true,
+  },
+});
 ```
 
 Use `omit` to blacklist fields you want excluded (useful for sensitive data):
 
 ```ts title="omit.ts"
-import { PrismaClient } from '../generated/prisma/client'
-import { PrismaPg } from '@prisma/adapter-pg'
+import { PrismaClient } from "../generated/prisma/client";
+import { PrismaPg } from "@prisma/adapter-pg";
 
 const adapter = new PrismaPg({
-  connectionString: process.env.DATABASE_URL
-})
+  connectionString: process.env.DATABASE_URL,
+});
 
 const prisma = new PrismaClient({
   adapter,
   omit: {
-    user: { secretValue: true }
-  }
-})
+    user: { secretValue: true },
+  },
+});
 ```
 
 You cannot combine `select` and `omit` in the same query.
@@ -194,8 +195,8 @@ Use **offset pagination** for small datasets where jumping to arbitrary pages is
 const posts = await prisma.post.findMany({
   skip: 40,
   take: 10,
-  where: { email: { contains: 'prisma.io' } },
-})
+  where: { email: { contains: "prisma.io" } },
+});
 ```
 
 Use **cursor-based pagination** for large datasets or infinite scroll. Cursor-based pagination scales better because it uses indexed columns to find the starting position instead of traversing skipped rows:
@@ -208,9 +209,9 @@ const posts = await prisma.post.findMany({
     id: lastPost.id,
   },
   orderBy: {
-    id: 'asc',
+    id: "asc",
   },
-})
+});
 ```
 
 ### Batch operations
@@ -219,16 +220,13 @@ Use bulk methods when operating on multiple records:
 
 ```ts title="batch-operations.ts"
 await prisma.user.createMany({
-  data: [
-    { email: 'alice@prisma.io' },
-    { email: 'bob@prisma.io' }
-  ]
-})
+  data: [{ email: "alice@prisma.io" }, { email: "bob@prisma.io" }],
+});
 
 await prisma.post.updateMany({
   where: { published: false },
-  data: { published: true }
-})
+  data: { published: true },
+});
 ```
 
 Bulk operations (`createMany`, `createManyAndReturn`, `updateMany`, `updateManyAndReturn`, and `deleteMany`) [automatically run as transactions](/orm/prisma-client/queries/transactions#batch-operations), so all writes either succeed together or are rolled back if something fails.
@@ -238,10 +236,10 @@ Bulk operations (`createMany`, `createManyAndReturn`, `updateMany`, `updateManyA
 Prefer Prisma ORM's query API. Use raw SQL only when you need features not supported by Prisma ORM or heavily optimized queries:
 
 ```ts title="raw-query.ts"
-const email = 'user@example.com'
+const email = "user@example.com";
 const users = await prisma.$queryRaw`
   SELECT * FROM "User" WHERE email = ${email}
-`
+`;
 ```
 
 :::warning
@@ -255,14 +253,14 @@ Never concatenate user input into SQL strings. Always use parameterized queries 
 Use Prisma ORM's generated types instead of duplicating interfaces:
 
 ```ts title="generated-types.ts"
-import type { User } from '../generated/prisma/client'
+import type { User } from "../generated/prisma/client";
 
 async function getAdminEmails(): Promise<string[]> {
   const admins: User[] = await prisma.user.findMany({
-    where: { role: 'ADMIN' }
-  })
+    where: { role: "ADMIN" },
+  });
 
-  return admins.map(a => a.email)
+  return admins.map((a) => a.email);
 }
 ```
 
@@ -271,16 +269,16 @@ async function getAdminEmails(): Promise<string[]> {
 Always validate and sanitize user input before database operations:
 
 ```ts title="input-validation.ts"
-import { z } from 'zod'
+import { z } from "zod";
 
 const createUserSchema = z.object({
   email: z.string().email(),
-  name: z.string().min(1).max(100)
-})
+  name: z.string().min(1).max(100),
+});
 
 async function createUser(input: unknown) {
-  const data = createUserSchema.parse(input)
-  return prisma.user.create({ data })
+  const data = createUserSchema.parse(input);
+  return prisma.user.create({ data });
 }
 ```
 
@@ -294,17 +292,17 @@ Prisma ORM's API is safe by default. For raw queries, always use parameterized q
 // ✅ Safe: tagged template
 const result = await prisma.$queryRaw`
   SELECT * FROM "User" WHERE email = ${email}
-`
+`;
 
 // ✅ Safe: parameterized
 const result = await prisma.$queryRawUnsafe(
   'SELECT * FROM "User" WHERE email = $1',
-  email
-)
+  email,
+);
 
 // ❌ Unsafe: string concatenation
-const query = `SELECT * FROM "User" WHERE email = '${email}'`
-const result = await prisma.$queryRawUnsafe(query)
+const query = `SELECT * FROM "User" WHERE email = '${email}'`;
+const result = await prisma.$queryRawUnsafe(query);
 ```
 
 ### Sensitive data handling
@@ -312,26 +310,26 @@ const result = await prisma.$queryRawUnsafe(query)
 Exclude sensitive fields from query results:
 
 ```ts title="sensitive-data.ts"
-import { PrismaClient } from '../generated/prisma/client'
-import { PrismaPg } from '@prisma/adapter-pg'
+import { PrismaClient } from "../generated/prisma/client";
+import { PrismaPg } from "@prisma/adapter-pg";
 
 const adapter = new PrismaPg({
-  connectionString: process.env.DATABASE_URL
-})
+  connectionString: process.env.DATABASE_URL,
+});
 
 // Global exclusion
 const prisma = new PrismaClient({
   adapter,
   omit: {
-    user: { secretValue: true }
-  }
-})
+    user: { secretValue: true },
+  },
+});
 
 // Per-query exclusion
 const user = await prisma.user.findUnique({
   where: { id: 1 },
-  omit: { secretValue: true }
-})
+  omit: { secretValue: true },
+});
 ```
 
 ## Testing
@@ -351,24 +349,24 @@ Use a dedicated test database that can be reset freely:
 Mock Prisma ORM using `jest-mock-extended`:
 
 ```ts title="unit-test.ts"
-import { PrismaClient } from '../generated/prisma/client'
-import { mockDeep } from 'jest-mock-extended'
+import { PrismaClient } from "../generated/prisma/client";
+import { mockDeep } from "jest-mock-extended";
 
-const prismaMock = mockDeep<PrismaClient>()
+const prismaMock = mockDeep<PrismaClient>();
 
-test('finds user by email', async () => {
+test("finds user by email", async () => {
   prismaMock.user.findUnique.mockResolvedValue({
     id: 1,
-    email: 'test@example.com',
-    name: 'Test User'
-  })
+    email: "test@example.com",
+    name: "Test User",
+  });
 
   const user = await prismaMock.user.findUnique({
-    where: { email: 'test@example.com' }
-  })
+    where: { email: "test@example.com" },
+  });
 
-  expect(user).toBeDefined()
-})
+  expect(user).toBeDefined();
+});
 ```
 
 ### Integration tests with real database
@@ -376,32 +374,32 @@ test('finds user by email', async () => {
 Use a real database with Prisma Migrate:
 
 ```ts title="integration-test.ts"
-import { PrismaClient } from '../generated/prisma/client'
-import { PrismaPg } from '@prisma/adapter-pg'
+import { PrismaClient } from "../generated/prisma/client";
+import { PrismaPg } from "@prisma/adapter-pg";
 
 const adapter = new PrismaPg({
-  connectionString: process.env.DATABASE_URL
-})
+  connectionString: process.env.DATABASE_URL,
+});
 
-const prisma = new PrismaClient({ adapter })
+const prisma = new PrismaClient({ adapter });
 
 beforeEach(async () => {
   await prisma.user.create({
-    data: { email: 'test@example.com', name: 'Test' }
-  })
-})
+    data: { email: "test@example.com", name: "Test" },
+  });
+});
 
 afterEach(async () => {
-  await prisma.user.deleteMany()
-})
+  await prisma.user.deleteMany();
+});
 
-test('creates user', async () => {
+test("creates user", async () => {
   const user = await prisma.user.create({
-    data: { email: 'new@example.com', name: 'New User' }
-  })
+    data: { email: "new@example.com", name: "New User" },
+  });
 
-  expect(user.email).toBe('new@example.com')
-})
+  expect(user.email).toBe("new@example.com");
+});
 ```
 
 ## Production deployment
@@ -438,21 +436,21 @@ For AWS Lambda, Vercel, Cloudflare Workers, or similar platforms:
 3. Consider external connection poolers (like PgBouncer) for high-concurrency workloads
 
 ```ts title="serverless-handler.ts"
-import { PrismaClient } from '../generated/prisma/client'
-import { PrismaPg } from '@prisma/adapter-pg'
+import { PrismaClient } from "../generated/prisma/client";
+import { PrismaPg } from "@prisma/adapter-pg";
 
 const adapter = new PrismaPg({
-  connectionString: process.env.DATABASE_URL
-})
+  connectionString: process.env.DATABASE_URL,
+});
 
-const prisma = new PrismaClient({ adapter })
+const prisma = new PrismaClient({ adapter });
 
 export async function handler(event) {
-  const users = await prisma.user.findMany()
+  const users = await prisma.user.findMany();
   return {
     statusCode: 200,
-    body: JSON.stringify(users)
-  }
+    body: JSON.stringify(users),
+  };
 }
 ```
 

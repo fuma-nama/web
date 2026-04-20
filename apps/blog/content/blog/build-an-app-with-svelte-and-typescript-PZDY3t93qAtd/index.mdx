@@ -32,16 +32,11 @@ After installation, we'll enable TypeScript in the app using the setup script th
 
 Use `degit` to create a new project.
 
-
-
 ```shell
 npx degit sveltejs/template github-users-app
 ```
 
-
 Once the template downloads, open up the project in your editor and have a look in `src/App.svelte`. The template gives us a standard `.svelte` file with a `script` block. If we tried to use TypeScript here right away, we'd get an error.
-
-
 
 ```svelte
 <script>
@@ -49,12 +44,9 @@ Once the template downloads, open up the project in your editor and have a look 
 </script>
 ```
 
-
 To use TypeScript in this block, we need to opt-into it by setting `lang="ts"` in the `script` tag.
 
 In `App.svelte`, set the `lang` attribute to `ts`.
-
-
 
 ```svelte
 <script lang="ts">
@@ -62,35 +54,25 @@ In `App.svelte`, set the `lang` attribute to `ts`.
 </script>
 ```
 
-
 Our last step is to run the `setupTypeScript.js` file that Svelte provides so that we can enable TypeScript properly throughout the app.
-
-
 
 ```shell
 node scripts/setupTypeScript.js
 ```
 
-
 This script creates a `tsconfig.json` file at the root of the project and converts all the `.js` files to `.ts`. It also adds some new dependencies to the `package.json` file which support TypeScript.
 
 Reinstall the dependencies to get the new ones we need.
-
-
 
 ```shell
 npm install
 ```
 
-
 With these steps complete, we should be able to run the app and see everything working.
-
-
 
 ```shell
 npm run dev
 ```
-
 
 Open the app up at `http://localhost:5000`.
 
@@ -103,8 +85,6 @@ Open the app up at `http://localhost:5000`.
 Let's start building out the app by creating a component to show some users from GitHub.
 
 Create a file in the `/src` directory called `Users.svelte`. Inside, add a `script` block with a function to get some users from the GitHub API. Be sure to opt-into TypeScript with the `lang` attribute.
-
-
 
 ```svelte
 <script lang="ts">
@@ -125,10 +105,7 @@ Create a file in the `/src` directory called `Users.svelte`. Inside, add a `scri
 </script>
 ```
 
-
 In `App.svelte`, import and use the `Users` component so we can see the results from the API call logged to the console.
-
-
 
 ```svelte
 <script lang="ts">
@@ -140,7 +117,6 @@ In `App.svelte`, import and use the `Users` component so we can see the results 
 </main>
 ```
 
-
 Refresh the page to make sure the results come through.
 
 ![GitHub users data being resolved from an API call](/build-an-app-with-svelte-and-typescript-PZDY3t93qAtd/imgs/svelte-typescript-2.png)
@@ -148,8 +124,6 @@ Refresh the page to make sure the results come through.
 Next, let's add a template to the `Users` component to render the data. We'll use an Await block, as well as an Each block to iterate over the users.
 
 > **Note:** The examples here use Tailwind v2 for styling. There's a bit of a setup process to get Tailwind in the project. Have a look at [this article](https://dev.to/swyx/how-to-set-up-svelte-with-tailwind-css-4fg5) by [@swyx](https://twitter.com/swyx) to find out how to set up Tailwind in a Svelte project.
-
-
 
 ```svelte
 <script lang="ts">
@@ -181,7 +155,6 @@ Next, let's add a template to the `Users` component to render the data. We'll us
 </section>
 ```
 
-
 We've adjusted the `getUsers` call to create a reactive declaration. This allows Svelte to automatically update our view when data from this call resolves.
 
 We're awaiting this promise using an Await block in the template and then using an Each block to loop over and display each entry.
@@ -197,8 +170,6 @@ To fix this, we need to make our component aware of the type information for thi
 ## Apply Type-Hints to the Users Data
 
 Add a type called `User` to the `Users` component and give it some of the properties that we know to exist on the GitHub users data. Then apply the `User` type to the return of the `getUsers` function.
-
-
 
 ```svelte
 <script lang="ts">
@@ -223,7 +194,6 @@ Add a type called `User` to the `Users` component and give it some of the proper
 </script>
 ```
 
-
 The return type of the `getUsers` function is now type-hinted as a `Promise` that resolves with an array of objects that are of type `User`.
 
 You may be wondering why we're relying on this spot to type-hint our data. It's because we can't apply a type hint to the other spots we might think to. We can't type-hint the `$: allUsersPromise` declaration, nor can we apply types in our template. Type-hinting the return of the function gives us some type safety in a way that is workable with Svelte.
@@ -239,8 +209,6 @@ One benefit of pairing TypeScript with libraries that use props to pass data dow
 Let's create a `UserDetail` component so we can see some more information about the user and also demonstrate how to type-hint the props to be passed in.
 
 Create a new file called `UserDetail.svelte` in the `/src` directory. In the component, we'll want an event dispatcher so that the parent component can listen for when we want to close this part of the UI. We'll also want a local function which calls the GitHub API for detailed user information. Finally, we'll want a template to display the info.
-
-
 
 ```svelte
 <script lang="ts">
@@ -277,12 +245,9 @@ Create a new file called `UserDetail.svelte` in the `/src` directory. In the com
 </div>
 ```
 
-
 The component should accept a prop for the GitHub handle of the user we want more detail on. This is where we can type-hint the prop for this component. If we type-hint `userLogin` as a `string`, we won't be able to pass anything but a `string` as input from the parent component.
 
 Let's now import and call the `UserDetails` component in our `Users` component. We'll need to make some adjustments to toggle it open and closed from the parent.
-
-
 
 ```svelte
 <script lang="ts">
@@ -332,12 +297,12 @@ Let's now import and call the `UserDetails` component in our `Users` component. 
 </section>
 ```
 
-
 We're now listening for `click` events on the user's name so we can open the details component. When the user clicks the X at the top of the `UserDetails` component, the panel is closed.
 
 **Sidenote:** I know the `setTimeout` in the `on:closeDetails` event is pretty hacky. There's probably a better way. If you know it, [help me out](https://twitter.com/ryanchenkie)!
 
 The key thing to point out in this setup is that we have type safety for the inputs to our `UserDetails` component. If we tried to pass something other than a string, we'd get a type error.
+
 ```
 //...
 
@@ -345,11 +310,10 @@ The key thing to point out in this setup is that we have type safety for the inp
   userLogin={42}
 />
 ```
+
 ![Type error when passing an incorrect type to the UserDetails component](/build-an-app-with-svelte-and-typescript-PZDY3t93qAtd/imgs/svelte-typescript-5.png)
 
 Right now we have `any` applied as the return type to the `getUserDetails` function in `UserDetails.svelte`. Let's apply type-safety here by defining a type and using it.
-
-
 
 ```svelte
 <script lang="ts">
@@ -375,7 +339,6 @@ Right now we have `any` applied as the return type to the `getUserDetails` funct
 </script>
 ```
 
-
 With the `UserDetails` type applied, we're now protected in the template.
 
 ## Current TypeScript Limitations in Svelte
@@ -393,6 +356,7 @@ In our code above, we have a `closeDetails` event fired from the child `UserDeta
 />
 // type error: closeTheDetails
 ```
+
 [This discussion](https://github.com/sveltejs/language-tools/issues/424) provides some insight on the topic and points to what we may see in the future for being able to type event handlers.
 
 ## Aside: Add Type-Safe Database Access with Prisma
@@ -411,34 +375,25 @@ Let's start by creating a simple Node API. We'll build it with TypeScript.
 
 Start by creating a new folder and initiallizing npm.
 
-
-
 ```shell
 mkdir svelte-users-api
 cd svelte-users-api
 npm init -y
 ```
 
-
 Next, let's install the **dev** dependencies we'll need.
-
-
 
 ```shell
 npm install -D @prisma/cli typescript @types/node @types/express @types/cors ts-node-dev
 ```
 
-
 Most of the dependencies here are related to TypeScript but the first one in the list is `@prismac/cli`. This package will give us all the tooling we need for running `prisma` commands in our workspace to create our database models, run migrations, and more.
 
 Next, let's install our regular dependenceis.
 
-
-
 ```shell
 npm install @prisma/client express cors
 ```
-
 
 The first in the list for our regular dependencies is `@prisma/client`. The Prisma Client is what will give us type-safe access to our database.
 
@@ -446,18 +401,13 @@ The first in the list for our regular dependencies is `@prisma/client`. The Pris
 
 The Prisma CLI gives us an `init` command which takes care of creating a `/prisma` directory in our project and putting in a default model for us. Let's run that command and see what's inside.
 
-
-
 ```shell
 npx prisma init
 ```
 
-
 Inside the `/prisma` directory is a file called `schema.prisma`. This file uses the [Prisma Schema Language (PSL)](https://www.prisma.io/docs/concepts/components/prisma-schema#syntax) and is the place we describe all of our database tables and the relationships between them.
 
 Open up `schema.prisma` and put in a `User` model. This will represent a table which holds all of our user's data.
-
-
 
 ```prisma
 datasource db {
@@ -479,7 +429,6 @@ model User {
 }
 ```
 
-
 The `User` model has all of the same properties we were seeing from the GitHub API. This should allow us to easily swap out the calls to GitHub with calls to our own server.
 
 The `datasource db` line points to the database and connection we want to use. Prisma supports MySQL, Postgres, MSSQL, and SQLite. We'll use SQLite here as it's easy to work with and we don't need to spin anything else up.
@@ -490,12 +439,9 @@ The `datasource db` line points to the database and connection we want to use. P
 
 With our model in place, we can now run a command to create and run a [migration](https://www.prisma.io/docs/concepts/components/prisma-migrate).
 
-
-
 ```shell
 npx prisma migrate dev --preview-feature
 ```
-
 
 The `prisma migrate` command will create a new `/prisma/migrations` directory in our project and will furnish it with the SQL needed to create our database table. It will then create the SQLite database in the `/prisma` directory and will create our `User` table.
 
@@ -503,12 +449,9 @@ The `prisma migrate` command will create a new `/prisma/migrations` directory in
 
 We can now view our database table by using [Prisma Studio](https://github.com/prisma/studio).
 
-
-
 ```shell
 npx prisma studio
 ```
-
 
 This will open up Prisma Studio in the browser at `http://locahost:5555`.
 
@@ -524,28 +467,25 @@ With our database in place (and some data inside), we're now ready to create an 
 
 Create a file at the project root called `server.ts`. This will be where we new up our Express app, our Prisma Client, and where we build out a `GET` endpoint for our data.
 
-
-
 ```ts
-import express, { Request, Response } from 'express'
-import cors from 'cors'
-import { PrismaClient } from '@prisma/client'
+import express, { Request, Response } from "express";
+import cors from "cors";
+import { PrismaClient } from "@prisma/client";
 
-const app = express()
-app.use(cors())
+const app = express();
+app.use(cors());
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 
-app.get('/users', async (req: Request, res: Response) => {
-  const users = await prisma.user.findMany()
-  res.json(users)
-})
+app.get("/users", async (req: Request, res: Response) => {
+  const users = await prisma.user.findMany();
+  res.json(users);
+});
 
-const PORT = process.env.PORT || 5001
-app.listen(PORT)
-console.log(`Listening on http://localhost:${PORT}`)
+const PORT = process.env.PORT || 5001;
+app.listen(PORT);
+console.log(`Listening on http://localhost:${PORT}`);
 ```
-
 
 When we want to access our database with Prisma, we use the `PrismaClient`. It's where we get the typings for our data models and the guarantees of type safety when accessing our database.
 
@@ -557,16 +497,11 @@ Let's now run the API and swap out the calls to GitHub for a call to our server.
 
 In the project for the API, use `ts-node-dev` to run the server.
 
-
-
 ```shell
 ts-node-dev server.ts
 ```
 
-
 In the Svelte project, let's swap our the github.com URL in the fetch call in `Users.svelte` with our API URL.
-
-
 
 ```svelte
 <script lang="ts">
@@ -587,7 +522,6 @@ In the Svelte project, let's swap our the github.com URL in the fetch call in `U
 </script>
 ```
 
-
 With this simple change, we should now be getting data from our server instead of from GitHub.
 
 ![Svelte app pulling user data from our own API](/build-an-app-with-svelte-and-typescript-PZDY3t93qAtd/imgs/svelte-typescript-8.png)
@@ -597,4 +531,3 @@ With this simple change, we should now be getting data from our server instead o
 The type safety benefits that are now readily available in Svelte apps help to make our lives easier in the long run. Like any TypeScript project, it requires more effort upfront to make the app work. That extra effort pays dividends as time goes on since we can have more confidence about how our code works and we can catch bugs before they make it to production.
 
 Svelte and TypeScript pair up very nicely. Rounding things out with type safety on the backend using Prisma for database access makes for a compelling stack.
-

@@ -91,9 +91,8 @@ bench("Orders: getById", () => {
   });
 });
 ```
+
 These are the equivalent snippets from the Drizzle benchmarks:
-
-
 
 ```ts tab="Relational" title="drizzle.relational.bench.ts"
 import { bench } from "@ark/attest";
@@ -131,9 +130,14 @@ bench("Orders: getById", async () => {
       shipName: orders.shipName,
       shipCity: orders.shipCity,
       shipCountry: orders.shipCountry,
-      productsCount: sql<number>`count(${details.productId})`.as("productsCount"),
+      productsCount: sql<number>`count(${details.productId})`.as(
+        "productsCount",
+      ),
       quantitySum: sql<number>`sum(${details.quantity})`.as("quantitySum"),
-      totalPrice: sql<number>`sum(${details.quantity} * ${details.unitPrice})`.as("totalPrice"),
+      totalPrice:
+        sql<number>`sum(${details.quantity} * ${details.unitPrice})`.as(
+          "totalPrice",
+        ),
     })
     .from(orders)
     .leftJoin(details, eq(orders.id, details.orderId))
@@ -142,7 +146,6 @@ bench("Orders: getById", async () => {
     .orderBy(asc(orders.id));
 });
 ```
-
 
 When the benchmarks are executed, the `@ark/attest` library type-checks each block and records:
 
@@ -159,13 +162,13 @@ We report two sets of results measured on an `m7i.large` instance. The first one
 
 #### Schemas
 
-**Type instantiations:** 
+**Type instantiations:**
 
 | **Prisma ORM** | **Drizzle ORM** | **Difference (count)** | **Difference (%)** |
 | -------------- | --------------- | ---------------------- | ------------------ |
 | 428            | 41150           | +40722                 | +9514%             |
 
-**Check time:** 
+**Check time:**
 
 | **Prisma ORM** | **Drizzle ORM** | **Difference (ms)** | **Difference (%)** |
 | -------------- | --------------- | ------------------- | ------------------ |
@@ -173,9 +176,7 @@ We report two sets of results measured on an `m7i.large` instance. The first one
 
 #### Queries
 
-**Type instantiations:** 
-
-
+**Type instantiations:**
 
 | **Label**          | **Prisma ORM** | **Drizzle RQB API** | **Difference (%)** |
 | ------------------ | -------------- | ------------------- | ------------------ |
@@ -203,11 +204,7 @@ We report two sets of results measured on an `m7i.large` instance. The first one
 | Orders: getInfo    | 747            | 2671                          | +258%              |
 | **Average**        | **785**        | **2244**                      | **+186%**          |
 
-
-
-**Check time:** 
-
-
+**Check time:**
 
 | **Prisma ORM** | **Drizzle RQB API** | **Difference (%)** |
 | -------------- | ------------------- | ------------------ |
@@ -216,8 +213,6 @@ We report two sets of results measured on an `m7i.large` instance. The first one
 | **Prisma ORM** | **Drizzle SQL Query Builder** | **Difference (%)** |
 | -------------- | ----------------------------- | ------------------ |
 | 335ms          | 774ms                         | **+131%**          |
-
-
 
 ### Prisma ORM vs Drizzle **1.0.0-beta.1-2acab7f**
 
@@ -231,7 +226,7 @@ Drizzle recently published a beta with type-checking improvements. We re-ran the
 | -------------- | --------------- | ---------------------- | ------------------ |
 | 428            | 5017            | +4589                  | +1072%             |
 
-**Check time:** 
+**Check time:**
 
 | **Prisma ORM** | **Drizzle ORM** | **Difference (ms)** | **Difference (%)** |
 | -------------- | --------------- | ------------------- | ------------------ |
@@ -240,8 +235,6 @@ Drizzle recently published a beta with type-checking improvements. We re-ran the
 #### Queries
 
 **Type instantiations:**
-
-
 
 | **Label**          | **Prisma ORM** | **Drizzle RQB API** | **Difference (%)** |
 | ------------------ | -------------- | ------------------- | ------------------ |
@@ -269,11 +262,7 @@ Drizzle recently published a beta with type-checking improvements. We re-ran the
 | Orders: getInfo    | 747            | 2781                          | +272%              |
 | **Average**        | **785**        | **1780**                      | **+127%**          |
 
-
-
-**Check time:** 
-
-
+**Check time:**
 
 | **Prisma ORM** | **Drizzle RQB API** | **Difference (%)** |
 | -------------- | ------------------- | ------------------ |
@@ -282,8 +271,6 @@ Drizzle recently published a beta with type-checking improvements. We re-ran the
 | **Prisma ORM** | **Drizzle SQL Query Builder** | **Difference (%)** |
 | -------------- | ----------------------------- | ------------------ |
 | 284ms          | 519ms                         | **+83%**           |
-
-
 
 ### Result analysis between Drizzle's Relational Query Builder and Prisma ORM
 
@@ -349,5 +336,5 @@ Note that Drizzle's 1.0.0 beta significantly reduces schema instantiations to ~5
 You can explore all the benchmark files in our [open-source repo](https://github.com/prisma/type-benchmarks/blob/main/benchmark.md).
 
 If you are building a large, complex app where developer velocity and CI performance matter, Prisma ORM’s approach scales further and faster. Most importantly, type performance is developer experience. The faster your editor responds, the quicker your feedback loop and the happier your developers.
-	
+
 > We used Drizzle ORM versions `0.44.4` (stable) and `1.0.0-beta.1-2acab7f` and compared them against Prisma ORM `6.15.0`.

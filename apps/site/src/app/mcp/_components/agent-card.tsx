@@ -20,7 +20,11 @@ export function AgentCard({
 
   const isCopyAction = !!copyText;
   const isExternalLink = !isCopyAction && href?.startsWith("http");
-  const icon = href ? "fa-regular fa-arrow-up-right" : copyText ? "fa-regular fa-copy" : null;
+  const icon = href
+    ? "fa-regular fa-arrow-up-right"
+    : copyText
+      ? "fa-regular fa-copy"
+      : null;
 
   const handleClick = (e: React.MouseEvent) => {
     if (!isCopyAction) return;
@@ -35,7 +39,9 @@ export function AgentCard({
     ? { type: "button" as const, onClick: handleClick }
     : {
         href,
-        ...(isExternalLink ? { target: "_blank", rel: "noopener noreferrer" } : {}),
+        ...(isExternalLink
+          ? { target: "_blank", rel: "noopener noreferrer" }
+          : {}),
       };
 
   return (
@@ -56,7 +62,9 @@ export function AgentCard({
               unoptimized
             />
           ) : (
-            <span className="font-mono text-lg text-foreground-neutral-weak">Any AI agent</span>
+            <span className="font-mono text-lg text-foreground-neutral-weak">
+              Any AI agent
+            </span>
           )}
           {icon ? (
             <span

@@ -79,9 +79,11 @@ export function UtmPersistence() {
       const internalPathname =
         targetUrl.pathname === BLOG_PREFIX
           ? "/"
-          : targetUrl.pathname.replace(new RegExp(`^${BLOG_PREFIX}(?:/|$)`), "/");
-      const nextInternalHref =
-        `${internalPathname}${targetUrl.search}${targetUrl.hash}`;
+          : targetUrl.pathname.replace(
+              new RegExp(`^${BLOG_PREFIX}(?:/|$)`),
+              "/",
+            );
+      const nextInternalHref = `${internalPathname}${targetUrl.search}${targetUrl.hash}`;
       const isModifiedClick =
         event.metaKey || event.ctrlKey || event.shiftKey || event.altKey;
 

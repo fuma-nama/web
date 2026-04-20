@@ -29,97 +29,92 @@ The Prisma Nuxt module provides:
 Let’s create a new Nuxt app and add the `@prisma/nuxt` module. This module will set up Prisma ORM for us and also launch Prisma Studio, allowing us to manipulate data in our SQLite database directly from the Nuxt Devtools:
 
 1. Begin with a [new Nuxt project](https://nuxt.com/docs/getting-started/installation#new-project):
-    ```shell
-    npx nuxi@latest init test-nuxt-app
-    ```
-    
+   ```shell
+   npx nuxi@latest init test-nuxt-app
+   ```
 2. Navigate to your project directory and install `@prisma/nuxt`:
-    ```shell
-    cd test-nuxt-app
-    npm install @prisma/nuxt
-    ```
-    
+   ```shell
+   cd test-nuxt-app
+   npm install @prisma/nuxt
+   ```
 3. Add `@prisma/nuxt` to your `nuxt.config.ts`:
-    ```tsx
-    export default defineNuxtConfig({
-      modules: ["@prisma/nuxt"],
-      devtools: { enabled: true },
-    });
-    ```
-    
+   ```tsx
+   export default defineNuxtConfig({
+     modules: ["@prisma/nuxt"],
+     devtools: { enabled: true },
+   });
+   ```
 4. Start the development server:
-    
-    ```shell
-    npm run dev
-    ```
-    
-    This will:
-    
-    1. Install the Prisma CLI
-    2. Initialize a Prisma project with SQLite
-    3. Create example models (`User` and `Post`) in the Prisma Schema
-    4. Prompt you to run a migration to create database tables with Prisma Migrate
-    5. Install and generate a Prisma Client
-    6. Prompt you to start Prisma Studio
-5. Open [localhost:3000](http://localhost:3000/) in your browser and follow terminal instructions to open Nuxt Devtools and Prisma Studio:
-    
-    ![Prisma Studio integrated with the Nuxt devtools](/introducing-prisma-nuxt/imgs/4b382494983173328bca87b9d927878808be769f-3456x2160.png)
-    
-6. Use Prisma Studio to add a user to the database:
-    
-    ![Adding user data with Prisma Studio](/introducing-prisma-nuxt/imgs/66431efa24a44146a3ca79463c0cf8a6764c9b18-3456x2160.png)
 
-We’ve seen how easy it is to start with Prisma ORM in Nuxt, thanks to the module. Now proceed to the next section to see how to query your data from within the app using the `usePrismaClient` composable. 
+   ```shell
+   npm run dev
+   ```
+
+   This will:
+
+   1. Install the Prisma CLI
+   2. Initialize a Prisma project with SQLite
+   3. Create example models (`User` and `Post`) in the Prisma Schema
+   4. Prompt you to run a migration to create database tables with Prisma Migrate
+   5. Install and generate a Prisma Client
+   6. Prompt you to start Prisma Studio
+
+5. Open [localhost:3000](http://localhost:3000/) in your browser and follow terminal instructions to open Nuxt Devtools and Prisma Studio:
+
+   ![Prisma Studio integrated with the Nuxt devtools](/introducing-prisma-nuxt/imgs/4b382494983173328bca87b9d927878808be769f-3456x2160.png)
+
+6. Use Prisma Studio to add a user to the database:
+
+   ![Adding user data with Prisma Studio](/introducing-prisma-nuxt/imgs/66431efa24a44146a3ca79463c0cf8a6764c9b18-3456x2160.png)
+
+We’ve seen how easy it is to start with Prisma ORM in Nuxt, thanks to the module. Now proceed to the next section to see how to query your data from within the app using the `usePrismaClient` composable.
 
 ## Using `usePrismaClient` composable to create a server component
 
 Now we’ll create a [server component](https://nuxt.com/docs/guide/directory-structure/components#server-components) that retrieves the first user from the database using the `usePrismaClient` composable in a server component:
 
 1. Configure `nuxt.config.ts` to automate the setup process, so we aren't prompted to start Prisma Studio every time the development server reloads:
-    ```tsx
-    export default defineNuxtConfig({
-      modules: ["@prisma/nuxt"],
-      prisma: {
-        autoSetupPrisma: true,
-      },
-      devtools: { enabled: true },
-    });
-    ```
-    
+   ```tsx
+   export default defineNuxtConfig({
+     modules: ["@prisma/nuxt"],
+     prisma: {
+       autoSetupPrisma: true,
+     },
+     devtools: { enabled: true },
+   });
+   ```
 2. Create a new `FirstUser.server.vue` component in the `components` folder, and import `usePrismaClient` in the script:
-    ```html
-    <script setup>
-    import { usePrismaClient } from '@prisma/nuxt'
-    
-    const prisma = usePrismaClient();
-    const firstUserFound = await prisma.user.findFirst();
-    </script>
-    
-    <template>
-      <div>
-        <p>{{ firstUserFound ?? "" }}</p>
-      </div>
-    </template>
-    ```
-    
-3. Integrate the server component into `app.vue`:
-    ```html
-    <template>
-      <h1>Welcome to the Nuxt Prisma Demo</h1>
-      <NuxtIsland name="FirstUser"> </NuxtIsland>
-    </template>
-    ```
-    
-4. View the user details queried from the database in your browser:
-    
-   ![User details being shown on a JSON format while Prisma Studio is still open](/introducing-prisma-nuxt/imgs/42555908a437dac15e42224b3e7a1fbccfadd8d2-3456x2160.png)
-    
 
-And that’s how easily you can get started using Prisma ORM in your Nuxt app using the Nuxt Prisma module. 
+   ```html
+   <script setup>
+     import { usePrismaClient } from '@prisma/nuxt'
+
+     const prisma = usePrismaClient();
+     const firstUserFound = await prisma.user.findFirst();
+   </script>
+
+   <template>
+     <div>
+       <p>{{ firstUserFound ?? "" }}</p>
+     </div>
+   </template>
+   ```
+
+3. Integrate the server component into `app.vue`:
+   ```html
+   <template>
+     <h1>Welcome to the Nuxt Prisma Demo</h1>
+     <NuxtIsland name="FirstUser"> </NuxtIsland>
+   </template>
+   ```
+4. View the user details queried from the database in your browser:
+   ![User details being shown on a JSON format while Prisma Studio is still open](/introducing-prisma-nuxt/imgs/42555908a437dac15e42224b3e7a1fbccfadd8d2-3456x2160.png)
+
+And that’s how easily you can get started using Prisma ORM in your Nuxt app using the Nuxt Prisma module.
 
 ## Explore more in the documentation
 
-For further details on the Nuxt Prisma module's capabilities, visit our [documentation](https://pris.ly/prisma-nuxt). This is an early release, and we're actively working on improvements based on community feedback. We welcome your contributions and suggestions. If you find this project useful, please star it on [GitHub](https://github.com/prisma/nuxt-prisma)! 
+For further details on the Nuxt Prisma module's capabilities, visit our [documentation](https://pris.ly/prisma-nuxt). This is an early release, and we're actively working on improvements based on community feedback. We welcome your contributions and suggestions. If you find this project useful, please star it on [GitHub](https://github.com/prisma/nuxt-prisma)!
 
 <br />
 [Get started](https://pris.ly/prisma-nuxt)

@@ -4,7 +4,11 @@ import posthog from "posthog-js";
 import { useCopyButton } from "fumadocs-ui/utils/use-copy-button";
 import { buttonVariants } from "@prisma-docs/ui/components/button";
 import { cn } from "@prisma-docs/ui/lib/cn";
-import { Popover, PopoverContent, PopoverTrigger } from "fumadocs-ui/components/ui/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "fumadocs-ui/components/ui/popover";
 import { cva } from "class-variance-authority";
 
 const cache = new Map<string, string>();
@@ -30,7 +34,9 @@ async function fetchMarkdownWithFallback(
 
   const fallbackUrl = toIndexMarkdownUrl(markdownUrl);
   if (!fallbackUrl) {
-    throw new Error(`Failed to fetch markdown from ${markdownUrl} (${res.status})`);
+    throw new Error(
+      `Failed to fetch markdown from ${markdownUrl} (${res.status})`,
+    );
   }
 
   const fallbackRes = await fetch(fallbackUrl);
@@ -46,7 +52,9 @@ async function fetchMarkdownWithFallback(
 export function CopyPromptButton({ fullPrompt }: { fullPrompt: string }) {
   const [checked, onClick] = useCopyButton(async () => {
     await navigator.clipboard.writeText(fullPrompt);
-    posthog.capture("docs:copy_prompt", { page_path: window.location.pathname });
+    posthog.capture("docs:copy_prompt", {
+      page_path: window.location.pathname,
+    });
   });
 
   return (
@@ -55,12 +63,17 @@ export function CopyPromptButton({ fullPrompt }: { fullPrompt: string }) {
         buttonVariants({
           color: "secondary",
           size: "sm",
-          className: "gap-2 [&_i]:text-[0.875rem] [&_i]:text-fd-muted-foreground",
+          className:
+            "gap-2 [&_i]:text-[0.875rem] [&_i]:text-fd-muted-foreground",
         }),
       )}
       onClick={onClick}
     >
-      {checked ? <i className="fa-regular fa-check" /> : <i className="fa-regular fa-copy" />}
+      {checked ? (
+        <i className="fa-regular fa-check" />
+      ) : (
+        <i className="fa-regular fa-copy" />
+      )}
       Copy Prompt
     </button>
   );
@@ -77,10 +90,14 @@ export function LLMCopyButton({
   const [isLoading, setLoading] = useState(false);
   const [checked, onClick] = useCopyButton(async () => {
     const fallbackUrl = toIndexMarkdownUrl(markdownUrl);
-    const cached = cache.get(markdownUrl) ?? (fallbackUrl ? cache.get(fallbackUrl) : undefined);
+    const cached =
+      cache.get(markdownUrl) ??
+      (fallbackUrl ? cache.get(fallbackUrl) : undefined);
     if (cached) {
       await navigator.clipboard.writeText(cached);
-      posthog.capture("docs:copy_markdown", { page_path: window.location.pathname });
+      posthog.capture("docs:copy_markdown", {
+        page_path: window.location.pathname,
+      });
       return;
     }
 
@@ -96,7 +113,9 @@ export function LLMCopyButton({
           }),
         }),
       ]);
-      posthog.capture("docs:copy_markdown", { page_path: window.location.pathname });
+      posthog.capture("docs:copy_markdown", {
+        page_path: window.location.pathname,
+      });
     } finally {
       setLoading(false);
     }
@@ -109,12 +128,17 @@ export function LLMCopyButton({
         buttonVariants({
           color: "secondary",
           size: "sm",
-          className: "gap-2 [&_i]:text-[0.875rem] [&_i]:text-fd-muted-foreground",
+          className:
+            "gap-2 [&_i]:text-[0.875rem] [&_i]:text-fd-muted-foreground",
         }),
       )}
       onClick={onClick}
     >
-      {checked ? <i className="fa-regular fa-check" /> : <i className="fa-regular fa-copy" />}
+      {checked ? (
+        <i className="fa-regular fa-check" />
+      ) : (
+        <i className="fa-regular fa-copy" />
+      )}
       Copy Markdown
     </button>
   );
@@ -140,7 +164,9 @@ export function ViewOptions({
 }) {
   const items = useMemo(() => {
     const fullMarkdownUrl =
-      typeof window !== "undefined" ? new URL(markdownUrl, window.location.origin) : "loading";
+      typeof window !== "undefined"
+        ? new URL(markdownUrl, window.location.origin)
+        : "loading";
     const q = `Read ${fullMarkdownUrl}, I want to ask questions about it.`;
 
     return [

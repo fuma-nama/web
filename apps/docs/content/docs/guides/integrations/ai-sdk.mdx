@@ -1,10 +1,10 @@
 ---
 title: AI SDK (with Next.js)
-description: 'Build a chat application with AI SDK, Prisma, and Next.js to store chat sessions and messages'
+description: "Build a chat application with AI SDK, Prisma, and Next.js to store chat sessions and messages"
 image: /img/guides/prisma-ai-sdk-nextjs-cover.png
 url: /guides/integrations/ai-sdk
-metaTitle: 'How to use AI SDK with Prisma ORM, Prisma Postgres, and Next.js for chat applications'
-metaDescription: 'Build a chat application with AI SDK, Prisma, and Next.js to store chat sessions and messages'
+metaTitle: "How to use AI SDK with Prisma ORM, Prisma Postgres, and Next.js for chat applications"
+metaDescription: "Build a chat application with AI SDK, Prisma, and Next.js to store chat sessions and messages"
 ---
 
 ## Introduction
@@ -275,7 +275,8 @@ import { saveChat } from "@/lib/save-chat"; // [!code ++]
 export const maxDuration = 300;
 
 export async function POST(req: Request) {
-  const { messages, id }: { messages: UIMessage[]; id: string } = await req.json(); // [!code highlight]
+  const { messages, id }: { messages: UIMessage[]; id: string } =
+    await req.json(); // [!code highlight]
 
   const result = streamText({
     model: openai("gpt-4o"),
@@ -556,7 +557,11 @@ export default function Chat() {
   }, [setMessages]);
 
   if (isLoading) {
-    return <div className="flex justify-center items-center h-screen">Loading...</div>;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        Loading...
+      </div>
+    );
   }
 
   return (

@@ -3,11 +3,7 @@ import { notFound } from "next/navigation";
 import { getMDXComponents } from "@/mdx-components";
 import { createRelativeLink } from "fumadocs-ui/mdx";
 import { blog } from "@/lib/source";
-import {
-  Badge,
-  InlineTOC,
-  Separator,
-} from "@prisma/eclipse";
+import { Badge, InlineTOC, Separator } from "@prisma/eclipse";
 
 import { JsonLd } from "@prisma-docs/ui/components/json-ld";
 import { FooterNewsletterForm } from "@prisma-docs/ui/components/newsletter";
@@ -73,11 +69,17 @@ function toIsoDate(value: unknown): string | undefined {
   return date.toISOString();
 }
 
-function getBlogPostingJsonLd(page: ReturnType<typeof blog.getPage>): BlogPostingSchema | null {
+function getBlogPostingJsonLd(
+  page: ReturnType<typeof blog.getPage>,
+): BlogPostingSchema | null {
   if (!page) return null;
 
   const title = (page.data.metaTitle ?? page.data.title)?.trim();
-  const description = (page.data.metaDescription ?? page.data.description ?? "").trim();
+  const description = (
+    page.data.metaDescription ??
+    page.data.description ??
+    ""
+  ).trim();
   if (!title || !description) return null;
 
   const canonicalPath = withBlogBasePath(page.url);
@@ -89,13 +91,15 @@ function getBlogPostingJsonLd(page: ReturnType<typeof blog.getPage>): BlogPostin
 
   const authorNames = Array.isArray(page.data.authors)
     ? page.data.authors
-      .filter((author): author is string => typeof author === "string")
-      .map((author) => author.trim())
-      .filter(Boolean)
+        .filter((author): author is string => typeof author === "string")
+        .map((author) => author.trim())
+        .filter(Boolean)
     : [];
 
   const datePublished = toIsoDate(page.data.date);
-  const dateModified = toIsoDate((page.data as { lastModified?: unknown }).lastModified) ?? datePublished;
+  const dateModified =
+    toIsoDate((page.data as { lastModified?: unknown }).lastModified) ??
+    datePublished;
 
   const jsonLd: BlogPostingSchema = {
     "@context": "https://schema.org",
@@ -195,10 +199,8 @@ export default async function Page(props: {
                   hover:bg-background-ppg/50
                   hover:border-stroke-ppg/50
                   hover:text-foreground-ppg"
-
                   />
                 </Link>
-
               ))}
             </div>
           )}
@@ -207,7 +209,6 @@ export default async function Page(props: {
         {/* Body */}
         <article className="w-full flex flex-col pb-8 mt-12">
           <div className="prose min-w-0 [&_figure]:w-full [&_figure]:md:max-w-140 [&_figure]:lg:max-w-200">
-
             <p className="font-semibold text-lg">{page.data.excerpt}</p>
 
             <MDX

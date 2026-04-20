@@ -88,106 +88,109 @@ npm install @prisma/adapter-neon
 Finally, instantiate Prisma Client which you can do using the driver adapter and the connection URL for the database instance you're using:
 
 ```typescript tab="PostgreSQL"
-import { PrismaPg } from '@prisma/adapter-pg'
-import { PrismaClient } from '../generated/prisma/client'
+import { PrismaPg } from "@prisma/adapter-pg";
+import { PrismaClient } from "../generated/prisma/client";
 
-const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL })
-const prisma = new PrismaClient({ adapter })
+const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
+const prisma = new PrismaClient({ adapter });
 ```
 
 ```typescript tab="SQLite"
-import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3';
-import { PrismaClient } from '../generated/prisma/client';
+import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
+import { PrismaClient } from "../generated/prisma/client";
 
-const adapter = new PrismaBetterSqlite3({ url: process.env.DATABASE_URL })
+const adapter = new PrismaBetterSqlite3({ url: process.env.DATABASE_URL });
 const prisma = new PrismaClient({ adapter });
 ```
 
 ```typescript tab="D1"
-import { PrismaClient } from '../generated/prisma/client'
-import { PrismaD1 } from '@prisma/adapter-d1'
+import { PrismaClient } from "../generated/prisma/client";
+import { PrismaD1 } from "@prisma/adapter-d1";
 
 export interface Env {
-  DB: D1Database
+  DB: D1Database;
 }
 
 export default {
   async fetch(
     request: Request,
     env: Env,
-    ctx: ExecutionContext
+    ctx: ExecutionContext,
   ): Promise<Response> {
-    const adapter = new PrismaD1(env.DB)
-    const prisma = new PrismaClient({ adapter })
+    const adapter = new PrismaD1(env.DB);
+    const prisma = new PrismaClient({ adapter });
     // …
     // ... query your DB
   },
-}
+};
 ```
 
 ```typescript tab="MySQL/MariaDB"
-import { PrismaMariaDb } from '@prisma/adapter-mariadb';
-import { PrismaClient } from '../generated/prisma/client';
+import { PrismaMariaDb } from "@prisma/adapter-mariadb";
+import { PrismaClient } from "../generated/prisma/client";
 
 const adapter = new PrismaMariaDb({
-host: "localhost",
-port: 3306,
-connectionLimit: 5
+  host: "localhost",
+  port: 3306,
+  connectionLimit: 5,
 });
 const prisma = new PrismaClient({ adapter });
 ```
 
 ```typescript tab="PlanetScale"
-import { PrismaPlanetScale } from '@prisma/adapter-planetscale'
-import { PrismaClient } from '../generated/prisma/client'
-import { fetch as undiciFetch } from 'undici'
+import { PrismaPlanetScale } from "@prisma/adapter-planetscale";
+import { PrismaClient } from "../generated/prisma/client";
+import { fetch as undiciFetch } from "undici";
 
-const adapter = new PrismaPlanetScale({ url: process.env.DATABASE_URL, fetch: undiciFetch })
-const prisma = new PrismaClient({ adapter })
+const adapter = new PrismaPlanetScale({
+  url: process.env.DATABASE_URL,
+  fetch: undiciFetch,
+});
+const prisma = new PrismaClient({ adapter });
 ```
 
 ```typescript tab="MSSQL"
-import { PrismaMssql } from '@prisma/adapter-mssql';
-import { PrismaClient } from '../generated/prisma/client';
+import { PrismaMssql } from "@prisma/adapter-mssql";
+import { PrismaClient } from "../generated/prisma/client";
 
 const sqlConfig = {
-user: process.env.DB_USER,
-password: process.env.DB_PASSWORD,
-database: process.env.DB_NAME,
-server: process.env.HOST,
-pool: {
-max: 10,
-min: 0,
-idleTimeoutMillis: 30000
-},
-options: {
-encrypt: true, // for azure
-trustServerCertificate: false // change to true for local dev / self-signed certs
-}
-}
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  server: process.env.HOST,
+  pool: {
+    max: 10,
+    min: 0,
+    idleTimeoutMillis: 30000,
+  },
+  options: {
+    encrypt: true, // for azure
+    trustServerCertificate: false, // change to true for local dev / self-signed certs
+  },
+};
 
-const adapter = new PrismaMssql(sqlConfig)
+const adapter = new PrismaMssql(sqlConfig);
 const prisma = new PrismaClient({ adapter });
 ```
 
 ```typescript tab="CockroachDB"
-import { PrismaPg } from '@prisma/adapter-pg'
-import { PrismaClient } from '../generated/prisma/client'
+import { PrismaPg } from "@prisma/adapter-pg";
+import { PrismaClient } from "../generated/prisma/client";
 
-const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL })
-const prisma = new PrismaClient({ adapter })
+const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
+const prisma = new PrismaClient({ adapter });
 ```
 
 ```typescript tab="Neon Serverless"
-import { PrismaClient } from '../generated/prisma/client'
-import { PrismaNeon } from '@prisma/adapter-neon'
-import dotenv from 'dotenv'
+import { PrismaClient } from "../generated/prisma/client";
+import { PrismaNeon } from "@prisma/adapter-neon";
+import dotenv from "dotenv";
 
-dotenv.config()
-const connectionString = `${process.env.DATABASE_URL}`
+dotenv.config();
+const connectionString = `${process.env.DATABASE_URL}`;
 
-const adapter = new PrismaNeon({ connectionString })
-const prisma = new PrismaClient({ adapter })
+const adapter = new PrismaNeon({ connectionString });
+const prisma = new PrismaClient({ adapter });
 ```
 
 ### 5. Query your database
@@ -206,7 +209,7 @@ generator client {
   output          = "../generated/prisma"
   engineType      = "client" // enable Prisma ORM without Rust
 }
-````
+```
 
 ### 2. Re-generate Prisma Client
 
@@ -304,68 +307,70 @@ npm install @prisma/adapter-neon
 Finally, you need to instantiate Prisma Client which you can do using the driver adapter and the connection URL for the database instance you're using.
 
 ```typescript tab="PostgreSQL"
-import { PrismaPg } from '@prisma/adapter-pg'
-import { PrismaClient } from '../generated/prisma/client'
+import { PrismaPg } from "@prisma/adapter-pg";
+import { PrismaClient } from "../generated/prisma/client";
 
-const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL })
-const prisma = new PrismaClient({ adapter })
+const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
+const prisma = new PrismaClient({ adapter });
 ```
 
 ```typescript tab="SQLite"
-import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3';
-import { PrismaClient } from '../generated/prisma/client';
+import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
+import { PrismaClient } from "../generated/prisma/client";
 
-const adapter = new PrismaBetterSqlite3({ url: process.env.DATABASE_URL })
+const adapter = new PrismaBetterSqlite3({ url: process.env.DATABASE_URL });
 const prisma = new PrismaClient({ adapter });
 ```
 
 ```typescript tab="D1"
-import { PrismaClient } from '../generated/prisma/client'
-import { PrismaD1 } from '@prisma/adapter-d1'
+import { PrismaClient } from "../generated/prisma/client";
+import { PrismaD1 } from "@prisma/adapter-d1";
 
 export interface Env {
-  DB: D1Database
+  DB: D1Database;
 }
 
 export default {
   async fetch(
     request: Request,
     env: Env,
-    ctx: ExecutionContext
+    ctx: ExecutionContext,
   ): Promise<Response> {
-    const adapter = new PrismaD1(env.DB)
-    const prisma = new PrismaClient({ adapter })
+    const adapter = new PrismaD1(env.DB);
+    const prisma = new PrismaClient({ adapter });
 
     // ... query your DB
-
-},
-}
+  },
+};
 ```
 
 ```typescript tab="MySQL/MariaDB"
-import { PrismaMariaDb } from '@prisma/adapter-mariadb';
-import { PrismaClient } from '../generated/prisma/client';
+import { PrismaMariaDb } from "@prisma/adapter-mariadb";
+import { PrismaClient } from "../generated/prisma/client";
 
 const adapter = new PrismaMariaDb({
   host: "localhost",
   port: 3306,
-  connectionLimit: 5
+  connectionLimit: 5,
 });
 const prisma = new PrismaClient({ adapter });
 ```
 
 ```typescript tab="PlanetScale"
-import { PrismaPlanetScale } from '@prisma/adapter-planetscale'
-import { PrismaClient } from '../generated/prisma/client'
-import { fetch as undiciFetch } from 'undici'
+import { PrismaPlanetScale } from "@prisma/adapter-planetscale";
+import { PrismaClient } from "../generated/prisma/client";
+import { fetch as undiciFetch } from "undici";
 
-const adapter = new PrismaPlanetScale({ url: process.env.DATABASE_URL, fetch: undiciFetch })
-const prisma = new PrismaClient({ adapter })
+const adapter = new PrismaPlanetScale({
+  url: process.env.DATABASE_URL,
+  fetch: undiciFetch,
+});
+const prisma = new PrismaClient({ adapter });
 ```
 
 ```typescript tab="MSSQL"
-import { PrismaMssql } from '@prisma/adapter-mssql';
-import { PrismaClient } from '../generated/prisma/client';
+import { PrismaMssql } from "@prisma/adapter-mssql";
+import { PrismaClient } from "../generated/prisma/client";
 
 const sqlConfig = {
   user: process.env.DB_USER,
@@ -375,36 +380,36 @@ const sqlConfig = {
   pool: {
     max: 10,
     min: 0,
-    idleTimeoutMillis: 30000
+    idleTimeoutMillis: 30000,
   },
   options: {
     encrypt: true, // for azure
-    trustServerCertificate: false // change to true for local dev / self-signed certs
-  }
-}
+    trustServerCertificate: false, // change to true for local dev / self-signed certs
+  },
+};
 
-const adapter = new PrismaMssql(sqlConfig)
+const adapter = new PrismaMssql(sqlConfig);
 const prisma = new PrismaClient({ adapter });
 ```
 
 ```typescript tab="CockroachDB"
-import { PrismaPg } from '@prisma/adapter-pg'
-import { PrismaClient } from '../generated/prisma/client'
+import { PrismaPg } from "@prisma/adapter-pg";
+import { PrismaClient } from "../generated/prisma/client";
 
-const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL })
-const prisma = new PrismaClient({ adapter })
+const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
+const prisma = new PrismaClient({ adapter });
 ```
 
 ```typescript tab="Neon Serverless"
-import { PrismaClient } from '../generated/prisma/client'
-import { PrismaNeon } from '@prisma/adapter-neon'
-import dotenv from 'dotenv'
+import { PrismaClient } from "../generated/prisma/client";
+import { PrismaNeon } from "@prisma/adapter-neon";
+import dotenv from "dotenv";
 
-dotenv.config()
-const connectionString = `${process.env.DATABASE_URL}`
+dotenv.config();
+const connectionString = `${process.env.DATABASE_URL}`;
 
-const adapter = new PrismaNeon({ connectionString })
-const prisma = new PrismaClient({ adapter })
+const adapter = new PrismaNeon({ connectionString });
+const prisma = new PrismaClient({ adapter });
 ```
 
 ### 5. Query your database

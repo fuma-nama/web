@@ -6,13 +6,13 @@ This repository is a **pnpm monorepo** containing the Prisma documentation, blog
 
 ## Repository structure
 
-| Path | Description |
-|------|--------------|
-| `apps/docs` | Prisma documentation site (Next.js + Fumadocs) |
-| `apps/blog` | Prisma blog |
-| `apps/eclipse` | Eclipse design system documentation |
+| Path               | Description                                                 |
+| ------------------ | ----------------------------------------------------------- |
+| `apps/docs`        | Prisma documentation site (Next.js + Fumadocs)              |
+| `apps/blog`        | Prisma blog                                                 |
+| `apps/eclipse`     | Eclipse design system documentation                         |
 | `packages/eclipse` | Eclipse design system component library (`@prisma/eclipse`) |
-| `packages/ui` | Shared UI components and utilities (`@prisma-docs/ui`) |
+| `packages/ui`      | Shared UI components and utilities (`@prisma-docs/ui`)      |
 
 See each app’s `README.md` for more detail.
 See [ARCHITECTURE.md](ARCHITECTURE.md) for the cross-app multi-zone overview.
@@ -32,10 +32,10 @@ pnpm dev
 
 This starts all apps via Turbo:
 
-- **Site** — http://localhost:3000  
-- **Docs** — http://localhost:3001  
-- **Blog** — http://localhost:3002  
-- **Eclipse** — http://localhost:3003  
+- **Site** — http://localhost:3000
+- **Docs** — http://localhost:3001
+- **Blog** — http://localhost:3002
+- **Eclipse** — http://localhost:3003
 
 To run a single app:
 
@@ -60,12 +60,12 @@ pnpm --filter docs start
 
 ## Scripts
 
-| Script | Description |
-|--------|-------------|
-| `pnpm lint:links` | Validate internal and external links (docs) |
-| `pnpm lint:code` | Lint code blocks in MDX (docs) |
-| `pnpm lint:spellcheck` | Spell-check content (docs) |
-| `pnpm check` | Run formatting and lint fixes across all workspaces |
+| Script                 | Description                                         |
+| ---------------------- | --------------------------------------------------- |
+| `pnpm lint:links`      | Validate internal and external links (docs)         |
+| `pnpm lint:code`       | Lint code blocks in MDX (docs)                      |
+| `pnpm lint:spellcheck` | Spell-check content (docs)                          |
+| `pnpm check`           | Run formatting and lint fixes across all workspaces |
 
 ## Content
 

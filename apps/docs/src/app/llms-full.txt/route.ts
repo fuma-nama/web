@@ -1,4 +1,4 @@
-import { source, sourceV6 } from "@/lib/source";
+import { getSource } from "@/lib/source";
 import { getLLMText } from "@/lib/get-llm-text";
 
 export const revalidate = false;
@@ -13,6 +13,8 @@ Includes both v7 (current) and v6 documentation.
 
 `;
 
+  const source = await getSource();
+  const sourceV6 = await getSource("v6");
   const allPages = [...source.getPages(), ...sourceV6.getPages()];
   const scan = allPages.map(getLLMText);
   const scanned = await Promise.all(scan);

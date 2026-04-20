@@ -33,76 +33,82 @@ In fact, we prepared an [example](https://github.com/nikolasburk/graphql-cors-ex
 ### Server
 
 ```js
-const express = require('express')
-const bodyParser = require('body-parser')
-const cors = require('cors')
-const { graphqlExpress, graphiqlExpress } = require('apollo-server-express')
-const { makeExecutableSchema } = require('graphql-tools')
+const express = require("express");
+const bodyParser = require("body-parser");
+const cors = require("cors");
+const { graphqlExpress, graphiqlExpress } = require("apollo-server-express");
+const { makeExecutableSchema } = require("graphql-tools");
 
 const typeDefs = `
 type Query {
   hello(name: String): String!
 }
-`
+`;
 
 const resolvers = {
   Query: {
-    hello: (_, { name }) => `Hello ${name || 'World'}`,
+    hello: (_, { name }) => `Hello ${name || "World"}`,
   },
-}
+};
 
-const myGraphQLSchema = makeExecutableSchema({ typeDefs, resolvers })
-const PORT = 4000
-const app = express()
+const myGraphQLSchema = makeExecutableSchema({ typeDefs, resolvers });
+const PORT = 4000;
+const app = express();
 
 // app.use(cors()) // not having cors enabled will cause an access control error
-app.use('/graphql', bodyParser.json(), graphqlExpress({ schema: myGraphQLSchema }))
-app.get('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }))
+app.use(
+  "/graphql",
+  bodyParser.json(),
+  graphqlExpress({ schema: myGraphQLSchema }),
+);
+app.get("/graphiql", graphiqlExpress({ endpointURL: "/graphql" }));
 
-console.log(`Server listening on http://localhost:${PORT} ...`)
-app.listen(PORT)
+console.log(`Server listening on http://localhost:${PORT} ...`);
+app.listen(PORT);
 ```
+
 > Notice that line 23 is commented out — CORS is not enabled!
 
 ### Frontend
 
 ```js
-import React from 'react'
-import ReactDOM from 'react-dom'
-import './index.css'
-import App from './App'
-import registerServiceWorker from './registerServiceWorker'
-import { ApolloProvider } from 'react-apollo'
-import { ApolloClient, HttpLink, InMemoryCache } from 'apollo-client-preset'
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
+import App from "./App";
+import registerServiceWorker from "./registerServiceWorker";
+import { ApolloProvider } from "react-apollo";
+import { ApolloClient, HttpLink, InMemoryCache } from "apollo-client-preset";
 
-const httpLink = new HttpLink({ uri: 'http://localhost:4000/graphql' })
+const httpLink = new HttpLink({ uri: "http://localhost:4000/graphql" });
 
 const client = new ApolloClient({
   link: httpLink,
   cache: new InMemoryCache(),
-})
+});
 
 ReactDOM.render(
   <ApolloProvider client={client}>
     <App />
   </ApolloProvider>,
-  document.getElementById('root'),
-)
-registerServiceWorker()
+  document.getElementById("root"),
+);
+registerServiceWorker();
 ```
+
 > Standard setup for using Apollo Client 2.0
 
 ```js
-import React, { Component } from 'react'
-import logo from './logo.svg'
-import './App.css'
-import gql from 'graphql-tag'
-import { graphql } from 'react-apollo'
+import React, { Component } from "react";
+import logo from "./logo.svg";
+import "./App.css";
+import gql from "graphql-tag";
+import { graphql } from "react-apollo";
 
 class App extends Component {
   render() {
     if (this.props.data.loading) {
-      return <div>Loading</div>
+      return <div>Loading</div>;
     }
     return (
       <div className="App">
@@ -110,18 +116,17 @@ class App extends Component {
           <h1 className="App-title">{this.props.data.hello}</h1>
         </header>
       </div>
-    )
+    );
   }
 }
 
-export default graphql(
-  gql`
-    {
-      hello
-    }
-  `,
-)(App)
+export default graphql(gql`
+  {
+    hello
+  }
+`)(App);
 ```
+
 > The `App` component sends a simple `hello` query using Apollo Client
 
 In your local development setup, where the React app is loaded from [`http://localhost:3000`](http://localhost:3000) and the GraphQL server is serving at [`http://localhost:4000`](http://localhost:4000)/graphql, you’ll now get an access control error if you’re trying to run the app:
@@ -150,12 +155,12 @@ When using `express-graphql` and `apollo-server`, all you need to do is include 
 
 ```js
 // other imports ...
-const cors = require('cors')
+const cors = require("cors");
 
-const app = express()
+const app = express();
 
-app.use(cors()) // enable `cors` to set HTTP response header: Access-Control-Allow-Origin: *
-app.use('/graphql', bodyParser.json(), graphqlExpress({ schema }))
+app.use(cors()); // enable `cors` to set HTTP response header: Access-Control-Allow-Origin: *
+app.use("/graphql", bodyParser.json(), graphqlExpress({ schema }));
 
-app.listen(PORT)
+app.listen(PORT);
 ```

@@ -11,7 +11,7 @@ heroImageAlt: "Relay Modern"
 ---
 
 The @connection directive is new to Relay Modern and unfortunately doesn’t have any official documentation. In this
-  article, we want to give a brief overview on how to use it.
+article, we want to give a brief overview on how to use it.
 
 If you tried to get started with Relay Modern yourself, chances are you came across the updated [Todo Example](https://github.com/relayjs/relay-examples/tree/master/todo-modern) project on GitHub. If you’ve also studied the [mutations](https://github.com/relayjs/relay-examples/tree/master/todo-modern) in that project, you might have noticed the `@connection` directive that you need to specify when querying _lists_ of items.
 
@@ -49,18 +49,19 @@ export default createFragmentContainer(TodoList, {
       ...Todo_viewer
     }
   `,
-})
+});
 ```
+
 In `TodoList.js`, the data dependencies for the `TodoList` component are declared in the form of a GraphQL fragment. `todos` refers to a _connection_ that's defined in the GraphQL schema. When requesting the items from this list, the `@connection` directive is used alongside the todos field. Relay will use the specified key `TodoList_todos` in its internal cache to refer to that connection.
 
 ### AddTodoMutation.js
 
 ```js
 function sharedUpdater(store, user, newEdge) {
-  const userProxy = store.get(user.id)
-  const conn = ConnectionHandler.getConnection(userProxy, 'TodoList_todos')
-  ConnectionHandler.insertEdgeAfter(conn, newEdge)
+  const userProxy = store.get(user.id);
+  const conn = ConnectionHandler.getConnection(userProxy, "TodoList_todos");
+  ConnectionHandler.insertEdgeAfter(conn, newEdge);
 }
 ```
-The key is used again in `AddTodoMutation.js`. This time, its purpose is to pull the connection from the internal cache using the `ConnectionHandler` API. The key is passed to the call to `ConnectionHandler.getConnection(...)`. This allows to retrieve the list from the cache and update it manually with the new todo item that was created through the mutation.
 
+The key is used again in `AddTodoMutation.js`. This time, its purpose is to pull the connection from the internal cache using the `ConnectionHandler` API. The key is passed to the call to `ConnectionHandler.getConnection(...)`. This allows to retrieve the list from the cache and update it manually with the new todo item that was created through the mutation.

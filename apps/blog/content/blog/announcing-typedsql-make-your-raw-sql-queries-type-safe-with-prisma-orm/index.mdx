@@ -14,23 +14,21 @@ tags:
   - "announcement"
 ---
 
-With today’s [v5.19.0](https://github.com/prisma/prisma/releases/tag/5.19.0) release, Prisma ORM introduces a new way to write raw SQL queries in a type-safe way! You now get the best of both worlds with Prisma ORM: A convenient  high-level abstraction for the majority of queries _and_ a flexible, type-safe escape hatch for raw SQL.
+With today’s [v5.19.0](https://github.com/prisma/prisma/releases/tag/5.19.0) release, Prisma ORM introduces a new way to write raw SQL queries in a type-safe way! You now get the best of both worlds with Prisma ORM: A convenient high-level abstraction for the majority of queries _and_ a flexible, type-safe escape hatch for raw SQL.
 
 ## TL;DR: We made raw SQL fully type-safe
 
-With Prisma ORM, we have designed what we believe to be the best API to write regular CRUD queries that make up 95% of most apps! 
+With Prisma ORM, we have designed what we believe to be the best API to write regular CRUD queries that make up 95% of most apps!
 
 For the remaining 5% — the complex queries that either can't be expressed with the Prisma Client API or rCopy the port number from the terminal output, you’ll need it in the next step for the pg_restore command.equire maximum performance — we have provided a lower level API to write raw SQL. However, this escape hatch didn't offer type safety and developers were missing the great DX they were used to from Prisma ORM, so we looked for a better way!
 
 With today’s Prisma ORM [v5.19.0](https://github.com/prisma/prisma/releases/tag/5.19.0) release, we are thrilled to announce TypedSQL: The best way to write complex and highly performant queries. **[TypedSQL](https://www.prisma.io/typedsql) is just SQL, but better.** It’s fully type-safe, provides auto-completion, and gives you a fantastic DX whenever you need to craft raw SQL queries. Here’s how it works:
 
-1. Write a SQL query in a `.sql` file and put it into the `prisma/sql` directory:
-
-    
+1.  Write a SQL query in a `.sql` file and put it into the `prisma/sql` directory:
 
     ```sql
     -- prisma/sql/conversionByVariant.sql
-    
+
     SELECT "variant", CAST("checked_out" AS FLOAT) / CAST("opened" AS FLOAT) AS "conversion"
     FROM (
       SELECT
@@ -42,14 +40,14 @@ With today’s Prisma ORM [v5.19.0](https://github.com/prisma/prisma/releases/ta
     ) AS "counts"
     ORDER BY "conversion" DESC
     ```
-    
+
     ```prisma
     model User {
       id             String          @id @default(uuid())
       email          String          @unique
       trackingEvents TrackingEvent[]
     }
-    
+
     model TrackingEvent {
       id        String   @id @default(uuid())
       timestamp DateTime @default(now())
@@ -59,15 +57,14 @@ With today’s Prisma ORM [v5.19.0](https://github.com/prisma/prisma/releases/ta
       user      User     @relation(fields: [userId], references: [id])
     }
     ```
-    
-		You can also create SQL queries with arguments!
-		
+
+        You can also create SQL queries with arguments!
 
     ```sql
     -- prisma/sql/conversionByVariantByVersion.sql
-	-- note that this syntax is for PostgreSQL.
-	-- Argument syntax will depend on your database engine.
-    
+    -- note that this syntax is for PostgreSQL.
+    -- Argument syntax will depend on your database engine.
+
     SELECT "variant", CAST("checked_out" AS FLOAT) / CAST("opened" AS FLOAT) AS "conversion"
     FROM (
       SELECT
@@ -75,57 +72,57 @@ With today’s Prisma ORM [v5.19.0](https://github.com/prisma/prisma/releases/ta
         COUNT(*) FILTER (WHERE "type"='PageOpened') AS "opened",
         COUNT(*) FILTER (WHERE "type"='CheckedOut') AS "checked_out"
       FROM "TrackingEvent"
-	    WHERE version = $1
+        WHERE version = $1
       GROUP BY "variant"
     ) AS "counts"
     ORDER BY "conversion" DESC
     ```
-    
+
     ```prisma
     model User {
       id             String          @id @default(uuid())
       email          String          @unique
       trackingEvents TrackingEvent[]
     }
-    
+
     model TrackingEvent {
       id        String   @id @default(uuid())
       timestamp DateTime @default(now())
       userId    String
       type      String
       variant   String
-	    version Int
+        version Int
       user      User     @relation(fields: [userId], references: [id])
     }
     ```
-    
-    
-2. Generate query functions by using the `--sql` flag on `prisma generate`:
-```
+
+2.  Generate query functions by using the `--sql` flag on `prisma generate`:
+
+````
     npx prisma generate --sql
     ```
-    
+
 3. Import the query function from `@prisma/client/sql` …
-    
+
     ```typescript
     import { PrismaClient } from '@prisma/client'
     import { conversionByVariant } from '@prisma/client/sql'
     ```
-    
+
     … and call it inside the new `$queryRawTyped` function to get fully typed results 😎
-    
+
     ```typescript
     // `result` is fully typed!
     const result = await prisma.$queryRawTyped(conversionByVariant())
     ```
-		
+
 		If your SQL query has arguments, they are provided to the query function passed to `$queryRawTyped`
-		
+
 		```typescript
 		// only give me conversion results from TrackingEvent version 5
 		const result = await prisma.$queryRawTyped(conversionByVariantByVersion(5))
 		```
-    
+
 The Prisma Client API together with TypedSQL provides the best experience for both CRUD operations and highly complex queries. With this addition, we hope you will never have to touch a SQL query builder again!
 
 
@@ -148,7 +145,7 @@ If you’ve written raw SQL in a TypeScript project before, you likely know it d
 
 ### Application developers should care about _data_ – not SQL
 
-At Prisma, we strongly believe that application developers should care about _data_ – not SQL. 
+At Prisma, we strongly believe that application developers should care about _data_ – not SQL.
 
 The majority of queries a typical application developer writes uses a fairly limited set of features, typically related to common CRUD operations, such as _pagination_, _filters_ or _nested queries_.
 
@@ -178,32 +175,31 @@ model Post {
   author    User    @relation(fields: [authorId], references: [id])
   authorId  Int
 }
-```
+````
+
 Using the Prisma CLI, you can then generate a (customizable) SQL migration and run the migration against your database. Once the schema has been mapped to your database, you can query it with Prisma Client:
-
-
 
 ```typescript
 // Create new user with posts
 await prisma.user.create({
   data: {
-    name: 'Alice',
-    email: 'alice@prisma.io',
+    name: "Alice",
+    email: "alice@prisma.io",
     posts: {
-      create: { title: 'Hello World' },
+      create: { title: "Hello World" },
     },
   },
-})
+});
 ```
+
 ```typescript
 // Query users with posts
 await prisma.user.findMany({
   include: {
     posts: true,
   },
-})
+});
 ```
-
 
 ## Escape hatch: Dropping down to raw SQL
 
@@ -212,7 +208,7 @@ While we believe that this kind of higher-level abstraction makes developers mor
 - the Prisma Client API isn’t flexible enough to express a certain query.
 - a query needs to be optimized for speed.
 
-In these cases, Prisma ORM offers an escape hatch for raw SQL by using the `$queryRaw` method of Prisma Client: 
+In these cases, Prisma ORM offers an escape hatch for raw SQL by using the `$queryRaw` method of Prisma Client:
 
 ```typescript
 const result = await prisma.$queryRaw`
@@ -226,11 +222,12 @@ FROM (
   GROUP BY "variant"
 ) AS "counts"
 ORDER BY "conversion" DESC
-`
+`;
 ```
+
 The main problem with this approach is that this query isn’t type-safe. If the developer wants to enjoy the type safety benefits they get from the standard Prisma Client API, they need to manually write the return types of this query, which can be cumbersome and time-consuming. Another problem is that these manually defined types don’t auto-update with schema changes, which introduces another possibility for error.
 
-While there are ways to improve the DX using Prisma ORM’s raw queries, e.g. by using the [Kysely query builder extension for Prisma Cient](https://github.com/eoin-obrien/prisma-extension-kysely)  or [SafeQL](https://safeql.dev/compatibility/prisma.html), we wanted to address this problem in a native way.
+While there are ways to improve the DX using Prisma ORM’s raw queries, e.g. by using the [Kysely query builder extension for Prisma Cient](https://github.com/eoin-obrien/prisma-extension-kysely) or [SafeQL](https://safeql.dev/compatibility/prisma.html), we wanted to address this problem in a native way.
 
 ## New in Prisma ORM: TypedSQL 🎉
 
@@ -241,7 +238,7 @@ With TypedSQL, Prisma ORM now gives you the best of both worlds:
 - A higher-level abstraction that makes developers productive and can serve the majority of queries in a project.
 - A delightful and type-safe escape hatch for when you need to craft SQL directly.
 
-It also gives development teams, where individual developers have different preferences, the option to choose their favorite approach: Do you have an Engineer on the team who’s a die-hard SQL fan but also some that wouldn’t touch SQL with a ten-foot pole? 
+It also gives development teams, where individual developers have different preferences, the option to choose their favorite approach: Do you have an Engineer on the team who’s a die-hard SQL fan but also some that wouldn’t touch SQL with a ten-foot pole?
 
 Prisma ORM now gives both groups what they want without sacrificing DX or flexibility!
 
@@ -249,7 +246,7 @@ Prisma ORM now gives both groups what they want without sacrificing DX or flexib
 
 TypedSQL is your new companion whenever you would have resorted to using `$queryRaw` in the past.
 
-We see TypedSQL as the evolution of SQL query builders, giving developers even more flexibility in their database queries because it removes all abstractions. 
+We see TypedSQL as the evolution of SQL query builders, giving developers even more flexibility in their database queries because it removes all abstractions.
 
 <br />
 [Try TypedSQL](https://pris.ly/typedsql-example)

@@ -36,8 +36,6 @@ Integration testing allows you to ensure the various components of your applicat
   - [Write the tests for `/auth/signin`](#write-the-tests-for-authsignin)
 - [Summary & What's next](#summary--whats-next)
 
-
-
 ## Introduction
 
 So far in this series, you have explored mocking your Prisma Client and using that mocked Prisma Client to write unit tests against small isolated areas of your application.
@@ -46,9 +44,9 @@ In this section of the series, you will say goodbye to the mocked Prisma Client 
 
 ### What is integration testing?
 
-In the previous article of this series you learned to write unit tests, focusing on testing small isolated units of code to ensure the smallest building blocks of your application function properly. The goal of those tests was to test specific scenarios and bits of functionality without worrying about the underlying database, external modules, or interactions between components. 
+In the previous article of this series you learned to write unit tests, focusing on testing small isolated units of code to ensure the smallest building blocks of your application function properly. The goal of those tests was to test specific scenarios and bits of functionality without worrying about the underlying database, external modules, or interactions between components.
 
-_Integration testing_, however, is a different mindset altogether. This kind of testing involves taking related areas, or components, of your application and ensuring they function properly together. 
+_Integration testing_, however, is a different mindset altogether. This kind of testing involves taking related areas, or components, of your application and ensuring they function properly together.
 
 ![diagram of request](/testing-series-3-aBUyF8nxAn/imgs/example.png)
 
@@ -60,7 +58,7 @@ With this very brief overview of integration testing, you will now begin prepari
 
 ### Technologies you will use
 
-- [Vitest](https://vitest.dev/) 
+- [Vitest](https://vitest.dev/)
 - [Prisma](https://www.prisma.io/)
 - [Node.js](https://nodejs.org/en/)
 - [Postgres](https://www.postgresql.org/)
@@ -95,24 +93,28 @@ In your terminal head over to a directory where you store your projects. In that
 ```sh
 git clone git@github.com:sabinadams/express_sample_app.git
 ```
+
 The command above will clone the project into a folder named `express_sample_app`. The default branch for that repository is `main`, so you will need to checkout the `unit-tests` branch.
 
 ```sh
 cd express_sample_app
 git checkout unit-tests
 ```
+
 Once you have cloned the repository, there are a few steps to take to set the project up.
 
 First, navigate into the project and install the `node_modules`:
 
 ```sh
-npm i 
+npm i
 ```
+
 Next, create a `.env` file at the root of the project:
 
 ```sh
 touch .env
 ```
+
 This file should contain a variable named `API_SECRET` whose value you can set to any `string` you want as well as one named `DATABASE_URL` which can be left empty for now:
 
 ```shell
@@ -120,7 +122,8 @@ This file should contain a variable named `API_SECRET` whose value you can set t
 API_SECRET="supersecretstring"
 DATABASE_URL=""
 ```
-In `.env` the `API_SECRET` variable provides a _secret key_ used by the authentication services to encrypt your passwords. In a real-world application this value should be replaced with a long random string with numeric and alphabetic characters. 
+
+In `.env` the `API_SECRET` variable provides a _secret key_ used by the authentication services to encrypt your passwords. In a real-world application this value should be replaced with a long random string with numeric and alphabetic characters.
 
 The `DATABASE_URL`, as the name suggests, contains the URL to your database. You currently do not have or need a real database.
 
@@ -135,25 +138,27 @@ To begin configuring your Docker container, create a new file at the root of you
 ```sh
 touch docker-compose.yml
 ```
-This file is where you will configure your container, letting Docker know how to set up the database server, which _image_ to use (a Docker image is a set of instructions detailing how to build a container), and how to store the container's data. 
+
+This file is where you will configure your container, letting Docker know how to set up the database server, which _image_ to use (a Docker image is a set of instructions detailing how to build a container), and how to store the container's data.
 
 > **Note**: There are a ton of things you can configure within the `docker-compose.yml` file. You can find the documentation [here](https://docs.docker.com/compose/compose-file/).
 
-Your container should create and expose a Postgres server. 
+Your container should create and expose a Postgres server.
 
 To accomplish this, start off by specifying which version of Compose's file format you will use:
 
 ```yml
 # docker-compose.yml
-version: '3.8'
+version: "3.8"
 ```
+
 This version number also determines which version of the Docker Engine you will be using. `3.8` is the latest version at the time of writing this article.
 
 Next, you will need a [`service`](https://docs.docker.com/compose/compose-file/#services-top-level-element) in which your database server will run. Create a new `service` named `db` with the following configuration:
 
 ```yml
 # docker-compose.yml
-version: '3.8'
+version: "3.8"
 services:
   db:
     image: postgres:14.1-alpine
@@ -162,10 +167,11 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
     ports:
-      - '5432:5432'
+      - "5432:5432"
     volumes:
       - db:/var/lib/postgresql/data
 ```
+
 The configuration added above specifies a service named `db` with the following configrations:
 
 - `image`: Defines which Docker image to use when building this service
@@ -180,7 +186,7 @@ Add the following to your `docker-compose.yml` file to let Docker know the volum
 
 ```yml
 # docker-compose.yml
-version: '3.8'
+version: "3.8"
 services:
   db:
     image: postgres:14.1-alpine
@@ -189,21 +195,23 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
     ports:
-      - '5432:5432'
+      - "5432:5432"
     volumes:
       - db:/var/lib/postgresql/data
 volumes:
   db:
     driver: local
 ```
+
 If you now head over to your terminal and navigate to the root of your project, you should be able to run the following command to start up your container running Postgres:
 
 ```sh
 docker-compose up
 ```
+
 ![Docker Compose running](/testing-series-3-aBUyF8nxAn/imgs/docker-compose-running.png)
 
-Your database server is now available and accessible from the url `postgres://postgres:postgres@localhost:5432`. 
+Your database server is now available and accessible from the url `postgres://postgres:postgres@localhost:5432`.
 
 Update your `.env` file's `DATABASE_URL` variable to point to that url and specify `quotes` as the database name:
 
@@ -212,6 +220,7 @@ Update your `.env` file's `DATABASE_URL` variable to point to that url and speci
 API_SECRET="supersecretstring"
 DATABASE_URL="postgres://postgres:postgres@localhost:5432/quotes"
 ```
+
 ## Add a Vitest configuration file for integration tests
 
 In the previous article, you created a configuration file for Vitest. That configuration file, `vitest.config.unit.ts`, was specific to the unit tests in the project.
@@ -225,47 +234,50 @@ Create a new file at the root of your project named `vitest.config.integration.t
 ```sh
 touch vitest.config.integration.ts
 ```
+
 Paste the following into that new file:
 
 ```ts
 // vitest.config.integration.ts
-import { defineConfig } from 'vitest/config'
+import { defineConfig } from "vitest/config";
 
 export default defineConfig({
   test: {
-    include: ['src/tests/**/*.test.ts'],
+    include: ["src/tests/**/*.test.ts"],
   },
   resolve: {
     alias: {
-      auth: '/src/auth',
-      quotes: '/src/quotes',
-      lib: '/src/lib'
-    }
-  }
-})
+      auth: "/src/auth",
+      quotes: "/src/quotes",
+      lib: "/src/lib",
+    },
+  },
+});
 ```
+
 The snippet above is essentially the same as the contents of `vitest.config.unit.ts` except the `test.include` blob points to any `.ts` files within `src/tests` rather than any files within `src` like the unit tests configuration does. This means all of your integration tests should go in a new folder within `src` named `tests`.
 
 Next, add another key to this new configuration file that tells Vitest not to run multiple tests at the same time in different threads:
 
 ```ts
 // vitest.config.integration.ts
-import { defineConfig } from 'vitest/config'
+import { defineConfig } from "vitest/config";
 
 export default defineConfig({
   test: {
-    include: ['src/tests/**/*.test.ts'],
-    threads: false
+    include: ["src/tests/**/*.test.ts"],
+    threads: false,
   },
   resolve: {
     alias: {
-      auth: '/src/auth',
-      quotes: '/src/quotes',
-      lib: '/src/lib'
-    }
-  }
-})
+      auth: "/src/auth",
+      quotes: "/src/quotes",
+      lib: "/src/lib",
+    },
+  },
+});
 ```
+
 This is extrememely important because your integration tests will be interacting with a database and expecting specific sets of data. If multiple tests are running at the same time and interacting with your database, you will likely cause problems in your tests due to unexpected data.
 
 On a similar note, you will also need a way to reset your database between tests. In this application, between every single test you will completely clear out your database so you can start with a blank slate on each test.
@@ -273,47 +285,52 @@ On a similar note, you will also need a way to reset your database between tests
 Create a new folder in `src` named `tests` and a new folder with `tests` named `helpers`:
 
 ```sh
-mkdir -p src/tests/helpers 
+mkdir -p src/tests/helpers
 ```
+
 Within that new directory, create a file named `prisma.ts`:
 
 ```sh
 touch src/tests/helpers/prisma.ts
 ```
+
 This file is a helper that simply instantiates and exports Prisma Client.
 
 Add the following to that file:
 
 ```ts
 // src/tests/helpers/prisma.ts
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from "@prisma/client";
 
-const prisma = new PrismaClient()
-export default prisma
+const prisma = new PrismaClient();
+export default prisma;
 ```
+
 Now create another file in `src/tests/helpers` named `reset-db.ts`:
 
 ```sh
-touch src/tests/helpers/reset-db.ts 
+touch src/tests/helpers/reset-db.ts
 ```
+
 This file is where you will write and export a function that resets your database.
 
 Your database only has three tables: `Tag`, `Quote` and `User`. Write and export a function that runs `deleteMany` on each of those tables within a transaction:
 
 ```ts
 // src/tests/helpers/reset-db.ts
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from "@prisma/client";
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 
 export default async () => {
   await prisma.$transaction([
     prisma.tag.deleteMany(),
     prisma.quote.deleteMany(),
-    prisma.user.deleteMany()
-  ])
-}
+    prisma.user.deleteMany(),
+  ]);
+};
 ```
+
 With the file written above, you now have a way to clear your database. The last thing to do here is actually invoke that function between each and every integration test.
 
 A nice way to do this is to use a [_setup file_](https://vitest.dev/config/#setupfiles). This is a file that you can configure Vitest to process before running any tests. Here you can use Vitest's lifecycle hooks to customize its behavior.
@@ -323,6 +340,7 @@ Create another file in `src/tests/helpers` named `setup.ts`.
 ```sh
 touch src/tests/helpers/setup.ts
 ```
+
 Your goal is to reset the database before every single test to make sure you have a clean slate. You can accomplish this by running the function exported by `reset-db.ts` within the `beforeEach` lifecycle function provided by Vitest.
 
 Within `setup.ts`, use `beforeEach` to run your reset function between every test:
@@ -330,13 +348,14 @@ Within `setup.ts`, use `beforeEach` to run your reset function between every tes
 ```ts
 // src/tests/helpers/setup.ts
 
-import resetDb from './reset-db'
-import { beforeEach } from 'vitest'
+import resetDb from "./reset-db";
+import { beforeEach } from "vitest";
 
 beforeEach(async () => {
-  await resetDb()
-})
+  await resetDb();
+});
 ```
+
 Now when you run your suite of tests, every individual test across all files within `src/tests` will start with a clean slate.
 
 > **Note**: You may be wondering about a scenario where you would want to start off with some data in a specific testing context. Within each individual test file you write, you can also hook into these lifecycle functions and customize the behavior per-file. An example of this will be shown later on.
@@ -364,12 +383,12 @@ export default defineConfig({
   }
 })
 ```
+
 ## Update the unit testing configuration
 
-Currently, the unit testing configuration file will also run your integration tests as it searches for any `.ts` file that lies within `src`. 
+Currently, the unit testing configuration file will also run your integration tests as it searches for any `.ts` file that lies within `src`.
 
 Update the configuration in `vitest.config.unit.ts` to ignore files within `src/tests`:
-
 
 ```ts
 // vitest.config.unit.ts
@@ -392,6 +411,7 @@ export default defineConfig({
   }
 })
 ```
+
 Now your unit tests and integration tests are completely separate and can only be run using their own individual commands.
 
 ## Write a script to spin up the test environment
@@ -411,11 +431,13 @@ Create a new directory at the root of your project named `scripts`:
 ```sh
 mkdir scripts
 ```
+
 Within that directory, create a file named `run-integration.sh`:
 
 ```sh
 touch scripts/run-integration.sh
 ```
+
 Within this file, you will need the following steps to happen:
 
 1. Load in any environment variables from `.env` so you have access to the database URL.
@@ -433,6 +455,7 @@ Create another file in `scripts` named `setenv.sh`:
 ```sh
 touch scripts/setenv.sh
 ```
+
 Within this file, add the following snippet:
 
 ```shell
@@ -442,6 +465,7 @@ Within this file, add the following snippet:
 # Export env vars
 export $(grep -v '^#' .env | xargs)
 ```
+
 This will read in your `.env` file and export each variable so it becomes available in your scripts.
 
 Back in `scripts/run-integration.sh`, you can now use this file to gain access to the environment variables using the `source` command:
@@ -453,11 +477,12 @@ Back in `scripts/run-integration.sh`, you can now use this file to gain access t
 DIR="$(cd "$(dirname "$0")" && pwd)"
 source $DIR/setenv.sh
 ```
+
 Above, the `DIR` variable is used to find the relative path to `setenv.sh` and that path is used to execute the script.
 
 ### Start your Docker container in detached mode
 
-The next step is to spin up your Docker container. It is important to note that you will need to start the container in _detached mode_. 
+The next step is to spin up your Docker container. It is important to note that you will need to start the container in _detached mode_.
 
 Typically, when you run `docker-compose up` your terminal will be connected to the container's output so you can see what is going on. This, however, prevents the terminal from performing any other actions until you stop your Docker container.
 
@@ -473,6 +498,7 @@ DIR="$(cd "$(dirname "$0")" && pwd)"
 source $DIR/setenv.sh
 +docker-compose up -d
 ```
+
 Here, the `-d` flag signifies the container should be run in detached mode.
 
 ### Make the script wait until the database server is ready
@@ -486,6 +512,7 @@ Download the contents of that script into a file named `scripts/wait-for-it.sh` 
 ```sh
 curl https://raw.githubusercontent.com/nickjj/wait-for-it/master/wait-for-it.sh -o scripts/wait-for-it.sh
 ```
+
 > **Warning**: If the `wait-for-it.sh` script does not work for you, please see the [GitHub discussion](https://github.com/prisma/prisma/discussions/19245) for an alternative way to connect to the database and ensure the test runs successfully.
 
 Then, head back into `run-integration.sh` and update it with the following:
@@ -500,6 +527,7 @@ docker-compose up -d
 +echo '🟡 - Waiting for database to be ready...'
 +$DIR/wait-for-it.sh "${DATABASE_URL}" -- echo '🟢 - Database is ready!'
 ```
+
 Your script will now wait for the database at the location specified in the `DATABASE_URL` environment variable to be available before continuing.
 
 If you are on a Mac, you will also need to run the following command to install and alias a command that is used within the `wait-for-it.sh` script:
@@ -507,9 +535,10 @@ If you are on a Mac, you will also need to run the following command to install 
 ```sh
 brew install coreutils && alias timeout=gtimeout
 ```
+
 ### Prepare the database and run the tests
 
-The last two steps are now safe to take place. 
+The last two steps are now safe to take place.
 
 After the `wait-for-it` script is run, run a Prisma migration to apply any new changes to the database:
 
@@ -524,6 +553,7 @@ echo '🟡 - Waiting for database to be ready...'
 $DIR/wait-for-it.sh "${DATABASE_URL}" -- echo '🟢 - Database is ready!'
 +npx prisma migrate dev --name init
 ```
+
 Then to wrap this all up, add the following statement to run your integration tests:
 
 ```shell
@@ -543,17 +573,19 @@ npx prisma migrate dev --name init
 +    vitest -c ./vitest.config.integration.ts --ui
 +fi
 ```
+
 Notice the `if`/`else` statement that was used. This is what allows you to look for a flag passed to the script. If a flag was found, it is assumed to be `--ui` and will run the tests with the Vitest user interface.
 
 ### Make the scripts executable
 
-The scripts required to run your tests are all complete, however if you try to execute any of them you will get a permissions error. 
+The scripts required to run your tests are all complete, however if you try to execute any of them you will get a permissions error.
 
 In order to make these scripts executable, you will need to run the following command which gives your current user access to run them:
 
 ```sh
 chmod +x scripts/*
 ```
+
 ## Configure your npm scripts
 
 Your scripts are now executable. The next step is to create `scripts` records within `package.json` that will invoke these custom scripts and start up your tests.
@@ -572,11 +604,13 @@ In `package.json` add the following to the `scripts` section:
 },
 // ...
 ```
+
 Now, if you run either of the following scripts you should see your Docker container spinning up, a Prisma migration being executed, and finally your tests being run:
 
 ```shell
 npm run test:int
 ```
+
 ![tests running and failing](/testing-series-3-aBUyF8nxAn/imgs/tests-run.png)
 
 > **Note**: At the moment your tests will fail. That is because Vitest could not find any files with tests to run.
@@ -593,7 +627,7 @@ Keeping this in mind, you will focus your integration tests on testing each rout
 
 > **Note**: There are many differing opinions on what integration tests should cover. In some cases, a developer may want to write dedicated integration tests to ensure smaller components (such as your _controllers_ and _services_) work correctly together along with tests that validate the entire API route works correctly. The decision about what should be covered in your tests depends entirely on your application's needs and what you as a developer feel needs to be tested.
 
-Similar to the previous article in this series, in order to keep the information in this tutorial to a manageable length you will focus on writing the tests for the API routes `/auth/signin` and `/auth/signup`. 
+Similar to the previous article in this series, in order to keep the information in this tutorial to a manageable length you will focus on writing the tests for the API routes `/auth/signin` and `/auth/signup`.
 
 > **Note**: If you are curious about what the tests for the `/quotes/*` routes would look like, the complete set of tests is available in the `integration-tests` branch of the GitHub repository.
 
@@ -604,32 +638,35 @@ Create a new file in `src/tests` named `auth.test.ts`
 ```sh
 touch src/tests/auth.test.ts
 ```
+
 This is where all tests relating to the `/auth` routes of your API will go.
 
 Within this file, import the `describe`, `expect` and `it` functions from Vitest and use `describe` to define this suite of tests:
 
 ```ts
 // src/tests/auth.test.ts
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it } from "vitest";
 
-describe('/auth', async () => {
+describe("/auth", async () => {
   // tests will go here
-})
+});
 ```
+
 The first endpoint you will test is the `POST /auth/signup` route.
 
 Within the test suite context, add another `describe` block to describe the suite of tests associated with this specific route:
 
 ```ts
 // src/tests/auth.test.ts
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it } from "vitest";
 
-describe('/auth', async () => {
-  describe('[POST] /auth/signup', () => {
+describe("/auth", async () => {
+  describe("[POST] /auth/signup", () => {
     // tests will go here
-  })
-})
+  });
+});
 ```
+
 This route allows you to provide a username and a password to create a new user. By looking through the logic in `src/auth/auth.controller.ts` and the route definition at `src/auth/auth.routes.ts`, it can be determined that the following behaviors that are important to test for:
 
 - It should respond with a `200` status code and user details
@@ -642,7 +679,6 @@ This route allows you to provide a username and a password to create a new user.
 The next four sections will detail how to write the tests for these scenarios.
 
 #### It should respond with a `200` status code and user details
-
 
 To begin writing the test for this scenario, use the `it` function imported from Vitest to describe what "it" should do.
 
@@ -657,6 +693,7 @@ describe('/auth', async () => {
   })
 })
 ```
+
 In order to actually `POST` data to the endpoint in your application you will make use of a library named [`supertest`](https://www.npmjs.com/package/supertest). This library allows you to provide it an HTTP server and send requests to that server via a simple API.
 
 Install `supertest` as a development dependency:
@@ -664,6 +701,7 @@ Install `supertest` as a development dependency:
 ```sh
 npm i -D supertest @types/supertest
 ```
+
 Then import `supertest` at the top of `src/tests/auth.test.ts` with the name `request`. Also import the default export from `src/lib/createServer`, which provides the `app` object:
 
 ```ts
@@ -680,6 +718,7 @@ describe('/auth', async () => {
   })
 })
 ```
+
 You can now send a request to your Express API using the `request` function:
 
 ```ts
@@ -696,9 +735,10 @@ describe('/auth', async () => {
   })
 })
 ```
-Above, the `app` instance was passed to the `request` function. The response of that function is a set of functions that allow you to interact with the HTTP server passed to `request`. 
 
-The `post` function was then used to define the _HTTP method_ and route you intended to interact with. Finally `send` was invoked to send the `POST` request along with a request body. 
+Above, the `app` instance was passed to the `request` function. The response of that function is a set of functions that allow you to interact with the HTTP server passed to `request`.
+
+The `post` function was then used to define the _HTTP method_ and route you intended to interact with. Finally `send` was invoked to send the `POST` request along with a request body.
 
 The returned value of that contains all of the details of the request's response, however the `status` and `body` values were specifically pulled out of the response.
 
@@ -733,6 +773,7 @@ describe('/auth', async () => {
   })
 })
 ```
+
 The changes above do the following:
 
 1. Imports `prisma` so you can query the database to double-check data was created correctly
@@ -751,7 +792,7 @@ If you run `npm run test:int:ui` in your terminal, you should see the Vitest GUI
 
 #### It should respond with a valid session token when successful
 
-This next test will verify that when a user is created, the response should include a session token that can be used to validate that user's requests to the API. 
+This next test will verify that when a user is created, the response should include a session token that can be used to validate that user's requests to the API.
 
 Create a new test for this scenario beneath the previous test:
 
@@ -767,6 +808,7 @@ describe('/auth', async () => {
   })
 })
 ```
+
 This test will be a bit simpler than the previous. All it needs to do is send a valid sign up request and inspect the response to verify a valid token was sent back.
 
 Use `supertest` to send a `POST` request to the `/auth/signup` endpoint and retrieve the response body:
@@ -786,7 +828,8 @@ describe('/auth', async () => {
   })
 })
 ```
-The response body should contain a field named `token` which contains the session token string. 
+
+The response body should contain a field named `token` which contains the session token string.
 
 Add a set of expectations that verify the `token` field is present in the response, and also use the `jwt` library to verify the token is a valid session token:
 
@@ -810,6 +853,7 @@ describe('/auth', async () => {
 
 // ...
 ```
+
 #### It should respond with a `400` status code if a user exists with the provided username
 
 Until now, you have verified valid requests to `/auth/signup` respond as expected. Now you will switch gears and make sure the app appropriately handles invalid requests.
@@ -828,7 +872,8 @@ describe('/auth', async () => {
   })
 })
 ```
-In order to trigger the 400 that should occur when a sign up request is made with an existing username, a user must already exist in the database. 
+
+In order to trigger the 400 that should occur when a sign up request is made with an existing username, a user must already exist in the database.
 
 Add a query to this test that creates a user named `'testusername'` with any password:
 
@@ -849,9 +894,10 @@ describe('/auth', async () => {
   })
 })
 ```
+
 Now you should be able to trigger the error by sending a sign up request with the same username as that user.
 
->**Note**: Remember, this user record (as well as the other records created as a result of your sign up tests) are deleted between each individual test.
+> **Note**: Remember, this user record (as well as the other records created as a result of your sign up tests) are deleted between each individual test.
 
 Send a request to `/auth/signup` providing the same username as the user created above: `'testusername'`:
 
@@ -877,6 +923,7 @@ describe('/auth', async () => {
   })
 })
 ```
+
 Now that a request is being sent to that endpoint, it is time to think about what you would expect to happen in this scenario. You would expect:
 
 - The request to respond with a `400` status code
@@ -912,6 +959,7 @@ describe('/auth', async () => {
   })
 })
 ```
+
 #### It should respond with a `400` status code if an invalid request body is provided
 
 The last test you will write for this endpoint is a test verifying a request will respond with a `400` status code if an invalid request body is sent to the API.
@@ -934,7 +982,8 @@ describe('/auth', async () => {
   })
 })
 ```
-This test will very straightforward. It should simply send a `POST` request to the `/auth/signup` endpoint and provide an invalid request body. 
+
+This test will very straightforward. It should simply send a `POST` request to the `/auth/signup` endpoint and provide an invalid request body.
 
 Use `supertest` to send a `POST` request to `/auth/signup`, however instead of a `username` field send an `email` field:
 
@@ -953,7 +1002,8 @@ describe('/auth', async () => {
   })
 })
 ```
-This request body should cause the validation middleware to respond to the request with a `400` error code before continuing to the controller. 
+
+This request body should cause the validation middleware to respond to the request with a `400` error code before continuing to the controller.
 
 Use the following set of expectations to validate this behavior:
 
@@ -976,20 +1026,22 @@ describe('/auth', async () => {
   })
 })
 ```
+
 With that, your suite of tests for the `/auth/signup` endpoint is complete! If you take a look back at the Vitest GUI you should find all of your tests are successful:
 
 ```shell
 npm run test:int:ui
 ```
+
 ![Full suite of signup tests complete](/testing-series-3-aBUyF8nxAn/imgs/signup-suite-success.png)
 
 ### Write the tests for `/auth/signin`
 
 This next endpoint you will write tests for has many similarities to the previous one, however rather than creating a new user it validates an existing user.
 
-The `/auth/signin` endpoint takes in a `username` and a `password`, makes sure a user exists with the provided data, generates a session token and responds to the request with the session token and the user's details. 
+The `/auth/signin` endpoint takes in a `username` and a `password`, makes sure a user exists with the provided data, generates a session token and responds to the request with the session token and the user's details.
 
->**Note**: The implementation of this functionality can be found in `src/auth/auth.controller.ts` and `src/auth/auth.router.ts`.
+> **Note**: The implementation of this functionality can be found in `src/auth/auth.controller.ts` and `src/auth/auth.router.ts`.
 
 In your suite of tests you will verify the following are true of this endpoint:
 
@@ -1016,9 +1068,10 @@ describe('/auth', () => {
 +  })
 })
 ```
+
 The tests you will write in this suite will also require a user to exist in the database, as you will be the sign in functionality.
 
-Within the `describe` block you just added, you can use Vitest's `beforeEach` function to add a user to the database before each test. 
+Within the `describe` block you just added, you can use Vitest's `beforeEach` function to add a user to the database before each test.
 
 Add the following to the new suite of tests:
 
@@ -1043,9 +1096,10 @@ describe('/auth', () => {
   })
 })
 ```
+
 > **Note**: It is important to note that the encryption method for the password here must exactly match the encryption method used in `src/auth/auth.service.ts`.
 
-Now that the initial setup for this suite of tests is complete you can move on to writing the tests. 
+Now that the initial setup for this suite of tests is complete you can move on to writing the tests.
 
 Just like before, the next six sections will cover each of these scenarios individually and walk through how the test works.
 
@@ -1061,15 +1115,16 @@ To start, add your new test within the `describe` block for this suite of tests 
 describe('/auth', () => {
   describe('[POST] /auth/signup', () => { /* ... */ })
   describe('[POST] /auth/signin', () => {
-    beforeEach(async () => { 
+    beforeEach(async () => {
       // ...
     })
 +    it('should respond with a `200` status code when provided valid credentials', async () => {
-+    
++
 +    })
   })
 })
 ```
+
 To test for the desired behavior, send a `POST` request to the `/auth/signin` endpoint with the same username and password used to create your test user. Then verify the status code of the response is `200`:
 
 ```ts
@@ -1090,6 +1145,7 @@ describe('/auth', () => {
   })
 })
 ```
+
 #### It should respond with the user details when successful
 
 This next test is very similar to the previous test, except rather than checking for a `200` response status you will check for a `user` object in the response body and validate its contents.
@@ -1119,12 +1175,13 @@ describe('/auth', () => {
   })
 })
 ```
+
 The contents of the test above do the following:
 
 1. Sends a `POST` request to `/auth/signin` with a request body containing the test user's username and password
 2. Extracts the keys of the response body's `user` object
 3. Validates there are two keys, `id` and `username`, in the response and that the value of `user.username` matches the test user's username
-  
+
 #### It should respond with a valid session token when successful
 
 In this test, you again will follow a very similar process to the previous two tests, only this test will verify the presence of a valid session token in the response body.
@@ -1150,6 +1207,7 @@ describe('/auth', () => {
   })
 })
 ```
+
 As you can see above, a request was sent to the target endpoint and the response body was abstracted from the result.
 
 The [`toHaveProperty`](https://vitest.dev/api/expect.html#tohaveproperty) function was used to verify the present of a `token` key in the response body. Then the session token was validated using the `jwt.verify` function.
@@ -1182,9 +1240,10 @@ describe('/auth', () => {
   })
 })
 ```
-As you can see above, the response's status is expected to be `400`. 
 
-An expectation was also added for the response body to not contain a `token` property as an invalid login request should not trigger a session token to be generated. 
+As you can see above, the response's status is expected to be `400`.
+
+An expectation was also added for the response body to not contain a `token` property as an invalid login request should not trigger a session token to be generated.
 
 > **Note**: The second expectation of this test is not strictly necessary as the `400` status code is enough to know the condition in your controller was met to short-circuit the request and respond with an error.
 
@@ -1212,9 +1271,10 @@ describe('/auth', () => {
   })
 })
 ```
+
 #### It should respond with a `400` status code when given an invalid request body
 
-In this final test, you will verify sending an invalid request body causes an error response. 
+In this final test, you will verify sending an invalid request body causes an error response.
 
 The `validate` middleware used in `src/auth/auth.router.ts` should catch the invalid request body and short-circuit the auth controller altogether.
 
@@ -1240,6 +1300,7 @@ describe('/auth', () => {
   })
 })
 ```
+
 As you can see above, the `username` field was switched out for an `email` field as was done in a test previously in this article. As a result, the request body does not match the `zod` definition for the request body and triggers an error.
 
 If you head over to the Vitest GUI you should see your entire suite of tests for both endpoints successfully passing all checks.

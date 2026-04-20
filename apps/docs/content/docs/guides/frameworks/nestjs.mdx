@@ -215,7 +215,9 @@ import { User, Prisma } from "./generated/prisma/client.js";
 export class UserService {
   constructor(private prisma: PrismaService) {}
 
-  async user(userWhereUniqueInput: Prisma.UserWhereUniqueInput): Promise<User | null> {
+  async user(
+    userWhereUniqueInput: Prisma.UserWhereUniqueInput,
+  ): Promise<User | null> {
     return this.prisma.user.findUnique({
       where: userWhereUniqueInput,
     });
@@ -280,7 +282,9 @@ import { Post, Prisma } from "./generated/prisma/client.js";
 export class PostService {
   constructor(private prisma: PrismaService) {}
 
-  async post(postWhereUniqueInput: Prisma.PostWhereUniqueInput): Promise<Post | null> {
+  async post(
+    postWhereUniqueInput: Prisma.PostWhereUniqueInput,
+  ): Promise<Post | null> {
     return this.prisma.post.findUnique({
       where: postWhereUniqueInput,
     });
@@ -339,7 +343,15 @@ Finally, you'll use the services you created in the previous sections to impleme
 Replace the contents of the `app.controller.ts` file with the following code:
 
 ```typescript title="src/app.controller.ts"
-import { Controller, Get, Param, Post, Body, Put, Delete } from "@nestjs/common";
+import {
+  Controller,
+  Get,
+  Param,
+  Post,
+  Body,
+  Put,
+  Delete,
+} from "@nestjs/common";
 import { UserService } from "./user.service.js";
 import { PostService } from "./post.service.js";
 import { User as UserModel } from "./generated/prisma/client.js";
@@ -365,7 +377,9 @@ export class AppController {
   }
 
   @Get("filtered-posts/:searchString")
-  async getFilteredPosts(@Param("searchString") searchString: string): Promise<PostModel[]> {
+  async getFilteredPosts(
+    @Param("searchString") searchString: string,
+  ): Promise<PostModel[]> {
     return this.postService.posts({
       where: {
         OR: [
@@ -395,7 +409,9 @@ export class AppController {
   }
 
   @Post("user")
-  async signupUser(@Body() userData: { name?: string; email: string }): Promise<UserModel> {
+  async signupUser(
+    @Body() userData: { name?: string; email: string },
+  ): Promise<UserModel> {
     return this.UserService.createUser(userData);
   }
 

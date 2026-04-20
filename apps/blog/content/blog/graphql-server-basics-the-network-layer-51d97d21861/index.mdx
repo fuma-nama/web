@@ -35,15 +35,16 @@ A key thing to understand about GraphQL is that it’s actually agnostic to the 
 All you need to get started with your own web server is code looking as follows:
 
 ```js
-const express = require('express')
-const app = express()
+const express = require("express");
+const app = express();
 
 // respond with "hello world" when a GET request is received
-app.get('/', function(req, res) {
-  res.send('<h1>Hello World</h1>')
-})
-app.listen(3000)
+app.get("/", function (req, res) {
+  res.send("<h1>Hello World</h1>");
+});
+app.listen(3000);
 ```
+
 After executing this script with [Node.js](https://nodejs.org/en/), you can access the website on `http://localhost:3000` in your browser:
 
 ![](/graphql-server-basics-the-network-layer-51d97d21861/imgs/1*0ZgAAtT0Zm-Kc63SNeT5Ew.png)
@@ -51,17 +52,19 @@ After executing this script with [Node.js](https://nodejs.org/en/), you can acce
 You can easily add more _endpoints_ (also called [_routes_](https://expressjs.com/en/guide/routing.html)) to your server’s API:
 
 ```js
-app.get('/goodbye', function(req, res) {
-  res.send('<h1>Goodbye</h1>')
-})
+app.get("/goodbye", function (req, res) {
+  res.send("<h1>Goodbye</h1>");
+});
 ```
+
 Or use another [HTTP method](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods), for example POST instead of GET:
 
 ```js
-app.post('/', function(req, res) {
-  res.send('<h1>You just made a POST request</h1>')
-})
+app.post("/", function (req, res) {
+  res.send("<h1>You just made a POST request</h1>");
+});
 ```
+
 Express provides great flexibility around implementing your server, allowing you to easily add functionality using the concept of [_middleware_](https://expressjs.com/en/guide/writing-middleware.html).
 
 ### The key to flexibility and modularity in Express: Middleware
@@ -80,11 +83,12 @@ Middleware can be used for many use cases, such as _authentication_, _caching_, 
 
 ```js
 function loggingMiddleware(req, res, next) {
-  console.log(`Received a request at: ${Date.now()}`)
-  next()
+  console.log(`Received a request at: ${Date.now()}`);
+  next();
 }
-app.use(loggingMiddleware)
+app.use(loggingMiddleware);
 ```
+
 The flexibility gained through this middleware approach is leveraged by frameworks like `graphql-express`, `apollo-server` or `graphql-yoga`, which are all based on Express!
 
 ### Express & GraphQL
@@ -135,6 +139,7 @@ app.use('/graphql', graphqlHTTP({
 
 app.listen(4000)
 ```
+
 > Executing this code with Node.js starts a GraphQL server on `http://localhost:4000/graphql`
 
 If you’ve read the [previous article](https://www.prisma.io/blog/graphql-server-basics-the-schema-ac5e2950214e) on the GraphQL schema, you’ll have a pretty good understanding what the _lines 7 to 18_ are being used for: We build a `GraphQLSchema` that can execute the following query:
@@ -144,6 +149,7 @@ query {
   hello
 } # responds:  { "data": { "hello": "Hello World" } }
 ```
+
 The new part about this code snippet however is the integrated network layer. Rather than writing a query inline and executing it directly with GraphQL.js (as demonstrated [here](https://github.com/nikolasburk/plain-graphql/blob/graphql-js/src/index.js#L78)), this time we’re just setting up the server to wait for incoming queries which can then be executed against the `GraphQLSchema`.
 
 You really don’t need a lot more to get started with GraphQL on the server-side.
@@ -155,32 +161,33 @@ At its essence, `apollo-server` is very similar to `express-graphql`, with a few
 However, at the core it also simply is a middleware bridging the HTTP layer with the GraphQL engine provided by GraphQL.js. Here is what an equivalent implementation of the above `express-graphql`-based example looks like with `apollo-server-express`:
 
 ```js
-const express = require('express')
-const bodyParser = require('body-parser')
-const { graphqlExpress, graphiqlExpress } = require('apollo-server-express')
-const { GraphQLSchema, GraphQLObjectType, GraphQLString } = require('graphql')
+const express = require("express");
+const bodyParser = require("body-parser");
+const { graphqlExpress, graphiqlExpress } = require("apollo-server-express");
+const { GraphQLSchema, GraphQLObjectType, GraphQLString } = require("graphql");
 
 const schema = new GraphQLSchema({
   query: new GraphQLObjectType({
-    name: 'Query',
+    name: "Query",
     fields: {
       hello: {
         type: GraphQLString,
         resolve: (root, args, context, info) => {
-          return 'Hello World'
+          return "Hello World";
         },
       },
     },
   }),
-})
+});
 
-const app = express()
+const app = express();
 
-app.use('/graphql', bodyParser.json(), graphqlExpress({ schema }))
-app.get('/graphiql', graphiqlExpress({ endpointURL: '/graphql' })) // enable GraphiQL
+app.use("/graphql", bodyParser.json(), graphqlExpress({ schema }));
+app.get("/graphiql", graphiqlExpress({ endpointURL: "/graphql" })); // enable GraphiQL
 
-app.listen(4000)
+app.listen(4000);
 ```
+
 ## `graphql-yoga`: The easiest way to build a GraphQL server
 
 ![](/graphql-server-basics-the-network-layer-51d97d21861/imgs/1*yIYI_iNabiNS_7uuzFVJDQ.png)
@@ -198,23 +205,24 @@ This friction is removed by [`graphql-yoga`](https://github.com/graphcool/graphq
 Here is what the same GraphQL server we already saw with `express-graphql` and `apollo-server` looks like:
 
 ```js
-const { GraphQLServer } = require('graphql-yoga')
+const { GraphQLServer } = require("graphql-yoga");
 
 const typeDefs = `
   type Query {
     hello: String!
   }
-`
+`;
 
 const resolvers = {
   Query: {
-    hello: (root, args, context, info) => 'Hello  World',
+    hello: (root, args, context, info) => "Hello  World",
   },
-}
+};
 
-const server = new GraphQLServer({ typeDefs, resolvers })
-server.start() // defaults to port 4000
+const server = new GraphQLServer({ typeDefs, resolvers });
+server.start(); // defaults to port 4000
 ```
+
 Note that a `GraphQLServer` can either be instantiated using a ready instance of `GraphQLSchema` or by using the convenience API (based on `makeExecutableSchema` from `graphql-tools`) as shown in the snippet above.
 
 ### Built-in support for GraphQL Playgrounds, Subscriptions & Tracing
@@ -236,4 +244,3 @@ In the Node ecosystem, Express is by far the most popular framework to build web
 [`graphql-yoga`](https://github.com/graphcool/graphql-yoga) is a convenience layer on top of a number of other libraries (such as `graphql-tools`, `express`, `graphql-subscriptions` and `graphql-playground`) and is the easiest way for building GraphQL servers.
 
 In the next article, we’ll discuss the internals of the `info` argument that gets passed into your GraphQL resolvers.
-

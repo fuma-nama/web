@@ -9,7 +9,7 @@ export const chatPromptAtom = atom<string>("");
 // Atom for sidebar open/closed state (persisted to localStorage)
 export const chatOpenAtom = atomWithStorage<boolean>(
   "prisma-docs:chat-open",
-  false
+  false,
 );
 
 export const useAIChatContext = () => {

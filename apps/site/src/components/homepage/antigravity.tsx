@@ -177,7 +177,11 @@ const AntigravityInner = ({
 
   useEffect(() => {
     particleRefs.current = particleRefs.current.slice(0, count);
-    particlesRef.current = createParticles(count, sceneSize.width, sceneSize.height);
+    particlesRef.current = createParticles(
+      count,
+      sceneSize.width,
+      sceneSize.height,
+    );
     introStartTime.current = null;
   }, [count, sceneSize.height, sceneSize.width]);
 
@@ -257,13 +261,12 @@ const AntigravityInner = ({
             const angle = Math.atan2(dy, dx) + globalRotation;
             const wave =
               Math.sin(particle.t * waveSpeed + angle) * (0.5 * waveAmplitude);
-            const deviation = particle.randomRadiusOffset * inverseFieldStrength;
+            const deviation =
+              particle.randomRadiusOffset * inverseFieldStrength;
             const currentRingRadius = ringRadius + wave + deviation;
 
-            targetXPos =
-              projectedTargetX + currentRingRadius * Math.cos(angle);
-            targetYPos =
-              projectedTargetY + currentRingRadius * Math.sin(angle);
+            targetXPos = projectedTargetX + currentRingRadius * Math.cos(angle);
+            targetYPos = projectedTargetY + currentRingRadius * Math.sin(angle);
             targetZPos =
               particle.mz * depthFactor +
               Math.sin(particle.t) * waveAmplitude * depthFactor;
@@ -287,7 +290,10 @@ const AntigravityInner = ({
             particleSize;
 
           const angleToCenter =
-            (Math.atan2(projectedTargetY - particle.cy, projectedTargetX - particle.cx) *
+            (Math.atan2(
+              projectedTargetY - particle.cy,
+              projectedTargetX - particle.cx,
+            ) *
               180) /
             Math.PI;
           const introProgress = clamp(
@@ -350,14 +356,7 @@ const AntigravityInner = ({
     }
 
     return (
-      <rect
-        x="-0.1"
-        y="-0.3"
-        width="0.2"
-        height="0.6"
-        rx="0.1"
-        fill={color}
-      />
+      <rect x="-0.1" y="-0.3" width="0.2" height="0.6" rx="0.1" fill={color} />
     );
   }, [color, particleShape]);
 

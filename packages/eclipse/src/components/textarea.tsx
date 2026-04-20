@@ -29,7 +29,10 @@ interface TextareaProps
 }
 
 const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
-  ({ className, showCharCount = false, maxLength, onChange, size, ...rest }, ref) => {
+  (
+    { className, showCharCount = false, maxLength, onChange, size, ...rest },
+    ref,
+  ) => {
     const [charCount, setCharCount] = React.useState(0);
 
     const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -74,10 +77,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
                   ? "warning"
                   : "neutral"
             }
-            className={cn(
-              "absolute",
-              badgeInset[resolvedSize],
-            )}
+            className={cn("absolute", badgeInset[resolvedSize])}
             label={`${charCount}/${maxLength}`}
           ></Badge>
         )}

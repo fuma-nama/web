@@ -2,9 +2,8 @@
 title: Upgrade to v4
 description: Comprehensive guide for upgrading to Prisma ORM v4
 url: /guides/upgrade-prisma-orm/v4
-metaTitle: 'Upgrade to Prisma ORM 4'
-metaDescription: 'Guides on how to upgrade to Prisma ORM 4'
-
+metaTitle: "Upgrade to Prisma ORM 4"
+metaDescription: "Guides on how to upgrade to Prisma ORM 4"
 ---
 
 This guide helps you upgrade your project to Prisma ORM 4. Version 4 includes several important changes that may affect your application, so please review this guide carefully before proceeding.
@@ -26,6 +25,7 @@ This guide helps you upgrade your project to Prisma ORM 4. Version 4 includes se
 ### Breaking changes
 
 1. **Schema Changes**
+
    - Explicit `@unique` constraints for one-to-one relations
    - Enforced `@unique` or `@id` for one-to-one and one-to-many relations in MySQL/MongoDB
    - Scalar list defaults
@@ -47,7 +47,6 @@ npm install @prisma/client@4
 npm install -D prisma@4
 npx prisma generate
 ```
-
 
 :::danger
 
@@ -78,6 +77,7 @@ npx prisma validate
 Address any validation errors, paying special attention to:
 
 1. **Explicit `@unique` constraints for one-to-one relations**
+
    - Add `@unique` to relation scalar fields in one-to-one relations
 
    ```prisma
@@ -97,6 +97,7 @@ Address any validation errors, paying special attention to:
    ```
 
 2. **Enforced `@unique` or `@id` for relations in MySQL/MongoDB**
+
    - Ensure referenced fields in one-to-one and one-to-many relations have `@unique` or `@id`
 
    ```prisma
@@ -116,6 +117,7 @@ Address any validation errors, paying special attention to:
    ```
 
 3. **Update SQLite connection strings**
+
    - Remove the `sqlite:` protocol prefix if present
    - Change from: `sqlite:./dev.db`
    - To: `file:./dev.db`
@@ -141,12 +143,12 @@ This will update your schema with new capabilities like improved index configura
 
 In Prisma 4, the return types of `queryRaw` and `queryRawUnsafe` have changed:
 
-| Data Type  | Before 4.0.0  | From 4.0.0    |
-|------------|---------------|---------------|
-| `DateTime` | `String`      | `Date`        |
-| `BigInt`   | `String`      | `BigInt`      |
-| `Bytes`    | `String`      | `Buffer`      |
-| `Decimal`  | `String`      | `Decimal`     |
+| Data Type  | Before 4.0.0 | From 4.0.0 |
+| ---------- | ------------ | ---------- |
+| `DateTime` | `String`     | `Date`     |
+| `BigInt`   | `String`     | `BigInt`   |
+| `Bytes`    | `String`     | `Buffer`   |
+| `Decimal`  | `String`     | `Decimal`  |
 
 **Update your code** to handle these type changes, especially if you're using TypeScript or performing type checks.
 
@@ -158,17 +160,17 @@ Prisma 4 changes how JSON null values are handled. If you're working with JSON f
 // Before
 const result = await prisma.model.findMany({
   where: {
-    jsonField: { equals: null }
-  }
+    jsonField: { equals: null },
+  },
 });
 
 // After
-import { Prisma } from '@prisma/client';
+import { Prisma } from "@prisma/client";
 
 const result = await prisma.model.findMany({
   where: {
-    jsonField: { equals: Prisma.JsonNull }
-  }
+    jsonField: { equals: Prisma.JsonNull },
+  },
 });
 ```
 
@@ -233,6 +235,7 @@ model User {
 ### 3. Better Type Safety
 
 Prisma 4 improves type safety with:
+
 - Stricter validation of relation fields
 - Better error messages for common mistakes
 - Improved type inference for complex queries
@@ -267,10 +270,12 @@ Prisma 4 improves type safety with:
 ### Common Issues
 
 1. **Schema Validation Errors**
+
    - **Symptom**: Errors about missing `@unique` constraints
    - **Solution**: Add `@unique` to required relation fields
 
 2. **Type Errors in `queryRaw`**
+
    - **Symptom**: Type errors after upgrade
    - **Solution**: Update type definitions to match new return types
 
@@ -288,6 +293,7 @@ Prisma 4 improves type safety with:
 ## Getting Help
 
 If you encounter issues during the upgrade:
+
 1. Check the [GitHub Issues](https://github.com/prisma/prisma/issues) for known problems
 2. Ask for help in the [Prisma Slack](https://slack.prisma.io/)
 3. Open a [GitHub Discussion](https://github.com/prisma/prisma/discussions)

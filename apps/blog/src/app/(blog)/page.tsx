@@ -124,7 +124,6 @@ export default async function BlogHome({
     return authors.length > 0 ? authors[0] : null;
   };
 
-
   const items: BlogCardItem[] = posts.map((post) => {
     const data = post.data as any;
 
@@ -172,14 +171,19 @@ export default async function BlogHome({
       : items.filter((item) => item.tags?.includes(currentCategory));
 
   const totalPages = Math.max(1, Math.ceil(filteredItems.length / PAGE_SIZE));
-  const pageFromQuery = parsePage(getFirstQueryValue(resolvedSearchParams.page));
+  const pageFromQuery = parsePage(
+    getFirstQueryValue(resolvedSearchParams.page),
+  );
   const currentPage = Math.max(1, Math.min(pageFromQuery, totalPages));
 
   const shouldShowFeatured = currentCategory === SHOW_ALL && currentPage === 1;
   const featuredPost = shouldShowFeatured ? filteredItems[0] : undefined;
   const postsToRender = shouldShowFeatured
     ? filteredItems.slice(1, PAGE_SIZE)
-    : filteredItems.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+    : filteredItems.slice(
+        (currentPage - 1) * PAGE_SIZE,
+        currentPage * PAGE_SIZE,
+      );
 
   const paginationSequence = getPaginationSequence(totalPages, currentPage);
 
@@ -210,7 +214,10 @@ export default async function BlogHome({
               <PaginationContent>
                 <PaginationItem>
                   <PaginationPrevious
-                    href={buildBlogHref(currentCategory, Math.max(1, currentPage - 1))}
+                    href={buildBlogHref(
+                      currentCategory,
+                      Math.max(1, currentPage - 1),
+                    )}
                     aria-disabled={currentPage === 1}
                   />
                 </PaginationItem>

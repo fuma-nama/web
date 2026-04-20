@@ -79,8 +79,8 @@ export const partnersTosSections: PartnersTosSection[] = [
         <p>
           <b>Enrollment:</b> Application to the Program is required. Prisma will
           make a decision within 5 business days. Prisma employees and residents
-          of sanctioned countries are excluded from participation. Any changes in
-          status must be reported immediately.
+          of sanctioned countries are excluded from participation. Any changes
+          in status must be reported immediately.
         </p>
         <p>
           <b>Affiliate Program:</b> Partners must create an account, be at least
@@ -133,9 +133,9 @@ export const partnersTosSections: PartnersTosSection[] = [
         </p>
         <p>
           Both parties must protect Confidential Information using reasonable
-          care. Disclosure is permitted only to employees or contractors who need
-          to know and are bound by confidentiality obligations, or when legally
-          required with prior notice to the disclosing party.
+          care. Disclosure is permitted only to employees or contractors who
+          need to know and are bound by confidentiality obligations, or when
+          legally required with prior notice to the disclosing party.
         </p>
         <p>
           Upon termination of this Agreement, all confidential materials must be
@@ -156,8 +156,8 @@ export const partnersTosSections: PartnersTosSection[] = [
         <p>
           Prisma reserves the right to modify the Program with 30 days&apos;
           notice for significant changes. Upon termination, Partners must return
-          all Prisma property, cease displaying all Links and Creative materials,
-          and forfeit all Program rights.
+          all Prisma property, cease displaying all Links and Creative
+          materials, and forfeit all Program rights.
         </p>
       </>
     ),
@@ -173,9 +173,10 @@ export const partnersTosSections: PartnersTosSection[] = [
         </p>
         <p>
           Partners agree to indemnify and hold harmless Prisma against any
-          third-party claims arising from breaches of this Agreement, negligence,
-          customer relationships, tax obligations, and legal violations.
-          Indemnified parties shall receive prompt written notice of any claims.
+          third-party claims arising from breaches of this Agreement,
+          negligence, customer relationships, tax obligations, and legal
+          violations. Indemnified parties shall receive prompt written notice of
+          any claims.
         </p>
       </>
     ),
@@ -185,9 +186,9 @@ export const partnersTosSections: PartnersTosSection[] = [
     content: (
       <p>
         If any provision of this Agreement is found to be invalid, illegal, or
-        unenforceable, such invalidity shall not affect the remaining provisions.
-        The Agreement shall be construed as if the invalid provision had never
-        been included.
+        unenforceable, such invalidity shall not affect the remaining
+        provisions. The Agreement shall be construed as if the invalid provision
+        had never been included.
       </p>
     ),
   },

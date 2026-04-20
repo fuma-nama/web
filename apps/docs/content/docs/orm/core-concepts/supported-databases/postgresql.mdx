@@ -1,6 +1,6 @@
 ---
 title: PostgreSQL
-description: 'Use Prisma ORM with PostgreSQL databases including self-hosted, serverless (Neon, Supabase), and CockroachDB'
+description: "Use Prisma ORM with PostgreSQL databases including self-hosted, serverless (Neon, Supabase), and CockroachDB"
 url: /orm/core-concepts/supported-databases/postgresql
 metaTitle: PostgreSQL database connector
 metaDescription: This page explains how Prisma can connect to a PostgreSQL database using the PostgreSQL database connector.
@@ -96,13 +96,13 @@ Standard PostgreSQL server (9.6+).
 
 **Connection string arguments:**
 
-| Argument | Default | Description |
-|----------|---------|-------------|
-| `schema` | `public` | PostgreSQL schema to use |
-| `connect_timeout` | `5` | Seconds to wait for connection (0 = no timeout) |
-| `sslmode` | `prefer` | TLS mode: `prefer`, `disable`, `require` |
-| `sslcert` | | Path to server certificate |
-| `sslidentity` | | Path to PKCS12 certificate |
+| Argument          | Default  | Description                                     |
+| ----------------- | -------- | ----------------------------------------------- |
+| `schema`          | `public` | PostgreSQL schema to use                        |
+| `connect_timeout` | `5`      | Seconds to wait for connection (0 = no timeout) |
+| `sslmode`         | `prefer` | TLS mode: `prefer`, `disable`, `require`        |
+| `sslcert`         |          | Path to server certificate                      |
+| `sslidentity`     |          | Path to PKCS12 certificate                      |
 
 ### Neon
 
@@ -123,11 +123,13 @@ Serverless PostgreSQL with automatic scaling and branching.
 PostgreSQL hosting with built-in auth, storage, and real-time features.
 
 **Connection types:**
+
 - **Direct:** `db.[project-ref].supabase.co:5432`
 - **Transaction pooler:** Port `6543` with `?pgbouncer=true`
 - **Session pooler:** Port `5432` on pooler host
 
 **Key features:**
+
 - Supavisor connection pooling
 - Built-in PostgreSQL extensions
 - Integrated with Supabase ecosystem
@@ -146,11 +148,11 @@ Distributed, PostgreSQL-compatible database designed for scalability and high av
 
 **Key differences:**
 
-| Feature | PostgreSQL | CockroachDB |
-|---------|-----------|-------------|
-| Native types | `VARCHAR(n)` | `STRING(n)` |
-| ID generation | `autoincrement()` | Uses `unique_rowid()` |
-| Sequential IDs | Recommended | Avoid (use `autoincrement()` instead) |
+| Feature        | PostgreSQL        | CockroachDB                           |
+| -------------- | ----------------- | ------------------------------------- |
+| Native types   | `VARCHAR(n)`      | `STRING(n)`                           |
+| ID generation  | `autoincrement()` | Uses `unique_rowid()`                 |
+| Sequential IDs | Recommended       | Avoid (use `autoincrement()` instead) |
 
 **ID generation example:**
 
@@ -176,17 +178,17 @@ model User {
 
 ### Prisma to PostgreSQL
 
-| Prisma | PostgreSQL | CockroachDB |
-|--------|-----------|-------------|
-| `String` | `text` | `STRING` |
-| `Boolean` | `boolean` | `BOOL` |
-| `Int` | `integer` | `INT4` |
-| `BigInt` | `bigint` | `INT8` |
-| `Float` | `double precision` | `FLOAT8` |
-| `Decimal` | `decimal(65,30)` | `DECIMAL` |
-| `DateTime` | `timestamp(3)` | `TIMESTAMP` |
-| `Json` | `jsonb` | `JSONB` |
-| `Bytes` | `bytea` | `BYTES` |
+| Prisma     | PostgreSQL         | CockroachDB |
+| ---------- | ------------------ | ----------- |
+| `String`   | `text`             | `STRING`    |
+| `Boolean`  | `boolean`          | `BOOL`      |
+| `Int`      | `integer`          | `INT4`      |
+| `BigInt`   | `bigint`           | `INT8`      |
+| `Float`    | `double precision` | `FLOAT8`    |
+| `Decimal`  | `decimal(65,30)`   | `DECIMAL`   |
+| `DateTime` | `timestamp(3)`     | `TIMESTAMP` |
+| `Json`     | `jsonb`            | `JSONB`     |
+| `Bytes`    | `bytea`            | `BYTES`     |
 
 See [full type mapping reference](/orm/reference/prisma-schema-reference#model-field-scalar-types) for complete details.
 
@@ -213,13 +215,14 @@ DATABASE_URL="postgresql://user:pass@localhost/db?host=/var/run/postgresql/"
 ```ts
 const adapter = new PrismaPg(
   { connectionString: process.env.DATABASE_URL },
-  { schema: "mySchema" }
+  { schema: "mySchema" },
 );
 ```
 
 **Connection pool defaults (Prisma ORM v7):**
 
 Driver adapters use `pg` defaults which differ from v6:
+
 - **Connection timeout:** `0` (no timeout) vs v6's `5s`
 - **Idle timeout:** `10s` vs v6's `300s`
 

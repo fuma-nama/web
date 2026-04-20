@@ -114,7 +114,8 @@ function toExternalHttpUrl(raw: string): string | null {
 
   try {
     const parsed = new URL(trimmed);
-    if (parsed.protocol !== "http:" && parsed.protocol !== "https:") return null;
+    if (parsed.protocol !== "http:" && parsed.protocol !== "https:")
+      return null;
     if (parsed.hostname === "localhost") return null;
     return parsed.toString();
   } catch {
@@ -122,7 +123,9 @@ function toExternalHttpUrl(raw: string): string | null {
   }
 }
 
-function collectFileLinks(filePath: string): Array<{ url: string; line: number }> {
+function collectFileLinks(
+  filePath: string,
+): Array<{ url: string; line: number }> {
   const rawContent = fs.readFileSync(filePath, "utf8");
   const content = stripCodeBlocks(rawContent);
   const links: Array<{ url: string; line: number }> = [];
@@ -187,7 +190,9 @@ async function fetchWithTimeout(
   }
 }
 
-async function checkUrl(url: string): Promise<{ ok: boolean; reason?: string }> {
+async function checkUrl(
+  url: string,
+): Promise<{ ok: boolean; reason?: string }> {
   try {
     // Some providers (e.g. VS Marketplace, Bluesky) return 404 for HEAD
     // while the same URL works with GET in a browser.
@@ -197,7 +202,10 @@ async function checkUrl(url: string): Promise<{ ok: boolean; reason?: string }> 
     });
 
     if (response.status >= 400 || response.status === 429) {
-      response = await fetchWithTimeout(url, { method: "GET", headers: BROWSER_HEADERS });
+      response = await fetchWithTimeout(url, {
+        method: "GET",
+        headers: BROWSER_HEADERS,
+      });
     }
 
     if (response.status === 404) {
@@ -230,13 +238,16 @@ async function runWithConcurrency<T>(
 ): Promise<void> {
   let index = 0;
 
-  const workers = Array.from({ length: Math.min(limit, items.length) }, async () => {
-    while (index < items.length) {
-      const item = items[index];
-      index += 1;
-      await worker(item);
-    }
-  });
+  const workers = Array.from(
+    { length: Math.min(limit, items.length) },
+    async () => {
+      while (index < items.length) {
+        const item = items[index];
+        index += 1;
+        await worker(item);
+      }
+    },
+  );
 
   await Promise.all(workers);
 }

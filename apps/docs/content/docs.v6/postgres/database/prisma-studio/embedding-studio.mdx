@@ -206,7 +206,9 @@ app.post("/studio", async (c) => {
   const url = process.env.DATABASE_URL;
 
   // 3. Execute the query against Prisma Postgres
-  const [error, results] = await createPrismaPostgresHttpClient({ url }).execute(query);
+  const [error, results] = await createPrismaPostgresHttpClient({
+    url,
+  }).execute(query);
 
   // 6. Return results or errors
   if (error) {
@@ -244,7 +246,9 @@ app.post("/studio", async (c) => {
   const url = determineUrlFromContext(customHeader, customPayload);
 
   // 5. Execute the query using Prisma Postgres or Prisma Accelerate
-  const [error, results] = await createPrismaPostgresHttpClient({ url }).execute(query);
+  const [error, results] = await createPrismaPostgresHttpClient({
+    url,
+  }).execute(query);
 
   // 6. Return results or errors
   if (error) {

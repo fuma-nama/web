@@ -33,10 +33,7 @@ type MixedbreadSearchChunk = {
   generated_metadata?: GeneratedMetadata;
 };
 
-function withPrefixedPath(
-  path: string | undefined,
-  prefix: string,
-): string {
+function withPrefixedPath(path: string | undefined, prefix: string): string {
   const normalizedPath = (path ?? "")
     .replace(/^\/+/, "")
     .replace(new RegExp(`^${prefix.replace("/", "")}/`), "");
@@ -72,7 +69,9 @@ function normalizeDocsUrl(url?: string): string {
 function getDocsImagePath(normalizedDocsUrl: string): string {
   if (!normalizedDocsUrl || normalizedDocsUrl === "#") return "";
   const docsUrl = new URL(normalizedDocsUrl, websiteBaseUrl);
-  const docsPath = docsUrl.pathname.replace(/^\/docs\//, "").replace(/^\/+/, "");
+  const docsPath = docsUrl.pathname
+    .replace(/^\/docs\//, "")
+    .replace(/^\/+/, "");
   return `https://www.prisma.io/docs/og/${docsPath}/image.png`;
 }
 
@@ -101,24 +100,26 @@ function transformResult(item: MixedbreadSearchChunk): SiteSearchResult | null {
     source,
     content:
       source === "blog"
-        ? metadata.metaTitle ?? metadata.title ?? item.text ?? "Untitled"
-        : metadata.title ?? item.text ?? "Untitled",
+        ? (metadata.metaTitle ?? metadata.title ?? item.text ?? "Untitled")
+        : (metadata.title ?? item.text ?? "Untitled"),
     url: normalizedUrl,
     description:
       source === "blog"
-        ? metadata.metaDescription ?? metadata.excerpt ?? item.text ?? ""
-        : metadata.metaDescription ?? item.text ?? "",
+        ? (metadata.metaDescription ?? metadata.excerpt ?? item.text ?? "")
+        : (metadata.metaDescription ?? item.text ?? ""),
     heroImagePath:
       source === "blog"
         ? normalizeBlogImagePath(
             metadata.heroImagePath ?? metadata.metaImagePath,
           )
         : getDocsImagePath(normalizedUrl),
-    tags: source === "blog" ? metadata.tags ?? [] : [],
+    tags: source === "blog" ? (metadata.tags ?? []) : [],
   };
 }
 
-function transformResults(results: MixedbreadSearchChunk[]): SiteSearchResult[] {
+function transformResults(
+  results: MixedbreadSearchChunk[],
+): SiteSearchResult[] {
   return results
     .map(transformResult)
     .filter((item): item is SiteSearchResult => item !== null);

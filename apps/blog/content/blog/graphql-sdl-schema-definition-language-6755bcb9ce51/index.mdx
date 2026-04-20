@@ -11,7 +11,7 @@ heroImageAlt: "GraphQL SDL "
 ---
 
 GraphQL has its own language to write GraphQL Schemas: The GraphQL Schema Definition Language (SDL). SDL is simple and
-  intuitive to use while being extremely powerful and expressive.
+intuitive to use while being extremely powerful and expressive.
 
 ## What is a GraphQL Schema Definition?
 
@@ -35,6 +35,7 @@ type Blog {
   posts: [Post!]! @relation(name: "Posts")
 }
 ```
+
 The main components of a schema definition are the _types_ and their _fields_. Additional information can be provided as custom _directives_ like the `@default` value specified for the `likes` field.
 
 ### Type
@@ -46,6 +47,7 @@ type Post implements Item {
   # ...
 }
 ```
+
 ## Field
 
 A field has a name and a type:
@@ -53,6 +55,7 @@ A field has a name and a type:
 ```graphql
 age: Int
 ```
+
 The GraphQL spec defines some [built-in](https://spec.graphql.org/June2018/#sec-Scalars) scalar values but more can be defined by a concrete implementation. The built in scalar types are:
 
 - Int
@@ -68,11 +71,13 @@ Non-nullable fields are denoted by an exclamation mark:
 ```graphql
 age: Int!
 ```
+
 Lists are denoted by square brackets:
 
 ```graphql
 names: [String!]
 ```
+
 ## Enum
 
 An `enum` is a scalar value that has a specified set of possible values:
@@ -83,6 +88,7 @@ enum Category {
   API_DESIGN
 }
 ```
+
 ## Interface
 
 In GraphQL an `interface` is a list of fields. A GraphQL type must have the same fields as all the interfaces it implements and all interface fields must be of the same type.
@@ -92,6 +98,7 @@ interface Item {
   title: String!
 }
 ```
+
 ## Schema directive
 
 A directive allows you to attach arbitrary information to any other schema definition element. Directives are always placed behind the element they describe:
@@ -99,7 +106,7 @@ A directive allows you to attach arbitrary information to any other schema defin
 ```graphql
 name: String! @defaultValue(value: "new blogpost")
 ```
+
 Directives don’t have intrinsic meaning. Each GraphQL implementation can define their own custom directives that add new functionality.
 
 GraphQL specifies built-in skip and include directives that can be used to include or exclude specific fields in queries, but these aren't used in the schema language.
-

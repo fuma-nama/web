@@ -20,10 +20,18 @@ export function UserProfile() {
 **Live Example:**
 
 <div className="flex items-center gap-4 my-4 not-prose">
-  <Avatar format="initials" size="lg">SM</Avatar>
-  <Avatar format="initials" size="xl">MD</Avatar>
-  <Avatar format="initials" size="2xl">LG</Avatar>
-  <Avatar format="initials" size="3xl">XL</Avatar>
+  <Avatar format="initials" size="lg">
+    SM
+  </Avatar>
+  <Avatar format="initials" size="xl">
+    MD
+  </Avatar>
+  <Avatar format="initials" size="2xl">
+    LG
+  </Avatar>
+  <Avatar format="initials" size="3xl">
+    XL
+  </Avatar>
 </div>
 
 **Avatar with Image**
@@ -32,14 +40,7 @@ export function UserProfile() {
 import { Avatar } from "@prisma/eclipse";
 
 export function UserProfileImage() {
-  return (
-    <Avatar 
-      format="image" 
-      src="/avatar.jpg" 
-      alt="John Doe" 
-      size="lg" 
-    />
-  );
+  return <Avatar format="image" src="/avatar.jpg" alt="John Doe" size="lg" />;
 }
 ```
 
@@ -70,13 +71,49 @@ export function IconAvatar() {
 
 <div className="flex items-center gap-4 my-4 not-prose">
   <Avatar format="icon" size="lg">
-    <svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0.34 -0.059977834648891726 33.11668247084116 39.96397783464889" width="20" height="20"><path d="M32.908 30.475L19.151 1.26a2.208 2.208 0 0 0-1.88-1.257 2.183 2.183 0 0 0-2.01 1.042L.34 25.212a2.26 2.26 0 0 0 .025 2.426L7.66 38.935a2.346 2.346 0 0 0 2.635.969l21.17-6.262a2.32 2.32 0 0 0 1.457-1.258 2.27 2.27 0 0 0-.013-1.91zm-3.08 1.253L11.864 37.04c-.548.163-1.074-.312-.96-.865l6.418-30.731c.12-.575.914-.666 1.165-.134l11.881 25.23a.858.858 0 0 1-.541 1.188z" clipRule="evenodd" fillRule="evenodd"/></svg>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="white"
+      viewBox="0.34 -0.059977834648891726 33.11668247084116 39.96397783464889"
+      width="20"
+      height="20"
+    >
+      <path
+        d="M32.908 30.475L19.151 1.26a2.208 2.208 0 0 0-1.88-1.257 2.183 2.183 0 0 0-2.01 1.042L.34 25.212a2.26 2.26 0 0 0 .025 2.426L7.66 38.935a2.346 2.346 0 0 0 2.635.969l21.17-6.262a2.32 2.32 0 0 0 1.457-1.258 2.27 2.27 0 0 0-.013-1.91zm-3.08 1.253L11.864 37.04c-.548.163-1.074-.312-.96-.865l6.418-30.731c.12-.575.914-.666 1.165-.134l11.881 25.23a.858.858 0 0 1-.541 1.188z"
+        clipRule="evenodd"
+        fillRule="evenodd"
+      />
+    </svg>
   </Avatar>
   <Avatar format="icon" size="xl">
-    <svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0.34 -0.059977834648891726 33.11668247084116 39.96397783464889" width="24" height="24"><path d="M32.908 30.475L19.151 1.26a2.208 2.208 0 0 0-1.88-1.257 2.183 2.183 0 0 0-2.01 1.042L.34 25.212a2.26 2.26 0 0 0 .025 2.426L7.66 38.935a2.346 2.346 0 0 0 2.635.969l21.17-6.262a2.32 2.32 0 0 0 1.457-1.258 2.27 2.27 0 0 0-.013-1.91zm-3.08 1.253L11.864 37.04c-.548.163-1.074-.312-.96-.865l6.418-30.731c.12-.575.914-.666 1.165-.134l11.881 25.23a.858.858 0 0 1-.541 1.188z" clipRule="evenodd" fillRule="evenodd"/></svg>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="white"
+      viewBox="0.34 -0.059977834648891726 33.11668247084116 39.96397783464889"
+      width="24"
+      height="24"
+    >
+      <path
+        d="M32.908 30.475L19.151 1.26a2.208 2.208 0 0 0-1.88-1.257 2.183 2.183 0 0 0-2.01 1.042L.34 25.212a2.26 2.26 0 0 0 .025 2.426L7.66 38.935a2.346 2.346 0 0 0 2.635.969l21.17-6.262a2.32 2.32 0 0 0 1.457-1.258 2.27 2.27 0 0 0-.013-1.91zm-3.08 1.253L11.864 37.04c-.548.163-1.074-.312-.96-.865l6.418-30.731c.12-.575.914-.666 1.165-.134l11.881 25.23a.858.858 0 0 1-.541 1.188z"
+        clipRule="evenodd"
+        fillRule="evenodd"
+      />
+    </svg>
   </Avatar>
   <Avatar format="icon" size="2xl">
-    <svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0.34 -0.059977834648891726 33.11668247084116 39.96397783464889" width="28" height="28"><path d="M32.908 30.475L19.151 1.26a2.208 2.208 0 0 0-1.88-1.257 2.183 2.183 0 0 0-2.01 1.042L.34 25.212a2.26 2.26 0 0 0 .025 2.426L7.66 38.935a2.346 2.346 0 0 0 2.635.969l21.17-6.262a2.32 2.32 0 0 0 1.457-1.258 2.27 2.27 0 0 0-.013-1.91zm-3.08 1.253L11.864 37.04c-.548.163-1.074-.312-.96-.865l6.418-30.731c.12-.575.914-.666 1.165-.134l11.881 25.23a.858.858 0 0 1-.541 1.188z" clipRule="evenodd" fillRule="evenodd"/></svg>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="white"
+      viewBox="0.34 -0.059977834648891726 33.11668247084116 39.96397783464889"
+      width="28"
+      height="28"
+    >
+      <path
+        d="M32.908 30.475L19.151 1.26a2.208 2.208 0 0 0-1.88-1.257 2.183 2.183 0 0 0-2.01 1.042L.34 25.212a2.26 2.26 0 0 0 .025 2.426L7.66 38.935a2.346 2.346 0 0 0 2.635.969l21.17-6.262a2.32 2.32 0 0 0 1.457-1.258 2.27 2.27 0 0 0-.013-1.91zm-3.08 1.253L11.864 37.04c-.548.163-1.074-.312-.96-.865l6.418-30.731c.12-.575.914-.666 1.165-.134l11.881 25.23a.858.858 0 0 1-.541 1.188z"
+        clipRule="evenodd"
+        fillRule="evenodd"
+      />
+    </svg>
   </Avatar>
 </div>
 
@@ -87,12 +124,12 @@ import { Avatar } from "@prisma/eclipse";
 
 export function DisabledAvatar() {
   return (
-    <Avatar 
-      format="image" 
-      src="/avatar.jpg" 
-      alt="Disabled user" 
-      size="lg" 
-      disabled 
+    <Avatar
+      format="image"
+      src="/avatar.jpg"
+      alt="Disabled user"
+      size="lg"
+      disabled
     />
   );
 }
@@ -115,12 +152,7 @@ export function DisabledAvatar() {
 Display a user photo or image:
 
 ```tsx
-<Avatar 
-  format="image" 
-  src="/user-photo.jpg" 
-  alt="User Name" 
-  size="xl" 
-/>
+<Avatar format="image" src="/user-photo.jpg" alt="User Name" size="xl" />
 ```
 
 #### Initials Avatar
@@ -154,10 +186,18 @@ The Avatar component supports four sizes:
 
 ```tsx
 <div className="flex items-center gap-4">
-  <Avatar format="initials" size="lg">SM</Avatar>
-  <Avatar format="initials" size="xl">MD</Avatar>
-  <Avatar format="initials" size="2xl">LG</Avatar>
-  <Avatar format="initials" size="3xl">XL</Avatar>
+  <Avatar format="initials" size="lg">
+    SM
+  </Avatar>
+  <Avatar format="initials" size="xl">
+    MD
+  </Avatar>
+  <Avatar format="initials" size="2xl">
+    LG
+  </Avatar>
+  <Avatar format="initials" size="3xl">
+    XL
+  </Avatar>
 </div>
 ```
 

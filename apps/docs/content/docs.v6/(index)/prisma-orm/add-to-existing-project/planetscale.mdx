@@ -131,7 +131,10 @@ import { PrismaPlanetScale } from "@prisma/adapter-planetscale";
 import { PrismaClient } from "../generated/prisma/client";
 import { fetch as undiciFetch } from "undici";
 
-const adapter = new PrismaPlanetScale({ url: process.env.DATABASE_URL, fetch: undiciFetch });
+const adapter = new PrismaPlanetScale({
+  url: process.env.DATABASE_URL,
+  fetch: undiciFetch,
+});
 const prisma = new PrismaClient({ adapter });
 
 export { prisma };

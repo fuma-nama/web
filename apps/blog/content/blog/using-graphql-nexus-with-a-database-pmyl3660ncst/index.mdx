@@ -14,8 +14,8 @@ seriesIndex: 3
 ---
 
 [GraphQL Nexus](https://nexus.js.org/) is a code-first, type-safe GraphQL schema construction library for
-  JavaScript/TypeScript. Learn how it can be connected to a database using the Prisma client & the new
-  [`nexus-prisma`](https://github.com/prisma/nexus-prisma) plugin.
+JavaScript/TypeScript. Learn how it can be connected to a database using the Prisma client & the new
+[`nexus-prisma`](https://github.com/prisma/nexus-prisma) plugin.
 
 > ⚠️ **This article is outdated** as it relates to [Prisma 1](https://github.com/prisma/prisma1) which is now [deprecated](https://github.com/prisma/prisma1/issues/5208). To learn more about the most recent version of Prisma, read the [documentation](https://www.prisma.io/docs). ⚠️
 
@@ -76,8 +76,6 @@ When writing your GraphQL server code with `nexus` and `nexus-prisma`, you build
 
 After having generated the CRUD building blocks, you can use `prismaObjectType` from `nexus-prisma` to start exposing (and customizing) them. The following code snippets depict an implementation that provides a GraphQL API for a TODO-list app based on Prisma and `nexus-prisma`:
 
-
-
 ```graphql
 type Todo {
   id: ID! @unique
@@ -85,6 +83,7 @@ type Todo {
   done: Boolean! @default(value: "false")
 }
 ```
+
 ```ts
 import { prismaObjectType } from 'nexus-prisma'
 import { idArg } from 'nexus-prisma'
@@ -124,6 +123,7 @@ const schema = makePrismaSchema({
 
 // Feed the `schema` into your GraphQL server, e.g. `apollo-server, `graphql-yoga`
 ```
+
 ```graphql
 # The fully exposed "Query" building block
 type Query {
@@ -165,7 +165,6 @@ type Todo {
 # e.g. `TodoWhereUniqueInput`, `TodoCreateInput`, `TodoConnection`, ...
 ```
 
-
 We're applying `prismaObjectType` to `Query` and `Mutation`. For `Query`, we're keeping all fields (i.e. `todo`, `todoes` and `todoesConnection`). For `Mutation` we're using `prismaFields` to customize the exposed operations.
 
 `prismaFields` lets us select the operations to be exposed. In this case, we only want to keep the operation to _create_ a model (`createTodo`). From the generated CRUD building blocks, we're including neither `updateTodo` nor `deleteTodo` but implement our own `markAsDone(id: ID!)` mutation that checks off a certain `Todo`.
@@ -183,19 +182,18 @@ Let's now take a quick tour through a standard Prisma use case and see how to qu
 
 If you want to follow along, you need to have the Prisma CLI installed:
 
-
-
 ```shell
 npm install -g prisma
 ```
+
 ```shell
 yarn global add prisma
 ```
+
 ```shell
 brew tap prisma/prisma
 brew install prisma
 ```
-
 
 ### 1) Setup Prisma project with TypeScript, `nexus` and `nexus-prisma`
 
@@ -205,12 +203,9 @@ This section mostly deals with your project setup. Feel free to skip it if you d
   <Accordion title="See project setup instructions">
 Use the Prisma CLI to create a simple Prisma project:
 
-
-
 ```shell
 prisma init myblog
 ```
-
 
 In the interactive prompt, select the following options:
 
@@ -222,18 +217,13 @@ In the interactive prompt, select the following options:
 
 Next you need to configure your `nexus-prisma` workflow. Add the following dependencies (inside the `myblog` directory):
 
-
-
 ```shell
 npm init -y
 npm install --save nexus graphql nexus-prisma prisma-client-lib graphql-yoga
 npm install --save-dev typescript ts-node-dev
 ```
 
-
 Next, add the following two lines to the end of your `prisma.yml`:
-
-
 
 ```yml
 hooks:
@@ -242,12 +232,9 @@ hooks:
     - npx nexus-prisma-generate --client ./generated/prisma-client --output ./generated/nexus-prisma
 ```
 
-
 This ensures that the Prisma client as well as the generated `nexus-prisma` CRUD building blocks are being updated whenever you make changes to your models.
 
 Since we're using TypeScript, let's quickly add a `tsconfig.json`:
-
-
 
 ```json
 {
@@ -260,24 +247,20 @@ Since we're using TypeScript, let's quickly add a `tsconfig.json`:
 }
 ```
 
-
 Finally, go ahead and add a `start` script that you'll use for development. It starts a development server that watches your files in the background and updates the generated SDL and Nexus typings as you code. Add this to your `package.json`:
-
-
 
 ```json
 "scripts": {
   "start": "ts-node-dev --no-notify --respawn --transpileOnly ./"
 },
 ```
+
   </Accordion>
 </Accordions>
 
 ### 2) Define models, migrate database & generate the Prisma client
 
 The `prisma init` command created a default `User` model in `datamodel.prisma`. As we're building a blogging application, let's adjust the models to our application domain:
-
-
 
 ```graphql
 type User {
@@ -298,16 +281,11 @@ type Post {
 }
 ```
 
-
 Next you need to migrate the database by applying the datamodel to it. Using the following command, each model defined in `datamodel.prisma` will be mapped to a table in the underlying database:
-
-
 
 ```shell
 prisma deploy
 ```
-
-
 
 Because you configured the `post-deploy` hook in `prisma.yml` earlier, your Prisma client and the CRUD building blocks are automatically updated.
 
@@ -317,23 +295,21 @@ In the early phase of a project, it's often helpful to have full CRUD capabiliti
 
 Let's start with a GraphQL API that exposes full CRUD for the defined models (note that this includes filters, pagination and sorting). Create a new file called `index.ts` and add the following code to it:
 
-
-
 ```ts
-import * as path from 'path'
-import { GraphQLServer } from 'graphql-yoga'
-import { makePrismaSchema, prismaObjectType } from 'nexus-prisma'
-import { prisma } from './generated/prisma-client'
-import datamodelInfo from './generated/nexus-prisma'
+import * as path from "path";
+import { GraphQLServer } from "graphql-yoga";
+import { makePrismaSchema, prismaObjectType } from "nexus-prisma";
+import { prisma } from "./generated/prisma-client";
+import datamodelInfo from "./generated/nexus-prisma";
 
 const Query = prismaObjectType({
-  name: 'Query',
-  definition: t => t.prismaFields(['*']),
-})
+  name: "Query",
+  definition: (t) => t.prismaFields(["*"]),
+});
 const Mutation = prismaObjectType({
-  name: 'Mutation',
-  definition: t => t.prismaFields(['*']),
-})
+  name: "Mutation",
+  definition: (t) => t.prismaFields(["*"]),
+});
 
 const schema = makePrismaSchema({
   types: [Query, Mutation],
@@ -344,18 +320,17 @@ const schema = makePrismaSchema({
   },
 
   outputs: {
-    schema: path.join(__dirname, './generated/schema.graphql'),
-    typegen: path.join(__dirname, './generated/nexus.ts'),
+    schema: path.join(__dirname, "./generated/schema.graphql"),
+    typegen: path.join(__dirname, "./generated/nexus.ts"),
   },
-})
+});
 
 const server = new GraphQLServer({
   schema,
   context: { prisma },
-})
-server.start(() => console.log(`Server is running on http://localhost:4000`))
+});
+server.start(() => console.log(`Server is running on http://localhost:4000`));
 ```
-
 
 > We're not paying much attention to file structure in this short tutorial. Check our [`graphql-auth`](https://github.com/prisma/prisma-examples/tree/master/typescript/graphql-auth) example for a proper setup and modularized schema.
 
@@ -379,6 +354,7 @@ query {
   }
 }
 ```
+
 ```graphql
 # Fetch a certain user by email
 query {
@@ -392,12 +368,18 @@ query {
   }
 }
 ```
+
 #### Example mutations
 
 ```graphql
 # Create a post and its author
 mutation {
-  createPost(data: { title: "Hello World", author: { create: { email: "bob@prisma.io" } } }) {
+  createPost(
+    data: {
+      title: "Hello World"
+      author: { create: { email: "bob@prisma.io" } }
+    }
+  ) {
     id
     published
     author {
@@ -407,6 +389,7 @@ mutation {
   }
 }
 ```
+
 ```graphql
 # Update the name of a user
 mutation {
@@ -416,6 +399,7 @@ mutation {
   }
 }
 ```
+
 ```graphql
 # Delete a user
 mutation {
@@ -425,6 +409,7 @@ mutation {
   }
 }
 ```
+
   </Accordion>
 </Accordions>
 
@@ -449,25 +434,20 @@ In this section, we'll hide the `email` field from the `User` model.
 
 To customize a model, we need to apply the `prismaObjectType` function to it and pass the `definition(t)` function as an option:
 
-
-
 ```ts
 const User = prismaObjectType({
-  name: 'User',
+  name: "User",
   definition(t) {
-    t.prismaFields(['id', 'name', 'posts'])
+    t.prismaFields(["id", "name", "posts"]);
   },
-})
+});
 ```
-
 
 By calling `prismaFields` on the model `t`, we can customize the exposed fields (and their arguments). Because `email` is not included in the list, it's removed from our GraphQL API.
 
 ![Hide a field from the User model](/using-graphql-nexus-with-a-database-pmyl3660ncst/imgs/Zwby9Hs.png)
 
 To apply the changes, you need to explicitily pass `User` to the `types` array inside of `makePrismaSchema`:
-
-
 
 ```ts
 const schema = makePrismaSchema({
@@ -477,7 +457,6 @@ const schema = makePrismaSchema({
 }
 ```
 
-
 Note that your editor is able to suggest what to pass into `prismaObjectType` and `prismaFields` based on the generated CRUD building blocks. This means when you type `prismaObjectType('')` and hit **ctrl+space**, it suggests the names of all generated CRUD building blocks. When calling `t.prismaFields([''])`, it suggests the fields of `t`:
 
 {/* <Video src="/blog/using-graphql-nexus-with-a-database-pmyl3660ncst/imgs/MOArOPF.mp4" width={960} height={548} /> */}
@@ -486,28 +465,23 @@ Note that your editor is able to suggest what to pass into `prismaObjectType` an
 
 The new code-first approach with `nexus-prisma` also makes it easy to add computed fields to Prisma models. Say you want to add a field to `Post` that always returns the `title` spelled entirely uppercased. Here's how to implement that:
 
-
-
 ```ts
 const Post = prismaObjectType({
-  name: 'Post',
+  name: "Post",
   definition(t) {
-    t.prismaFields(['*'])
-    t.string('uppercaseTitle', {
+    t.prismaFields(["*"]);
+    t.string("uppercaseTitle", {
       resolve: ({ title }, args, ctx) => title.toUpperCase(),
-    })
+    });
   },
-})
+});
 ```
-
 
 We add a new field to our model using the `t.string(...)` API that comes from `graphql-nexus`. Because it's a computed field (and therefore can't be automatically resolved by `nexus-prisma`), we also need to attach a resolver to it.
 
 ![Customize the GraphQL API via nexus-prisma](/using-graphql-nexus-with-a-database-pmyl3660ncst/imgs/64ipcsj.png)
 
 As before, you need to explicitly add the customized `Post` model to the `types` array:
-
-
 
 ```ts
 const schema = makePrismaSchema({
@@ -517,24 +491,20 @@ const schema = makePrismaSchema({
 }
 ```
 
-
 #### 4.3) Hide `createPost` and `updatePost` mutations
 
 In the same way that we've hidden the `email` field from the `User` model, we can also hide operations from the `Query`/`Mutation` types that are part of the generated `nexus-prisma` CRUD building blocks.
 
 To hide `createPost` and `updatePost` we again need to pass `definition(t)` to `prismaObjectType` as an option. Note that once we call `prismaFields` on a type, we need to explicitly list all fields we want to keep (an empty array would be interpreted as "keep no operations"):
 
-
-
 ```ts
 const Mutation = prismaObjectType({
-  name: 'Mutation',
+  name: "Mutation",
   definition(t) {
-    t.prismaFields(['createUser', 'updateUser', 'deleteUser', 'deletePost'])
+    t.prismaFields(["createUser", "updateUser", "deleteUser", "deletePost"]);
   },
-})
+});
 ```
-
 
 > The generated CRUD GraphQL API also includes batched and upsert operations that we're excluding here for brevity as well.
 
@@ -548,27 +518,26 @@ type Mutation {
   publish(id: ID!): Post
 }
 ```
+
 To implement these mutations, you need to add two fields (by calling `t.field( ... )` from the `nexus` API) to the `Mutation` type:
-
-
 
 ```ts
 const Mutation = prismaObjectType({
-  name: 'Mutation',
+  name: "Mutation",
   definition(t) {
-    t.prismaFields(['createUser', 'updateUser', 'deleteUser', 'deletePost'])
-    t.field('createDraft', {
-      type: 'Post',
+    t.prismaFields(["createUser", "updateUser", "deleteUser", "deletePost"]);
+    t.field("createDraft", {
+      type: "Post",
       args: {
         title: stringArg(),
         content: stringArg({ nullable: true }),
       },
       resolve: (parent, { title, content }, ctx) => {
-        return ctx.prisma.createPost({ title, content })
+        return ctx.prisma.createPost({ title, content });
       },
-    })
-    t.field('publish', {
-      type: 'Post',
+    });
+    t.field("publish", {
+      type: "Post",
       nullable: true,
       args: {
         id: idArg(),
@@ -577,13 +546,12 @@ const Mutation = prismaObjectType({
         return ctx.prisma.updatePost({
           where: { id },
           data: { published: true },
-        })
+        });
       },
-    })
+    });
   },
-})
+});
 ```
-
 
 Be sure to import `stringArg` and `idArg` from the `nexus` package to make this work.
 
@@ -668,6 +636,7 @@ type Post {
 
 # More generated SDL types ...
 ```
+
 ---
 
 ## 3 key takeways from our code-first GraphQL articles
@@ -693,4 +662,3 @@ Please share your feedback by [opening a GitHub issue](https://github.com/prisma
 ---
 
 **A huge shoutout to our open-source engineer [Flavian Desverne](https://twitter.com/fdesverne) for his incredible work on the `nexus-prisma` plugin 💪✨**
-

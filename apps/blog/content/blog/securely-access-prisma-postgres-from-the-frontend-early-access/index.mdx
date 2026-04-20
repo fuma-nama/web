@@ -69,13 +69,13 @@ export default defineRules({
 
       // only authenticated users can create messages
       create({ context }) {
-        return isAuthenticated(context.userId)
+        return isAuthenticated(context.userId);
       },
     },
-
-  }
-})
+  },
+});
 ```
+
 You'll then need to run a `deploy` command provided by the Prisma CLI to make your rules take effect. The command also returns a public key that you need to pass to your database client instance which comes. This client is called `AuthorizedClient` and is lightweight, secure and compatible with browser environments so you can access your database from the frontend.
 
 For database access, you need to instantiate `AuthorizedClient` which enables authorized database access according to the defined permission rules _in the browser_:
@@ -88,6 +88,7 @@ const authorizedClient = new AuthorizedClient<typeof rules>({
   publicKey: "<public_key>",
 });
 ```
+
 This instance of `AuthorizedClient` is akin to `PrismaClient` and exposes the same queries you're already familiar with:
 
 ```ts
@@ -95,10 +96,11 @@ This instance of `AuthorizedClient` is akin to `PrismaClient` and exposes the sa
 
 authorizedClient.user.findMany({
   where: {
-    email: { endsWith: "prisma.io" }
-  }
-})
+    email: { endsWith: "prisma.io" },
+  },
+});
 ```
+
 ## Join the private Early Access program
 
 If that made you curious and you're looking for a way to talk to your database directly from your frontend applications in a convenient and type-safe way, apply now to join:
@@ -108,6 +110,11 @@ If that made you curious and you're looking for a way to talk to your database d
 
 <br />
 <br />
-We'll reach out to all applicants by the end of the week. If you're selected, you'll receive access to usage documentation and a reference example to start using security rules in your own apps. We're aiming for a close collaboration with Early Access testers and are looking forward to your input. Your feedback will be crucial to help shape what security rules are going to look like when they are released in General Availability.
+We'll reach out to all applicants by the end of the week. If you're selected,
+you'll receive access to usage documentation and a reference example to start
+using security rules in your own apps. We're aiming for a close collaboration
+with Early Access testers and are looking forward to your input. Your feedback
+will be crucial to help shape what security rules are going to look like when
+they are released in General Availability.
 
-If you have any questions, ping us on [X](https://pris.ly/x) or join our [Discord](https://pris.ly/discord). 
+If you have any questions, ping us on [X](https://pris.ly/x) or join our [Discord](https://pris.ly/discord).

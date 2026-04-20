@@ -12,7 +12,7 @@ heroImageAlt: "Jamstack with Next.js and Prisma"
 ---
 
 Jamstack is a popular approach for building web apps. But it can be
-  challenging to use the Jamstack in highly interactive apps. Learn more about how to solve those challenges with Prisma and Next.js.
+challenging to use the Jamstack in highly interactive apps. Learn more about how to solve those challenges with Prisma and Next.js.
 
 ## Contents
 
@@ -135,16 +135,16 @@ Let's look at the `getStaticProps` function for the root page of the blog:
 
 ```ts
 // pages/index.tsx
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 
 // This function gets called at build time and returns props
 export const getStaticProps: GetStaticProps = async () => {
   // 👇 Fetch the posts from the database
   const posts = await prisma.post.findMany({
     orderBy: {
-      id: 'desc',
+      id: "desc",
     },
-  })
+  });
   return {
     props: {
       posts,
@@ -153,9 +153,10 @@ export const getStaticProps: GetStaticProps = async () => {
     // - When a request comes in
     // - At most once every second
     revalidate: 1,
-  }
-}
+  };
+};
 ```
+
 The `getStaticProps` function handles data fetching and the incremental re-generation configuration with the `revalidate` key in the returned object. By setting it to 1 second, we ensure that if a new blog post is published, it will take around `1 second + build time for the page` at most until it's rendered.
 
 Now let's look at the corresponding component for the blog page:
@@ -185,11 +186,13 @@ const Home: React.FC<{
 }
 export default Home
 ```
+
 In the example above, the `Home` component gets the `posts` from the props from `getStaticProps` and renders them.
 
 ### Post pages
 
 Now, let's look at the second page for individual posts and comments. Because the page's route is dynamic, i.e. containing the `id` parameter `/post/[id]`, we define two data fetching functions:
+
 - `getStaticPaths`: Responsible for fetching all existing blog post ` id's from the database to generate their respective pages.
 - `getStaticProps`: Responsible for fetching the data for a given post. This function will run once for every post `id` returned by the `getStaticPaths` function.
 
@@ -197,7 +200,7 @@ Now let's take a look at the code:
 
 ```ts
 // pages/post/[id].tsx
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 
 // This function gets called at build time
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -206,19 +209,19 @@ export const getStaticPaths: GetStaticPaths = async () => {
     select: {
       id: true,
     },
-  })
+  });
 
   // Get the paths we want to pre-render based on posts
-  const paths = posts.map(post => ({
+  const paths = posts.map((post) => ({
     params: { id: String(post.id) },
-  }))
+  }));
 
   return {
     paths,
     // If an ID is requested that isn't defined here, fallback will incrementally generate the page
     fallback: true,
-  }
-}
+  };
+};
 
 // This also gets called at build time
 export const getStaticProps: GetStaticProps = async ({ params }) => {
@@ -229,7 +232,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     include: {
       comments: true,
     },
-  })
+  });
   return {
     props: {
       post: matchedPost,
@@ -238,9 +241,10 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     // - When a request comes in
     // - At most once every second
     revalidate: 1,
-  }
-}
+  };
+};
 ```
+
 There are two important things to notice here with regards to incremental static re-generation:
 
 - `fallback` is set to true in `getStaticPaths` so that if a request is made to a blog post that wasn't available during the build, Next.js will incrementally generate that at run-time when the post is first requested.
@@ -281,10 +285,12 @@ When deploying a Next.js app to Vercel, all assets are automatically served from
 ### Deploying the database and serverless functions to the same region
 
 You can reduce the response times of serverless functions that use Prisma by following two guiding principles:
+
 - Deploy the functions and database to a region close to most of your users to improve response times for client-side requests to the API.
 - Deploy the database to the same region as the functions to reduce the latency of incremental re-regeneration and run duration of functions.
 
 These principles are based on the multiple _round-trips_ that take place when a user makes a request a serverless function:
+
 - Between the user and the serverless function.
 - Between the data centers of the serverless function and database to initiate the database connection and for every query.
 
@@ -317,4 +323,3 @@ Prisma is a next-generation ORM that makes working with database access easy. It
 Adopting the Jamstack architecture often involves composing frameworks, cloud services, and third-party APIs, resulting in a completely new development workflow with its own set of trade-offs and operational concerns. Therefore, it's useful to have a solid understanding of differences in rendering techniques and the role of data and interactivity in your app. That way, you can make an informed decision.
 
 To learn more about Prisma and Next.js, check out the [Prisma docs](https://www.prisma.io/nextjs), and the [Next.js docs](https://nextjs.org/).
-

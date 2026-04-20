@@ -11,7 +11,7 @@ heroImagePath: "/connections-edges-nodes-in-relay-758d358aa4c7/imgs/hero-a86c8de
 ---
 
 The terminology of Relay can be quite overwhelming in the beginning. Relay introduces a handful of new concepts on top
-  of GraphQL, mainly in order to manage relationships between models..
+of GraphQL, mainly in order to manage relationships between models..
 
 This already leads to the first new term: a one-to-many relationship between two models is called a **connection**.
 
@@ -29,6 +29,7 @@ Let’s consider this following simple GraphQL query. It fetches the `releaseDat
   }
 }
 ```
+
 Now let’s take this query and adjust it to the expected format of Relay.
 
 ```graphql
@@ -44,6 +45,7 @@ Now let’s take this query and adjust it to the expected format of Relay.
     }
   }
 ```
+
 ## Edges and nodes
 
 Okay, let’s see what’s going on here. The `actors` connection now has a more complex structure containing the fields `edges` and `node`. These terms should be a bit more clear when looking at the following image.
@@ -57,4 +59,3 @@ Lastly, we also notice the first: 10 parameter on the actors field. This gives u
 ## Further reading
 
 This was just a brief overview on connections in Relay. If you want to dive deeper please check out the [Relay docs on connections](https://relay.dev/docs/api-reference/store/#connectionhandler) or explore the [Relay Cursor Connections Specification](https://relay.dev/graphql/connections.htm).
-

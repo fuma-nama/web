@@ -18,14 +18,14 @@
     "oxlint": "catalog:",
     "turbo": "catalog:"
   },
-  "packageManager": "pnpm@10.30.0+sha512.2b5753de015d480eeb88f5b5b61e0051f05b4301808a82ec8b840c9d2adf7748eb352c83f5c1593ca703ff1017295bc3fdd3119abb9686efc96b9fcb18200937",
+  "packageManager": "pnpm@10.33.0+sha512.10568bb4a6afb58c9eb3630da90cc9516417abebd3fabbe6739f0ae795728da1491e9db5a544c76ad8eb7570f5c4bb3d6c637b2cb41bfdcdb47fa823c8649319",
   "pnpm": {
     "overrides": {
-      "shiki": "^4.0.2",
-      "fast-xml-parser": ">=5.3.8",
-      "minimatch": ">=10.2.3",
-      "serialize-javascript": ">=7.0.3",
-      "rollup": ">=4.59.0"
+      "fast-xml-parser": ">=5.7.1",
+      "minimatch": ">=10.2.5",
+      "rollup": ">=4.60.2",
+      "serialize-javascript": ">=7.0.5",
+      "shiki": "^4.0.2"
     }
   }
 }

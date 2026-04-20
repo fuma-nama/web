@@ -29,7 +29,7 @@ Try it out with our [starter template](https://vercel.com/templates/next.js/pris
 
 Sometimes, all you need in your frontend app is a plain piece of data! For these situations, we’ve now released a new feature for Prisma Postgres that allows you to talk to your database directly from the frontend in a secure way!
 
-With Prisma Postgres’ new *security rules* feature, you can define fine-grained access rules for your database directly in TypeScript. [Join our private Early Access program](https://pris.ly/sr-form) and be one of the first developers to try out Prisma Postgres and help us shape its future with your feedback.
+With Prisma Postgres’ new _security rules_ feature, you can define fine-grained access rules for your database directly in TypeScript. [Join our private Early Access program](https://pris.ly/sr-form) and be one of the first developers to try out Prisma Postgres and help us shape its future with your feedback.
 
 ## 🎉 Prisma ORM 6.7.0
 
@@ -41,7 +41,7 @@ We have written extensively about [why we're moving away from Rust](https://www
 
 This re-write is not just a move from one programming language to another. It fundamentally improves the architecture of Prisma ORM and replaces the Query Engine (which is written in Rust and deployed as a standalone binary) with a much leaner and more efficient approach that we call *Query Compiler*.
 
-To use the new "Rust-free" version of Prisma ORM, add the `queryCompiler` (*new*) and `driverAdapters` feature flags to your client generator:
+To use the new "Rust-free" version of Prisma ORM, add the `queryCompiler` (_new_) and `driverAdapters` feature flags to your client generator:
 
 ```typescript
 generator client {
@@ -58,11 +58,11 @@ generator client {
 In this release, we're introducing a new driver adapter for using the [`better-sqlite3`](https://github.com/WiseLibs/better-sqlite3) package, so you can now interact with SQLite databases in a JS-native way:
 
 ```typescript
-import { PrismaBetterSQLite3 } from '@prisma/adapter-better-sqlite3';
-import { PrismaClient } from './generated/prisma';
+import { PrismaBetterSQLite3 } from "@prisma/adapter-better-sqlite3";
+import { PrismaClient } from "./generated/prisma";
 
 const adapter = new PrismaBetterSQLite3({
-  url: "file:./prisma/dev.db"
+  url: "file:./prisma/dev.db",
 });
 const prisma = new PrismaClient({ adapter });
 ```

@@ -24,7 +24,7 @@ Check out the [demo site](https://github.com/prisma/studio-core-demo) to see how
 
 ![](/orm-v6-11-0-embedded-prisma-studio-rust-free-orm-for-mysql-in-preview-and-more/imgs/d2c35b8243dd6f86ff9a353d5bb64ad79510920f-2836x981.png)
 
-Here's a high-level overview for how you can integrate Prisma Studio in your own app (check the [docs](https://www.prisma.io/docs/postgres/database/prisma-studio/embedding-studio) for details). First, install the [`@prisma/studio-core`](https://www.npmjs.com/package/@prisma/studio-core)  package via npm. Then, in your frontend, you can include the `Studio` component.
+Here's a high-level overview for how you can integrate Prisma Studio in your own app (check the [docs](https://www.prisma.io/docs/postgres/database/prisma-studio/embedding-studio) for details). First, install the [`@prisma/studio-core`](https://www.npmjs.com/package/@prisma/studio-core) package via npm. Then, in your frontend, you can include the `Studio` component.
 
 <Accordions type="single">
   <Accordion title="Expand to view the frontend code">
@@ -34,24 +34,26 @@ import { createPostgresAdapter } from "@prisma/studio-core/data/postgres-core";
 import { createStudioBFFClient } from "@prisma/studio-core/data/bff";
 
 function App() {
-  const adapter = useMemo(() => {
-    // 1. Create a client that points to your backend endpoint
-    const executor = createStudioBFFClient({
-      url: "http://localhost:4242/studio",
-    });
+const adapter = useMemo(() => {
+// 1. Create a client that points to your backend endpoint
+const executor = createStudioBFFClient({
+url: "http://localhost:4242/studio",
+});
 
     // 2. Create a Postgres adapter with the executor
     const adapter = createPostgresAdapter({ executor });
     return adapter;
-  }, []);
 
-  return (
-    <Layout>
-      <Studio adapter={adapter} />
-    </Layout>
-  );
+}, []);
+
+return (
+<Layout>
+<Studio adapter={adapter} />
+</Layout>
+);
 }
-```
+
+````
   </Accordion>
 </Accordions>
 
@@ -69,25 +71,26 @@ const app = new Hono().use("*", cors());
 app.post("/studio", async (c) => {
   // 1. Extract the query and custom data from the request
   const { query } = await c.req.json();
-  
+
   // 2. Read DB URL from env vars
   const url = process.env.DATABASE_URL;
-  
+
   // 3. Execute the query against Prisma Postgres
   const [error, results] = await createPrismaPostgresHttpClient({ url }).execute(query);
-  
+
   // 4. Return results or errors
   if (error) {
     return c.json([serializeError(error)]);
   }
-  
+
   return c.json([null, results]);
 });
-```
+````
+
   </Accordion>
 </Accordions>
 
-Note that you can also pass extra headers and a custom payload for each request sent from the frontend, that way you can add an authentication layer or serve multi-tenant use cases where each of your users has access to their own database. 
+Note that you can also pass extra headers and a custom payload for each request sent from the frontend, that way you can add an authentication layer or serve multi-tenant use cases where each of your users has access to their own database.
 
 [Try the demo](https://www.github.com/prisma/studio-core-demo) and let us know what you think!
 
@@ -101,7 +104,7 @@ While it's simple, it may feel unfamiliar because it's so different from existin
 
 ## Prisma Postgres now available for _all_ Postgres templates in Vercel Marketplace
 
-On vercel.com/templates, you can find lots of one-click-deploy application templates! We  worked with the Vercel team to get Prisma Postgres working with _all_ templates requiring a PostgreSQL database, for example:
+On vercel.com/templates, you can find lots of one-click-deploy application templates! We worked with the Vercel team to get Prisma Postgres working with _all_ templates requiring a PostgreSQL database, for example:
 
 - [Next.js SaaS Starter with Drizzle ORM](https://vercel.com/templates/authentication/next-js-saas-starter)
 - [Postgres SvelteKit Starter with Postgres.js](https://vercel.com/templates/svelte/postgres-sveltekit)
@@ -138,7 +141,9 @@ generator client {
   output          = "../generated/prisma"
 }
 ```
+
 To use the Rust-free Prisma ORM version, you can use the following driver adapters:
+
 - MySQL/MariaDB: `@prisma/adapter-mariadb`
 - Neon: `@prisma/adapter-neon` (or `@prisma/adapter-pg`)
 - CockroachDB: `@prisma/adapter-pg`
@@ -150,24 +155,27 @@ Here's how to use it with MySQL. First, make sure to re-generate Prisma Client f
 ```shell
 npx prisma generate
 ```
+
 Then, install the required driver adapter:
 
 ```shell
 npm install @prisma/adapter-mariadb
 ```
+
 Once installed, you can instantiate `PrismaClient` as follows:
 
 ```ts
-import { PrismaMariaDb } from '@prisma/adapter-mariadb';
-import { PrismaClient } from './generated/prisma';
+import { PrismaMariaDb } from "@prisma/adapter-mariadb";
+import { PrismaClient } from "./generated/prisma";
 
 const adapter = new PrismaMariaDb({
   host: "localhost",
   port: 3306,
-  connectionLimit: 5
+  connectionLimit: 5,
 });
 const prisma = new PrismaClient({ adapter });
 ```
+
 No more hassle with query engines, binary targets and an even smoother experience in serverless and edge environments!
 
 ### Ready-to-run examples for new `prisma-client` generator
@@ -181,10 +189,9 @@ To make it easier for you to try it out, we created a few ready-to-run example p
 - [`neextjs-starter-webpack-monorepo`](https://github.com/prisma/prisma-examples/tree/latest/generator-prisma-client/neextjs-starter-webpack-monorepo)
 - [`nextjs-starter-webpack-with-middleware`](https://github.com/prisma/prisma-examples/tree/latest/generator-prisma-client/nextjs-starter-webpack-with-middleware)
 
-
 ### Stop and remove local Prisma Postgres instances via CLI
 
-You can start a _local_ Prisma Postgres instance using the `prisma dev --name mydb` command or via the Prisma VS Code extension UI. 
+You can start a _local_ Prisma Postgres instance using the `prisma dev --name mydb` command or via the Prisma VS Code extension UI.
 
 If you start a local instance via the Prisma CLI, you can simply kill the process to stop the instance. However, when you start instances via the VS Code extension UI, you could also only stop them via the UI—not via the CLI.
 
@@ -198,7 +205,6 @@ Learn more about these new commands in the [docs](https://tbd).
 ## Connecting to Prisma Postgres with any tool is now faster
 
 We recently enabled the option to connect to Prisma Postgres with any tool via [direct connections](https://www.prisma.io/docs/postgres/database/direct-connections). In this release, we have reduced the connection latency so your first request is now even faster.
-
 
 ## Try out the new features & let us know what you think
 

@@ -158,5 +158,8 @@ You can then use Prisma Client as you normally would with full type-safety. Pris
 You can specify a [PostgreSQL schema](https://www.postgresql.org/docs/current/ddl-schemas.html) by passing in the `schema` option when instantiating `PrismaNeon`:
 
 ```ts
-const adapter = new PrismaNeon({ connectionString }, { schema: "myPostgresSchema" });
+const adapter = new PrismaNeon(
+  { connectionString },
+  { schema: "myPostgresSchema" },
+);
 ```

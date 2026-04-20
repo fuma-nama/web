@@ -11,7 +11,7 @@ heroImageAlt: "Prisma Client (Preview): Simplified & Type-safe Database Access"
 ---
 
 The Prisma client is an auto-generated library that can be used as an alternative to Prisma bindings to access data in
-  your applications. It is available in JavaScript, TypeScript, Flow and Go.
+your applications. It is available in JavaScript, TypeScript, Flow and Go.
 
 > ⚠️ **This article is outdated** as it relates to [Prisma 1](https://github.com/prisma/prisma1) which is now [deprecated](https://github.com/prisma/prisma1/issues/5208). To learn more about the most recent version of Prisma, read the [documentation](https://www.prisma.io/docs). ⚠️
 
@@ -58,6 +58,7 @@ generate:
   - generator: typescript-client
     output: ./prisma-client/
 ```
+
 2. Run the new `prisma generate` command in the Prisma CLI. It reads information from `prisma.yml` and your datamodel to generate the Prisma client. **Note that this only works with Prisma 1.17-beta or higher.**
 
 The code above demonstrates how to generate the client in TypeScript; for JavaScript, Flow and Go you can use the following values for `generator`: `javascript-client`, `flow-client` and `go-client`.
@@ -82,54 +83,55 @@ type User {
   posts: [Post!]!
 }
 ```
+
 > You can check out the full documentation for the new Prisma client API [here](https://v1.prisma.io/docs/1.34/prisma-client/).
 
 ### Importing the Prisma client instance
 
 Once generated, you can import the Prisma client instance into your code:
 
-
-
 ```js
-const { prisma } = require('./prisma-client')
+const { prisma } = require("./prisma-client");
 ```
+
 ```ts
-const { prisma } = require('./prisma-client')
+const { prisma } = require("./prisma-client");
 ```
+
 ```go
 import "github.com/you/repo/prisma-client"
 
 client := prisma.New(nil)
 ```
 
-
 ### Reading data
 
 While Prisma bindings expose all queries via the `query` field, queries can be invoked directly on the generated Prisma client:
 
-
-
 ```js
-const allUsers = await prisma.users()
+const allUsers = await prisma.users();
 ```
+
 ```ts
-const allUsers: User[] = await prisma.users()
+const allUsers: User[] = await prisma.users();
 ```
+
 ```go
 users := client.Users(nil).Exec()
 ```
 
-
 This returns all _scalar_ fields of the returned `User` objects. Relations can be queried elegantly using method chaining (also referred to as a [fluent API](https://www.sitepoint.com/javascript-like-boss-understanding-fluent-apis/)):
 
-
-
 ```js
-const postsByUser = await prisma.user({ email: 'alice@prisma.io' }).posts()
+const postsByUser = await prisma.user({ email: "alice@prisma.io" }).posts();
 ```
+
 ```ts
-const postsByUser: Post[] = await prisma.user({ email: 'alice@prisma.io' }).posts()
+const postsByUser: Post[] = await prisma
+  .user({ email: "alice@prisma.io" })
+  .posts();
 ```
+
 ```go
 email := "alice@prisma.io"
 postsByUser := client.
@@ -137,7 +139,6 @@ postsByUser := client.
     Posts(nil).
     Exec()
 ```
-
 
 Note that the snippet above still results in a single request to the Prisma API which is then resolved against the database by Prisma's powerful query engine.
 
@@ -149,20 +150,20 @@ It is also still possible to use GraphQL to query nested data or use schema dele
 
 Just like queries, mutations are also exposed on the top-level on your Prisma client:
 
-
-
 ```js
 const newUser = await prisma.createUser({
-  name: 'Alice',
-  email: 'alice@prisma.io',
-})
+  name: "Alice",
+  email: "alice@prisma.io",
+});
 ```
+
 ```ts
 const newUser: User = await prisma.createUser({
-  name: 'Alice',
-  email: 'alice@prisma.io',
-})
+  name: "Alice",
+  email: "alice@prisma.io",
+});
 ```
+
 ```go
 client.CreateUser(&prisma.UserCreateInput{
     Name:  "Alice",
@@ -170,43 +171,42 @@ client.CreateUser(&prisma.UserCreateInput{
 })
 ```
 
-
 You can also perform several write operations in a single transaction:
-
-
 
 ```js
 const newUserWithPosts = await prisma.createUser({
-  name: 'Bob',
-  email: 'bob@prisma.io',
+  name: "Bob",
+  email: "bob@prisma.io",
   posts: {
     create: [
       {
-        title: 'Hello World',
+        title: "Hello World",
       },
       {
-        title: 'I ❤️ Prisma',
+        title: "I ❤️ Prisma",
       },
     ],
   },
-})
+});
 ```
+
 ```ts
 const newUserWithPosts: User = await prisma.createUser({
-  name: 'Bob',
-  email: 'bob@prisma.io',
+  name: "Bob",
+  email: "bob@prisma.io",
   posts: {
     create: [
       {
-        title: 'Hello World',
+        title: "Hello World",
       },
       {
-        title: 'I ❤️ Prisma',
+        title: "I ❤️ Prisma",
       },
     ],
   },
-})
+});
 ```
+
 ```go
 client.CreateUser(&prisma.UserCreateInput{
     Name:  "Bob",
@@ -218,7 +218,6 @@ client.CreateUser(&prisma.UserCreateInput{
     },
 })
 ```
-
 
 > See more examples in the [documentation](https://v1.prisma.io/docs/1.34/prisma-client/basic-data-access/writing-data-JAVASCRIPT-rsc6/).
 
@@ -238,4 +237,3 @@ To learn more about the Prisma client, check out the new [examples](https://gith
 <br />
 
 [Get started](https://v1.prisma.io/docs/1.34/get-started/01-setting-up-prisma-new-database-JAVASCRIPT-a002/)
-

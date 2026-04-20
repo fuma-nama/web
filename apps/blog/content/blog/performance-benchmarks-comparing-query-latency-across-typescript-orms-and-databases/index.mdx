@@ -66,6 +66,7 @@ export default async function measure(label: string, query: any) {
   };
 }
 ```
+
 For example, the plain `findMany` query from Prisma ORM can be measured as follows:
 
 ```ts
@@ -73,6 +74,7 @@ const query = prisma.customer.findMany(); // unresolved promise
 const label = "prisma-findMany";
 await measure(label, query);
 ```
+
 There is one script per ORM per database (e.g. `prisma-postgres.ts`) that measures the latencies of all 14 queries individually and stores the results in `.csv` files.
 
 The scripts have been executed on an EC2 instance against PostgreSQL database hosted on various providers:
@@ -90,9 +92,11 @@ The size of the dataset is configurable when running the benchmarks. It determin
 ### Benchmark execution
 
 To execute the benchmarks, you can invoke the script as follows:
+
 ```
 sh ./benchmark.sh -i 500 -s 1000 --d postgresql://user:password@host:port/db
 ```
+
 This executes the pre-defined queries 500 times against a data set of 1000 records per table. The database URL can alternatively be provisioned as an environment variable.
 
 To collect our data, we have executed the benchmarks on _production_ infrastructure to simulate a real-world usage scenario. The scripts have been executed from an EC2 instance with this spec:
@@ -102,7 +106,6 @@ To collect our data, we have executed the benchmarks on _production_ infrastruct
 The databases we used have the following spec:
 
 ![](/performance-benchmarks-comparing-query-latency-across-typescript-orms-and-databases/imgs/68f3f4cb6645376e0536cbbfc973907a645a969d-1610x330.png)
-
 
 ### Publishing benchmark results
 
@@ -179,6 +182,7 @@ prisma.customer.findMany({
   },
 });
 ```
+
 **Drizzle ORM**
 
 ```js
@@ -188,11 +192,13 @@ db.query.Customer.findMany({
   },
 });
 ```
+
 **TypeORM**
 
 ```js
 AppDataSource.getRepository(Customer).find({ relations: ["orders"] });
 ```
+
 Taking RDS as an example, these are the median values in the results we've collected:
 
 |                     | Prisma ORM | Drizzle ORM | TypeORM |
@@ -234,4 +240,3 @@ Optimize captures all queries that are sent to your DB via Prisma ORM and gives 
 ## Check out the benchmark results
 
 You can find the results of our benchmark run on https://benchmarks.prisma.io. Check them out and let us know what you think on [X](https://pris.ly/x) and [Discord](https://pris.ly/discord). We're especially keen on hearing on how we can make this benchmark even more helpful to you and welcome suggestions for improvement!
-

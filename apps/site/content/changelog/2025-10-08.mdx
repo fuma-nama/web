@@ -17,7 +17,7 @@ source:
 
 ## Prisma ORM v6.17.0: Prisma Postgres works with any tool
 
-Previously, the *only* way to connect to Prisma Postgres was using Prisma ORM. That combination is great because it gives you connection pooling, global caching and overall an amazing DX.
+Previously, the _only_ way to connect to Prisma Postgres was using Prisma ORM. That combination is great because it gives you connection pooling, global caching and overall an amazing DX.
 
 That being said, preferences may vary and some developers prefer to use plain SQL or lower-level query builders in their applications. As of this release, these ways for connecting to Prisma Postgres are now officially Generally Available (GA) and can be used in your production apps!
 
@@ -46,24 +46,23 @@ Prisma ORM [v6.17.0](https://pris.ly/6.17.0) comes with a lot of bug fixes and i
 - Added support for Entra ID (ActiveDirectory) authentication parameters for the MS SQL Server driver adapter. For example, you can use the `config` object to configure [DefaultAzureCredential](https://learn.microsoft.com/en-gb/azure/developer/javascript/sdk/authentication/credential-chains#use-defaultazurecredential-for-flexibility): Learn more in this [PR](https://github.com/prisma/prisma/pull/28156/files#diff-351f5d894309f058776099c378e3956271f34f34c04e2b54576045b9773ab61aR61-R62).
 
 ```typescript
-import { PrismaMssql } from '@prisma/adapter-mssql'
-import { PrismaClient } from '@prisma/client'
+import { PrismaMssql } from "@prisma/adapter-mssql";
+import { PrismaClient } from "@prisma/client";
 
 const config = {
-  server: 'localhost',
+  server: "localhost",
   port: 1433,
-  database: 'mydb',
+  database: "mydb",
   authentication: {
-    type: 'azure-active-directory-default',
+    type: "azure-active-directory-default",
   },
   options: {
     encrypt: true,
   },
-}
+};
 
-const adapter = new PrismaMssql(config)
-const prisma = new PrismaClient({ adapter })
-
+const adapter = new PrismaMssql(config);
+const prisma = new PrismaClient({ adapter });
 ```
 
 - Relaxed the support package range for `@opentelemetry/instrumentation` to be compatible with `">=0.52.0 <1"`. Learn more in this [PR](https://github.com/prisma/prisma/pull/28199/files).

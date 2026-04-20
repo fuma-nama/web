@@ -83,17 +83,18 @@ Then follow these steps, either on your `main` branch or on a newly checked out 
 
 - Create a new empty directory in the `./prisma/migrations` directory. In this guide this will be called `000000000000_squashed_migrations`. Inside this, add a new empty `migration.sql` file.
 
- :::info
- We name the migration `000000000000_squashed_migrations` with all the leading zeroes because we want it to be the first migration in the migrations directory. Migrate runs the migrations in the directory in lexicographic (alphabetical) order. This is why it generates migrations with the date and time as a prefix when you use `migrate dev`. You can give the migration another name, as long as it it sorts lower than later migrations, for example `0_squashed` or `202207180000_squashed`.
+:::info
+We name the migration `000000000000_squashed_migrations` with all the leading zeroes because we want it to be the first migration in the migrations directory. Migrate runs the migrations in the directory in lexicographic (alphabetical) order. This is why it generates migrations with the date and time as a prefix when you use `migrate dev`. You can give the migration another name, as long as it it sorts lower than later migrations, for example `0_squashed` or `202207180000_squashed`.
 
- :::
+:::
 
 - Create a single migration that takes you:
+
   - from an empty database
   - to the current state of the production database schema as described in your `./prisma/schema.prisma` file
   - and outputs this to the `migration.sql` file created above
 
-   You can do this using the `migrate diff` command. From the root directory of your project, run the following command:
+  You can do this using the `migrate diff` command. From the root directory of your project, run the following command:
 
 ```npm
 npx prisma migrate diff \
@@ -104,7 +105,7 @@ npx prisma migrate diff \
 
 - Mark this migration as having been applied on production, to prevent it from being run there:
 
-   You can do this using the [`migrate resolve`](/orm/reference/prisma-cli-reference#migrate-resolve) command to mark the migration in the `000000000000_squashed_migrations` directory as already applied:
+  You can do this using the [`migrate resolve`](/orm/reference/prisma-cli-reference#migrate-resolve) command to mark the migration in the `000000000000_squashed_migrations` directory as already applied:
 
 ```npm
 npx prisma migrate resolve \

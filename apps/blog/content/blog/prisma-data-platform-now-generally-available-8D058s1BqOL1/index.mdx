@@ -16,23 +16,22 @@ tags:
 
 The Prisma Data Platform includes a Data Proxy, a Data Browser, and a Query Console that integrates with your current development pipeline.
 
-Prisma has become one of the most popular ORMs in the JavaScript community today. While ORMs make it easier for individual application developers to work with databases, they don’t address certain categories of problems that appear once their applications run in production. 
+Prisma has become one of the most popular ORMs in the JavaScript community today. While ORMs make it easier for individual application developers to work with databases, they don’t address certain categories of problems that appear once their applications run in production.
 
 - Many of Prisma’s ORM users prefer to use serverless infrastructure like AWS Lambda or Cloudflare Workers. They need [simplified connection pooling](https://www.prisma.io/blog/prisma-data-proxy-xb16ba0p21) between their application layer and their database infrastructure that ensures that queries are efficient and secure.
 - Our users have expressed a desire for a more advanced online version of [Prisma Studio](https://www.prisma.io/studio) that could be used securely across an entire team.
 
 That’s why we’re proud to announce that the [Prisma Data Platform](https://console.prisma.io) is now generally available to the public. The Prisma Data Platform provides a collaborative environment for connecting apps to databases. It also includes a visual interface for navigating, editing, and querying data. You can get started for free in minutes, and then scale up as your team or usage grows.
 
-
 ## Integrate with your current development pipeline
 
-Working with the same source of truth is instrumental for collaboration. Every project within the Prisma Data Platform starts with the GitHub repo and branch that contain your [Prisma schema](https://www.prisma.io/docs/concepts/components/prisma-schema). It’s *really easy* to get started. 
+Working with the same source of truth is instrumental for collaboration. Every project within the Prisma Data Platform starts with the GitHub repo and branch that contain your [Prisma schema](https://www.prisma.io/docs/concepts/components/prisma-schema). It’s _really easy_ to get started.
 
 1. Choose the repo and branch where your Prisma schema is hosted, or pick from a selection of sample projects available in the platform. This will lay out a Prisma project for your app’s database. The repo maps to a Prisma project, and an environment maps to a branch.
 2. Connect to your database’s hosting environment or provision a new database.
 3. Configure your Data Proxy.
 
-That’s it. You’ve configured your first environment for your team. You’ve just 1.) set up a data proxy that ensures your app can securely and reliably connect to your database and 2.) made it easier for your team to work with the appropriate version of your database. 
+That’s it. You’ve configured your first environment for your team. You’ve just 1.) set up a data proxy that ensures your app can securely and reliably connect to your database and 2.) made it easier for your team to work with the appropriate version of your database.
 
 The data in this Prisma Data Platform environment will always be in sync with the latest version of your schema file in the branch.
 
@@ -82,7 +81,7 @@ With the Prisma Data Platform, you can now set up role-based access control to e
 
 ## Experiment with queries in less time
 
-Once you’ve set up an environment for your database, you can use the Query Console to query that data without having to constantly run these queries in your code locally. Complex queries are often difficult to get right without having executed them against real data. Quickly troubleshoot a query and ensure it returns the right data, before going through a complete deployment cycle. 
+Once you’ve set up an environment for your database, you can use the Query Console to query that data without having to constantly run these queries in your code locally. Complex queries are often difficult to get right without having executed them against real data. Quickly troubleshoot a query and ensure it returns the right data, before going through a complete deployment cycle.
 
 ![Prisma Query Console](/prisma-data-platform-now-generally-available-8D058s1BqOL1/imgs/online-query-console.png)
 
@@ -96,4 +95,3 @@ Thousands of developers choose the Prisma ORM to think less about databases and 
 
 <br />
 [Get started with the Prisma Data Platform](https://cloud.prisma.io/)
-

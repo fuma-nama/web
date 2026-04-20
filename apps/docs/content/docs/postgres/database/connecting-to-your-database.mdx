@@ -42,12 +42,12 @@ DIRECT_URL="postgres://USER:PASSWORD@db.prisma.io:5432/?sslmode=require"
 
 ## Which connection to use
 
-| If you are...                                                    | Use        | Why                                                                  |
-| ---------------------------------------------------------------- | ---------- | -------------------------------------------------------------------- |
-| Running application queries (API handlers, workers, functions)   | **Pooled** | Safer under concurrency. Reuses a small set of database connections. |
+| If you are...                                                                               | Use        | Why                                                                  |
+| ------------------------------------------------------------------------------------------- | ---------- | -------------------------------------------------------------------- |
+| Running application queries (API handlers, workers, functions)                              | **Pooled** | Safer under concurrency. Reuses a small set of database connections. |
 | Running migrations, introspection, `pg_dump`, `pg_restore`, Prisma Studio, or admin tooling | **Direct** | These workflows need session continuity or should bypass the pooler. |
-| Using `LISTEN/NOTIFY` or session-level `SET` commands            | **Direct** | The pooler does not preserve session state across transactions.      |
-| Running queries or jobs that may exceed 10 minutes               | **Direct** | Pooled connections enforce a 10-minute query timeout.                |
+| Using `LISTEN/NOTIFY` or session-level `SET` commands                                       | **Direct** | The pooler does not preserve session state across transactions.      |
+| Running queries or jobs that may exceed 10 minutes                                          | **Direct** | Pooled connections enforce a 10-minute query timeout.                |
 
 If you swap them, the failure modes are asymmetric. Using the pooled string for migrations produces obvious errors (lock failures, prepared statement errors). Using the direct string for application traffic works at low concurrency but silently exhausts connections under production load. See [Connection pooling](/postgres/database/connection-pooling) for details.
 
@@ -114,7 +114,9 @@ if (process.env.NODE_ENV !== "production") {
 
 <CalloutContainer type="info">
   <CalloutDescription>
-    The serverless driver uses the **direct** connection string but does **not** open a TCP connection to the database. The direct hostname is used for routing only, the transport is HTTP/WebSocket, not PostgreSQL wire protocol.
+    The serverless driver uses the **direct** connection string but does **not**
+    open a TCP connection to the database. The direct hostname is used for
+    routing only, the transport is HTTP/WebSocket, not PostgreSQL wire protocol.
   </CalloutDescription>
 </CalloutContainer>
 

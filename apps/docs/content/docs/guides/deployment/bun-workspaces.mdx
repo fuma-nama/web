@@ -88,7 +88,6 @@ This command:
 - Creates a `prisma.config.ts` file for configuring Prisma.
 - Creates a `.env` file with a local `DATABASE_URL`.
 
-
 Create a Prisma Postgres database and replace the generated `DATABASE_URL` in your `.env` file with the `postgres://...` connection string from the CLI output:
 
 ```bash
@@ -124,7 +123,8 @@ Add a `scripts` section to your database `package.json` (Bun init may not add on
 
 ```json title="database/package.json"
 {
-  "scripts": { // [!code ++]
+  "scripts": {
+    // [!code ++]
     "db:generate": "prisma generate", // [!code ++]
     "db:migrate": "prisma migrate dev", // [!code ++]
     "db:deploy": "prisma migrate deploy", // [!code ++]

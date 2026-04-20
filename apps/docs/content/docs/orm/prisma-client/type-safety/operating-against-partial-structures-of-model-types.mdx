@@ -75,10 +75,14 @@ The following example uses the `satisfies` operator to create two type-safe obje
 import { Prisma } from "@prisma/client";
 
 // 1: Define a type that includes the relation to `Post`
-const userWithPosts = { include: { posts: true } } satisfies Prisma.UserDefaultArgs;
+const userWithPosts = {
+  include: { posts: true },
+} satisfies Prisma.UserDefaultArgs;
 
 // 2: Define a type that only contains a subset of the scalar fields
-const userPersonalData = { select: { email: true, name: true } } satisfies Prisma.UserDefaultArgs;
+const userPersonalData = {
+  select: { email: true, name: true },
+} satisfies Prisma.UserDefaultArgs;
 
 // 3: This type will include a user and all their posts
 type UserWithPosts = Prisma.UserGetPayload<typeof userWithPosts>;

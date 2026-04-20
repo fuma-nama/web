@@ -7,7 +7,7 @@ This package includes a custom React-based theme provider that works independent
 ### 1. Wrap your app with the ThemeProvider
 
 ```tsx
-import { ThemeProvider } from '@prisma-docs/ui/components/theme-provider';
+import { ThemeProvider } from "@prisma-docs/ui/components/theme-provider";
 
 function App() {
   return (
@@ -25,7 +25,7 @@ function App() {
 ### 2. Use the ThemeToggle component
 
 ```tsx
-import { ThemeToggle } from '@prisma-docs/ui/components/theme-toggle';
+import { ThemeToggle } from "@prisma-docs/ui/components/theme-toggle";
 
 function Header() {
   return (
@@ -41,7 +41,7 @@ function Header() {
 ### 3. Access theme in any component
 
 ```tsx
-import { useTheme } from '@prisma-docs/ui/components/theme-provider';
+import { useTheme } from "@prisma-docs/ui/components/theme-provider";
 
 function MyComponent() {
   const { theme, resolvedTheme, setTheme } = useTheme();
@@ -50,9 +50,9 @@ function MyComponent() {
     <div>
       <p>Current theme: {theme}</p>
       <p>Resolved theme: {resolvedTheme}</p>
-      <button onClick={() => setTheme('dark')}>Dark</button>
-      <button onClick={() => setTheme('light')}>Light</button>
-      <button onClick={() => setTheme('system')}>System</button>
+      <button onClick={() => setTheme("dark")}>Dark</button>
+      <button onClick={() => setTheme("light")}>Light</button>
+      <button onClick={() => setTheme("system")}>System</button>
     </div>
   );
 }
@@ -60,19 +60,19 @@ function MyComponent() {
 
 ## ThemeProvider Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `children` | `React.ReactNode` | required | Your app content |
-| `defaultTheme` | `'light' \| 'dark' \| 'system'` | `'system'` | Default theme on first load |
-| `storageKey` | `string` | `'theme'` | localStorage key for persisting theme |
-| `attribute` | `string` | `'data-theme'` | HTML attribute to set on document root |
+| Prop           | Type                            | Default        | Description                            |
+| -------------- | ------------------------------- | -------------- | -------------------------------------- |
+| `children`     | `React.ReactNode`               | required       | Your app content                       |
+| `defaultTheme` | `'light' \| 'dark' \| 'system'` | `'system'`     | Default theme on first load            |
+| `storageKey`   | `string`                        | `'theme'`      | localStorage key for persisting theme  |
+| `attribute`    | `string`                        | `'data-theme'` | HTML attribute to set on document root |
 
 ## ThemeToggle Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `mode` | `'light-dark' \| 'light-dark-system'` | `'light-dark'` | Toggle mode |
-| `className` | `string` | - | Additional CSS classes |
+| Prop        | Type                                  | Default        | Description            |
+| ----------- | ------------------------------------- | -------------- | ---------------------- |
+| `mode`      | `'light-dark' \| 'light-dark-system'` | `'light-dark'` | Toggle mode            |
+| `className` | `string`                              | -              | Additional CSS classes |
 
 ### Modes
 
@@ -94,9 +94,9 @@ Make sure your Tailwind config uses the `class` or `selector` strategy:
 ```js
 // tailwind.config.js
 module.exports = {
-  darkMode: 'class', // or 'selector'
+  darkMode: "class", // or 'selector'
   // ... rest of config
-}
+};
 ```
 
 Or use the attribute selector:
@@ -104,9 +104,9 @@ Or use the attribute selector:
 ```js
 // tailwind.config.js
 module.exports = {
-  darkMode: ['selector', '[data-theme="dark"]'],
+  darkMode: ["selector", '[data-theme="dark"]'],
   // ... rest of config
-}
+};
 ```
 
 ## CSS Variables

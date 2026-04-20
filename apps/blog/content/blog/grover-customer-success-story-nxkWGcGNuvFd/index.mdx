@@ -98,24 +98,27 @@ model Post {
   authorId  Int?
 }
 ```
+
 With a single command, the Prisma model provides a type-safe database access client.
 
 ```shell
 npx prisma generate
 ```
-```ts
-import { PrismaClient } from '@prisma/client'
 
-const prisma = new PrismaClient()
+```ts
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
 
 async function getPosts() {
   return await prisma.post.findMany({
     include: {
       author: true,
     },
-  })
+  });
 }
 ```
+
 ## Prisma is Catching on at Grover in Many Different Stacks
 
 Grover's encouragement of experimentation means that the various teams at the company have different stacks. For most, it's a mix of TypeScript and GraphQL in some fashion, but the details vary.

@@ -11,7 +11,7 @@ heroImageAlt: "All you need to know about Apollo Client 2"
 ---
 
 Apollo Client, a powerful and flexible GraphQL client library, just reached version 2.0. In this post, we want to
-  highlight some of the major changes compared to the previous release.
+highlight some of the major changes compared to the previous release.
 
 ## Simple modularity with Apollo Link
 
@@ -28,26 +28,27 @@ Here is what a simple implementation for a Link that’s making HTTP calls based
 ```js
 class GraphQLRequestLink extends ApolloLink {
   constructor({ endpoint, headers }) {
-    super()
-    this.client = new GraphQLClient(endpoint, { headers })
+    super();
+    this.client = new GraphQLClient(endpoint, { headers });
   }
 
   request(operation) {
-    return new Observable(observer => {
-      const { variables, query } = operation
+    return new Observable((observer) => {
+      const { variables, query } = operation;
       this.client
         .request(print(query), variables)
-        .then(data => {
-          observer.next(data)
-          observer.complete()
+        .then((data) => {
+          observer.next(data);
+          observer.complete();
         })
-        .catch(e => {
-          observer.error(e)
-        })
-    })
+        .catch((e) => {
+          observer.error(e);
+        });
+    });
   }
 }
 ```
+
 There are already a number of officially supported links which you can simply pull into your application using npm. Here’s a quick overview over a few of them (see [here](https://github.com/apollographql/apollo-link/tree/master/packages) for the full list):
 
 - [`apollo-link-http`](https://github.com/apollographql/apollo-link/tree/master/packages/apollo-link-http): Used to send GraphQL operations over HTTP
@@ -74,29 +75,30 @@ This example from [Evans Hauser’s article](https://dev-blog.apollodata.com/apo
 ```js
 class CatchLink extends ApolloLink {
   request(operation, forward) {
-    const observable = forward(operation)
+    const observable = forward(operation);
 
-    return new Observable(observer => {
+    return new Observable((observer) => {
       const subscription = observable.subscribe({
         next: observer.next.bind(observer),
-        error: error => {
+        error: (error) => {
           // reroute errors as proper data
           observer.next({
             data: {
               error,
             },
-          })
+          });
         },
         complete: observer.complete.bind(observer),
-      })
+      });
 
       return () => {
-        subscription.unsubscribe()
-      }
-    })
+        subscription.unsubscribe();
+      };
+    });
   }
 }
 ```
+
 The `CatchLink` intercepts any errors that are received from the API and places them in the `data` field of the GraphQL response, thus treating them as regular response data which are not terminating the Observable. In the case of `next` and `completed` events it simply forwards these to the observers.
 
 The introduction of Observables opens the door to use links for implementing not only regular queries and mutations that follow the classic “request-response-cycle”, but also for subscriptions or live queries which continuously receive data from the server.
@@ -106,36 +108,42 @@ The introduction of Observables opens the door to use links for implementing not
 If you have used `react-apollo` before, you most likely know that it was the only dependency you had to install in your application to import anything you’d need from Apollo Client (except for subscriptions). A typical setup with `react-apollo` looked as follows:
 
 ```js
-import { ApolloProvider, createNetworkInterface, ApolloClient } from 'react-apollo'
+import {
+  ApolloProvider,
+  createNetworkInterface,
+  ApolloClient,
+} from "react-apollo";
 
-const networkInterface = createNetworkInterface({ uri })
-const client = new ApolloClient({ networkInterface })
+const networkInterface = createNetworkInterface({ uri });
+const client = new ApolloClient({ networkInterface });
 
 export default (
   <ApolloProvider client={client}>
     <App />
   </ApolloProvider>
-)
+);
 ```
+
 Since one major theme of Apollo Client 2.0 is _modularity_, you now have to import your functionality from multiple individual packages:
 
 ```js
-import { ApolloProvider } from 'react-apollo'
-import { ApolloClient } from 'apollo-client'
-import { HttpLink } from 'apollo-link-http'
-import { InMemoryCache } from 'apollo-cache-inmemory'
+import { ApolloProvider } from "react-apollo";
+import { ApolloClient } from "apollo-client";
+import { HttpLink } from "apollo-link-http";
+import { InMemoryCache } from "apollo-cache-inmemory";
 
 const client = new ApolloClient({
   link: new HttpLink({ uri }),
   cache: new InMemoryCache(),
-})
+});
 
 export default (
   <ApolloProvider client={client}>
     <App />
   </ApolloProvider>
-)
+);
 ```
+
 In order to send queries and mutations, you also need to explicitly install the [`graphql-tag`](https://github.com/apollographql/graphql-tag) and even [`graphql`](https://github.com/graphql/graphql-js) libraries.
 
 To offer some convenience when getting started, the Apollo team created the [`apollo-client-presets`](https://www.npmjs.com/package/apollo-client-preset) package which includes `apollo-client`, `apollo-cache-inmemory` and `apollo-link-http`. Read more about the installation in the [README](https://github.com/apollographql/apollo-client#installation).
@@ -145,4 +153,3 @@ To offer some convenience when getting started, the Apollo team created the [`ap
 Apollo Client is a community-driven effort and thanks to the new link concept, it’s possible to write dedicated pieces of functionality and share them with other developers. This enables different cache implementations (so you’re not depending on Redux any more when using Apollo Client), offline support, deferred queries and much more! Exciting times for GraphQL 💚
 
 > To learn more about Apollo Client 2.0 follow the [React & Apollo tutorial on How to GraphQL](https://www.howtographql.com/react-apollo/0-introduction/).
-

@@ -35,9 +35,9 @@ Tryg 360 enabled their developers to spin up environments by simply clicking a b
 
 ![Tryg 360 technology overview](/tryg-customer-story-pdmdrRhTupvd/imgs/Tryg_Prisma_Image_1.png)
 
-To accomplish this, Tryg adopted Prisma for it's ability to auto-generate the database client, and GraphQL APIs that their developers would interact with. 
+To accomplish this, Tryg adopted Prisma for it's ability to auto-generate the database client, and GraphQL APIs that their developers would interact with.
 
-The [`generator`](https://www.prisma.io/docs/concepts/components/prisma-schema/generators) API  determines which assets are created when the `prisma generate` command is run.
+The [`generator`](https://www.prisma.io/docs/concepts/components/prisma-schema/generators) API determines which assets are created when the `prisma generate` command is run.
 
 Auto-generation of the Prisma Client and GraphQL API is essential to Tryg because they have very complex models with massive amounts of data – some schema files being 10k lines long with over a million characters!
 
@@ -66,7 +66,6 @@ Tryg had the following requirements regarding deploying new environments:
 - Deploy any application, source, or combination of applications
 - Do it with 1-click
 
-
 <Quotes
   speakerImgLink=""
   speakerName="Lasse Abelsen"
@@ -82,6 +81,7 @@ Tryg had the following requirements regarding deploying new environments:
 ![Tryg 360 technology overview](/tryg-customer-story-pdmdrRhTupvd/imgs/Tryg_Prisma_Image_2.png)
 
 Resources required to deploy an environment are defined in Helm charts. Kubernetes takes care of provisioning necessary resources. The steps involved while provisioning resources include:
+
 - Live streaming the raw data from different sources without any transformation. This ensures that developers can work with the live data when the environment is created.
 - Deploying the Time-Aware MirrorMaker – responsible for synchronizing data correctly from different data sources and pipelines at any time. This is an implementation of Apache Kafka's [MirrorMaker](https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=27846330).
 - Deploying a local Kafka cluster to load the data they need instead of loading data from all the sources.

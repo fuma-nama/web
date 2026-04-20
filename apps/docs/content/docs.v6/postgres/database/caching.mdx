@@ -273,7 +273,9 @@ try {
   if (e instanceof Prisma.PrismaClientKnownRequestError) {
     // The .code property can be accessed in a type-safe manner
     if (e.code === "P6003") {
-      console.log("The cache invalidation rate limit has been reached. Please try again later.");
+      console.log(
+        "The cache invalidation rate limit has been reached. Please try again later.",
+      );
     }
   }
   throw e;

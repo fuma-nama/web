@@ -3,7 +3,15 @@ title: Input
 description: A text input component for forms with multiple sizes and built-in validation styles.
 ---
 
-import { Input, inputVariants, Button, Field, FieldLabel, FieldDescription, FieldError } from "@prisma/eclipse";
+import {
+  Input,
+  inputVariants,
+  Button,
+  Field,
+  FieldLabel,
+  FieldDescription,
+  FieldError,
+} from "@prisma/eclipse";
 
 ### Usage
 
@@ -95,7 +103,9 @@ export function InputWithField() {
     <Field>
       <FieldLabel htmlFor="username">Username</FieldLabel>
       <Input id="username" placeholder="Enter your username" />
-      <FieldDescription>Choose a unique username for your account.</FieldDescription>
+      <FieldDescription>
+        Choose a unique username for your account.
+      </FieldDescription>
     </Field>
   );
 }
@@ -107,7 +117,9 @@ export function InputWithField() {
   <Field>
     <FieldLabel htmlFor="username-field">Username</FieldLabel>
     <Input id="username-field" placeholder="Enter your username" />
-    <FieldDescription>Choose a unique username for your account.</FieldDescription>
+    <FieldDescription>
+      Choose a unique username for your account.
+    </FieldDescription>
   </Field>
 </div>
 
@@ -138,7 +150,13 @@ export function DisabledInput() {
 Use the Field component with FieldError for proper error handling:
 
 ```tsx
-import { Input, Field, FieldLabel, FieldDescription, FieldError } from "@prisma/eclipse";
+import {
+  Input,
+  Field,
+  FieldLabel,
+  FieldDescription,
+  FieldError,
+} from "@prisma/eclipse";
 
 export function InvalidInputWithField() {
   return (
@@ -267,7 +285,12 @@ export function FormExample() {
         <label htmlFor="email" className="text-sm font-medium">
           Email
         </label>
-        <Input id="email" type="email" placeholder="john@example.com" required />
+        <Input
+          id="email"
+          type="email"
+          placeholder="john@example.com"
+          required
+        />
       </div>
       <div className="space-y-2">
         <label htmlFor="message" className="text-sm font-medium">

@@ -25,6 +25,7 @@ active column count in React instead of mounting separate mobile, tablet, and
 desktop trees.
 
 Each breakpoint renders a capped subset of testimonials:
+
 - mobile: 1 column of up to 8 testimonials
 - tablet: 2 columns of up to 8 testimonials each
 - desktop: 3 columns of up to 8 testimonials each
@@ -35,35 +36,40 @@ the DOM stays small without introducing hydration mismatches.
 ### 3. Component Class Conversions
 
 #### testimonialRoot
+
 **Before:** Vanilla Extract style object
-**After:** 
+**After:**
+
 ```tsx
 cn(
   "grid max-w-full gap-[30px] relative",
   "before:content-[''] before:absolute before:top-0 before:left-0 before:w-full before:h-[30%]...",
-  "after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[30%]..."
-)
+  "after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[30%]...",
+);
 ```
 
 #### Responsive Display Classes
+
 - **mobile**: `grid md:hidden`
 - **tablet**: `hidden md:grid lg:hidden grid-cols-2`
 - **desktop**: `hidden lg:grid grid-cols-3`
 
 #### brandWheel
+
 **Before:** Complex Vanilla Extract style
 **After:** static column wrapper
 
 #### rollingList
+
 **Before:** Separate style with animation
-**After:** 
+**After:**
+
 ```tsx
-<div className="flex flex-col gap-4">
-  {/* testimonial cards */}
-</div>
+<div className="flex flex-col gap-4">{/* testimonial cards */}</div>
 ```
 
 #### testimonialItemRoot
+
 **Before:** Vanilla Extract style object
 **After:** `text-foreground-neutral p-6 my-3 font-[family-name:var(--barlow)] font-normal text-lg bg-surface-primary border border-border-primary rounded-[10px] leading-[25.2px]`
 
@@ -72,21 +78,24 @@ cn(
 Converted global styles to Tailwind arbitrary variants:
 
 **Before:**
+
 ```ts
 globalStyle(`${testimonialRoot} > div:nth-child(3)`, {
-  display: 'none',
-  '@media': { '(min-width: 940px)': { display: 'flex' } }
-})
+  display: "none",
+  "@media": { "(min-width: 940px)": { display: "flex" } },
+});
 ```
 
 **After:**
+
 ```tsx
-"[&>*:nth-child(3)]:flex [&>*]:flex-1"
+"[&>*:nth-child(3)]:flex [&>*]:flex-1";
 ```
 
 ### 5. Pseudo-elements
 
 **Before:**
+
 ```ts
 "::before": {
   content: " / ",
@@ -95,8 +104,9 @@ globalStyle(`${testimonialRoot} > div:nth-child(3)`, {
 ```
 
 **After:**
+
 ```tsx
-"before:content-['_/_'] before:text-foreground-neutral-disabled"
+"before:content-['_/_'] before:text-foreground-neutral-disabled";
 ```
 
 ## Animation Timing
@@ -105,18 +115,19 @@ The scrolling animation was removed in favor of a static grid layout.
 
 ## Color Token Mapping
 
-| Vanilla Extract | Tailwind |
-|----------------|----------|
-| `vars.colors.text.secondary` | `text-foreground-neutral-weak` |
-| `vars.colors.text.terciary` | `text-foreground-neutral-weak` |
-| `vars.colors.text.disabled` | `text-foreground-neutral-disabled` |
-| `vars.colors.surface.primary` | `bg-surface-primary` |
-| `vars.colors.border.primary` | `border-border-primary` |
-| `vars.colors.surface.brand.darker` | `text-surface-brand-darker` |
+| Vanilla Extract                    | Tailwind                           |
+| ---------------------------------- | ---------------------------------- |
+| `vars.colors.text.secondary`       | `text-foreground-neutral-weak`     |
+| `vars.colors.text.terciary`        | `text-foreground-neutral-weak`     |
+| `vars.colors.text.disabled`        | `text-foreground-neutral-disabled` |
+| `vars.colors.surface.primary`      | `bg-surface-primary`               |
+| `vars.colors.border.primary`       | `border-border-primary`            |
+| `vars.colors.surface.brand.darker` | `text-surface-brand-darker`        |
 
 ## Breaking Changes
 
 None - the component API remains the same:
+
 - `list` prop still accepts `TestimonialItemType[]`
 - `noShadow` prop still removes gradients
 - `mask` prop still applies mask styles

@@ -113,7 +113,9 @@ function findMdxFiles(dir: string, fileList: string[] = []): string[] {
  * Main function
  */
 function main(): void {
-  console.log("Scanning MDX files for code blocks with filetype but no title...\n");
+  console.log(
+    "Scanning MDX files for code blocks with filetype but no title...\n",
+  );
 
   if (!fs.existsSync(DOCS_DIR)) {
     console.error(`Error: Directory not found: ${DOCS_DIR}`);
@@ -138,12 +140,16 @@ function main(): void {
     console.log("✅ All code blocks with filetype have a title property!");
     process.exit(0);
   } else {
-    console.error(`❌ Found ${allViolations.length} file(s) with violations:\n`);
+    console.error(
+      `❌ Found ${allViolations.length} file(s) with violations:\n`,
+    );
 
     allViolations.forEach(({ file, violations }) => {
       console.error(`\n${file}:`);
       violations.forEach(({ line, filetype, codeBlock }) => {
-        console.error(`  Line ${line}: Missing title for code block with filetype "${filetype}"`);
+        console.error(
+          `  Line ${line}: Missing title for code block with filetype "${filetype}"`,
+        );
         console.error(`    ${codeBlock.trim()}`);
       });
     });

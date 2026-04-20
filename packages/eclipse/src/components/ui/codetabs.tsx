@@ -16,10 +16,11 @@ import * as Unstyled from "./tabs";
 
 type CollectionKey = string | symbol;
 
-export interface TabsProps extends Omit<
-  ComponentProps<typeof Unstyled.Tabs>,
-  "value" | "onValueChange"
-> {
+export interface TabsProps
+  extends Omit<
+    ComponentProps<typeof Unstyled.Tabs>,
+    "value" | "onValueChange"
+  > {
   /**
    * Use simple mode instead of advanced usage as documented in https://radix-ui.com/primitives/docs/components/tabs.
    */
@@ -136,10 +137,8 @@ export function Tabs({
   );
 }
 
-export interface TabProps extends Omit<
-  ComponentProps<typeof Unstyled.TabsContent>,
-  "value"
-> {
+export interface TabProps
+  extends Omit<ComponentProps<typeof Unstyled.TabsContent>, "value"> {
   /**
    * Value of tab, detect from index if unspecified.
    */

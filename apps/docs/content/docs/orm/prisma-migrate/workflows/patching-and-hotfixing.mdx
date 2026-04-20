@@ -165,6 +165,7 @@ In this case, you need to create a migration that takes your production database
 
 - First you need your migration history at the time before the failed migration. You can either get this from your git history, or locally delete the folder of the last failed migration in your migration history.
 - You now want to take your production environment from its current failed state back to the state specified in your local migrations history:
+
   - Run the following `prisma migrate diff` command:
 
     ```bash wrap
@@ -238,7 +239,6 @@ npx prisma migrate resolve --applied Unique
 This will mark the failed migration called 'Unique' in the migrations table on your production environment as applied.
 
 Your local migration history now yields the same result as the state your production environment is in. You can now continue using the already known `migrate dev` /`migrate deploy` workflow.
-
 
 ## Prisma Migrate and PgBouncer
 

@@ -442,10 +442,17 @@ export const prerender = false;
     <main>
       <h1>Sign Up</h1>
       <form id="signup-form">
-        // [!code ++] <input type="text" name="name" placeholder="Name" required /> // [!code ++]
-        <input type="email" name="email" placeholder="Email" required /> // [!code ++]
-        <input required type="password" name="password" placeholder="Password" /> // [!code ++]
-        <button type="submit">Sign up</button> // [!code ++]
+        // [!code ++]
+        <input type="text" name="name" placeholder="Name" required /> // [!code
+        ++] <input type="email" name="email" placeholder="Email" required /> //
+        [!code ++]
+        <input
+          required
+          type="password"
+          name="password"
+          placeholder="Password"
+        />
+        // [!code ++] <button type="submit">Sign up</button> // [!code ++]
       </form>
       // [!code ++]
       <p>Already have an account? <a href="/sign-in">Sign in here</a>.</p>
@@ -474,7 +481,12 @@ export const prerender = false;
       <form id="signup-form">
         <input type="text" name="name" placeholder="Name" required />
         <input type="email" name="email" placeholder="Email" required />
-        <input required type="password" name="password" placeholder="Password" />
+        <input
+          required
+          type="password"
+          name="password"
+          placeholder="Password"
+        />
         <button type="submit">Sign up</button>
       </form>
       <p>Already have an account? <a href="/sign-in">Sign in here</a>.</p>
@@ -525,7 +537,12 @@ if (Astro.locals.user?.id) return Astro.redirect("/dashboard"); // [!code ++]
       <form id="signup-form">
         <input type="text" name="name" placeholder="Name" required />
         <input type="email" name="email" placeholder="Email" required />
-        <input required type="password" name="password" placeholder="Password" />
+        <input
+          required
+          type="password"
+          name="password"
+          placeholder="Password"
+        />
         <button type="submit">Sign up</button>
       </form>
       <p>Already have an account? <a href="/sign-in">Sign in here</a>.</p>
@@ -593,9 +610,16 @@ export const prerender = false;
     <main>
       <h1>Sign In</h1>
       <form id="signin-form">
-        // [!code ++] <input type="email" name="email" placeholder="Email" required /> // [!code ++]
-        <input required type="password" name="password" placeholder="Password" /> // [!code ++]
-        <button type="submit">Sign In</button> // [!code ++]
+        // [!code ++]
+        <input type="email" name="email" placeholder="Email" required /> //
+        [!code ++]
+        <input
+          required
+          type="password"
+          name="password"
+          placeholder="Password"
+        />
+        // [!code ++] <button type="submit">Sign In</button> // [!code ++]
       </form>
       // [!code ++]
       <p>Don't have an account? <a href="/sign-up">Sign up here</a>.</p>
@@ -623,7 +647,12 @@ export const prerender = false;
       <h1>Sign In</h1>
       <form id="signin-form">
         <input type="email" name="email" placeholder="Email" required />
-        <input required type="password" name="password" placeholder="Password" />
+        <input
+          required
+          type="password"
+          name="password"
+          placeholder="Password"
+        />
         <button type="submit">Sign In</button>
       </form>
       <p>Don't have an account? <a href="/sign-up">Sign up here</a>.</p>
@@ -670,7 +699,12 @@ if (Astro.locals.user?.id) return Astro.redirect("/dashboard"); // [!code ++]
       <h1>Sign In</h1>
       <form id="signin-form">
         <input type="email" name="email" placeholder="Email" required />
-        <input required type="password" name="password" placeholder="Password" />
+        <input
+          required
+          type="password"
+          name="password"
+          placeholder="Password"
+        />
         <button type="submit">Sign In</button>
       </form>
       <p>Don't have an account? <a href="/sign-up">Sign up here</a>.</p>
@@ -790,11 +824,13 @@ if (!Astro.locals.user?.id) return Astro.redirect("/sign-in");
     <script>
       // [!code ++]
       import { authClient } from "../../lib/auth-client"; // [!code ++]
-      document.getElementById("signOutButton")?.addEventListener("click", async () => {
-        // [!code ++]
-        await authClient.signOut(); // [!code ++]
-        window.location.href = "/sign-in"; // [!code ++]
-      }); // [!code ++]
+      document
+        .getElementById("signOutButton")
+        ?.addEventListener("click", async () => {
+          // [!code ++]
+          await authClient.signOut(); // [!code ++]
+          window.location.href = "/sign-in"; // [!code ++]
+        }); // [!code ++]
     </script>
     // [!code ++]
   </body>

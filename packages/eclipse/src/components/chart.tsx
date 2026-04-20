@@ -194,7 +194,9 @@ function ChartTooltipContent({
       return null;
     }
 
-    return <div className={cn("type-text-xs-strong", labelClassName)}>{value}</div>;
+    return (
+      <div className={cn("type-text-xs-strong", labelClassName)}>{value}</div>
+    );
   }, [
     label,
     labelFormatter,

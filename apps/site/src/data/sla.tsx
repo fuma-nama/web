@@ -65,8 +65,8 @@ export const slaSections: SlaSection[] = [
       <>
         <p>
           Compensation credits apply to future payments only. Credits are
-          non-refundable and non-transferable. The minimum credit threshold is $1
-          USD.
+          non-refundable and non-transferable. The minimum credit threshold is
+          $1 USD.
         </p>
         <p>Compensation structure:</p>
         <ul>

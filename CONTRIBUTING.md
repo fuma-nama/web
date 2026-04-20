@@ -28,19 +28,19 @@ Every commit **must** start with a valid change type:
 
 ### 2) Commit scope MUST be the app being worked on (or empty if crossing boundaries)
 
-We use Conventional-Commit-inspired scopes to clarify *where* changes land.
+We use Conventional-Commit-inspired scopes to clarify _where_ changes land.
 
 - If your change is scoped to **one app**, the scope **must** be that app/workspace.
   - Example: `feat(docs): update page layout`
 - If your change intentionally spans **multiple apps/packages**, you **must** use an **empty scope** (no parentheses).
   - Example: `chore: align eslint rules across apps`
 
-
 ### 3) Commit body MUST reference an issue
 
 Every commit **must** include a Linear issue reference in the **commit body**.
 
 Example:
+
 ```
 fix(admin): prevent crash on empty results
 
@@ -48,6 +48,7 @@ Linear: DR-482
 ```
 
 **Notes**
+
 - The Linear reference must be in the **body**, not just the title.
 - If a commit truly has no issue, create one first.
 
@@ -72,6 +73,7 @@ Linear: DR-482
 ### Examples
 
 Single app change (scoped):
+
 ```
 feat(docs): update getting started
 
@@ -79,6 +81,7 @@ Linear: DC-53423
 ```
 
 Single app bug fix (scoped):
+
 ```
 fix(docs): ensure UTMs are persisted
 
@@ -86,6 +89,7 @@ Linear: DC-233
 ```
 
 Cross-boundary change (empty scope):
+
 ```
 chore: update shared lint rules and apply fixes
 
@@ -101,10 +105,12 @@ Use the **same version** for a given dependency across all apps and packages (e.
 ---
 
 ## Keep changes workspace-focused
+
 - Prefer changes that only touch the necessary app/package.
 - If you need shared updates, ensure they’re intentional and explained in the PR.
 
 ### Validate before pushing
+
 Run checks for affected workspaces where possible:
 
 - `pnpm run lint`
@@ -115,12 +121,15 @@ Run checks for affected workspaces where possible:
 ## Pull Requests
 
 ### PR title
+
 PR titles should follow the same convention as commits:
+
 - `feat(app): …`
 - `fix(app): …`
 - `chore: …` (for cross-boundary)
 
 ### PR description should include
+
 - What changed and why
 - How it was tested (commands + notes)
 - Screenshots for UI changes (when applicable)
@@ -129,6 +138,7 @@ PR titles should follow the same convention as commits:
 ---
 
 ## Code Style & Quality
+
 - Prefer clarity over cleverness.
 - Avoid drive-by refactors inside feature/bugfix PRs.
 - Follow existing patterns within each app.

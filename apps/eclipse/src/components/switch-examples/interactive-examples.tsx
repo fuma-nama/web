@@ -14,7 +14,10 @@ export function ControlledSwitchExample() {
           checked={enabled}
           onCheckedChange={setEnabled}
         />
-        <label htmlFor="controlled" className="text-sm font-medium cursor-pointer">
+        <label
+          htmlFor="controlled"
+          className="text-sm font-medium cursor-pointer"
+        >
           Feature enabled
         </label>
       </div>
@@ -35,7 +38,9 @@ export function SwitchFormExample() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Settings:", settings);
-    alert(`Settings saved:\nDark Mode: ${settings.darkMode}\nNotifications: ${settings.notifications}\nAnalytics: ${settings.analytics}`);
+    alert(
+      `Settings saved:\nDark Mode: ${settings.darkMode}\nNotifications: ${settings.notifications}\nAnalytics: ${settings.analytics}`,
+    );
   };
 
   return (
@@ -43,7 +48,10 @@ export function SwitchFormExample() {
       <h3 className="text-lg font-semibold">App Settings</h3>
 
       <div className="flex items-center justify-between">
-        <label htmlFor="dark-mode" className="text-sm font-medium cursor-pointer">
+        <label
+          htmlFor="dark-mode"
+          className="text-sm font-medium cursor-pointer"
+        >
           Dark Mode
         </label>
         <Switch
@@ -56,7 +64,10 @@ export function SwitchFormExample() {
       </div>
 
       <div className="flex items-center justify-between">
-        <label htmlFor="notifications-form" className="text-sm font-medium cursor-pointer">
+        <label
+          htmlFor="notifications-form"
+          className="text-sm font-medium cursor-pointer"
+        >
           Enable Notifications
         </label>
         <Switch
@@ -69,7 +80,10 @@ export function SwitchFormExample() {
       </div>
 
       <div className="flex items-center justify-between">
-        <label htmlFor="analytics-form" className="text-sm font-medium cursor-pointer">
+        <label
+          htmlFor="analytics-form"
+          className="text-sm font-medium cursor-pointer"
+        >
           Analytics
         </label>
         <Switch

@@ -19,12 +19,8 @@ export function BasicTabs() {
         <TabsTrigger value="account">Account</TabsTrigger>
         <TabsTrigger value="password">Password</TabsTrigger>
       </TabsList>
-      <TabsContent value="account">
-        Account settings content
-      </TabsContent>
-      <TabsContent value="password">
-        Password settings content
-      </TabsContent>
+      <TabsContent value="account">Account settings content</TabsContent>
+      <TabsContent value="password">Password settings content</TabsContent>
     </Tabs>
   );
 }
@@ -33,18 +29,14 @@ export function BasicTabs() {
 **Live Example:**
 
 <div className="not-prose">
-    <Tabs defaultValue="account">
+  <Tabs defaultValue="account">
     <TabsList>
-        <TabsTrigger value="account">Account</TabsTrigger>
-        <TabsTrigger value="password">Password</TabsTrigger>
+      <TabsTrigger value="account">Account</TabsTrigger>
+      <TabsTrigger value="password">Password</TabsTrigger>
     </TabsList>
-    <TabsContent value="account">
-    Account settings content
-    </TabsContent>
-    <TabsContent value="password">
-        Password settings content
-    </TabsContent>
-    </Tabs>
+    <TabsContent value="account">Account settings content</TabsContent>
+    <TabsContent value="password">Password settings content</TabsContent>
+  </Tabs>
 </div>
 
 **Controlled Tabs**
@@ -60,10 +52,8 @@ export function ControlledTabs() {
 
   return (
     <>
-      <button onClick={() => setActiveTab("tab2")}>
-        Switch to Tab 2
-      </button>
-      
+      <button onClick={() => setActiveTab("tab2")}>Switch to Tab 2</button>
+
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList>
           <TabsTrigger value="tab1">Tab 1</TabsTrigger>
@@ -89,15 +79,17 @@ export function DisabledTabs() {
     <Tabs defaultValue="available">
       <TabsList>
         <TabsTrigger value="available">Available</TabsTrigger>
-        <TabsTrigger value="locked" disabled>Locked</TabsTrigger>
-        <TabsTrigger value="premium" disabled>Premium</TabsTrigger>
+        <TabsTrigger value="locked" disabled>
+          Locked
+        </TabsTrigger>
+        <TabsTrigger value="premium" disabled>
+          Premium
+        </TabsTrigger>
       </TabsList>
       <TabsContent value="available">
         This content is available to all users.
       </TabsContent>
-      <TabsContent value="locked">
-        This content is locked.
-      </TabsContent>
+      <TabsContent value="locked">This content is locked.</TabsContent>
       <TabsContent value="premium">
         This content requires a premium subscription.
       </TabsContent>
@@ -112,8 +104,12 @@ export function DisabledTabs() {
   <Tabs defaultValue="available">
     <TabsList>
       <TabsTrigger value="available">Available</TabsTrigger>
-      <TabsTrigger value="locked" disabled>Locked</TabsTrigger>
-      <TabsTrigger value="premium" disabled>Premium</TabsTrigger>
+      <TabsTrigger value="locked" disabled>
+        Locked
+      </TabsTrigger>
+      <TabsTrigger value="premium" disabled>
+        Premium
+      </TabsTrigger>
     </TabsList>
     <TabsContent value="available">
       <div className="p-4 border rounded-lg">
@@ -154,15 +150,9 @@ export function ColoredTabs() {
         <TabsTrigger value="migrate">Migrate</TabsTrigger>
         <TabsTrigger value="studio">Studio</TabsTrigger>
       </TabsList>
-      <TabsContent value="orm">
-        Content about Prisma ORM
-      </TabsContent>
-      <TabsContent value="migrate">
-        Content about Prisma Migrate
-      </TabsContent>
-      <TabsContent value="studio">
-        Content about Prisma Studio
-      </TabsContent>
+      <TabsContent value="orm">Content about Prisma ORM</TabsContent>
+      <TabsContent value="migrate">Content about Prisma Migrate</TabsContent>
+      <TabsContent value="studio">Content about Prisma Studio</TabsContent>
     </Tabs>
   );
 }
@@ -174,7 +164,9 @@ You can also override the color on individual triggers if needed:
 <Tabs defaultValue="orm" color="orm">
   <TabsList>
     <TabsTrigger value="orm">Prisma ORM</TabsTrigger>
-    <TabsTrigger value="ppg" color="ppg">Prisma Postgres</TabsTrigger>
+    <TabsTrigger value="ppg" color="ppg">
+      Prisma Postgres
+    </TabsTrigger>
   </TabsList>
   {/* Content */}
 </Tabs>
@@ -186,7 +178,9 @@ You can also override the color on individual triggers if needed:
   <Tabs defaultValue="orm" color="orm">
     <TabsList>
       <TabsTrigger value="orm">Prisma ORM</TabsTrigger>
-      <TabsTrigger value="migrate" color="ppg">Migrate</TabsTrigger>
+      <TabsTrigger value="migrate" color="ppg">
+        Migrate
+      </TabsTrigger>
       <TabsTrigger value="studio">Studio</TabsTrigger>
     </TabsList>
     <TabsContent value="orm">
@@ -223,6 +217,7 @@ You can also override the color on individual triggers if needed:
 The root tabs container component.
 
 **Props:**
+
 - `defaultValue` - The default active tab (string, optional)
 - `value` - The controlled active tab value (string, optional)
 - `onValueChange` - Callback when active tab changes ((value: string) => void, optional)
@@ -237,6 +232,7 @@ The root tabs container component.
 The container for tab triggers with an underline indicator.
 
 **Props:**
+
 - `className` - Additional CSS classes (optional)
 - All standard HTML `<div>` attributes
 
@@ -245,6 +241,7 @@ The container for tab triggers with an underline indicator.
 Individual tab button/trigger.
 
 **Props:**
+
 - `value` - The unique value for this tab (string, required)
 - `color` - Color variant override for this specific trigger: `"default"`, `"orm"`, or `"ppg"` (optional, inherits from `Tabs` if not set)
 - `disabled` - Whether the tab is disabled (boolean, default: false)
@@ -256,6 +253,7 @@ Individual tab button/trigger.
 The content panel for a tab.
 
 **Props:**
+
 - `value` - The tab value this content corresponds to (string, required)
 - `forceMount` - Force content to always be mounted (boolean, optional)
 - `className` - Additional CSS classes (optional)
@@ -291,14 +289,14 @@ The content panel for a tab.
 
 The Tabs component supports full keyboard navigation:
 
-| Key | Action |
-|-----|--------|
-| `Tab` | Move focus to the active tab or into tab content |
-| `ArrowLeft` / `ArrowRight` | Navigate between tabs (horizontal) |
-| `ArrowUp` / `ArrowDown` | Navigate between tabs (vertical) |
-| `Home` | Move to first tab |
-| `End` | Move to last tab |
-| `Enter` / `Space` | Activate focused tab (in manual mode) |
+| Key                        | Action                                           |
+| -------------------------- | ------------------------------------------------ |
+| `Tab`                      | Move focus to the active tab or into tab content |
+| `ArrowLeft` / `ArrowRight` | Navigate between tabs (horizontal)               |
+| `ArrowUp` / `ArrowDown`    | Navigate between tabs (vertical)                 |
+| `Home`                     | Move to first tab                                |
+| `End`                      | Move to last tab                                 |
+| `Enter` / `Space`          | Activate focused tab (in manual mode)            |
 
 ### Accessibility
 
@@ -312,6 +310,7 @@ The Tabs component supports full keyboard navigation:
 ### Common Use Cases
 
 **Settings Panels**
+
 ```tsx
 <Tabs defaultValue="profile">
   <TabsList>
@@ -324,6 +323,7 @@ The Tabs component supports full keyboard navigation:
 ```
 
 **Documentation Examples**
+
 ```tsx
 <Tabs defaultValue="preview">
   <TabsList>
@@ -335,6 +335,7 @@ The Tabs component supports full keyboard navigation:
 ```
 
 **Feature Comparison**
+
 ```tsx
 <Tabs defaultValue="features">
   <TabsList>
@@ -347,6 +348,7 @@ The Tabs component supports full keyboard navigation:
 ```
 
 **Dashboard Views**
+
 ```tsx
 <Tabs defaultValue="overview">
   <TabsList>
@@ -369,7 +371,7 @@ export default function Page() {
   return (
     <article>
       <h1>API Documentation</h1>
-      
+
       <Tabs defaultValue="curl">
         <TabsList>
           <TabsTrigger value="curl">cURL</TabsTrigger>
@@ -377,13 +379,19 @@ export default function Page() {
           <TabsTrigger value="python">Python</TabsTrigger>
         </TabsList>
         <TabsContent value="curl">
-          <pre><code>curl https://api.example.com/data</code></pre>
+          <pre>
+            <code>curl https://api.example.com/data</code>
+          </pre>
         </TabsContent>
         <TabsContent value="javascript">
-          <pre><code>fetch('https://api.example.com/data')</code></pre>
+          <pre>
+            <code>fetch('https://api.example.com/data')</code>
+          </pre>
         </TabsContent>
         <TabsContent value="python">
-          <pre><code>requests.get('https://api.example.com/data')</code></pre>
+          <pre>
+            <code>requests.get('https://api.example.com/data')</code>
+          </pre>
         </TabsContent>
       </Tabs>
     </article>

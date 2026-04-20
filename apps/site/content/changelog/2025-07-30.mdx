@@ -43,7 +43,7 @@ export default defineConfig({
   schema: path.join("db", "schema.prisma"),
   migrations: {
     path: path.join("db", "migrations"),
-    seed: "tsx db/seed.ts"
+    seed: "tsx db/seed.ts",
   },
 });
 ```
@@ -52,7 +52,7 @@ export default defineConfig({
 
 #### 🗄️ Multi-schema feature is now Generally Available
 
-Databases like PostgreSQL or SQL Server provide a way to logically organize your tables in dedicated namespaces called *schemas*. In Prisma ORM, you can assign tables to various schemas via the `@@schema` attribute:
+Databases like PostgreSQL or SQL Server provide a way to logically organize your tables in dedicated namespaces called _schemas_. In Prisma ORM, you can assign tables to various schemas via the `@@schema` attribute:
 
 ```css
 datasource db {
@@ -93,14 +93,11 @@ You can now use the `tables` option in `prisma.config.ts` to specify which table
 
 ```typescript
 // prisma.config.ts
- export default defineConfig({
+export default defineConfig({
   tables: {
-    external: [
-      "users",
-    ]
+    external: ["users"],
   },
-})
-
+});
 ```
 
 A typical use case for this is the [`users` table from Supabase](https://supabase.com/docs/guides/auth/managing-user-data) which you never want be changed by Prisma Migrate but still may want to query with Prisma Client.
@@ -156,11 +153,11 @@ The command doesn’t require authentication, so you can play around with your d
 
 ![create-db.gif](/changelog/image-bd1a52263c6e36773fe0c4b003a81298d7f175f4-800x450-gif-create-db.gif)
 
-Your instance will be automatically deleted after 24 hours *but* you can claim it and put it into your [Prisma Console](https://console.prisma.io) account if you want to keep using it after that period. Learn more [in the docs](https://www.prisma.io/docs/postgres/introduction/npx-create-db).
+Your instance will be automatically deleted after 24 hours _but_ you can claim it and put it into your [Prisma Console](https://console.prisma.io) account if you want to keep using it after that period. Learn more [in the docs](https://www.prisma.io/docs/postgres/introduction/npx-create-db).
 
 ## 🧭 New navigation UI for Prisma Console
 
-The [Prisma Console](https://console.prisma.io) got a little makeover, including a new design for navigating and managing your projects and their databases. This makes common workflows like *creating new projects*, *navigating between projects and databases*, as well as *accessing project settings* a lot more smooth.
+The [Prisma Console](https://console.prisma.io) got a little makeover, including a new design for navigating and managing your projects and their databases. This makes common workflows like _creating new projects_, _navigating between projects and databases_, as well as _accessing project settings_ a lot more smooth.
 
 ![new_ui.png](/changelog/image-a3438ae7d08cb86d8ac9db19dc2ad2ac4edf2c4c-3070x1866-png-new_ui.png)
 

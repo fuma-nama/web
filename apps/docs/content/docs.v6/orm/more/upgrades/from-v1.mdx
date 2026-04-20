@@ -48,19 +48,19 @@ There are two main upgrade strategies:
 
 The database schema created by Prisma 1's `prisma deploy` is only partially compatible with Prisma ORM 2+. Here's an overview of common incompatibilities:
 
-| Problem | SQL Fix | Prisma Schema Fix | Breaks Prisma 1 |
-| ------- | ------- | ----------------- | --------------- |
-| Default values aren't in database | Yes | Yes | No |
-| Generated CUIDs as IDs not in database | No | Yes | No |
-| `@createdAt` not in database | Yes | Yes | No |
-| `@updatedAt` not in database | No | Yes | No |
-| Inline 1-1 relations missing `UNIQUE` constraint | Yes | No | No |
-| All non-inline relations recognized as m-n | Yes | No | Yes |
-| Json type is `TEXT` in database | Yes | No | Varies |
-| Enums are `TEXT` in database | Yes | No | Varies |
-| Required 1-1 relations not in database | No | Yes | No |
-| Mismatching CUID length | Yes | No | No |
-| Scalar lists maintained with extra table | Depends | No | Depends |
+| Problem                                          | SQL Fix | Prisma Schema Fix | Breaks Prisma 1 |
+| ------------------------------------------------ | ------- | ----------------- | --------------- |
+| Default values aren't in database                | Yes     | Yes               | No              |
+| Generated CUIDs as IDs not in database           | No      | Yes               | No              |
+| `@createdAt` not in database                     | Yes     | Yes               | No              |
+| `@updatedAt` not in database                     | No      | Yes               | No              |
+| Inline 1-1 relations missing `UNIQUE` constraint | Yes     | No                | No              |
+| All non-inline relations recognized as m-n       | Yes     | No                | Yes             |
+| Json type is `TEXT` in database                  | Yes     | No                | Varies          |
+| Enums are `TEXT` in database                     | Yes     | No                | Varies          |
+| Required 1-1 relations not in database           | No      | Yes               | No              |
+| Mismatching CUID length                          | Yes     | No                | No              |
+| Scalar lists maintained with extra table         | Depends | No                | Depends         |
 
 ## Using the Prisma 1 Upgrade CLI
 

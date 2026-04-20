@@ -1,9 +1,9 @@
 ---
 title: Prisma CLI reference
-description: 'This page gives an overview of all available Prisma CLI commands, explains their options and shows numerous usage examples'
+description: "This page gives an overview of all available Prisma CLI commands, explains their options and shows numerous usage examples"
 url: /orm/reference/prisma-cli-reference
 metaTitle: Prisma CLI reference
-metaDescription: 'This page gives an overview of all available Prisma CLI commands, explains their options and shows numerous usage examples.'
+metaDescription: "This page gives an overview of all available Prisma CLI commands, explains their options and shows numerous usage examples."
 ---
 
 This document describes the Prisma CLI commands, arguments, and options.
@@ -91,7 +91,7 @@ By default, the project sets up a [local Prisma Postgres](/postgres/database/loc
 #### Arguments
 
 | Argument                 | Required | Description                                                                                                                                                                                                          | Default               |
-| ------------------------ | -------- | -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------                      | --------------------- |
+| ------------------------ | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
 | `--datasource-provider`  | No       | Specifies the value for the `provider` field in the `datasource` block. Options are `prisma+postgres`, `sqlite`, `postgresql`, `mysql`, `sqlserver`, `mongodb` and `cockroachdb`.                                    | `postgresql`          |
 | `--db`                   | No       | Shorthand syntax for `--datasource-provider prisma+postgres`; creates a new [Prisma Postgres](/postgres) instance. Requires authentication in the [PDP Console](https://console.prisma.io).                          |                       |
 | `--prompt` (or `--vibe`) | No       | Scaffolds a Prisma schema based on the prompt and deploys it to a fresh Prisma Postgres instance. Requires authentication in the [PDP Console](https://console.prisma.io).                                           |                       |
@@ -393,14 +393,14 @@ generator client {
 
 #### Options
 
-| Option              | Required | Description                                                                                                                                                                                                                              | Default |
-| ------------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| Option              | Required | Description                                                                                                                                                                                                                         | Default |
+| ------------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
 | `--data-proxy`      | No       | The `generate` command will generate Prisma Client for use with [Prisma Accelerate](/accelerate) prior to Prisma 5.0.0. Mutually exclusive with `--accelerate` and `--no-engine`.                                                   |
 | `--accelerate`      | No       | The `generate` command will generate Prisma Client for use with [Prisma Accelerate](/accelerate). Mutually exclusive with `--data-proxy` and `--no-engine`. Available in Prisma 5.1.0 and later.                                    |
 | `--no-engine`       | No       | The `generate` command will generate Prisma Client without an accompanied engine for use with [Prisma Accelerate](/accelerate). Mutually exclusive with `--data-proxy` and `--accelerate`. Available in Prisma ORM 5.2.0 and later. |
-| `--no-hints`        | No       | The `generate` command will generate Prisma Client without usage hints, surveys or info banners being printed to the terminal. Available in Prisma ORM 5.16.0 and later.                                                                 |
-| `--allow-no-models` | No       | The `generate` command will generate Prisma Client without generating any models.                                                                                                                                                        |
-| `--watch`           | No       | The `generate` command will continue to watch the `schema.prisma` file and re-generate Prisma Client on file changes.                                                                                                                    |
+| `--no-hints`        | No       | The `generate` command will generate Prisma Client without usage hints, surveys or info banners being printed to the terminal. Available in Prisma ORM 5.16.0 and later.                                                            |
+| `--allow-no-models` | No       | The `generate` command will generate Prisma Client without generating any models.                                                                                                                                                   |
+| `--watch`           | No       | The `generate` command will continue to watch the `schema.prisma` file and re-generate Prisma Client on file changes.                                                                                                               |
 
 :::warning
 
@@ -681,14 +681,14 @@ The `dev` command starts a [local Prisma Postgres](/postgres/database/local-deve
 
 ### Arguments
 
-| Argument              | Required | Description                                                                                                                                                 | Default   |
-| --------------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- |
+| Argument              | Required | Description                                                                                                                                         | Default   |
+| --------------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | --------- |
 | `--name` (or `-n`)    | No       | Enables targeting a specific database instance. [Learn more](/postgres/database/local-development#using-different-local-prisma-postgres-instances). | `default` |
-| `--port` (or `-p`)    | No       | Main port number the local Prisma Postgres HTTP server will listen on.                                                                                      | `51213`   |
-| `--db-port` (or `-P`) | No       | Port number the local Prisma Postgres database server will listen on.                                                                                       | `51214`   |
-| `--shadow-db-port`    | No       | Port number the shadow database server will listen on.                                                                                                      | `51215`   |
-| `--detach` (or `-d`)  | No       | Run the server in the background.                                                                                                                           | `false`   |
-| `--debug`             | No       | Enable debug logging.                                                                                                                                       | `false`   |
+| `--port` (or `-p`)    | No       | Main port number the local Prisma Postgres HTTP server will listen on.                                                                              | `51213`   |
+| `--db-port` (or `-P`) | No       | Port number the local Prisma Postgres database server will listen on.                                                                               | `51214`   |
+| `--shadow-db-port`    | No       | Port number the shadow database server will listen on.                                                                                              | `51215`   |
+| `--detach` (or `-d`)  | No       | Run the server in the background.                                                                                                                   | `false`   |
+| `--debug`             | No       | Enable debug logging.                                                                                                                               | `false`   |
 
 ### Examples
 
@@ -812,8 +812,8 @@ npx prisma dev rm mydb* # removes all DBs starting with `mydb`
 
 #### Arguments
 
-| Argument  | Required | Description                                                                                                          | Default |
-| --------- | -------- | -------------------------------------------------------------------------------------------------------------------- | ------- |
+| Argument  | Required | Description                                                                                                        | Default |
+| --------- | -------- | ------------------------------------------------------------------------------------------------------------------ | ------- |
 | `--force` | No       | Stops any running servers before removing them. Without this flag, the command will fail if any server is running. | `false` |
 
 :::note
@@ -1498,7 +1498,7 @@ One of the following `--from-...` options is required:
 | `--from-empty`             | Assume that the data model you are migrating from is empty     |                          |
 | `--from-schema`            | Path to a Prisma schema file, uses the data model for the diff |                          |
 | `--from-migrations`        | Path to the Prisma Migrate migrations directory                | Not supported in MongoDB |
-| `--from-config-datasource` | Use the datasource from the Prisma config file                 | Prisma v7+                |
+| `--from-config-datasource` | Use the datasource from the Prisma config file                 | Prisma v7+               |
 
 One of the following `--to-...` options is required:
 
@@ -1507,7 +1507,7 @@ One of the following `--to-...` options is required:
 | `--to-empty`             | Assume that the data model you are migrating to is empty       |                          |
 | `--to-schema`            | Path to a Prisma schema file, uses the data model for the diff |                          |
 | `--to-migrations`        | Path to the Prisma Migrate migrations directory                | Not supported in MongoDB |
-| `--to-config-datasource` | Use the datasource from the Prisma config file                 | Prisma v7+                |
+| `--to-config-datasource` | Use the datasource from the Prisma config file                 | Prisma v7+               |
 
 Other options:
 

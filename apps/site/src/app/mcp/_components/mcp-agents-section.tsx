@@ -29,8 +29,8 @@ export function McpAgentsSection({ agents }: { agents: readonly McpAgent[] }) {
             Works with your AI agent
           </h2>
           <p className="text-base leading-6 text-foreground-neutral-weak">
-            Works with any AI agent, whether you prefer to use a remote or a local server,
-            we&apos;ve got you.
+            Works with any AI agent, whether you prefer to use a remote or a
+            local server, we&apos;ve got you.
           </p>
         </div>
 
@@ -53,7 +53,9 @@ export function McpAgentsSection({ agents }: { agents: readonly McpAgent[] }) {
           </DialogTrigger>
           <DialogContent className="max-w-4xl">
             <DialogHeader>
-              <DialogTitle>Want to see your favorite AI tool listed on prisma.io/mcp?</DialogTitle>
+              <DialogTitle>
+                Want to see your favorite AI tool listed on prisma.io/mcp?
+              </DialogTitle>
             </DialogHeader>
             <div className="overflow-hidden rounded-xl border border-stroke-neutral bg-background-neutral-weaker shadow-box-low">
               <iframe

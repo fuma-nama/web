@@ -14,9 +14,9 @@ Defines a [data source](/v6/orm/prisma-schema/overview/data-sources) in the Pris
 
 A `datasource` block accepts the following fields:
 
-| Name                | Required | Type                                                                            | Description                                                                                                                                                                                                                                                                                                                                          |
-| ------------------- | -------- | ------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `provider`          | **Yes**  | String (`postgresql`, `mysql`, `sqlite`, `sqlserver`, `mongodb`, `cockroachdb`) | Describes which data source connectors to use.                                                                                                                                                                                                                                                                                                       |
+| Name                | Required | Type                                                                            | Description                                                                                                                                                                                                                                                                                                                                     |
+| ------------------- | -------- | ------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `provider`          | **Yes**  | String (`postgresql`, `mysql`, `sqlite`, `sqlserver`, `mongodb`, `cockroachdb`) | Describes which data source connectors to use.                                                                                                                                                                                                                                                                                                  |
 | `url`               | **Yes**  | String (URL)                                                                    | **Deprecated in Prisma ORM v7.** Configure the connection URL in Prisma Config instead: see [`datasource.url`](/v6/orm/reference/prisma-config-reference#datasourceurl). Existing schemas continue to work, but you should migrate to Prisma Config.                                                                                            |
 | `shadowDatabaseUrl` | No       | String (URL)                                                                    | **Deprecated in Prisma ORM v7.** Configure the shadow database URL in Prisma Config instead: see [`datasource.shadowDatabaseUrl`](/v6/orm/reference/prisma-config-reference#datasourceshadowdatabaseurl).                                                                                                                                       |
 | `directUrl`         | No       | String (URL)                                                                    | **Deprecated in Prisma ORM v7.** Configure the direct connection URL in Prisma Config instead: see [`datasource.directUrl`](/v6/orm/reference/prisma-config-reference#datasourcedirecturl-removed).                                                                                                                                             |
@@ -167,14 +167,14 @@ This is the default generator for Prisma ORM 6.x and earlier versions. Learn mor
 
 A `generator` block accepts the following fields:
 
-| Name              | Required | Type                         | Description                                                                                                                                                                                                        |
-| :---------------- | :------- | :--------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Name              | Required | Type                         | Description                                                                                                                                                                                                   |
+| :---------------- | :------- | :--------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `provider`        | **Yes**  | `prisma-client-js`           | Describes which [generator](/v6/orm/prisma-schema/overview/generators) to use. This can point to a file that implements a generator or specify a built-in generator directly.                                 |
 | `output`          | No       | String (file path)           | Determines the location for the generated client, [learn more](/v6/orm/prisma-client/setup-and-configuration/generating-prisma-client#using-a-custom-output-path). **Default**: `node_modules/.prisma/client` |
-| `previewFeatures` | No       | List of Enums                | Use intellisense to see list of currently available Preview features (`Ctrl+Space` in Visual Studio Code) **Default**: none                                                                                        |
-| `engineType`      | No       | Enum (`library` or `binary`) | Defines the [query engine](/v6/orm/more/internals/engines) type to download and use. **Default**: `library`                                                                                              |
-| `binaryTargets`   | No       | List of Enums (see below)    | Specify the OS on which the Prisma Client will run to ensure compatibility of the [query engine](/v6/orm/more/internals/engines). **Default**: `native`                                                  |
-| `moduleFormat`    | No       | Enum (`cjs` or `esm`)        | Defines the module format of the generated Prisma Client. This field is available only with `prisma-client` generator.                                                                                             |
+| `previewFeatures` | No       | List of Enums                | Use intellisense to see list of currently available Preview features (`Ctrl+Space` in Visual Studio Code) **Default**: none                                                                                   |
+| `engineType`      | No       | Enum (`library` or `binary`) | Defines the [query engine](/v6/orm/more/internals/engines) type to download and use. **Default**: `library`                                                                                                   |
+| `binaryTargets`   | No       | List of Enums (see below)    | Specify the OS on which the Prisma Client will run to ensure compatibility of the [query engine](/v6/orm/more/internals/engines). **Default**: `native`                                                       |
+| `moduleFormat`    | No       | Enum (`cjs` or `esm`)        | Defines the module format of the generated Prisma Client. This field is available only with `prisma-client` generator.                                                                                        |
 
 :::note[important]
 
@@ -196,8 +196,8 @@ A `generator` block accepts the following fields:
 
 | Name                     | Required | Type                                                                                                               | Description                                                                                                                                                                                                                 |
 | :----------------------- | :------- | :----------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `provider`               | **Yes**  | `prisma-client`                                                                                                    | Describes which [generator](/v6/orm/prisma-schema/overview/generators) to use. This can point to a file that implements a generator or specify a built-in generator directly.                                          |
-| `output`                 | **Yes**  | String (file path)                                                                                                 | Determines the location for the generated client, [learn more](/v6/orm/prisma-client/setup-and-configuration/generating-prisma-client#using-a-custom-output-path).                                                     |
+| `provider`               | **Yes**  | `prisma-client`                                                                                                    | Describes which [generator](/v6/orm/prisma-schema/overview/generators) to use. This can point to a file that implements a generator or specify a built-in generator directly.                                               |
+| `output`                 | **Yes**  | String (file path)                                                                                                 | Determines the location for the generated client, [learn more](/v6/orm/prisma-client/setup-and-configuration/generating-prisma-client#using-a-custom-output-path).                                                          |
 | `previewFeatures`        | No       | List of Enums                                                                                                      | Use intellisense to see list of currently available Preview features (`Ctrl+Space` in Visual Studio Code) **Default**: none                                                                                                 |
 | `runtime`                | No       | Enum (`nodejs`, `deno`, `bun`, `workerd` (alias `cloudflare`), `vercel-edge` (alias `edge-light`), `react-native`) | Target runtime environment. **Default**: `nodejs`                                                                                                                                                                           |
 | `moduleFormat`           | No       | Enum (`esm` or `cjs`)                                                                                              | Determines whether the generated code supports ESM (uses `import`) or CommonJS (uses `require(...)`) modules. We always recommend `esm` unless you have a good reason to use `cjs`. **Default**: Inferred from environment. |
@@ -440,9 +440,9 @@ Variable length text.
 
 #### PostgreSQL
 
-| Native database type | Native database type attribute | Notes                                                                                                                                                                            |
-| :------------------- | :----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `text`               | `@db.Text`                     |                                                                                                                                                                                  |
+| Native database type | Native database type attribute | Notes                                                                                                                                                                       |
+| :------------------- | :----------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `text`               | `@db.Text`                     |                                                                                                                                                                             |
 | `char(x)`            | `@db.Char(x)`                  |
 | `varchar(x)`         | `@db.VarChar(x)`               |
 | `bit(x)`             | `@db.Bit(x)`                   |
@@ -700,8 +700,8 @@ True or false value.
 
 #### Clients
 
-| Client           | Type                                                                                                | Description                                                                                                      |
-| :--------------- | :-------------------------------------------------------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------- |
+| Client           | Type                                                                                                | Description                                                                                                 |
+| :--------------- | :-------------------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------- |
 | Prisma Client JS | [`BigInt`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/BigInt) | See [examples of working with `BigInt`](/v6/orm/prisma-client/special-fields-and-types#working-with-bigint) |
 
 ### `Float`
@@ -822,8 +822,8 @@ Floating point number.
 
 #### Clients
 
-| Client           | Type                                               | Description                                                                                                        |
-| :--------------- | :------------------------------------------------- | :----------------------------------------------------------------------------------------------------------------- |
+| Client           | Type                                               | Description                                                                                                   |
+| :--------------- | :------------------------------------------------- | :------------------------------------------------------------------------------------------------------------ |
 | Prisma Client JS | [`Decimal`](https://mikemcl.github.io/decimal.js/) | See [examples of working with `Decimal`](/v6/orm/prisma-client/special-fields-and-types#working-with-decimal) |
 
 ### `DateTime`
@@ -1024,9 +1024,9 @@ Not supported
 
 #### Clients
 
-| Client                                                                                                    | Type                                                                                                        | Description                                                                                                    |
-| :-------------------------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------- |
-| Prisma Client JS                                                                                          | [`Uint8Array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array) | See [examples of working with `Bytes`](/v6/orm/prisma-client/special-fields-and-types#working-with-bytes) |
+| Client                                                      | Type                                                                                                        | Description                                                                                               |
+| :---------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------- |
+| Prisma Client JS                                            | [`Uint8Array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array) | See [examples of working with `Bytes`](/v6/orm/prisma-client/special-fields-and-types#working-with-bytes) |
 | Prisma Client JS ([before v6](/v6/orm/more/upgrades/to-v7)) | [`Buffer`](https://nodejs.org/api/buffer.html)                                                              | See [examples of working with `Bytes`](/v6/orm/prisma-client/special-fields-and-types#working-with-bytes) |
 
 ### `Unsupported`
@@ -1163,6 +1163,7 @@ Defines a single-field ID on the model.
 
 - Corresponding database construct: `PRIMARY KEY`
 - Can be annotated with a [`@default`](#default) attribute that uses [functions](#attribute-functions) to auto-generate an ID:
+
   - [`autoincrement()`](#autoincrement)
   - [`cuid()`](#cuid)
   - [`uuid()`](#uuid)
@@ -1177,6 +1178,7 @@ Defines a single-field ID on the model.
 - The [underlying ID field name is always `_id`](https://www.mongodb.com/docs/manual/core/document/#the-_id-field), and must be mapped with `@map("_id")`
 - Can be defined on any scalar field (`String`, `Int`, `enum`) unless you want to use `ObjectId` in your database
 - To use an [`ObjectId`](https://www.mongodb.com/docs/manual/reference/method/ObjectId/) as your ID, you must:
+
   - Use the `String` or `Bytes` field type
   - Annotate your field with `@db.ObjectId`:
 
@@ -2342,14 +2344,14 @@ Defines meta information about the relation. [Learn more](/v6/orm/prisma-schema/
 
 #### Arguments
 
-| Name         | Type                                                                                                                                                   | Required                                                                                        | Description                                                                                                                                                                        | Example                                               |
-| :----------- | :----------------------------------------------------------------------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :---------------------------------------------------- |
-| `name`       | `String`                                                                                                                                               | Sometimes (e.g. to disambiguate a relation)                                                     | Defines the name of the relationship. In an m-n-relation, it also determines the name of the underlying relation table.                                                            | `"CategoryOnPost"`, `"MyRelation"`                    |
-| `fields`     | `FieldReference[]`                                                                                                                                     | On [annotated](/v6/orm/prisma-schema/data-model/relations#relation-fields) relation fields | A list of [fields](/v6/orm/prisma-schema/data-model/models#defining-fields) of the _current_ model                                                                            | `["authorId"]`, `["authorFirstName, authorLastName"]` |
-| `references` | `FieldReference[]`                                                                                                                                     | On [annotated](/v6/orm/prisma-schema/data-model/relations#relation-fields) relation fields | A list of [fields](/v6/orm/prisma-schema/data-model/models#defining-fields) of the model on _the other side of the relation_                                                  | `["id"]`, `["firstName, lastName"]`                   |
-| `map`        | `String`                                                                                                                                               | No                                                                                              | Defines a [custom name](/v6/orm/prisma-schema/data-model/database-mapping#constraint-and-index-names) for the foreign key in the database.                                    | `["id"]`, `["firstName, lastName"]`                   |
-| `onUpdate`   | Enum. See [Types of referential actions](/v6/orm/prisma-schema/data-model/relations/referential-actions#types-of-referential-actions) for values. | No                                                                                              | Defines the [referential action](/v6/orm/prisma-schema/data-model/relations/referential-actions) to perform when a referenced entry in the referenced model is being updated. | `Cascade`, `NoAction`                                 |
-| `onDelete`   | Enum. See [Types of referential actions](/v6/orm/prisma-schema/data-model/relations/referential-actions#types-of-referential-actions) for values. | No                                                                                              | Defines the [referential action](/v6/orm/prisma-schema/data-model/relations/referential-actions) to perform when a referenced entry in the referenced model is being deleted. | `Cascade`, `NoAction`                                 |
+| Name         | Type                                                                                                                                              | Required                                                                                   | Description                                                                                                                                                                   | Example                                               |
+| :----------- | :------------------------------------------------------------------------------------------------------------------------------------------------ | :----------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :---------------------------------------------------- |
+| `name`       | `String`                                                                                                                                          | Sometimes (e.g. to disambiguate a relation)                                                | Defines the name of the relationship. In an m-n-relation, it also determines the name of the underlying relation table.                                                       | `"CategoryOnPost"`, `"MyRelation"`                    |
+| `fields`     | `FieldReference[]`                                                                                                                                | On [annotated](/v6/orm/prisma-schema/data-model/relations#relation-fields) relation fields | A list of [fields](/v6/orm/prisma-schema/data-model/models#defining-fields) of the _current_ model                                                                            | `["authorId"]`, `["authorFirstName, authorLastName"]` |
+| `references` | `FieldReference[]`                                                                                                                                | On [annotated](/v6/orm/prisma-schema/data-model/relations#relation-fields) relation fields | A list of [fields](/v6/orm/prisma-schema/data-model/models#defining-fields) of the model on _the other side of the relation_                                                  | `["id"]`, `["firstName, lastName"]`                   |
+| `map`        | `String`                                                                                                                                          | No                                                                                         | Defines a [custom name](/v6/orm/prisma-schema/data-model/database-mapping#constraint-and-index-names) for the foreign key in the database.                                    | `["id"]`, `["firstName, lastName"]`                   |
+| `onUpdate`   | Enum. See [Types of referential actions](/v6/orm/prisma-schema/data-model/relations/referential-actions#types-of-referential-actions) for values. | No                                                                                         | Defines the [referential action](/v6/orm/prisma-schema/data-model/relations/referential-actions) to perform when a referenced entry in the referenced model is being updated. | `Cascade`, `NoAction`                                 |
+| `onDelete`   | Enum. See [Types of referential actions](/v6/orm/prisma-schema/data-model/relations/referential-actions#types-of-referential-actions) for values. | No                                                                                         | Defines the [referential action](/v6/orm/prisma-schema/data-model/relations/referential-actions) to perform when a referenced entry in the referenced model is being deleted. | `Cascade`, `NoAction`                                 |
 
 The name of the `name` argument on the `@relation` attribute can be omitted (`references` is required):
 
@@ -3113,6 +3115,7 @@ Represents **default values** that cannot be expressed in the Prisma schema (suc
 - Compatible with any scalar type
 - Can not be an empty string `dbgenerated("")` in [2.21.0](https://github.com/prisma/prisma/releases/tag/2.21.0) and later
 - Accepts a `String` value in [2.17.0](https://github.com/prisma/prisma/releases/tag/2.17.0) and later, which allows you to:
+
   - [Set default values for `Unsupported` types](#set-default-value-for-unsupported-type)
   - [Override default value behavior for supported types](#override-default-value-behavior-for-supported-types)
 

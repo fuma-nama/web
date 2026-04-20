@@ -96,11 +96,13 @@ Before you deploy the application, you will make a few changes.
 Before you deploy your application, you will need to make a few updates to your application to make it work with the Prisma Data Proxy.
 
 First, update your `.env` file by renaming the existing `DATABASE_URL` to `MIGRATE_DATABASE_URL`. Create a `DATABASE_URL` variable and set the Prisma Data Proxy URL from the previous step here:
+
 ```
 # .env
 MIGRATE_DATABASE_URL="postgres://"
 DATABASE_URL="prisma://"
 ```
+
 The `MIGRATE_DATABASE_URL` will be used for making database schema changes to your database.
 
 ### Create new scripts in `package.json`
@@ -113,6 +115,7 @@ Next, update your `package.json` file by adding a `vercel-build` script:
     "vercel-build": "npx prisma generate --data-proxy && next build",
   },
 ```
+
 The `vercel-build` script will generate Prisma Client that uses the Prisma Data Proxy and build the application.
 
 ## Deploy the app to Vercel
@@ -133,10 +136,10 @@ Refer to the `.env.example` file in the repository for the environment variables
 
 Once you've added the environment variables, click **Deploy**.
 
-
 ![Configuring environment variables](/fullstack-nextjs-graphql-prisma-5-m2fna60h7c/imgs/vercel-environment-variables.png)
 
 Once your application is successfully deployed, copy its URL and:
+
 - Update the **Allowed Callback URLs** and **Allowed Logout URLs** on the Auth0 Dashboard with the URL of your application
 - Update your Auth0 Action with the URL of the deployed application
 - Update the **AllowedOrigins** Cross-origin Resource Sharing (CORS) policy on S3 with the URL to your deployed application
@@ -150,6 +153,7 @@ If everything works correctly, you will be able to view your deployed applicatio
 This article concludes the series. You learned how to build a full-stack app using modern tools that offer great developer experience and leveraged different services to get your application production-ready.
 
 You:
+
 - Explored database modeling using Prisma
 - Built a GraphQL API using GraphQL Yoga and Pothos
 - Added authentication using Auth0
@@ -160,4 +164,3 @@ You:
 You can find the complete source code for the app on [GitHub](https://github.com/prisma/awesome-links). Feel free to raise issues or contribute to the repository if you find any bugs or want to make improvements.
 
 Feel free to reach out on [Twitter](https://twitter.com/thisismahmoud_) if you have any questions.
-

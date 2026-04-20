@@ -2,7 +2,7 @@
 title: Partner Integration
 description: Build partner integrations that provision and transfer Prisma Postgres databases to users
 metaTitle: Partner Integration | Provision & Transfer Databases
-metaDescription: 'Build partner integrations with the Management API. Provision Prisma Postgres databases, implement claim flow with OAuth 2.0, transfer projects to user workspaces.'
+metaDescription: "Build partner integrations with the Management API. Provision Prisma Postgres databases, implement claim flow with OAuth 2.0, transfer projects to user workspaces."
 url: /management-api/partner-integration
 ---
 
@@ -136,14 +136,17 @@ const tokenData = await tokenResponse.json();
 2. **Call the Management API transfer endpoint** to move the project to the selected workspace. You will need the `project_id` and the user's access token:
 
 ```ts
-const transferResponse = await fetch(`https://api.prisma.io/v1/projects/${project_id}/transfer`, {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-    Authorization: `Bearer ${PRISMA_SERVICE_TOKEN}`,
+const transferResponse = await fetch(
+  `https://api.prisma.io/v1/projects/${project_id}/transfer`,
+  {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${PRISMA_SERVICE_TOKEN}`,
+    },
+    body: JSON.stringify({ recipientAccessToken: tokenData.access_token }),
   },
-  body: JSON.stringify({ recipientAccessToken: tokenData.access_token }),
-});
+);
 ```
 
 If the transfer is successful, the database is now owned by the user's workspace.

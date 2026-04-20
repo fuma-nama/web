@@ -15,13 +15,13 @@ Prisma Client is an auto-generated and type-safe query builder that's _tailored_
 In order to set up Prisma Client, you need a Prisma Config and a [Prisma schema file](/orm/prisma-schema/overview):
 
 ```ts title="prisma.config.ts" tab="Prisma Config"
-import 'dotenv/config';
-import { defineConfig, env } from 'prisma/config';
+import "dotenv/config";
+import { defineConfig, env } from "prisma/config";
 
 export default defineConfig({
-  schema: './prisma/schema.prisma',
+  schema: "./prisma/schema.prisma",
   datasource: {
-    url: env('DATABASE_URL'),
+    url: env("DATABASE_URL"),
   },
 });
 ```
@@ -146,7 +146,6 @@ Error in connector: Error querying the database: db error: FATAL: sorry, too man
    at PrismaClientFetcher.request
 ```
 
-
 ## Use Prisma Client to send queries to your database
 
 Once you have instantiated `PrismaClient`, you can start sending queries in your code:
@@ -167,6 +166,6 @@ const users = await prisma.user.findMany();
 
 Whenever you make changes to your database that are reflected in the Prisma schema, you need to manually re-generate Prisma Client to update the generated code in your output directory:
 
-```npm 
+```npm
 npx prisma generate
 ```

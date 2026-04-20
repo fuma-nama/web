@@ -196,7 +196,11 @@ Update your `src/index.ts` file to match the Prisma Elysia example, including Pr
 ```typescript title="src/index.ts"
 import { Elysia, t } from "elysia";
 import { prisma } from "./lib/prisma";
-import { TodoPlain, TodoPlainInputCreate, TodoPlainInputUpdate } from "./generated/prismabox/Todo";
+import {
+  TodoPlain,
+  TodoPlainInputCreate,
+  TodoPlainInputUpdate,
+} from "./generated/prismabox/Todo";
 
 const app = new Elysia()
   // Health check
@@ -369,7 +373,9 @@ const app = new Elysia()
 
   .listen(3000);
 
-console.log(`🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`);
+console.log(
+  `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`,
+);
 ```
 
 This creates the same endpoints as the official example:

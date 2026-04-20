@@ -269,7 +269,11 @@ While a bit more convenient in terms of types compared to STI, the generated typ
 Here's how you can define `Video` and `Article` types by combining Prisma ORM's generated `Video` and `Article` types with the `Activity` type. These combinations create a new type with the desired properties. Note that we're also omitting the `type` discriminator column because that's not needed anymore on the specific types:
 
 ```ts
-import { Video as VideoDB, Article as ArticleDB, Activity } from "../prisma/generated/client";
+import {
+  Video as VideoDB,
+  Article as ArticleDB,
+  Activity,
+} from "../prisma/generated/client";
 
 type Video = Omit<VideoDB & Activity, "type">;
 type Article = Omit<ArticleDB & Activity, "type">;

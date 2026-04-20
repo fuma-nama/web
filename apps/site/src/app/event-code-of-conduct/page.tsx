@@ -8,8 +8,7 @@ import { LegalAccordion } from "@/components/legal-accordion";
 
 export const metadata = createPageMetadata({
   title: "Prisma - Event Code of Conduct",
-  description:
-    "Read our Event Code of Conduct and how it relates to you.",
+  description: "Read our Event Code of Conduct and how it relates to you.",
   path: "/event-code-of-conduct",
   ogImage: "/og/og-event-code-of-conduct.png",
 });

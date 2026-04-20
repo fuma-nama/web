@@ -23,7 +23,7 @@ Some of these questions came up during the AMA, others earlier. We’re grouping
 
 ### Prisma 7 vs Prisma 6 performance: is it faster or slower?
 
-This depends heavily on *how* you measure performance.
+This depends heavily on _how_ you measure performance.
 
 Prisma 7 performs significantly better in some areas:
 
@@ -72,7 +72,7 @@ We didn’t fully achieve that vision.
 
 The Driver Adapter flow for introspection and migration was scrapped, which means part of the original purpose of `prisma.config.ts` isn’t realized yet.
 
-What *did* land:
+What _did_ land:
 
 - Centralized configuration for Prisma tooling
 - A clean separation between runtime-dependent code and development-time concerns
@@ -102,7 +102,7 @@ Below are questions asked directly during the AMA.
 
 ### Why Prisma uses PGlite for development but doesn’t provide a dedicated adapter
 
-<TweetEmbedComp tweets={['2019435347374150085']}/>
+<TweetEmbedComp tweets={["2019435347374150085"]} />
 
 Honest answer: a dedicated PGlite adapter was never prioritized.
 
@@ -112,7 +112,7 @@ The good news is that PGlite works with the PostgreSQL adapter. When starting `p
 
 ### How to switch database connection strings programmatically in Prisma 7
 
-<TweetEmbedComp tweets={['2019469260293079394']}/>
+<TweetEmbedComp tweets={["2019469260293079394"]} />
 
 If this refers to dynamically switching database URLs at runtime, that pattern still exists, but Prisma 7 pushes you toward a more explicit model.
 
@@ -128,7 +128,7 @@ That said, the ergonomics here can improve, and this feedback is noted.
 
 ### How query plan caching works in Prisma 7.4.0
 
-<TweetEmbedComp tweets={['2019444531612033415']}/>
+<TweetEmbedComp tweets={["2019444531612033415"]} />
 
 This one deserves its own deep dive, and it’s coming soon with the 7.4.0 release.
 
@@ -136,7 +136,7 @@ The short version is that Prisma 7 will soon cache compiled query plans and reus
 
 ### Why certain relationship features were removed in Prisma Studio v7
 
-<TweetEmbedComp tweets={['2019431395555438748']}/>
+<TweetEmbedComp tweets={["2019431395555438748"]} />
 
 The current Studio release is primarily focused on:
 
@@ -150,7 +150,7 @@ We care deeply about Studio, and there is a clear plan moving forward.
 
 ### Will Prisma make it easier to use raw or partial SQL in future versions?
 
-<TweetEmbedComp tweets={['2019442730720505915']}/>
+<TweetEmbedComp tweets={["2019442730720505915"]} />
 
 Yes, we’re actively working on this.
 

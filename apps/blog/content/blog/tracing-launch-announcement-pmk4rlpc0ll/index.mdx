@@ -16,8 +16,8 @@ tags:
 ---
 
 <center>
-    <i>5 min read</i>
-  </center>
+  <i>5 min read</i>
+</center>
 
 We are excited to launch two new featracing-launch-announcement-pmk4rlpc0lltures in Preview: [Tracing](https://www.prisma.io/docs/concepts/components/prisma-client/opentelemetry-tracing) and [Metrics](https://www.prisma.io/docs/concepts/components/prisma-client/metrics). These two features will allow you to monitor and troubleshoot various performance issues effectively. Try them out and [share your feedback](#share-your-feedback)!
 
@@ -35,19 +35,15 @@ Using a tracing tool such as [Jaeger](https://www.jaegertracing.io/) or [Honeyco
 
 ![Visualization of a single trace. A single trace consists of multiple spans. Each span represents the time taken by a certain stage of the total operation.](/tracing-launch-announcement-pmk4rlpc0ll/imgs/trace-spans-waterfall.png)
 
-
-
 ### Prisma tracing is OpenTelemetry compliant
 
 Tracing is a powerful tool that can help you track requests as they flow through your application. This is especially useful for debugging distributed systems, where each request can span multiple services. To levarage the full power of tracing, it should be implemented end-to-end throughout your application.
 
-The tracing feature in Prisma is fully compliant with  [OpenTelemetry](https://opentelemetry.io/), so you can integrate it seamlessly into your end-to-end application tracing setup. This also means that you can export your trace data to any  OpenTelemetry-compatible tracing system, such as [Jaeger](https://www.jaegertracing.io/), [Zipkin](https://zipkin.io/), [Honeycomb](https://www.honeycomb.io/trace/), [Datadog](https://www.datadoghq.com/), etc.
+The tracing feature in Prisma is fully compliant with [OpenTelemetry](https://opentelemetry.io/), so you can integrate it seamlessly into your end-to-end application tracing setup. This also means that you can export your trace data to any OpenTelemetry-compatible tracing system, such as [Jaeger](https://www.jaegertracing.io/), [Zipkin](https://zipkin.io/), [Honeycomb](https://www.honeycomb.io/trace/), [Datadog](https://www.datadoghq.com/), etc.
 
 ![Prisma tracing can be used with any OpenTelemetry-compatible tracing system](/tracing-launch-announcement-pmk4rlpc0ll/imgs/tracing-otel-collectors.png)
 
 To get started with tracing, check out the [tracing docs](https://www.prisma.io/docs/concepts/components/prisma-client/opentelemetry-tracing#get-started-with-tracing-in-prisma).
-
-
 
 ## Monitor the health and performance of your system with metrics
 
@@ -86,14 +82,12 @@ If you want aggregated numerical data for monitoring the health and performance 
 
 It's also important to note that tracing and metrics are complementary features. They can be used together to improve the observability of your system.
 
-
 ## Get started with tracing and metrics
 
 To get started with tracing and metrics:
 
 - See the [tracing documentation](https://www.prisma.io/docs/concepts/components/prisma-client/opentelemetry-tracing) and [tracing tutorial](https://www.prisma.io/blog/tracing-tutorial-prisma-pmkddgq1lm2).
 - See the [metrics documentation](https://www.prisma.io/docs/concepts/components/prisma-client/metrics) and [metrics tutorial](https://www.prisma.io/blog/metrics-tutorial-prisma-pmoldgq10kz).
-
 
 ## Share your feedback
 
@@ -104,8 +98,3 @@ We are eager to hear from you! Try out these features and let us know what you t
 📈 Share your [feedback on metrics](https://github.com/prisma/prisma/issues/13579).
 
 🚀 If you plan to use these features for mission critical applications, please [contact us](https://prisma-data.typeform.com/to/D91R9T4i) to discuss your use case.
-
-
-
-
-

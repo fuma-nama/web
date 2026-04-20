@@ -228,6 +228,7 @@ export function NextLinkBreadcrumb() {
 The root container for the breadcrumb navigation.
 
 **Props:**
+
 - Extends all standard HTML `<nav>` attributes
 - `separator` - Custom separator element (optional)
 
@@ -236,6 +237,7 @@ The root container for the breadcrumb navigation.
 The ordered list container for breadcrumb items.
 
 **Props:**
+
 - Extends all standard HTML `<ol>` attributes
 - `className` - Additional CSS classes (optional)
 
@@ -244,6 +246,7 @@ The ordered list container for breadcrumb items.
 Individual breadcrumb item wrapper.
 
 **Props:**
+
 - Extends all standard HTML `<li>` attributes
 - `className` - Additional CSS classes (optional)
 
@@ -252,6 +255,7 @@ Individual breadcrumb item wrapper.
 Link element for navigable breadcrumb items.
 
 **Props:**
+
 - Extends all standard HTML `<a>` attributes
 - `asChild` - Use child element as link (boolean, default: false)
 - `className` - Additional CSS classes (optional)
@@ -261,6 +265,7 @@ Link element for navigable breadcrumb items.
 The current page indicator (not clickable).
 
 **Props:**
+
 - Extends all standard HTML `<span>` attributes
 - `className` - Additional CSS classes (optional)
 
@@ -269,6 +274,7 @@ The current page indicator (not clickable).
 Visual separator between breadcrumb items.
 
 **Props:**
+
 - Extends all standard HTML `<li>` attributes
 - `children` - Custom separator content (default: ChevronRight icon)
 - `className` - Additional CSS classes (optional)
@@ -278,6 +284,7 @@ Visual separator between breadcrumb items.
 Ellipsis indicator for collapsed breadcrumb items.
 
 **Props:**
+
 - Extends all standard HTML `<span>` attributes
 - `className` - Additional CSS classes (optional)
 
@@ -329,7 +336,7 @@ import {
 export default function Page({ params }) {
   const page = getPage(params.slug);
   const breadcrumbs = generateBreadcrumbs(params.slug);
-  
+
   return (
     <>
       <Breadcrumb>
@@ -340,7 +347,9 @@ export default function Page({ params }) {
                 {index === breadcrumbs.length - 1 ? (
                   <BreadcrumbPage>{crumb.title}</BreadcrumbPage>
                 ) : (
-                  <BreadcrumbLink href={crumb.url}>{crumb.title}</BreadcrumbLink>
+                  <BreadcrumbLink href={crumb.url}>
+                    {crumb.title}
+                  </BreadcrumbLink>
                 )}
               </BreadcrumbItem>
               {index < breadcrumbs.length - 1 && <BreadcrumbSeparator />}
@@ -348,7 +357,7 @@ export default function Page({ params }) {
           ))}
         </BreadcrumbList>
       </Breadcrumb>
-      
+
       <page.data.body />
     </>
   );

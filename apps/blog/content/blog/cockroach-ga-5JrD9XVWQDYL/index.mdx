@@ -16,8 +16,8 @@ tags:
 ---
 
 On May 10th, we were thrilled to release version [3.14.0](https://github.com/prisma/prisma/releases/tag/3.14.0) of
-  Prisma ORM, which brought [CockroachDB](https://www.cockroachlabs.com/product/) support to GA! This production-ready
-  feature allows developers to make use of a scalable and resilient database.
+Prisma ORM, which brought [CockroachDB](https://www.cockroachlabs.com/product/) support to GA! This production-ready
+feature allows developers to make use of a scalable and resilient database.
 
 ## CockroachDB support in Prisma is now Generally Available 💙
 
@@ -66,11 +66,13 @@ model User {
 +  age  Int
 }
 ```
+
 Then create a new migration to account for that change.
 
 ```shell
 npx prisma migrate dev --name add-age
 ```
+
 ![](/cockroach-ga-5JrD9XVWQDYL/imgs/migration.png)
 
 Finally, ideally during a CI/CD step, the changes can be deployed to the database and CockroachDB will apply these across all of the databases in the cluster without downtime.
@@ -78,6 +80,7 @@ Finally, ideally during a CI/CD step, the changes can be deployed to the databas
 ```shell
 npx prisma migrate deploy
 ```
+
 ## Effectively optimize your queries
 
 On top of the performance and scaling benefits of a distributed serverless database, Prisma allows developers to fine-tune their database to fit the querying needs of their applications.
@@ -97,7 +100,8 @@ To jump in and begin building with CockroachDB and Prisma, you can use [Prisma M
 To get started with CockroachDB and Prisma, you can follow our guide to set up a new project from scratch.
 
 <br />
-[Start from scratch with CockroachDB](https://www.prisma.io/docs/getting-started/setup-prisma/start-from-scratch/relational-databases/connect-your-database-typescript-cockroachdb)
+[Start from scratch with
+CockroachDB](https://www.prisma.io/docs/getting-started/setup-prisma/start-from-scratch/relational-databases/connect-your-database-typescript-cockroachdb)
 
 ### ... or use Prisma with your existing CockroachDB database
 
@@ -106,4 +110,5 @@ If you already have an existing project that uses a CockroachDB database, you ca
 Prisma's _introspection_ features reads the schema of your database and automatically builds the Prisma schema with those models.
 
 <br />
-[Add Prisma to existing CockroachDB project](https://www.prisma.io/docs/getting-started/setup-prisma/add-to-existing-project/relational-databases-typescript-cockroachdb)
+[Add Prisma to existing CockroachDB
+project](https://www.prisma.io/docs/getting-started/setup-prisma/add-to-existing-project/relational-databases-typescript-cockroachdb)

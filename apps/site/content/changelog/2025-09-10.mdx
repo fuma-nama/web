@@ -19,7 +19,7 @@ source:
 
 Eight months ago, we published our [ORM manifesto](https://www.prisma.io/blog/prisma-orm-manifesto) with the first hint that we’re going to remove the Rust-based query engine from Prisma ORM:
 
-*We’re addressing this by migrating Prisma’s core logic from Rust to TypeScript and redesigning the ORM to make customization and extension easier.*
+_We’re addressing this by migrating Prisma’s core logic from Rust to TypeScript and redesigning the ORM to make customization and extension easier._
 
 After a lot of hard work and feedback from the community, we’re incredibly excited to share that the migration has been completed and you can now use Prisma ORM without its Rust engine in your production apps. 🎉 This is a major milestone in the history of Prisma ORM and comes with a lot of benefits:
 
@@ -72,7 +72,7 @@ CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
 ## ⚡️ Prisma ORM beats Drizzle in type checking performance
 
-Runtime performance is not the only performance category that matters. In fact, when it comes to DX, which is close to our heart at Prisma, *type checking performance* is equally important: if your TypeScript types become too complex and the compiler needs to do too much work (e.g. inferring types), it may slow down your editor, lead to laggy auto-completion or prevent jump-to-definition from working.
+Runtime performance is not the only performance category that matters. In fact, when it comes to DX, which is close to our heart at Prisma, _type checking performance_ is equally important: if your TypeScript types become too complex and the compiler needs to do too much work (e.g. inferring types), it may slow down your editor, lead to laggy auto-completion or prevent jump-to-definition from working.
 
 We've worked with TypeScript expert [David Blass](https://x.com/ssalbdivad) to find ways for improving the type checking performance in Prisma ORM and created [benchmarks](https://pris.ly/type-benchmarks) comparing the type checking performance with Drizzle.
 

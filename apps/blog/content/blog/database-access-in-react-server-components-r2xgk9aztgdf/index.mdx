@@ -93,24 +93,26 @@ function ArtistPage({ artistId }) {
       <TopTracks artistId={artistId} />
       <Discography artistId={artistId} />
     </ArtistDetails>
-  )
+  );
 }
 ```
+
 ### Building a fast and consistent user experience
 
 To add data fetching logic to an API, we'd need to fetch all data at once and pass it down to the different components. This way, we can achieve a consistent user experience by rendering all components at once. So we would end up with something like this:
 
 ```jsx
 function ArtistPage({ artistId }) {
-  const data = fetchAllData()
+  const data = fetchAllData();
   return (
     <ArtistDetails details={data.details} artistId={artistId}>
       <TopTracks topTracks={data.topTracks} artistId={artistId} />
       <Discography discography={data.discography} artistId={artistId} />
     </ArtistDetails>
-  )
+  );
 }
 ```
+
 This approach is fast because we only need to make a single request to our API.
 
 However, we find that the code is now **harder to maintain**. The reason being that the UI components are directly tightly coupled to the API response. So if we make a change in our UI, we need to update the API accordingly and vice-versa.
@@ -150,6 +152,7 @@ function ArtistPage ({ artistId }){
 	)
 }
 ```
+
 This approach is not fast because our parent component's children only start fetching data *after* the parent makes a request, receives a response, and renders.
 
 So we end up having a waterfall of network requests, where network requests start one after the other, instead of all at once:
@@ -165,20 +168,20 @@ So in our Spotify app example, this is what our components will look like:
 function ArtistPage({ artistId }) {
   // requests will not finish at the same time
   // nor at the same order
-  const details = fetchDetails(artistId).data
-  const topTracks = fetchTopTracks(artistId).data
-  const discography = fetchDiscography(artistId).data
+  const details = fetchDetails(artistId).data;
+  const topTracks = fetchTopTracks(artistId).data;
+  const discography = fetchDiscography(artistId).data;
 
   return (
     <ArtistDetails details={details} artistId={artistId}>
       <TopTracks topTracks={topTracks} artistId={artistId} />
       <Discography discography={discography} artistId={artistId} />
     </ArtistDetails>
-  )
+  );
 }
 ```
-This pattern will result in inconsistent behavior because if all components start fetching data together, they don't necessarily finish simultaneously. That's because the data fetching process depends on the network connection, which can vary. So while now we have fast, easy-to-maintain code, we are sacrificing user experience.
 
+This pattern will result in inconsistent behavior because if all components start fetching data together, they don't necessarily finish simultaneously. That's because the data fetching process depends on the network connection, which can vary. So while now we have fast, easy-to-maintain code, we are sacrificing user experience.
 
 So is it impossible to have all three? Not really.
 
@@ -231,6 +234,7 @@ cd react-server-components-demo
 npm install
 npm start
 ```
+
 The app will be running at [http://localhost:4000](http://localhost:4000) and this is what you'll see:
 
 ![Server Components demo screenshot](/database-access-in-react-server-components-r2xgk9aztgdf/imgs/server-components-demo.png)
@@ -273,6 +277,7 @@ server-components-demo/
 	┣ db.server.js
 	┗ index.client.js
 ```
+
 The `/notes` directory is where we save notes, in markdown format, when they're created on the frontend.
 
 The `/prisma` directory contains two files:
@@ -298,6 +303,7 @@ model Note {
     body      String?
 }
 ```
+
 The schema file is written in Prisma Schema Language (PSL). To get the best possible development experience, make sure you install our [VSCode extension,](https://marketplace.visualstudio.com/items?itemName=Prisma.prisma) which adds syntax highlighting, formatting, auto-completion, jump-to-definition, and linting for `.prisma` files.
 
 We specified that we're using SQLite and our `dev.db` file location in the `datasource` field.
@@ -338,34 +344,36 @@ To create a note we created a `/notes` endpoint that handles `POST` requests. In
 
 ```js
 app.post(
-  '/notes',
-  handleErrors(async function(req, res) {
+  "/notes",
+  handleErrors(async function (req, res) {
     const result = await prisma.note.create({
       data: {
         body: req.body.body,
         title: req.body.title,
       },
-    })
+    });
 
     // ...
     // return newly created note's id
     // in the response object
-    sendResponse(req, res, result.id)
+    sendResponse(req, res, result.id);
   }),
-)
+);
 ```
+
 To get all notes, we created a `/notes` route and when we receive a `GET` request we will call and await the `findMany()` function to return all records inside the `notes` table in our database.
 
 ```js
 app.get(
-  '/notes',
-  handleErrors(async function(_req, res) {
+  "/notes",
+  handleErrors(async function (_req, res) {
     // return all records
-    const notes = await prisma.note.findMany()
-    res.json(notes)
+    const notes = await prisma.note.findMany();
+    res.json(notes);
   }),
-)
+);
 ```
+
 A `GET` request to `/note/id` will return a single note when we pass its `id`.
 
 We get the note's `id` from the request's parameters using `req.param.id` and cast it to a number, since that's the type of the `id` we defined in our Prisma schema.
@@ -374,24 +382,25 @@ We then use `findUnique` which returns a single record by a unique identifier.
 
 ```js
 app.get(
-  '/notes/:id',
-  handleErrors(async function(req, res) {
+  "/notes/:id",
+  handleErrors(async function (req, res) {
     const note = await prisma.note.findUnique({
       where: {
         id: Number(req.params.id),
       },
-    })
-    res.json(note)
+    });
+    res.json(note);
   }),
-)
+);
 ```
+
 Finally, to update a note, we can send a `PUT` requests to `/notes/:id` and we access the note's id from the request parameters. We then pass it to the `update()` function and pass the note's updates coming from the request's body.
 
 ```js
 app.put(
-  '/notes/:id',
-  handleErrors(async function(req, res) {
-    const updatedId = Number(req.params.id)
+  "/notes/:id",
+  handleErrors(async function (req, res) {
+    const updatedId = Number(req.params.id);
     await prisma.note.update({
       where: {
         id: updatedId,
@@ -400,28 +409,30 @@ app.put(
         title: req.body.title,
         body: req.body.body,
       },
-    })
+    });
     // ...
-    sendResponse(req, res, null)
+    sendResponse(req, res, null);
   }),
-)
+);
 ```
+
 To delete a note, we send a `DELETE` request to `/notes/:id`. We then pass the note's id from the request parameters to the `delete` function.
 
 ```js
 app.delete(
-  '/notes/:id',
-  handleErrors(async function(req, res) {
+  "/notes/:id",
+  handleErrors(async function (req, res) {
     await prisma.note.delete({
       where: {
         id: Number(req.params.id),
       },
-    })
+    });
     // ...
-    sendResponse(req, res, null)
+    sendResponse(req, res, null);
   }),
-)
+);
 ```
+
 Note that all Prisma Client operations are promise-based, that's why we need to use async/await (or promises) when sending database queries using Prisma Client.
 
 ### A look at Server Components
@@ -438,10 +449,11 @@ So in the `db.server.js` file, we're creating a new instance of Prisma Client. H
 
 ```js
 //db.server.js
-import { PrismaClient } from 'react-prisma'
+import { PrismaClient } from "react-prisma";
 
-export const prisma = new PrismaClient()
+export const prisma = new PrismaClient();
 ```
+
 In the `NoteList.server.js` component, we're importing `prisma` and the `SidebarNote` component, which is a regular React component that receives a note object as a prop.
 
 We're filtering the list of notes by making a query to the database using Prisma.
@@ -450,8 +462,8 @@ We're retrieving all records inside the `notes` table, where the `title` of a no
 
 ```jsx
 // NoteList.server.js
-import { prisma } from './db.server'
-import SidebarNote from './SidebarNote'
+import { prisma } from "./db.server";
+import SidebarNote from "./SidebarNote";
 
 export default function NoteList({ searchText }) {
   const notes = prisma.note.findMany({
@@ -460,11 +472,11 @@ export default function NoteList({ searchText }) {
         contains: searchText ?? undefined,
       },
     },
-  })
+  });
 
   return notes.length > 0 ? (
     <ul className="notes-list">
-      {notes.map(note => (
+      {notes.map((note) => (
         <li key={note.id}>
           <SidebarNote note={note} />
         </li>
@@ -472,11 +484,14 @@ export default function NoteList({ searchText }) {
     </ul>
   ) : (
     <div className="notes-empty">
-      {searchText ? `Couldn't find any notes titled "${searchText}".` : 'No notes created yet!'}{' '}
+      {searchText
+        ? `Couldn't find any notes titled "${searchText}".`
+        : "No notes created yet!"}{" "}
     </div>
-  )
+  );
 }
 ```
+
 You'll notice that we don't need to `await` prisma here, that's because React uses a different mechanism that retries rendering when the data is cached. So it's still asynchronous, but you don't need to use async/await.
 
 ## Conclusion
@@ -490,4 +505,3 @@ We also end up having a faster user experience since less JavaScript is shipped 
 Finally, React's virtual DOM now spans the entire application instead of just the client.
 
 There are still many questions to be answered, and there are [drawbacks](https://github.com/josephsavona/rfcs/blob/server-components/text/0000-server-components.md#drawbacks), but it's exciting to see how the future of building Web apps using React might look like.
-

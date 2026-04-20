@@ -52,6 +52,7 @@ type Query {
   # ...
 }
 ```
+
 We can send the following query to ask for information about the Prisma organization:
 
 ```graphql
@@ -70,6 +71,7 @@ query {
   }
 }
 ```
+
 It works when we provide `"prismagraphql"` as the `login` to the `repositoryOwner` field.
 
 One issue here is that we can’t ask for the `email` in a straightforward way, because [`RepositoryOwner`](https://gist.github.com/gc-codesnippets/a54ab279f6ea181f13a01a232f1aa958#file-github-graphql-L6161) is only an interface that doesn’t have an `email` field. However, since we know that the concrete type of the Prisma organization is indeed [`Organization`](https://gist.github.com/gc-codesnippets/a54ab279f6ea181f13a01a232f1aa958#file-github-graphql-L3005), we can work around this issue by using an [_inline fragment_](http://graphql.org/learn/queries/#inline-fragments) inside the query:
@@ -84,6 +86,7 @@ query {
   }
 }
 ```
+
 Ok, so this will work but we’re already hitting some friction points that don’t allow for a straightforward use of the GitHub GraphQL API for the purpose of our app.
 
 Ideally, our API would just expose a root field that allowed to ask directly for the info we want without needing to provide an argument upon every query and letting us ask for fields on `Organization` directly:
@@ -93,6 +96,7 @@ type Query {
   prismagraphql: Organization!
 }
 ```
+
 ### Requirement 2: Retrieve list of Graphcool repositories by name
 
 How about the second requirement, retrieving a list of the Graphcool repositories by their names. Looking at the `Query` type again, this becomes a bit more complicated. The API doesn’t allow to retrieve a list of repositories directly— instead you can ask for single repositories by providing the `owner` and the repo’s `name` using the following root field:
@@ -113,6 +117,7 @@ type Query {
   # ...
 }
 ```
+
 Here’s a corresponding query:
 
 ```graphql
@@ -124,6 +129,7 @@ query {
   }
 }
 ```
+
 However, what we _actually_ want for our app (to avoid having to make multiple requests) is a root field looking as follows:
 
 ```graphql
@@ -131,6 +137,7 @@ type Query {
   prismagraphqlRepositories(names: [String!]): [Repository!]!
 }
 ```
+
 ### Requirement 3: Retrieve short description about the app itself
 
 Our API should be able to return a sentence describing our app, such as `"This app provides information about the Prisma GitHub organization"`.
@@ -142,6 +149,7 @@ type Query {
   info: String!
 }
 ```
+
 ### Defining the application schema
 
 We’re now aware of the required capabilities of our API and the ideal `Query` type we need to define for the schema:
@@ -153,6 +161,7 @@ type Query {
   info: String!
 }
 ```
+
 Obviously, this schema definition in itself is incomplete: it misses the definitions for the [`Organization`](https://gist.github.com/gc-codesnippets/a54ab279f6ea181f13a01a232f1aa958#file-github-graphql-L3005) and the [`Repository`](https://gist.github.com/gc-codesnippets/a54ab279f6ea181f13a01a232f1aa958#file-github-graphql-L5340) types. One straightforward way of solving this problem is to just manually copy and paste the definitions from GitHub’s schema definition.
 
 This approach quickly becomes cumbersome, since these type definitions themselves depend on other types in the schema (for example, the `Repository` type has a field [`codeOfconduct`](https://gist.github.com/gc-codesnippets/a54ab279f6ea181f13a01a232f1aa958#file-github-graphql-L5357) of type [`CodeOfConduct`](https://gist.github.com/gc-codesnippets/a54ab279f6ea181f13a01a232f1aa958#file-github-graphql-L420)) which you then need to manually copy over as well. There is no limit to how deep this dependency chain goes into the schema and you might even end up copying the full schema definition by hand.
@@ -183,6 +192,7 @@ type Query {
   graphcool: Organization!
 }
 ```
+
 In your JavaScript code, you can now use the `importSchema` function and it will resolve the dependencies for you, ensuring your schema definition is complete.
 
 ### Implementing the API
@@ -194,17 +204,18 @@ With the above schema definition, we’re only halfway there. What’s still mis
 Let’s think about how to implement these resolvers! A first version could look as follows:
 
 ```js
-const { importSchema } = require('graphql-import')
+const { importSchema } = require("graphql-import");
 
 // Import the application schema, including the
 // types it depends on from `schemas/github.graphql`
-const typeDefs = importSchema('schemas/app.graphql')
+const typeDefs = importSchema("schemas/app.graphql");
 
 // Implement resolver functions for our three custom
 // root fields on the `Query` type
 const resolvers = {
   Query: {
-    info: (parent, args) => 'This app provides information about the Prisma GitHub organization',
+    info: (parent, args) =>
+      "This app provides information about the Prisma GitHub organization",
     prismagraphqlRepositories: (parent, { names }, context, info) => {
       // ???
     },
@@ -212,8 +223,9 @@ const resolvers = {
       // ???
     },
   },
-}
+};
 ```
+
 The resolver for `info` is trivial, we can return a simple string describing our app. But how to deal with the ones for `prismagraphql` and `prismagraphqlRepositories` where we actually need to return information from the GitHub GraphQL API?
 
 The naive way of implementing this here would be to look at the `info` argument to retrieve the _selection set_ of the incoming query — then construct another GraphQL query from scratch that has the same selection set and send it to the GitHub API. This can even be facilitated by creating a [_remote schema_](https://www.prisma.io/blog/how-do-graphql-remote-schemas-work-7118237c89d7) for the GitHub GraphQL API but overall is still quite a verbose and cumbersome process.
@@ -247,20 +259,23 @@ We can achieve this using the following code:
 
 ```js
 // Read GitHub's schema definition from local file
-const gitHubTypeDefs = fs.readFileSync('./schemas/github.graphql', { encoding: 'utf8' })
+const gitHubTypeDefs = fs.readFileSync("./schemas/github.graphql", {
+  encoding: "utf8",
+});
 
 // Instantiate `GraphQLSchema` with schema definition
-const introspectionSchema = makeExecutableSchema({ typeDefs: gitHubTypeDefs })
+const introspectionSchema = makeExecutableSchema({ typeDefs: gitHubTypeDefs });
 
 // Create `HttpLink` based using person auth token
-const link = new GitHubLink(TOKEN)
+const link = new GitHubLink(TOKEN);
 
 // Create remote executable schema based on schema definition and link
 const schema = makeRemoteExecutableSchema({
   schema: introspectionSchema,
   link,
-})
+});
 ```
+
 [`GitHubLink`](https://github.com/nikolasburk/github-schema-delegation/blob/master/src/GitHubLink.js) is just a simple wrapper on top of `HttpLink`, providing a bit of convenience around creating the required Link component.
 
 Awesome, we now have an executable version of the GitHub GraphQL API that we can delegate to in our resolvers! 🎉 Let’s start by implementing the `prismagraphql` resolver first:
@@ -270,11 +285,20 @@ const resolvers = {
   Query: {
     // ... other resolvers
     prismagraphql: (parent, args, context, info) => {
-      return delegateToSchema(schema, {}, 'query', 'repositoryOwner', { login: 'prismagraphql' }, context, info)
+      return delegateToSchema(
+        schema,
+        {},
+        "query",
+        "repositoryOwner",
+        { login: "prismagraphql" },
+        context,
+        info,
+      );
     },
   },
-}
+};
 ```
+
 We’re passing the seven arguments expected by the `delegateToSchema` function. Overall there are no surprises: The `schema` is the remote executable schema for the GitHub GraphQL API. In there, we want to delegate execution of our own `prismagraphql` query, to the `repositoryOwner` query from GitHub’s API. Since that field expects a `login` argument, we provide it with `"prismagraphql"` as its value. Finally we’re simply passing on the `info` and `context` objects through the resolver chain.
 
 The resolver for `prismagraphqlRepositories` can be approached in a similar fashion, yet it’s a bit trickier. What makes it different from the previous implementation is that the types of our `prismagraphqlRepositories: [Repository!]!` and the original field `repository: Repository` from GitHub’s schema definition don’t match up as nicely as before. We now need to return an _array_ of repos, instead of a single one.
@@ -287,14 +311,23 @@ const resolvers = {
     // ... other resolvers
     prismagraphqlRepositories: (parent, { names }, context, info) => {
       return Promise.all(
-        names.map(name => {
-          return delegateToSchema(schema, {}, 'query', 'repository', { owner: 'prismagraphql', name }, context, info)
+        names.map((name) => {
+          return delegateToSchema(
+            schema,
+            {},
+            "query",
+            "repository",
+            { owner: "prismagraphql", name },
+            context,
+            info,
+          );
         }),
-      )
+      );
     },
   },
-}
+};
 ```
+
 This is it! We have now implemented all three resolvers for our custom GraphQL API. While the first one (for `info`) is trivial and simply returns a custom string, `prismagraphql` and `prismagraphqlRepositories` are using _schema delegation_ to forward execution of queries to the underlying GitHub API.
 
 > If you want to see a working example of this code, check out this [repository](https://github.com/nikolasburk/github-schema-delegation).
@@ -320,34 +353,48 @@ The core idea of a schema binding is to provide an easy way for making an existi
 With a dedicated binding for the GitHub API, we can now simplify the example from above. Rather than creating the remote executable schema by hand, this part is now done by the [`graphql-binding-github`](https://github.com/graphcool/graphql-binding-github) package. Here’s what the full implementation looks like where all the initial setup code we previously needed to delegate to the GitHub API is removed:
 
 ```js
-const { GitHub } = require('graphql-binding-github')
-const { GraphQLServer } = require('graphql-yoga')
-const { importSchema } = require('graphql-import')
+const { GitHub } = require("graphql-binding-github");
+const { GraphQLServer } = require("graphql-yoga");
+const { importSchema } = require("graphql-import");
 
-const TOKEN = '__YOUR_GITHUB__TOKEN__' // https://developer.github.com/v4/guides/forming-calls/#authenticating-with-graphql
-const github = new GitHub(TOKEN)
+const TOKEN = "__YOUR_GITHUB__TOKEN__"; // https://developer.github.com/v4/guides/forming-calls/#authenticating-with-graphql
+const github = new GitHub(TOKEN);
 
-const typeDefs = importSchema('schemas/app.graphql')
+const typeDefs = importSchema("schemas/app.graphql");
 
 const resolvers = {
   Query: {
-    info: (parent, args) => 'This app provides information about the Prisma GitHub organization',
+    info: (parent, args) =>
+      "This app provides information about the Prisma GitHub organization",
     prismagraphqlRepositories: (parent, { names }, context, info) => {
       return Promise.all(
-        names.map(name => {
-          return github.delegate('query', 'repository', { owner: 'prismagraphql', name }, context, info)
+        names.map((name) => {
+          return github.delegate(
+            "query",
+            "repository",
+            { owner: "prismagraphql", name },
+            context,
+            info,
+          );
         }),
-      )
+      );
     },
     prismagraphql: (parent, args, context, info) => {
-      return github.delegate('query', 'repositoryOwner', { login: 'prismagraphql' }, context, info)
+      return github.delegate(
+        "query",
+        "repositoryOwner",
+        { login: "prismagraphql" },
+        context,
+        info,
+      );
     },
   },
-}
+};
 
-const server = new GraphQLServer({ typeDefs, resolvers })
-server.start(() => console.log('Server running on http://localhost:4000'))
+const server = new GraphQLServer({ typeDefs, resolvers });
+server.start(() => console.log("Server running on http://localhost:4000"));
 ```
+
 Instead of creating the remote schema ourselves, we’re simply instantiating the [`GitHub`](https://github.com/graphcool/graphql-binding-github/blob/master/src/index.ts#L20) class imported from `graphql-binding-github` and use its `delegate` function. It will then use `delegateToSchema` under the hood to actually perform the request.
 
 > Schema bindings for public GraphQL APIs can be shared among developers. Next to the [`graphql-binding-github`](https://www.google.de/search?q=graphql-github-binding&oq=graphql-github-binding&aqs=chrome..69i57.4859j0j1&sourceid=chrome&ie=UTF-8), there also already is a binding available for the Yelp GraphQL API: [`graphql-binding-yelp`](https://github.com/DevanB/graphql-binding-yelp) by [Devan Beitel](https://twitter.com/devanbeitel)
@@ -367,4 +414,3 @@ This is our second article of the series “Understanding GraphQL schema stitchi
 In this article, we mainly discussed the concept of _schema delegation_ by providing a comprehensive example based on the [GitHub GraphQL API](https://developer.github.com/v4/) (the code for the example is available [here](https://github.com/nikolasburk/github-schema-delegation)). Schema delegation is a mechanism to forward (_delegate_) the execution of a resolver function to another resolver in a different (or even the same) GraphQL schema. Its key benefit is that we don’t have to construct an entirely new query from scratch but instead can reuse and forward (parts of) the incoming query.
 
 When using schema delegation as the foundation, it is possible to create dedicated NPM packages to easily share reusable _schema bindings_ for existing GraphQL APIs. To get a sense of what these look like, you can check out the [bindings for the GitHub API](https://github.com/graphcool/graphql-binding-github) as well as the [prisma-binding](https://github.com/prismagraphql/prisma-binding) which allows to easily generate bindings for any Graphcool service.
-

@@ -98,7 +98,11 @@ export function MultipleLabels() {
     </div>
     <div className="space-y-2">
       <Label htmlFor="email-multi-live">Email</Label>
-      <Input id="email-multi-live" type="email" placeholder="john@example.com" />
+      <Input
+        id="email-multi-live"
+        type="email"
+        placeholder="john@example.com"
+      />
     </div>
   </div>
 </div>
@@ -149,9 +153,7 @@ import { Label, Input } from "@prisma/eclipse";
 export function LabelWithHelper() {
   return (
     <div className="space-y-2 max-w-md">
-      <Label htmlFor="password">
-        Password
-      </Label>
+      <Label htmlFor="password">Password</Label>
       <Input id="password" type="password" placeholder="Enter password" />
       <span className="text-sm text-foreground-neutral-weak">
         Must be at least 8 characters
@@ -165,9 +167,7 @@ export function LabelWithHelper() {
 
 <div className="max-w-md my-4">
   <div className="space-y-2">
-    <Label htmlFor="password-helper">
-      Password
-    </Label>
+    <Label htmlFor="password-helper">Password</Label>
     <Input id="password-helper" type="password" placeholder="Enter password" />
     <span className="text-sm text-foreground-neutral-weak block">
       Must be at least 8 characters
@@ -253,19 +253,24 @@ export function FormWithLabels() {
         </Label>
         <Input id="form-name" placeholder="Enter your name" required />
       </div>
-      
+
       <div className="space-y-2">
         <Label htmlFor="form-email">
           Email <span className="text-foreground-error">*</span>
         </Label>
-        <Input id="form-email" type="email" placeholder="you@example.com" required />
+        <Input
+          id="form-email"
+          type="email"
+          placeholder="you@example.com"
+          required
+        />
       </div>
-      
+
       <div className="space-y-2">
         <Label htmlFor="form-phone">Phone</Label>
         <Input id="form-phone" type="tel" placeholder="(555) 555-5555" />
       </div>
-      
+
       <Button type="submit">Submit</Button>
     </form>
   );
@@ -282,19 +287,24 @@ export function FormWithLabels() {
       </Label>
       <Input id="form-name-live" placeholder="Enter your name" required />
     </div>
-    
+
     <div className="space-y-2">
       <Label htmlFor="form-email-live">
         Email <span className="text-foreground-error">*</span>
       </Label>
-      <Input id="form-email-live" type="email" placeholder="you@example.com" required />
+      <Input
+        id="form-email-live"
+        type="email"
+        placeholder="you@example.com"
+        required
+      />
     </div>
-    
+
     <div className="space-y-2">
       <Label htmlFor="form-phone-live">Phone</Label>
       <Input id="form-phone-live" type="tel" placeholder="(555) 555-5555" />
     </div>
-    
+
     <Button type="submit">Submit</Button>
   </form>
 </div>
@@ -324,7 +334,7 @@ export function FormWithLabels() {
 
 - Always use `htmlFor` attribute that matches the input's `id`
 - Keep label text clear, concise, and descriptive
-- Use required indicators (*) for required fields
+- Use required indicators (\*) for required fields
 - Place labels above inputs for better mobile UX (vertical layout)
 - Don't rely solely on placeholder text - always use labels
 - Use helper text below inputs for additional context
@@ -413,6 +423,12 @@ Label works seamlessly with:
 <div className="max-w-md my-4">
   <div className="space-y-2">
     <Label htmlFor="age">Age</Label>
-    <Input id="age" type="number" min="0" max="120" placeholder="Enter your age" />
+    <Input
+      id="age"
+      type="number"
+      min="0"
+      max="120"
+      placeholder="Enter your age"
+    />
   </div>
 </div>

@@ -1,9 +1,9 @@
 ---
 title: Deploy to AWS Lambda
-description: 'Learn how to deploy your Prisma ORM-backed applications to AWS Lambda with AWS SAM, Serverless Framework, or SST'
+description: "Learn how to deploy your Prisma ORM-backed applications to AWS Lambda with AWS SAM, Serverless Framework, or SST"
 url: /orm/prisma-client/deployment/serverless/deploy-to-aws-lambda
 metaTitle: Deploy your application using Prisma ORM to AWS Lambda
-metaDescription: 'Learn how to deploy your Prisma ORM-backed applications to AWS Lambda with AWS SAM, Serverless Framework, or SST'
+metaDescription: "Learn how to deploy your Prisma ORM-backed applications to AWS Lambda with AWS SAM, Serverless Framework, or SST"
 ---
 
 :::info[Quick summary]
@@ -81,7 +81,6 @@ Packaging deployment-example-sls for stage dev (us-east-1)
 .
 ```
 
-
 ## Deploying with SST
 
 ### Working with environment variables
@@ -98,9 +97,7 @@ const globalForPrisma = global as unknown as { prisma: PrismaClient };
 
 const adapter = new PrismaPg({ connectionString });
 
-export const prisma =
-  globalForPrisma.prisma ||
-  new PrismaClient({ adapter });
+export const prisma = globalForPrisma.prisma || new PrismaClient({ adapter });
 
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
 

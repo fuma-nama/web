@@ -57,7 +57,10 @@ With options:
 
 ```ts
 await prisma.$transaction(
-  [prisma.resource.deleteMany({ where: { name: "name" } }), prisma.resource.createMany({ data })],
+  [
+    prisma.resource.deleteMany({ where: { name: "name" } }),
+    prisma.resource.createMany({ data }),
+  ],
   { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
 );
 ```

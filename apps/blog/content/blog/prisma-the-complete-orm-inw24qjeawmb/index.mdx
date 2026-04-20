@@ -37,7 +37,6 @@ Prisma is a next-generation and [open-source](https://www.github.com/prisma/pris
 
 ![](/prisma-the-complete-orm-inw24qjeawmb/imgs/CTGhQZ9.png)
 
-
 These tools can be adopted _together_ or _individually_ in any Node.js or TypeScript project. Prisma currently supports PostgreSQL, MySQL, SQLite, SQL Server (Preview). A [connector for MongoDB](https://www.notion.so/prismaio/Support-MongoDB-9f115ebf4a754069a7d7eaae94dc4651) is in the works, sign up for the Early Access program [here](https://prisma-data.typeform.com/to/FriDuIeM).
 
 ### Databases are hard
@@ -49,12 +48,6 @@ At Prisma, we found that the Node.js ecosytem – while becoming increasingly po
 > Application developers should care about **data** – not SQL
 
 As tools become more specialized, application developers should be able to focus on implementing _value-adding_ features for their organizations instead of spending time plumbing together the layers of their application by writing _glue code_.
-
-
-
-
-
-
 
 ### Prisma – The Complete ORM for Node.js & TypeScript
 
@@ -83,10 +76,12 @@ model User {
   posts Post[]
 }
 ```
+
 Each of these models maps to a table in the underlying database and serves as foundation for the generated data access API provided by Prisma Client. Prisma's [VS Code extension](https://marketplace.visualstudio.com/items?itemName=Prisma.prisma) provides syntax highlighting, autocompletion, quick fixes and lots of other features to make data modeling a magical and delightful experience ✨
 
 <br />
-[Explore the Prisma schema](https://www.prisma.io/docs/concepts/components/prisma-schema)
+[Explore the Prisma
+schema](https://www.prisma.io/docs/concepts/components/prisma-schema)
 
 #### Database migrations with Prisma Migrate
 
@@ -103,20 +98,23 @@ CREATE TABLE "Post" (
     "authorId" INTEGER,
 
     PRIMARY KEY ("id")
+
 );
 
 CREATE TABLE "User" (
-    "id" SERIAL NOT NULL,
-    "email" TEXT NOT NULL,
-    "name" TEXT,
+"id" SERIAL NOT NULL,
+"email" TEXT NOT NULL,
+"name" TEXT,
 
     PRIMARY KEY ("id")
+
 );
 
 CREATE UNIQUE INDEX "User.email_unique" ON "User"("email");
 
 ALTER TABLE "Post" ADD FOREIGN KEY ("authorId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-```
+
+````
 ```sql
 CREATE TABLE `Post` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
@@ -138,7 +136,8 @@ UNIQUE INDEX `User.email_unique`(`email`),
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 ALTER TABLE `Post` ADD FOREIGN KEY (`authorId`) REFERENCES `User`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
-```
+````
+
 ```sql
 CREATE TABLE "Post" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -157,6 +156,7 @@ CREATE TABLE "User" (
 
 CREATE UNIQUE INDEX "User.email_unique" ON "User"("email");
 ```
+
 ```sql
 CREATE TABLE [dbo].[Post] (
     [id] INT NOT NULL IDENTITY(1,1),
@@ -177,13 +177,15 @@ CREATE TABLE [dbo].[User] (
 
 ALTER TABLE [dbo].[Post] ADD CONSTRAINT [FK__Post__authorId] FOREIGN KEY ([authorId]) REFERENCES [dbo].[User]([id]) ON DELETE SET NULL ON UPDATE CASCADE;
 ```
+
   </Accordion>
 </Accordions>
 
 While the SQL is generated automatically based on the Prisma schema, you can easily customize it to your specific needs. With this approach, Prisma Migrate [strikes a great balance between _productivity_ and _control_](https://www.prisma.io/blog/prisma-migrate-ga-b5eno5g08d0b#predictable-schema-migrations-with-full-control).
 
 <br />
-[Learn about Prisma Migrate](https://www.prisma.io/docs/concepts/components/prisma-migrate)
+[Learn about Prisma
+Migrate](https://www.prisma.io/docs/concepts/components/prisma-migrate)
 
 #### Intuitive and type-safe database access with Prisma Client
 
@@ -195,51 +197,56 @@ Also, as a bonus for TypeScript developers: All results of Prisma Client queries
 
 Click through the tabs in this code block to explore some Prisma Client queries (or explore the full [API reference](https://www.prisma.io/docs/reference/api-reference/prisma-client-reference)):
 
-
-
 ```ts
 // Find all posts
-const posts = await prisma.post.findMany()
+const posts = await prisma.post.findMany();
 ```
+
 ```ts
 // Find all posts and include their authors in the result
 const postsWithAuthors = await prisma.post.findMany({
   include: { author: true },
-})
+});
 ```
+
 ```ts
 // Create a new user with a new post
 const userWithPosts: User = await prisma.user.create({
   data: {
-    email: 'ada@prisma.io',
-    name: 'Ada Lovelace',
+    email: "ada@prisma.io",
+    name: "Ada Lovelace",
     posts: {
-      create: [{ title: 'Hello World' }],
+      create: [{ title: "Hello World" }],
     },
   },
-})
+});
 ```
+
 ```ts
 // Find all users with `@prisma` emails
 const users = await prisma.user.findMany({
   where: {
-    email: { contains: '@prisma' },
+    email: { contains: "@prisma" },
   },
-})
+});
 ```
+
 ```ts
-const postsByUser = await prisma.user.findUnique({ where: { email: 'ada@prisma.io' } }).posts()
+const postsByUser = await prisma.user
+  .findUnique({ where: { email: "ada@prisma.io" } })
+  .posts();
 ```
+
 ```ts
 const posts = await prisma.post.findMany({
   take: 5,
   cursor: { id: 2 },
-})
+});
 ```
 
-
 <br />
-[Learn about Prisma Client](https://www.prisma.io/docs/concepts/components/prisma-client)
+[Learn about Prisma
+Client](https://www.prisma.io/docs/concepts/components/prisma-client)
 
 #### A modern admin interface with Prisma Studio
 
@@ -250,17 +257,11 @@ Prisma also comes with a modern admin interface for your database – think phpM
 <br />
 [Learn about Prisma Studio](https://www.prisma.io/studio)
 
-
-
 ---
 
 ## Prisma fits any stack
 
 Prisma is agnostic to the application that you build and will complement your stack nicely, no matter what your favorite technologies are. You can find out more about how Prisma works with your favorite framework or library here:
-
-
-
-
 
 <br />
 <br />
@@ -366,16 +367,25 @@ Prisma has built-in workflows for all stages of the development lifecycle, from 
 
 <Accordions type="single">
   <Accordion title="Expand to learn about the application lifecycle with Prisma">
-| Development Stage | Link                                                                                                                                | Resource      |
-| :---------------- | :---------------------------------------------------------------------------------------------------------------------------------- | ------------- |
-| Plan              | [Data Modeling](https://www.prisma.io/dataguide/datamodeling)                                                                       | Data Guide    |
-| Plan              | [Prisma schema](https://www.prisma.io/docs/concepts/components/prisma-schema)                                                       | Documentation |
-| Code              | [Prisma Client API](https://www.prisma.io/docs/concepts/components/prisma-client)                                                   | Documentation |
-| Test              | [Testing best practices with Prisma](https://www.prisma.io/docs/guides/testing)                                                     | Documentation |
-| Deploy            | [Expand and contract pattern for database migrations](https://www.prisma.io/dataguide/types/relational/expand-and-contract-pattern) | Data Guide    |
-| Deploy            | [Deployment guides for Prisma-based applications](https://www.prisma.io/docs/guides/deployment/deployment-guides)                   | Documentation |
-| Monitor           | [Best practices for monitoring apps in production](https://www.prisma.io/blog/monitoring-best-practices-monitor5g08d0b)             | Blog          |
-| Operate           | [Database troubleshooting](https://www.prisma.io/dataguide/managing-databases/database-troubleshooting)                             | Data Guide    |
+    | Development Stage | Link | Resource | | :---------------- |
+    :----------------------------------------------------------------------------------------------------------------------------------
+    | ------------- | | Plan | [Data
+    Modeling](https://www.prisma.io/dataguide/datamodeling) | Data Guide | |
+    Plan | [Prisma
+    schema](https://www.prisma.io/docs/concepts/components/prisma-schema) |
+    Documentation | | Code | [Prisma Client
+    API](https://www.prisma.io/docs/concepts/components/prisma-client) |
+    Documentation | | Test | [Testing best practices with
+    Prisma](https://www.prisma.io/docs/guides/testing) | Documentation | |
+    Deploy | [Expand and contract pattern for database
+    migrations](https://www.prisma.io/dataguide/types/relational/expand-and-contract-pattern)
+    | Data Guide | | Deploy | [Deployment guides for Prisma-based
+    applications](https://www.prisma.io/docs/guides/deployment/deployment-guides)
+    | Documentation | | Monitor | [Best practices for monitoring apps in
+    production](https://www.prisma.io/blog/monitoring-best-practices-monitor5g08d0b)
+    | Blog | | Operate | [Database
+    troubleshooting](https://www.prisma.io/dataguide/managing-databases/database-troubleshooting)
+    | Data Guide |
   </Accordion>
 </Accordions>
 
@@ -403,13 +413,9 @@ This idea is largely inspired by companies like Facebook, Twitter and Airbnb tha
 
 Prisma's goal is to _democratize_ the idea of this custom data access layer and make it available to development teams and organizations of any size.
 
-
-
 ![](/prisma-the-complete-orm-inw24qjeawmb/imgs/O1lwo0v.png)
 
 ![](/prisma-the-complete-orm-inw24qjeawmb/imgs/Hb9VOWN.png)
-
-
 
 ---
 
@@ -432,6 +438,11 @@ There are various ways to get started with Prisma:
 
 [Community](https://www.prisma.io/community) has been incredibly important for us since we've started. From hosting Meetups and conferences to helping out users on [Slack](https://slack.prisma.io) and [GitHub Discussions](https://github.com/prisma/prisma/discussions) we are always trying to be closely in touch with the developer community. Come join us!
 
-
-<TweetEmbedComp tweets={['1349886964363882499', '1369304411177123843', '1352663140203442176', '1382806675875332103']}/>
-
+<TweetEmbedComp
+  tweets={[
+    "1349886964363882499",
+    "1369304411177123843",
+    "1352663140203442176",
+    "1382806675875332103",
+  ]}
+/>

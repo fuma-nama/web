@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import { createContext, use, type FC, type ReactNode } from "react";
 import type * as PageTree from "fumadocs-core/page-tree";
 import { SidebarItem } from "@/components/layout/notebook/sidebar";
@@ -15,7 +15,9 @@ export function BadgeProvider({
   badges: Record<string, BadgeType>;
   children: ReactNode;
 }) {
-  return <BadgeContext.Provider value={badges}>{children}</BadgeContext.Provider>;
+  return (
+    <BadgeContext.Provider value={badges}>{children}</BadgeContext.Provider>
+  );
 }
 
 const BADGE_LABEL: Record<BadgeType, string> = {

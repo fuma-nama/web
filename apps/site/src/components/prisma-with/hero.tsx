@@ -48,17 +48,11 @@ export function Hero({ data }: { data: HeroData }) {
             <Button asChild variant="ppg" size="3xl">
               <a href={data.btns[0].url}>
                 <span>{data.btns[0].label}</span>
-                {data.btns[0].icon && (
-                  <i className={data.btns[0].icon} />
-                )}
+                {data.btns[0].icon && <i className={data.btns[0].icon} />}
               </a>
             </Button>
             {secondaryButton && (
-              <Button
-                asChild
-                variant="default-strong"
-                size="3xl"
-              >
+              <Button asChild variant="default-strong" size="3xl">
                 <a href={secondaryButton.url}>
                   <span>{secondaryButton.label}</span>
                   {secondaryButton.icon && (

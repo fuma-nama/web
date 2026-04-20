@@ -11,7 +11,7 @@ heroImagePath: "/introducing-instant-app-deployments-in-partnership-with-vercel/
 heroImageAlt: "Promotional graphic with the text “Instant app deployments for AI” and “Vercel + Prisma.” The design shows UI elements like a chat box with “Build and deploy anything…,” a send button, generating text, and icons representing databases and deployment."
 ---
 
-AI coding platforms let anyone create software from a prompt, but turning generated code into a deployed app is still a hard problem. Announcing **Instant App Deployment**, a new API built on  [Prisma Postgres](https://prisma.io/postgres) and [Vercel](https://vercel.com), that solves this problem.
+AI coding platforms let anyone create software from a prompt, but turning generated code into a deployed app is still a hard problem. Announcing **Instant App Deployment**, a new API built on [Prisma Postgres](https://prisma.io/postgres) and [Vercel](https://vercel.com), that solves this problem.
 
 ## The infrastructure problem nobody wants to readily solve
 
@@ -24,14 +24,13 @@ The result: users have working code but no clear path to a deployed application.
 ## How instant app deployment works
 
 Instant app hosting provides a complete deployment solution through a single API call. When users click "Deploy" in a platform, here's what happens:
+
 1. **The platform calls the deployment API** with the application code and configuration.
 2. **A Prisma Postgres database is provisioned** with connection pooling and caching configured.
 3. **Vercel deploys the application** across their global infrastructure, with the database automatically connected.
-4. **Users receive a production URL** where their application is live. All in just a single action. Users can also *claim* the deployed application in their own Vercel account.
+4. **Users receive a production URL** where their application is live. All in just a single action. Users can also _claim_ the deployed application in their own Vercel account.
 
 The entire process takes minutes, not hours. No configuration files, no DevOps knowledge required. It's an elegant setup from both the platform and the users perspective that removes friction on both ends.
-
-
 
 <Steps variant="vertical">
 
@@ -58,17 +57,14 @@ const API = "https://api.vercel.com";
 const PRISMA_PRODUCT_ID = "prisma-postgres";
 
 const api = (path: string, body: any, method = "POST") =>
-  fetch(
-    `${API}${path}${path.includes("?") ? "&" : "?"}teamId=${TEAM_ID}`,
-    {
-      method,
-      headers: {
-        Authorization: `Bearer ${VERCEL_TOKEN}`,
-        "Content-Type": "application/json"
-      },
-      body: body ? JSON.stringify(body) : undefined,
-    }
-  ).then(r => r.json());
+  fetch(`${API}${path}${path.includes("?") ? "&" : "?"}teamId=${TEAM_ID}`, {
+    method,
+    headers: {
+      Authorization: `Bearer ${VERCEL_TOKEN}`,
+      "Content-Type": "application/json",
+    },
+    body: body ? JSON.stringify(body) : undefined,
+  }).then((r) => r.json());
 ```
 
 </Step>
@@ -127,7 +123,7 @@ console.log(`DB: ${db.store.id}`);
 ```ts
 await api(
   `/integrations/installations/${INTEGRATION_CONFIG_ID}/products/${PRISMA_PRODUCT_ID}/resources/${db.store.id}/connections`,
-  { projectId: project.id }
+  { projectId: project.id },
 );
 console.log(`DB connected`);
 ```
@@ -162,7 +158,6 @@ console.log(`Claim: https://vercel.com/claim-deployment?code=${transfer.code}`);
 
 </Steps>
 
-
 To explore all the APIs for claiming a Vercel deployment, [check out our guide](https://pris.ly/claim-vercel-guide?utm_source=prisma_claim_deployment_blog) or visit [the official Vercel docs](https://vercel.com/docs/deployments/claim-deployments?utm_source=prisma_claim_deployment_blog). You can also [try out the live demo](https://pris.ly/vercel-app-demo-live?utm_source=prisma_claim_deployment_blog) we’ve prepared.
 
 ## Built for real production workloads
@@ -181,7 +176,7 @@ This solves a critical problem for platforms: you can offer instant deployments 
 
 ## Perfect for modern development workflows
 
-Whether you're building an AI assistant that generates full applications, a no-code tool for app development, or a teaching platform where students deploy projects, Instant App Deployment  handles the infrastructure complexity.
+Whether you're building an AI assistant that generates full applications, a no-code tool for app development, or a teaching platform where students deploy projects, Instant App Deployment handles the infrastructure complexity.
 
 Consider these use cases:
 

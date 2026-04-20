@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import {
   type ComponentProps,
@@ -9,9 +9,9 @@ import {
   useMemo,
   useRef,
   useState,
-} from 'react';
-import * as Primitive from '@radix-ui/react-tabs';
-import { mergeRefs } from '../../lib/merge-refs';
+} from "react";
+import * as Primitive from "@radix-ui/react-tabs";
+import { mergeRefs } from "../../lib/merge-refs";
 
 type ChangeListener = (v: string) => void;
 const listeners = new Map<string, Set<ChangeListener>>();
@@ -39,7 +39,7 @@ const TabsContext = createContext<{
 
 function useTabContext() {
   const ctx = use(TabsContext);
-  if (!ctx) throw new Error('You must wrap your component in <Tabs>');
+  if (!ctx) throw new Error("You must wrap your component in <Tabs>");
   return ctx;
 }
 
@@ -64,9 +64,13 @@ export function Tabs({
     onValueChangeRef.current = _onValueChange;
   }, [_onValueChange]);
   const [internalValue, setInternalValue] = useState(defaultValue);
-  const stableOnValueChange = useCallback((v: string) => onValueChangeRef.current?.(v), []);
+  const stableOnValueChange = useCallback(
+    (v: string) => onValueChangeRef.current?.(v),
+    [],
+  );
   const value = _value !== undefined ? _value : internalValue;
-  const setValue = _value !== undefined ? stableOnValueChange : setInternalValue;
+  const setValue =
+    _value !== undefined ? stableOnValueChange : setInternalValue;
 
   useLayoutEffect(() => {
     if (!groupId) return;
@@ -104,7 +108,7 @@ export function Tabs({
           const id = valueToIdMap.get(v);
 
           if (id) {
-            window.history.replaceState(null, '', `#${id}`);
+            window.history.replaceState(null, "", `#${id}`);
           }
         }
 
@@ -129,7 +133,10 @@ export function Tabs({
   );
 }
 
-export function TabsContent({ value, ...props }: ComponentProps<typeof Primitive.TabsContent>) {
+export function TabsContent({
+  value,
+  ...props
+}: ComponentProps<typeof Primitive.TabsContent>) {
   const { valueToIdMap } = useTabContext();
 
   if (props.id) {

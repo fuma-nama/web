@@ -58,12 +58,14 @@ generator client {
   previewFeatures = ["clientExtensions"]
 }
 ```
+
 Then, you can call the `$extends` method on a Prisma Client instance. This will return a new, "extended" client instance without modifying the original instance. You can chain calls to `$extends` to use multiple extensions, and create separate instances with different extensions:
 
 ```typescript
 const prisma = new PrismaClient();
 const extendedPrisma = prisma.$extends(myExtensionA).$extends(myExtensionB);
 ```
+
 ### The components of an extension
 
 There are four different types of components that can be included in an extension:
@@ -78,12 +80,21 @@ A single extension can include one or more components, as well as an optional na
 ```typescript
 const prisma = new PrismaClient().$extends({
   name: "myExtension",
-  model: { /* ... */ },
-  client: { /* ... */ },
-  query: { /* ... */ },
-  result: { /* ... */ },
+  model: {
+    /* ... */
+  },
+  client: {
+    /* ... */
+  },
+  query: {
+    /* ... */
+  },
+  result: {
+    /* ... */
+  },
 });
 ```
+
 To see the full syntax for defining each type of extension component, please refer to [the docs](https://www.prisma.io/docs/concepts/components/prisma-client/client-extensions).
 
 ### Sharing an extension
@@ -102,6 +113,7 @@ export default Prisma.defineExtension({
   },
 });
 ```
+
 When publishing shared extensions to npm, we recommend using the `prisma-extension-<package-name>` convention. This will make it easier for users to find and install your extension in their apps.
 
 For example, if you publish an extension with the package name `prisma-extension-find-or-create`, users can install it like:
@@ -109,6 +121,7 @@ For example, if you publish an extension with the package name `prisma-extension
 ```sh
 npm install prisma-extension-find-or-create
 ```
+
 And then use the extension in their app:
 
 ```typescript
@@ -116,8 +129,11 @@ import { PrismaClient } from "@prisma/client";
 import findOrCreate from "prisma-extension-find-or-create";
 
 const prisma = new PrismaClient().$extends(findOrCreate);
-const user = await prisma.user.findOrCreate({ /* ... */ });
+const user = await prisma.user.findOrCreate({
+  /* ... */
+});
 ```
+
 Read [our documentation on sharing extensions](https://www.prisma.io/docs/concepts/components/prisma-client/client-extensions/shared-extensions) for more details.
 
 ## Sample use cases
@@ -140,7 +156,7 @@ Computed fields are type-safe and may return anything from simple values to comp
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient()
-  .$extends({
+.$extends({
     result: {
       user: {
         fullName: {
@@ -153,25 +169,27 @@ const prisma = new PrismaClient()
     },
   })
   .$extends({
-    result: {
-      user: {
-        displayName: {
-          needs: { fullName: true, email: true },
-          compute(user) {
-            return `${user.fullName} <${user.email}>`;
-          },
-        },
-      },
-    },
-  });
-```
+result: {
+user: {
+displayName: {
+needs: { fullName: true, email: true },
+compute(user) {
+return `${user.fullName} <${user.email}>`;
+},
+},
+},
+},
+});
+
+````
 ```typescript
 const users = await prisma.user.findMany({ take: 5 });
 
 for (const user of users) {
   console.info(`- ${user.displayName}`);
 }
-```
+````
+
 ```prisma
 model User {
   id        String @id @default(cuid())
@@ -180,6 +198,7 @@ model User {
   email     String
 }
 ```
+
   </Accordion>
 </Accordions>
 
@@ -199,28 +218,30 @@ import { de } from "date-fns/locale";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient().$extends({
-  result: {
-    post: {
-      createdAt: {
-        needs: { createdAt: true },
-        compute(post) {
-          return formatDistanceToNow(post.createdAt, {
-            addSuffix: true,
-            locale: de,
-          });
-        },
-      },
-    },
-  },
+result: {
+post: {
+createdAt: {
+needs: { createdAt: true },
+compute(post) {
+return formatDistanceToNow(post.createdAt, {
+addSuffix: true,
+locale: de,
 });
-```
+},
+},
+},
+},
+});
+
+````
 ```typescript
 const posts = await prisma.post.findMany({ take: 5 });
 
 for (const post of posts) {
   console.info(`- ${post.title} (${post.createdAt})`);
 }
-```
+````
+
 ```prisma
 model Post {
   id        String   @id @default(cuid())
@@ -228,6 +249,7 @@ model Post {
   createdAt DateTime @default(now())
 }
 ```
+
   </Accordion>
 </Accordions>
 
@@ -243,23 +265,25 @@ This example is a special case for the previous [Transformed fields](#example-tr
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient().$extends({
-  result: {
-    user: {
-      password: {
-        needs: {},
-        compute() {
-          return undefined;
-        },
-      },
-    },
-  },
+result: {
+user: {
+password: {
+needs: {},
+compute() {
+return undefined;
+},
+},
+},
+},
 });
-```
+
+````
 ```typescript
 const user = await prisma.user.findFirstOrThrow();
 console.info("Email: ", user.email);       // "user@example.com"
 console.info("Password: ", user.password); // undefined
-```
+````
+
 ```prisma
 model User {
   id       String @id @default(cuid())
@@ -267,6 +291,7 @@ model User {
   password String
 }
 ```
+
   </Accordion>
 </Accordions>
 
@@ -284,14 +309,14 @@ This technique can be used to customize Prisma result objects with behavior, ana
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient().$extends({
-  result: {
-    user: {
-      save: {
-        needs: { id: true, email: true },
-        compute({ id, email }) {
-          return () => prisma.user.update({ where: { id }, data: { email } });
-        },
-      },
+result: {
+user: {
+save: {
+needs: { id: true, email: true },
+compute({ id, email }) {
+return () => prisma.user.update({ where: { id }, data: { email } });
+},
+},
 
       delete: {
         needs: { id: true },
@@ -300,9 +325,11 @@ const prisma = new PrismaClient().$extends({
         },
       },
     },
-  },
+
+},
 });
-```
+
+````
 ```typescript
 const user = await prisma.user.create({
   data: { email: "test@example.com" },
@@ -310,13 +337,15 @@ const user = await prisma.user.create({
 user.email = "updated@example.com";
 await user.save();
 await user.delete();
-```
+````
+
 ```prisma
 model User {
   id    String @id @default(cuid())
   email String
 }
 ```
+
   </Accordion>
 </Accordions>
 
@@ -335,21 +364,21 @@ import bcrypt from "bcryptjs";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient().$extends({
-  model: {
-    user: {
-      async signUp(email: string, password: string) {
-        const hash = await bcrypt.hash(password, 10);
-        return prisma.user.create({
-          data: {
-            email,
-            password: {
-              create: {
-                hash,
-              },
-            },
-          },
-        });
-      },
+model: {
+user: {
+async signUp(email: string, password: string) {
+const hash = await bcrypt.hash(password, 10);
+return prisma.user.create({
+data: {
+email,
+password: {
+create: {
+hash,
+},
+},
+},
+});
+},
 
       async findManyByDomain(domain: string) {
         return prisma.user.findMany({
@@ -357,15 +386,18 @@ const prisma = new PrismaClient().$extends({
         });
       },
     },
-  },
+
+},
 });
-```
+
+````
 ```typescript
 await prisma.user.signUp("user1@example1.com", "p4ssword");
 await prisma.user.signUp("user2@example2.com", "s3cret");
 
 const users = await prisma.user.findManyByDomain("example2.com");
-```
+````
+
 ```prisma
 model User {
   id       String    @id @default(cuid())
@@ -379,6 +411,7 @@ model Password {
   userId String @unique
 }
 ```
+
   </Accordion>
 </Accordions>
 
@@ -401,16 +434,17 @@ const prisma = new PrismaClient().$extends({
       byAuthor: (authorId: string) => ({ authorId }),
       byAuthorDomain: (domain: string) => ({
         author: { email: { endsWith: `@${domain}` } },
-      }),
-      hasComments: () => ({ comments: { some: {} } }),
-      hasRecentComments: (date: Date) => ({
-        comments: { some: { createdAt: { gte: date } } },
-      }),
-      titleContains: (search: string) => ({ title: { contains: search } }),
-    } satisfies Record<string, (...args: any) => Prisma.PostWhereInput>,
-  },
+}),
+hasComments: () => ({ comments: { some: {} } }),
+hasRecentComments: (date: Date) => ({
+comments: { some: { createdAt: { gte: date } } },
+}),
+titleContains: (search: string) => ({ title: { contains: search } }),
+} satisfies Record<string, (...args: any) => Prisma.PostWhereInput>,
+},
 });
-```
+
+````
 ```typescript
 const posts = await prisma.post.findMany({
   where: {
@@ -422,7 +456,8 @@ const posts = await prisma.post.findMany({
     ],
   },
 });
-```
+````
+
 ```prisma
 model User {
   id        String @id @default(cuid())
@@ -452,6 +487,7 @@ model Comment {
   post      Post @relation(fields: [postId], references: [id], onDelete: Cascade)
 }
 ```
+
   </Accordion>
 </Accordions>
 
@@ -467,38 +503,38 @@ This example creates a client that only allows read operations like `findMany` a
 import { Prisma, PrismaClient } from "@prisma/client";
 
 const WRITE_METHODS = [
-  "create",
-  "update",
-  "upsert",
-  "delete",
-  "createMany",
-  "updateMany",
-  "deleteMany",
+"create",
+"update",
+"upsert",
+"delete",
+"createMany",
+"updateMany",
+"deleteMany",
 ] as const;
 
 const ReadonlyClient = Prisma.defineExtension({
-  name: "ReadonlyClient",
-  model: {
-    $allModels: Object.fromEntries(
+name: "ReadonlyClient",
+model: {
+$allModels: Object.fromEntries(
       WRITE_METHODS.map((method) => [
         method,
         function (args: never) {
           throw new Error(
-            `Calling the \`${method}\` method on a readonly client is not allowed`
-          );
+            `Calling the \`${method}\` method on a readonly client is not allowed`          );
         },
       ])
     ) as {
       [K in typeof WRITE_METHODS[number]]: (
-        args: `Calling the \`${K}\` method on a readonly client is not allowed`
-      ) => never;
-    },
-  },
+        args:`Calling the \`${K}\` method on a readonly client is not allowed`
+) => never;
+},
+},
 });
 
 const prisma = new PrismaClient();
 const readonlyPrisma = prisma.$extends(ReadonlyClient);
-```
+
+````
 ```typescript
 const posts = await readonlyPrisma.post.findMany({ take: 5 });
 console.log(posts);
@@ -510,7 +546,8 @@ console.log(posts);
 await readonlyPrisma.post.create({
   data: { title: "New post", published: false },
 });
-```
+````
+
 ```prisma
 model Post {
   id        String  @id @default(cuid())
@@ -518,9 +555,9 @@ model Post {
   published Boolean
 }
 ```
+
   </Accordion>
 </Accordions>
-
 
 ### Example: Input transformation
 
@@ -555,12 +592,15 @@ const prisma = new PrismaClient().$extends({
         });
       },
     },
-  },
+
+},
 });
-```
+
+````
 ```typescript
 const publishedPostsCount = await prisma.post.count();
-```
+````
+
 ```prisma
 model Post {
   id        String  @id @default(cuid())
@@ -568,6 +608,7 @@ model Post {
   published Boolean
 }
 ```
+
   </Accordion>
 </Accordions>
 
@@ -586,29 +627,30 @@ import { Prisma, PrismaClient } from "@prisma/client";
 import { ProductCreateInput } from "./schemas";
 
 const prisma = new PrismaClient().$extends({
-  query: {
-    product: {
-      create({ args, query }) {
-        args.data = ProductCreateInput.parse(args.data);
-        return query(args);
-      },
-      update({ args, query }) {
-        args.data = ProductCreateInput.partial().parse(args.data);
-        return query(args);
-      },
-      updateMany({ args, query }) {
-        args.data = ProductCreateInput.partial().parse(args.data);
-        return query(args);
-      },
-      upsert({ args, query }) {
-        args.create = ProductCreateInput.parse(args.create);
-        args.update = ProductCreateInput.partial().parse(args.update);
-        return query(args);
-      },
-    },
-  },
+query: {
+product: {
+create({ args, query }) {
+args.data = ProductCreateInput.parse(args.data);
+return query(args);
+},
+update({ args, query }) {
+args.data = ProductCreateInput.partial().parse(args.data);
+return query(args);
+},
+updateMany({ args, query }) {
+args.data = ProductCreateInput.partial().parse(args.data);
+return query(args);
+},
+upsert({ args, query }) {
+args.create = ProductCreateInput.parse(args.create);
+args.update = ProductCreateInput.partial().parse(args.update);
+return query(args);
+},
+},
+},
 });
-```
+
+````
 ```typescript
 import { z } from "zod";
 import { Prisma } from "@prisma/client";
@@ -624,7 +666,8 @@ export const ProductCreateInput = z.object({
     .instanceof(Prisma.Decimal)
     .refine((price) => price.gte("0.01") && price.lt("1000000.00")),
 }) satisfies z.Schema<Prisma.ProductUncheckedCreateInput>;
-```
+````
+
 ```typescript
 // Valid product
 const product = await prisma.product.create({
@@ -650,6 +693,7 @@ try {
   console.log(err?.cause?.issues);
 }
 ```
+
 ```prisma
 model Product {
   id          String   @id @default(cuid())
@@ -668,6 +712,7 @@ model Review {
   productId String
 }
 ```
+
   </Accordion>
 </Accordions>
 
@@ -689,53 +734,54 @@ import { Prisma, PrismaClient } from "@prisma/client";
 import { Profile } from "./schemas";
 
 const prisma = new PrismaClient().$extends({
-  result: {
-    user: {
-      profile: {
-        needs: { profile: true },
-        compute({ profile }) {
-          return Profile.parse(profile);
-        },
-      },
-    },
-  },
+result: {
+user: {
+profile: {
+needs: { profile: true },
+compute({ profile }) {
+return Profile.parse(profile);
+},
+},
+},
+},
 
-  query: {
-    user: {
-      create({ args, query }) {
-        args.data.profile = Profile.parse(args.data.profile);
-        return query(args);
-      },
-      createMany({ args, query }) {
-        const users = Array.isArray(args.data) ? args.data : [args.data];
-        for (const user of users) {
-          user.profile = Profile.parse(user.profile);
-        }
-        return query(args);
-      },
-      update({ args, query }) {
-        if (args.data.profile !== undefined) {
-          args.data.profile = Profile.parse(args.data.profile);
-        }
-        return query(args);
-      },
-      updateMany({ args, query }) {
-        if (args.data.profile !== undefined) {
-          args.data.profile = Profile.parse(args.data.profile);
-        }
-        return query(args);
-      },
-      upsert({ args, query }) {
-        args.create.profile = Profile.parse(args.create.profile);
-        if (args.update.profile !== undefined) {
-          args.update.profile = Profile.parse(args.update.profile);
-        }
-        return query(args);
-      },
-    },
-  },
+query: {
+user: {
+create({ args, query }) {
+args.data.profile = Profile.parse(args.data.profile);
+return query(args);
+},
+createMany({ args, query }) {
+const users = Array.isArray(args.data) ? args.data : [args.data];
+for (const user of users) {
+user.profile = Profile.parse(user.profile);
+}
+return query(args);
+},
+update({ args, query }) {
+if (args.data.profile !== undefined) {
+args.data.profile = Profile.parse(args.data.profile);
+}
+return query(args);
+},
+updateMany({ args, query }) {
+if (args.data.profile !== undefined) {
+args.data.profile = Profile.parse(args.data.profile);
+}
+return query(args);
+},
+upsert({ args, query }) {
+args.create.profile = Profile.parse(args.create.profile);
+if (args.update.profile !== undefined) {
+args.update.profile = Profile.parse(args.update.profile);
+}
+return query(args);
+},
+},
+},
 });
-```
+
+````
 ```typescript
 import { z } from "zod";
 
@@ -788,7 +834,8 @@ export const Profile = z
     socialLinks: SocialLinks,
   })
   .partial();
-```
+````
+
 ```typescript
 import * as runtime from "@prisma/client/runtime/index";
 import { UserPayload } from "@prisma/client";
@@ -796,13 +843,14 @@ import { UserPayload } from "@prisma/client";
 const users = await prisma.user.findMany({ take: 10 });
 users.forEach(renderUser);
 
-type ExtArgs = UserPayload<typeof prisma["$extends"]["extArgs"]>;
+type ExtArgs = UserPayload<(typeof prisma)["$extends"]["extArgs"]>;
 type User = runtime.Types.GetResult<ExtArgs, {}, "findUniqueOrThrow">;
 
 function renderUser(user: User) {
   // ...
 }
 ```
+
 ```prisma
 model User {
   id      String @id @default(cuid())
@@ -810,6 +858,7 @@ model User {
   profile Json
 }
 ```
+
   </Accordion>
 </Accordions>
 
@@ -831,25 +880,26 @@ import { performance } from "perf_hooks";
 import * as util from "util";
 
 const prisma = new PrismaClient().$extends({
-  query: {
-    $allModels: {
-      async $allOperations({ operation, model, args, query }) {
-        const start = performance.now();
-        const result = await query(args);
-        const end = performance.now();
-        const time = end - start;
-        console.log(
-          util.inspect(
-            { model, operation, args, time },
-            { showHidden: false, depth: null, colors: true }
-          )
-        );
-        return result;
-      },
-    },
-  },
+query: {
+$allModels: {
+async $allOperations({ operation, model, args, query }) {
+const start = performance.now();
+const result = await query(args);
+const end = performance.now();
+const time = end - start;
+console.log(
+util.inspect(
+{ model, operation, args, time },
+{ showHidden: false, depth: null, colors: true }
+)
+);
+return result;
+},
+},
+},
 });
-```
+
+````
 ```typescript
 await prisma.user.findMany({
   orderBy: [{ lastName: "asc" }, { firstName: "asc" }],
@@ -857,7 +907,8 @@ await prisma.user.findMany({
 });
 
 await prisma.user.groupBy({ by: ["lastName"], _count: true });
-```
+````
+
 ```prisma
 model User {
   id        String @id @default(cuid())
@@ -865,6 +916,7 @@ model User {
   lastName  String
 }
 ```
+
   </Accordion>
 </Accordions>
 
@@ -881,31 +933,32 @@ import { backOff, IBackOffOptions } from "exponential-backoff";
 import { Prisma, PrismaClient } from "@prisma/client";
 
 function RetryTransactions(options?: Partial<IBackOffOptions>) {
-  return Prisma.defineExtension((prisma) =>
-    prisma.$extends({
+return Prisma.defineExtension((prisma) =>
+prisma.$extends({
       client: {
         $transaction(...args: any) {
           return backOff(() => prisma.$transaction.apply(prisma, args), {
-            retry: (e) => {
-              // Retry the transaction only if the error was due to a write conflict or deadlock
-              // See: https://www.prisma.io/docs/reference/api-reference/error-reference#p2034
-              return e.code === "P2034";
-            },
-            ...options,
-          });
-        },
-      } as { $transaction: typeof prisma["$transaction"] },
-    })
-  );
+retry: (e) => {
+// Retry the transaction only if the error was due to a write conflict or deadlock
+// See: https://www.prisma.io/docs/reference/api-reference/error-reference#p2034
+return e.code === "P2034";
+},
+...options,
+});
+},
+} as { $transaction: typeof prisma["$transaction"] },
+})
+);
 }
 
 const prisma = new PrismaClient().$extends(
-  RetryTransactions({
-    jitter: "full",
-    numOfAttempts: 5,
-  })
+RetryTransactions({
+jitter: "full",
+numOfAttempts: 5,
+})
 );
-```
+
+````
 ```typescript
 // If one or more transactions fail due to deadlock / write conflict,
 // the entire transaction will be retried up to 5 times.
@@ -920,7 +973,8 @@ await Promise.allSettled([
     // ...
   }),
 ]);
-```
+````
+
 ```prisma
 model User {
   id        String @id @default(cuid())
@@ -928,6 +982,7 @@ model User {
   lastName  String
 }
 ```
+
   </Accordion>
 </Accordions>
 
@@ -945,19 +1000,19 @@ This gives you the full power of [interactive transactions](https://www.prisma.i
 import { Prisma, PrismaClient } from "@prisma/client";
 
 type FlatTransactionClient = Prisma.TransactionClient & {
-  $commit: () => Promise<void>;
-  $rollback: () => Promise<void>;
+$commit: () => Promise<void>;
+$rollback: () => Promise<void>;
 };
 
 const ROLLBACK = { [Symbol.for("prisma.client.extension.rollback")]: true };
 
 const prisma = new PrismaClient().$extends({
-  client: {
-    async $begin() {
-      const prisma = Prisma.getExtensionContext(this);
-      let setTxClient: (txClient: Prisma.TransactionClient) => void;
-      let commit: () => void;
-      let rollback: () => void;
+client: {
+async $begin() {
+const prisma = Prisma.getExtensionContext(this);
+let setTxClient: (txClient: Prisma.TransactionClient) => void;
+let commit: () => void;
+let rollback: () => void;
 
       // a promise for getting the tx inner client
       const txClient = new Promise<Prisma.TransactionClient>((res) => {
@@ -1006,15 +1061,18 @@ const prisma = new PrismaClient().$extends({
 
       throw new Error("Transactions are not supported by this client");
     },
-  },
+
+},
 });
-```
+
+````
 ```typescript
 const tx = await prisma.$begin();
 const user = await tx.user.findFirstOrThrow();
 await tx.user.update(/* ... */);
 await tx.$commit(); // Or: await tx.$rollback();
-```
+````
+
 ```prisma
 model User {
   id        String @id @default(cuid())
@@ -1023,6 +1081,7 @@ model User {
   email     String
 }
 ```
+
   </Accordion>
 </Accordions>
 
@@ -1040,23 +1099,24 @@ A detailed explanation of this solution can be found in [the example's `README` 
 import { Prisma, PrismaClient } from "@prisma/client";
 
 function forUser(userId: number) {
-  return Prisma.defineExtension((prisma) =>
-    prisma.$extends({
+return Prisma.defineExtension((prisma) =>
+prisma.$extends({
       query: {
         $allModels: {
           async $allOperations({ args, query }) {
             const [, result] = await prisma.$transaction([
-              prisma.$executeRaw`SELECT set_config('app.current_user_id', ${userId.toString()}, TRUE)`,
-              query(args),
-            ]);
-            return result;
-          },
-        },
-      },
-    })
-  );
+prisma.$executeRaw`SELECT set_config('app.current_user_id', ${userId.toString()}, TRUE)`,
+query(args),
+]);
+return result;
+},
+},
+},
+})
+);
 }
-```
+
+````
 ```typescript
 const prisma = new PrismaClient();
 const user = await prisma.user.findFirstOrThrow();
@@ -1068,7 +1128,8 @@ await userPrisma.product.update({
   where: { id: product.id },
   data: { name: "Updated Name" },
 });
-```
+````
+
 ```prisma
 model User {
   id    Int    @id @default(autoincrement())
@@ -1114,6 +1175,7 @@ model ProductVersion {
   @@schema("audit")
 }
 ```
+
 ```sql
 -- Product audit trigger function
 CREATE OR REPLACE FUNCTION "audit"."Product_audit"() RETURNS TRIGGER AS $$
@@ -1136,6 +1198,7 @@ CREATE TRIGGER audit
 AFTER INSERT OR UPDATE OR DELETE ON "public"."Product"
     FOR EACH ROW EXECUTE FUNCTION "audit"."Product_audit"();
 ```
+
   </Accordion>
 </Accordions>
 
@@ -1153,41 +1216,42 @@ A detailed explanation of this solution can be found in [the example's `README` 
 import { Prisma, PrismaClient } from "@prisma/client";
 
 function bypassRLS() {
-  return Prisma.defineExtension((prisma) =>
-    prisma.$extends({
+return Prisma.defineExtension((prisma) =>
+prisma.$extends({
       query: {
         $allModels: {
           async $allOperations({ args, query }) {
             const [, result] = await prisma.$transaction([
-              prisma.$executeRaw`SELECT set_config('app.bypass_rls', 'on', TRUE)`,
-              query(args),
-            ]);
-            return result;
-          },
-        },
-      },
-    })
-  );
+prisma.$executeRaw`SELECT set_config('app.bypass_rls', 'on', TRUE)`,
+query(args),
+]);
+return result;
+},
+},
+},
+})
+);
 }
 
 function forCompany(companyId: string) {
-  return Prisma.defineExtension((prisma) =>
-    prisma.$extends({
+return Prisma.defineExtension((prisma) =>
+prisma.$extends({
       query: {
         $allModels: {
           async $allOperations({ args, query }) {
             const [, result] = await prisma.$transaction([
-              prisma.$executeRaw`SELECT set_config('app.current_company_id', ${companyId}, TRUE)`,
-              query(args),
-            ]);
-            return result;
-          },
-        },
-      },
-    })
-  );
+prisma.$executeRaw`SELECT set_config('app.current_company_id', ${companyId}, TRUE)`,
+query(args),
+]);
+return result;
+},
+},
+},
+})
+);
 }
-```
+
+````
 ```typescript
 const prisma = new PrismaClient();
 const user = await prisma.$extends(bypassRLS()).user.findFirstOrThrow();
@@ -1205,7 +1269,8 @@ const projects = await companyPrisma.project.findMany({
 });
 
 invariant(projects.every((project) => project.companyId === user.companyId));
-```
+````
+
 ```prisma
 model Company {
   id   String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
@@ -1257,6 +1322,7 @@ model Task {
   assignee User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
 }
 ```
+
 ```sql
 -- Enable Row Level Security
 ALTER TABLE "Company" ENABLE ROW LEVEL SECURITY;
@@ -1282,6 +1348,7 @@ CREATE POLICY bypass_rls_policy ON "User" USING (current_setting('app.bypass_rls
 CREATE POLICY bypass_rls_policy ON "Project" USING (current_setting('app.bypass_rls', TRUE)::text = 'on');
 CREATE POLICY bypass_rls_policy ON "Task" USING (current_setting('app.bypass_rls', TRUE)::text = 'on');
 ```
+
   </Accordion>
 </Accordions>
 

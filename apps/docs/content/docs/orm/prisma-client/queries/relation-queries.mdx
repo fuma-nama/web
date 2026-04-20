@@ -1,9 +1,9 @@
 ---
 title: Relation queries
-description: 'Prisma Client provides convenient queries for working with relations, such as a fluent API, nested writes (transactions), nested reads and relation filters'
+description: "Prisma Client provides convenient queries for working with relations, such as a fluent API, nested writes (transactions), nested reads and relation filters"
 url: /orm/prisma-client/queries/relation-queries
 metaTitle: Relation queries (Concepts)
-metaDescription: 'Prisma Client provides convenient queries for working with relations, such as a fluent API, nested writes (transactions), nested reads and relation filters.'
+metaDescription: "Prisma Client provides convenient queries for working with relations, such as a fluent API, nested writes (transactions), nested reads and relation filters."
 ---
 
 A key feature of Prisma Client is the ability to query [relations](/orm/prisma-schema/data-model/relations) between two or more models. Relation queries include:
@@ -90,30 +90,30 @@ const user = await prisma.user.findFirst({
 
 ```json
 {
-  id: 19,
-  name: null,
-  email: 'emma@prisma.io',
-  profileViews: 0,
-  role: 'USER',
-  coinflips: [],
-  posts: [
+  "id": 19,
+  "name": null,
+  "email": "emma@prisma.io",
+  "profileViews": 0,
+  "role": "USER",
+  "coinflips": [],
+  "posts": [
     {
-      id: 20,
-      title: 'My first post',
-      published: true,
-      authorId: 19,
-      comments: null,
-      views: 0,
-      likes: 0
+      "id": 20,
+      "title": "My first post",
+      "published": true,
+      "authorId": 19,
+      "comments": null,
+      "views": 0,
+      "likes": 0
     },
     {
-      id: 21,
-      title: 'How to make cookies',
-      published: true,
-      authorId: 19,
-      comments: null,
-      views: 0,
-      likes: 0
+      "id": 21,
+      "title": "How to make cookies",
+      "published": true,
+      "authorId": 19,
+      "comments": null,
+      "views": 0,
+      "likes": 0
     }
   ]
 }
@@ -133,21 +133,21 @@ const post = await prisma.post.findFirst({
 
 ```json
 {
-  id: 17,
-  title: 'How to make cookies',
-  published: true,
-  authorId: 16,
-  comments: null,
-  views: 0,
-  likes: 0,
-  author: {
-    id: 16,
-    name: null,
-    email: 'orla@prisma.io',
-    profileViews: 0,
-    role: 'USER',
-    coinflips: [],
-  },
+  "id": 17,
+  "title": "How to make cookies",
+  "published": true,
+  "authorId": 16,
+  "comments": null,
+  "views": 0,
+  "likes": 0,
+  "author": {
+    "id": 16,
+    "name": null,
+    "email": "orla@prisma.io",
+    "profileViews": 0,
+    "role": "USER",
+    "coinflips": []
+  }
 }
 ```
 
@@ -169,42 +169,42 @@ const user = await prisma.user.findFirst({
 
 ```json
 {
-    "id": 40,
-    "name": "Yvette",
-    "email": "yvette@prisma.io",
-    "profileViews": 0,
-    "role": "USER",
-    "coinflips": [],
-    "testing": [],
-    "city": null,
-    "country": "Sweden",
-    "posts": [
+  "id": 40,
+  "name": "Yvette",
+  "email": "yvette@prisma.io",
+  "profileViews": 0,
+  "role": "USER",
+  "coinflips": [],
+  "testing": [],
+  "city": null,
+  "country": "Sweden",
+  "posts": [
+    {
+      "id": 66,
+      "title": "How to make an omelette",
+      "published": true,
+      "authorId": 40,
+      "comments": null,
+      "views": 0,
+      "likes": 0,
+      "categories": [
         {
-            "id": 66,
-            "title": "How to make an omelette",
-            "published": true,
-            "authorId": 40,
-            "comments": null,
-            "views": 0,
-            "likes": 0,
-            "categories": [
-                {
-                    "id": 3,
-                    "name": "Easy cooking"
-                }
-            ]
-        },
-        {
-            "id": 67,
-            "title": "How to eat an omelette",
-            "published": true,
-            "authorId": 40,
-            "comments": null,
-            "views": 0,
-            "likes": 0,
-            "categories": []
+          "id": 3,
+          "name": "Easy cooking"
         }
-    ]
+      ]
+    },
+    {
+      "id": 67,
+      "title": "How to eat an omelette",
+      "published": true,
+      "authorId": 40,
+      "comments": null,
+      "views": 0,
+      "likes": 0,
+      "categories": []
+    }
+  ]
 }
 ```
 
@@ -227,8 +227,8 @@ const user = await prisma.user.findFirst({
 
 ```json
 {
-  name: "Elsa",
-  posts: [ { title: 'My first post' }, { title: 'How to make cookies' } ]
+  "name": "Elsa",
+  "posts": [{ "title": "My first post" }, { "title": "How to make cookies" }]
 }
 ```
 
@@ -404,7 +404,10 @@ const result = await prisma.user.create({
     name: "Elsa Prisma",
     posts: {
       // [!code highlight]
-      create: [{ title: "How to make an omelette" }, { title: "How to eat an omelette" }], // [!code highlight]
+      create: [
+        { title: "How to make an omelette" },
+        { title: "How to eat an omelette" },
+      ], // [!code highlight]
     }, // [!code highlight]
   },
   include: {
@@ -415,30 +418,30 @@ const result = await prisma.user.create({
 
 ```json
 {
-  id: 29,
-  name: 'Elsa',
-  email: 'elsa@prisma.io',
-  profileViews: 0,
-  role: 'USER',
-  coinflips: [],
-  posts: [
+  "id": 29,
+  "name": "Elsa",
+  "email": "elsa@prisma.io",
+  "profileViews": 0,
+  "role": "USER",
+  "coinflips": [],
+  "posts": [
     {
-      id: 22,
-      title: 'How to make an omelette',
-      published: true,
-      authorId: 29,
-      comments: null,
-      views: 0,
-      likes: 0
+      "id": 22,
+      "title": "How to make an omelette",
+      "published": true,
+      "authorId": 29,
+      "comments": null,
+      "views": 0,
+      "likes": 0
     },
     {
-      id: 23,
-      title: 'How to eat an omelette',
-      published: true,
-      authorId: 29,
-      comments: null,
-      views: 0,
-      likes: 0
+      "id": 23,
+      "title": "How to eat an omelette",
+      "published": true,
+      "authorId": 29,
+      "comments": null,
+      "views": 0,
+      "likes": 0
     }
   ]
 }
@@ -455,10 +458,10 @@ In most cases, a nested `create` will be preferable unless the [`skipDuplicates`
 
 | Feature                               | `create` | `createMany` | Notes                                                                                                                                                                                           |
 | :------------------------------------ | :------- | :----------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Supports nesting additional relations | ✔        | ✘ \*         | For example, you can create a user, several posts, and several comments per post in one query.<br />\* You can manually set a foreign key in a has-one relation - for example: `{ authorId: 9}` |
-| Supports 1-n relations                | ✔        | ✔            | For example, you can create a user and multiple posts (one user has many posts)                                                                                                                 |
-| Supports m-n relations                | ✔        | ✘            | For example, you can create a post and several categories (one post can have many categories, and one category can have many posts)                                                             |
-| Supports skipping duplicate records   | ✘        | ✔            | Use `skipDuplicates` query option.                                                                                                                                                              |
+| Supports nesting additional relations | ✔       | ✘ \*         | For example, you can create a user, several posts, and several comments per post in one query.<br />\* You can manually set a foreign key in a has-one relation - for example: `{ authorId: 9}` |
+| Supports 1-n relations                | ✔       | ✔           | For example, you can create a user and multiple posts (one user has many posts)                                                                                                                 |
+| Supports m-n relations                | ✔       | ✘            | For example, you can create a post and several categories (one post can have many categories, and one category can have many posts)                                                             |
+| Supports skipping duplicate records   | ✘        | ✔           | Use `skipDuplicates` query option.                                                                                                                                                              |
 
 #### Using nested `create`
 
@@ -507,42 +510,42 @@ const result = await prisma.user.create({
 
 ```json
 {
-    "id": 40,
-    "name": "Yvette",
-    "email": "yvette@prisma.io",
-    "profileViews": 0,
-    "role": "USER",
-    "coinflips": [],
-    "testing": [],
-    "city": null,
-    "country": "Sweden",
-    "posts": [
+  "id": 40,
+  "name": "Yvette",
+  "email": "yvette@prisma.io",
+  "profileViews": 0,
+  "role": "USER",
+  "coinflips": [],
+  "testing": [],
+  "city": null,
+  "country": "Sweden",
+  "posts": [
+    {
+      "id": 66,
+      "title": "How to make an omelette",
+      "published": true,
+      "authorId": 40,
+      "comments": null,
+      "views": 0,
+      "likes": 0,
+      "categories": [
         {
-            "id": 66,
-            "title": "How to make an omelette",
-            "published": true,
-            "authorId": 40,
-            "comments": null,
-            "views": 0,
-            "likes": 0,
-            "categories": [
-                {
-                    "id": 3,
-                    "name": "Easy cooking"
-                }
-            ]
-        },
-        {
-            "id": 67,
-            "title": "How to eat an omelette",
-            "published": true,
-            "authorId": 40,
-            "comments": null,
-            "views": 0,
-            "likes": 0,
-            "categories": []
+          "id": 3,
+          "name": "Easy cooking"
         }
-    ]
+      ]
+    },
+    {
+      "id": 67,
+      "title": "How to eat an omelette",
+      "published": true,
+      "authorId": 40,
+      "comments": null,
+      "views": 0,
+      "likes": 0,
+      "categories": []
+    }
+  ]
 }
 ```
 
@@ -579,35 +582,35 @@ const result = await prisma.user.create({
 
 ```json
 {
-    "id": 43,
-    "name": null,
-    "email": "saanvi@prisma.io",
-    "profileViews": 0,
-    "role": "USER",
-    "coinflips": [],
-    "testing": [],
-    "city": null,
-    "country": "India",
-    "posts": [
-        {
-            "id": 70,
-            "title": "My first post",
-            "published": true,
-            "authorId": 43,
-            "comments": null,
-            "views": 0,
-            "likes": 0
-        },
-        {
-            "id": 71,
-            "title": "My second post",
-            "published": true,
-            "authorId": 43,
-            "comments": null,
-            "views": 0,
-            "likes": 0
-        }
-    ]
+  "id": 43,
+  "name": null,
+  "email": "saanvi@prisma.io",
+  "profileViews": 0,
+  "role": "USER",
+  "coinflips": [],
+  "testing": [],
+  "city": null,
+  "country": "India",
+  "posts": [
+    {
+      "id": 70,
+      "title": "My first post",
+      "published": true,
+      "authorId": 43,
+      "comments": null,
+      "views": 0,
+      "likes": 0
+    },
+    {
+      "id": 71,
+      "title": "My second post",
+      "published": true,
+      "authorId": 43,
+      "comments": null,
+      "views": 0,
+      "likes": 0
+    }
+  ]
 }
 ```
 
@@ -631,7 +634,8 @@ const posts = await prisma.post.createManyAndReturn({
     },
     {
       title: "Linux or macOS — what's better?",
-      categoryId: categories.find((category) => category.name === "Technology")!.id,
+      categoryId: categories.find((category) => category.name === "Technology")!
+        .id,
     },
     {
       title: "Who will win the next soccer championship?",
@@ -691,21 +695,21 @@ const result = await prisma.user.create({
 
 ```json
 {
-  id: 27,
-  name: null,
-  email: 'vlad@prisma.io',
-  profileViews: 0,
-  role: 'USER',
-  coinflips: [],
-  posts: [
+  "id": 27,
+  "name": null,
+  "email": "vlad@prisma.io",
+  "profileViews": 0,
+  "role": "USER",
+  "coinflips": [],
+  "posts": [
     {
-      id: 10,
-      title: 'An existing post',
-      published: true,
-      authorId: 27,
-      comments: {},
-      views: 0,
-      likes: 0
+      "id": 10,
+      "title": "An existing post",
+      "published": true,
+      "authorId": 27,
+      "comments": {},
+      "views": 0,
+      "likes": 0
     }
   ]
 }
@@ -774,19 +778,19 @@ const result = await prisma.post.create({
 
 ```json
 {
-  id: 26,
-  title: 'How to make croissants',
-  published: true,
-  authorId: 43,
-  views: 0,
-  likes: 0,
-  author: {
-    id: 43,
-    name: 'Viola',
-    email: 'viola@prisma.io',
-    profileViews: 0,
-    role: 'USER',
-    coinflips: []
+  "id": 26,
+  "title": "How to make croissants",
+  "published": true,
+  "authorId": 43,
+  "views": 0,
+  "likes": 0,
+  "author": {
+    "id": 43,
+    "name": "Viola",
+    "email": "viola@prisma.io",
+    "profileViews": 0,
+    "role": "USER",
+    "coinflips": []
   }
 }
 ```
@@ -814,13 +818,13 @@ const result = await prisma.user.update({
 
 ```json
 {
-  id: 16,
-  name: null,
-  email: 'orla@prisma.io',
-  profileViews: 0,
-  role: 'USER',
-  coinflips: [],
-  posts: []
+  "id": 16,
+  "name": null,
+  "email": "orla@prisma.io",
+  "profileViews": 0,
+  "role": "USER",
+  "coinflips": [],
+  "posts": []
 }
 ```
 
@@ -845,14 +849,14 @@ const result = await prisma.post.update({
 
 ```json
 {
-  id: 23,
-  title: 'How to eat an omelette',
-  published: true,
-  authorId: null,
-  comments: null,
-  views: 0,
-  likes: 0,
-  author: null
+  "id": 23,
+  "title": "How to eat an omelette",
+  "published": true,
+  "authorId": null,
+  "comments": null,
+  "views": 0,
+  "likes": 0,
+  "author": null
 }
 ```
 
@@ -879,13 +883,13 @@ const result = await prisma.user.update({
 
 ```json
 {
-  id: 16,
-  name: null,
-  email: 'orla@prisma.io',
-  profileViews: 0,
-  role: 'USER',
-  coinflips: [],
-  posts: []
+  "id": 16,
+  "name": null,
+  "email": "orla@prisma.io",
+  "profileViews": 0,
+  "role": "USER",
+  "coinflips": [],
+  "posts": []
 }
 ```
 
@@ -1225,7 +1229,6 @@ const postsByUser = await prisma.post.findMany({
 ```
 
 The main difference between the queries is that the fluent API call is translated into two separate database queries while the other one only generates a single query (see this [GitHub issue](https://github.com/prisma/prisma/issues/1984))
-
 
 This request returns all categories by a specific post:
 

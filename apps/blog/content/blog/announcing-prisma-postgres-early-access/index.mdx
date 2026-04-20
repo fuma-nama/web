@@ -25,13 +25,14 @@ Thanks to the first-class integration of Prisma products, **Prisma Postgres come
 Prisma Postgres is now available in Early Access 🎉
 
 <br />
-[Try Prisma Postgres](https://www.prisma.io/docs/getting-started/quickstart-prismaPostgres)
+[Try Prisma
+Postgres](https://www.prisma.io/docs/getting-started/quickstart-prismaPostgres)
 
 <Youtube videoId="JDV8CKULPIk" />
 
 ## A new era for "serverless" PostgreSQL
 
-Our new architecture takes a fundamentally different approach to provisioning databases compared to existing cloud providers and other serverless database products. In this section, we'll take a look at the trend of serverless databases and explain how Prisma Postgres fits into this category. Jump ahead to the [next section](##building-a-managed-postgresql-service-on-millisecond-cloud-infrastructure) if you care more about our architecture and technical details.  
+Our new architecture takes a fundamentally different approach to provisioning databases compared to existing cloud providers and other serverless database products. In this section, we'll take a look at the trend of serverless databases and explain how Prisma Postgres fits into this category. Jump ahead to the [next section](##building-a-managed-postgresql-service-on-millisecond-cloud-infrastructure) if you care more about our architecture and technical details.
 
 ### What is a serverless database?
 
@@ -45,7 +46,7 @@ The promise of auto-scaling often means that a database can scale down to zero, 
 
 ![](/announcing-prisma-postgres-early-access/imgs/36a57a880128c93e52193c963fc0c9889ea9df5a-1282x504.png)
 
-*Source: [Vercel Docs | Vercel Postgres Limits](https://vercel.com/docs/storage/vercel-postgres/limits#vercel-postgres-cold-starts)*
+_Source: [Vercel Docs | Vercel Postgres Limits](https://vercel.com/docs/storage/vercel-postgres/limits#vercel-postgres-cold-starts)_
 
 Some database providers even require manual action from developers to wake a suspended database. While serverless databases have their advantages, cold starts are a major drawback!
 
@@ -67,13 +68,22 @@ What if you could get all the benefits of "serverless" without the drawbacks, li
 
 Today, we are thrilled to share the first step in this direction: We've teamed up with [Unikraft](https://unikraft.cloud/) to provision PostgreSQL instances using [Unikraft Cloud](https://unikraft.cloud/docs/), a groundbreaking millisecond cloud platform that eliminates cold starts, enables millisecond scale-to-zero and auto-scale, and allows for thousands of instances to run on a single bare metal machine.
 
-<Quotes speakerImgLink="/blog/announcing-prisma-postgres-early-access/imgs/022ffab1873aba7d53ea1f10ab731171741b2a0e-200x200.png"
+<Quotes
+  speakerImgLink="/blog/announcing-prisma-postgres-early-access/imgs/022ffab1873aba7d53ea1f10ab731171741b2a0e-200x200.png"
   speakerName="Death to Cold Starts"
   companyLink="https://unikraft.cloud/blog/death-to-cold-starts/"
   companyName="Unikraft Blog"
 >
-  <div style={{marginBottom:'20px',fontSize:'20px',color:'#2d3748',lineHeight:'32px'}}>
-      Cold starts are a real pain. Unikraft Cloud provides cold starts in the order of a few milliseconds with hardware-level isolation.
+  <div
+    style={{
+      marginBottom: "20px",
+      fontSize: "20px",
+      color: "#2d3748",
+      lineHeight: "32px",
+    }}
+  >
+    Cold starts are a real pain. Unikraft Cloud provides cold starts in the
+    order of a few milliseconds with hardware-level isolation.
   </div>
 </Quotes>
 
@@ -92,7 +102,7 @@ Prisma Postgres is neither. Instead, it uses Unikraft Cloud and is based on a ne
 
 ### An overview of the Unikraft Cloud stack
 
-Let's take a closer look at Unikraft Cloud's millisecond cloud infrastructure: 
+Let's take a closer look at Unikraft Cloud's millisecond cloud infrastructure:
 
 ![](/announcing-prisma-postgres-early-access/imgs/8cf5361a40fdc079b0db4b848483b59f2e99d50b-1740x232.png)
 
@@ -104,7 +114,7 @@ To provide high efficiency and millisecond semantics, the Unikraft team had to o
 
 ### No cloud provider: Prisma Postgres runs on bare metal
 
-We are building Prisma Postgres from first principles, striking the perfect balance between performance, cost, safety, and ease of use. 
+We are building Prisma Postgres from first principles, striking the perfect balance between performance, cost, safety, and ease of use.
 
 To have _full_ control and avoid the limitations, constraints, and pricing models of major cloud providers, we chose to lease our own physical machines in data centers around the globe.
 
@@ -116,11 +126,17 @@ Prisma Postgres is based on the observation that _modern hardware is incredibly 
   companyLink="https://basecamp.com/cloud-exit"
   companyName="Basecamp Blog"
 >
-  <div style={{marginBottom:'20px',fontSize:'20px',color:'#2d3748',lineHeight:'32px'}}>
-      Leaving the cloud will save us $7 million over five years.
+  <div
+    style={{
+      marginBottom: "20px",
+      fontSize: "20px",
+      color: "#2d3748",
+      lineHeight: "32px",
+    }}
+  >
+    Leaving the cloud will save us $7 million over five years.
   </div>
 </Quotes>
-
 
 In short: With Prisma Postgres, your database will run on powerful servers backed by high CPU core counts, large amounts of RAM, and super-fast NVME storage.
 
@@ -129,7 +145,7 @@ In short: With Prisma Postgres, your database will run on powerful servers backe
 One of the core components of our architecture is the deployment of PostgreSQL inside _unikernels running as lightweight microVMs_.
 
 > Unikernels are famous for providing excellent performance in terms of boot times, throughput and memory consumption, to name a few metrics.
-> 
+>
 > [Unikraft: Fast, Specialized Unikernels the Easy Way](https://dl.acm.org/doi/abs/10.1145/3447786.3456248) (Research paper, EuroSys 21)
 
 Over the past few months, we've collaborated closely with the Unikraft team and have been deeply impressed by their work of increasing DX and making unikernels more approachable for developers. Our conclusion is clear: **Unikernels are finally ready to be adopted for high-performance production workloads.**
@@ -144,7 +160,7 @@ Through an extra compilation step, Unikraft turns a traditional fullstack applic
 
 ![](/announcing-prisma-postgres-early-access/imgs/d7a8980c3be1841af6c46fee0683b93179052358-1114x592.png)
 
-*Source: [Unikraft Cloud - How it works](https://unikraft.cloud/how-it-works)*
+_Source: [Unikraft Cloud - How it works](https://unikraft.cloud/how-it-works)_
 
 ### The Prisma Postgres unikernel binary is 5 times smaller than the original PostgreSQL image
 
@@ -152,13 +168,11 @@ We've created the Prisma Postgres unikernel binary image in close collaboration 
 
 ![](/announcing-prisma-postgres-early-access/imgs/c5430a6cd6e3437dc71d217e3bee9d3b4755788c-2510x1290.png)
 
-
 The Unikraft team managed to trim the original PostgreSQL image down from 280MB to 61MB. Here's a breakdown of the components of the **Prisma Postgres image**:
-
 
 ![](/announcing-prisma-postgres-early-access/imgs/c356d781c1816fad242fac28520fbe6199a9deae-2888x1858.png)
 
-We reduced the image to about 20% of its original size by identifying and removing unnecessary packages from our deployment. The original PostgreSQL image includes a lot of generic functionality that isn't needed for Prisma Postgres. 
+We reduced the image to about 20% of its original size by identifying and removing unnecessary packages from our deployment. The original PostgreSQL image includes a lot of generic functionality that isn't needed for Prisma Postgres.
 
 In our architecture, these specialized binary images are deployed as unikernels on our bare metal machines; and, as unikernels are ultimately virtual machines, each PostgreSQL instance provides strong, hardware-level isolation.
 
@@ -179,8 +193,7 @@ Everything in between the two is overhead. A unikernel adds the thinnest possibl
 
 ![](/announcing-prisma-postgres-early-access/imgs/178696d9a18e3803db87032122e7ade619554c4e-2888x1236.png)
 
-*Source: [Unikraft Docs - Virtualization](https://unikraft.org/docs/concepts/virtualization)*
-
+_Source: [Unikraft Docs - Virtualization](https://unikraft.org/docs/concepts/virtualization)_
 
 Here's a summary of the advantages unikernels have in comparison to standard VMs and containers:
 
@@ -198,7 +211,6 @@ Our architecture enables us to avoid cold starts while providing all the benefit
 - **Pre-built unikernel images**: Our PostgreSQL unikernels are pre-built and optimized for rapid deployment. Each unikernel binary includes PostgreSQL and a minimal OS, avoiding lengthy and resource-heavy initialization processes.
 - **MicroVMs boot in milliseconds**: Unlike traditional virtual machines that take longer to initialise due to their larger overhead (BIOS, full OS, etc.), our microVMs are stripped of unnecessary components and can be launched in milliseconds.
 - **Multi-tier VM snapshotting:** Unikraft VMs combine the virtual machine monitor (VMM) of [Firecracker](https://firecracker-microvm.github.io/) with the packaging characteristics of unikernels. Firecracker makes it possible to create and restore VM memory snapshots, enabling a restore of a machine from hibernation in single-digit milliseconds. For Prisma Postgres, we are building a multi-tier snapshotting system that'll efficiently manage snapshots. This capability will allow us to hibernate databases after short durations of inactivity while still being capable of serving a request with negligible startup overhead.
-
 
 ## A fully integrated data layer with a DB, ORM, edge caching, connection pooling & more
 
@@ -221,11 +233,13 @@ Here's an overview of what you get with Prisma:
 The fastest way to try Prisma Postgres is by following the instructions here:
 
 <br />
-[Try Prisma Postgres](https://www.prisma.io/docs/getting-started/quickstart-prismaPostgres)
+[Try Prisma
+Postgres](https://www.prisma.io/docs/getting-started/quickstart-prismaPostgres)
 
 <br />
 <br />
-After setting up the database, you will receive instructions for downloading and running a sample project.
+After setting up the database, you will receive instructions for downloading and
+running a sample project.
 
 ### What you get with Prisma Postgres today
 
@@ -235,7 +249,7 @@ Prisma Postgres is launching in Early Access today. During the Early Access phas
 - Prisma Postgres always comes bundled with Accelerate, this means you get connection pooling and edge caching out-of-the box.
 - Prisma Postgres charges per query, for egress, and for storage/delivery of database events. You can find all details on our [pricing](https://www.prisma.io/pricing) page.
 
-Also check out the [documentation](https://www.prisma.io/docs/orm/overview/databases/prisma-postgres) to learn about current limitations of Prisma Postgres. 
+Also check out the [documentation](https://www.prisma.io/docs/orm/overview/databases/prisma-postgres) to learn about current limitations of Prisma Postgres.
 
 ### Try Prisma Postgres
 
@@ -246,6 +260,7 @@ Today marks the initial release of Prisma Postgres. Look forward to the General 
 We hope you're as excited as we are about this addition to the Prisma family. Try it out and let us know what you think on [X](https://pris.ly/x) and our [Discord](https://pris.ly/discord)!
 
 <br />
-[Try Prisma Postgres](https://www.prisma.io/docs/getting-started/quickstart-prismaPostgres)
+[Try Prisma
+Postgres](https://www.prisma.io/docs/getting-started/quickstart-prismaPostgres)
 
 > **Note**: Postgres, PostgreSQL and the Slonik Logo are trademarks or registered trademarks of the PostgreSQL Community Association of Canada, and used with their permission

@@ -45,7 +45,6 @@ const config: Config = {
         {},
       );
       addUtilities(utilities);
-
     },
   ],
 };

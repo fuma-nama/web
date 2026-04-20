@@ -4,7 +4,10 @@ description: A toggle switch component built on Radix UI for binary on/off state
 ---
 
 import { Switch, Field, FieldLabel, FieldDescription } from "@prisma/eclipse";
-import { ControlledSwitchExample, SwitchFormExample } from "@/components/switch-examples/interactive-examples";
+import {
+  ControlledSwitchExample,
+  SwitchFormExample,
+} from "@/components/switch-examples/interactive-examples";
 
 ### Usage
 
@@ -35,8 +38,8 @@ export function SwitchWithLabel() {
   return (
     <div className="flex items-center gap-2">
       <Switch id="airplane-mode" />
-      <label 
-        htmlFor="airplane-mode" 
+      <label
+        htmlFor="airplane-mode"
         className="text-sm font-medium leading-none cursor-pointer"
       >
         Airplane Mode
@@ -50,8 +53,8 @@ export function SwitchWithLabel() {
 
 <div className="flex items-center gap-2 my-4">
   <Switch id="airplane-mode-example" />
-  <label 
-    htmlFor="airplane-mode-example" 
+  <label
+    htmlFor="airplane-mode-example"
     className="text-sm font-medium leading-none cursor-pointer"
   >
     Airplane Mode
@@ -70,7 +73,9 @@ export function SwitchWithField() {
     <Field orientation="horizontal" className="justify-between">
       <div className="flex flex-col gap-1">
         <FieldLabel htmlFor="notifications">Push Notifications</FieldLabel>
-        <FieldDescription>Receive push notifications on your device.</FieldDescription>
+        <FieldDescription>
+          Receive push notifications on your device.
+        </FieldDescription>
       </div>
       <Switch id="notifications" />
     </Field>
@@ -84,7 +89,9 @@ export function SwitchWithField() {
   <Field orientation="horizontal" className="justify-between">
     <div className="flex flex-col gap-1">
       <FieldLabel htmlFor="notifications-field">Push Notifications</FieldLabel>
-      <FieldDescription>Receive push notifications on your device.</FieldDescription>
+      <FieldDescription>
+        Receive push notifications on your device.
+      </FieldDescription>
     </div>
     <Switch id="notifications-field" />
   </Field>
@@ -104,8 +111,8 @@ export function ControlledSwitch() {
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-2">
-        <Switch 
-          id="controlled" 
+        <Switch
+          id="controlled"
           checked={enabled}
           onCheckedChange={setEnabled}
         />
@@ -127,8 +134,6 @@ export function ControlledSwitch() {
   <ControlledSwitchExample />
 </div>
 
-
-
 **Disabled State**
 
 ```tsx
@@ -139,8 +144,8 @@ export function DisabledSwitch() {
     <div className="space-y-4">
       <div className="flex items-center gap-2">
         <Switch id="disabled-off" disabled />
-        <label 
-          htmlFor="disabled-off" 
+        <label
+          htmlFor="disabled-off"
           className="text-sm font-medium opacity-70 cursor-not-allowed"
         >
           Disabled (off)
@@ -148,8 +153,8 @@ export function DisabledSwitch() {
       </div>
       <div className="flex items-center gap-2">
         <Switch id="disabled-on" disabled checked />
-        <label 
-          htmlFor="disabled-on" 
+        <label
+          htmlFor="disabled-on"
           className="text-sm font-medium opacity-70 cursor-not-allowed"
         >
           Disabled (on)
@@ -165,8 +170,8 @@ export function DisabledSwitch() {
 <div className="space-y-4 my-4">
   <div className="flex items-center gap-2">
     <Switch id="disabled-off-example" disabled />
-    <label 
-      htmlFor="disabled-off-example" 
+    <label
+      htmlFor="disabled-off-example"
       className="text-sm font-medium opacity-70 cursor-not-allowed"
     >
       Disabled (off)
@@ -174,8 +179,8 @@ export function DisabledSwitch() {
   </div>
   <div className="flex items-center gap-2">
     <Switch id="disabled-on-example" disabled checked />
-    <label 
-      htmlFor="disabled-on-example" 
+    <label
+      htmlFor="disabled-on-example"
       className="text-sm font-medium opacity-70 cursor-not-allowed"
     >
       Disabled (on)
@@ -194,10 +199,12 @@ export function SettingsPanel() {
   return (
     <div className="space-y-6 max-w-md">
       <h3 className="text-lg font-semibold">Notification Settings</h3>
-      
+
       <Field orientation="horizontal" className="justify-between">
         <div className="flex flex-col gap-1">
-          <FieldLabel htmlFor="email-notifications">Email Notifications</FieldLabel>
+          <FieldLabel htmlFor="email-notifications">
+            Email Notifications
+          </FieldLabel>
           <FieldDescription>Receive notifications via email.</FieldDescription>
         </div>
         <Switch id="email-notifications" defaultChecked />
@@ -205,8 +212,12 @@ export function SettingsPanel() {
 
       <Field orientation="horizontal" className="justify-between">
         <div className="flex flex-col gap-1">
-          <FieldLabel htmlFor="push-notifications">Push Notifications</FieldLabel>
-          <FieldDescription>Receive push notifications on your devices.</FieldDescription>
+          <FieldLabel htmlFor="push-notifications">
+            Push Notifications
+          </FieldLabel>
+          <FieldDescription>
+            Receive push notifications on your devices.
+          </FieldDescription>
         </div>
         <Switch id="push-notifications" />
       </Field>
@@ -214,7 +225,9 @@ export function SettingsPanel() {
       <Field orientation="horizontal" className="justify-between">
         <div className="flex flex-col gap-1">
           <FieldLabel htmlFor="sms-notifications">SMS Notifications</FieldLabel>
-          <FieldDescription>Receive notifications via text message.</FieldDescription>
+          <FieldDescription>
+            Receive notifications via text message.
+          </FieldDescription>
         </div>
         <Switch id="sms-notifications" />
       </Field>
@@ -236,13 +249,17 @@ export function SettingsPanel() {
     <Switch id="email-notifications-example" defaultChecked />
   </Field>
 
-  <Field orientation="horizontal" className="justify-between">
-    <div className="flex flex-col gap-1">
-      <FieldLabel htmlFor="push-notifications-example">Push Notifications</FieldLabel>
-      <FieldDescription>Receive push notifications on your devices.</FieldDescription>
-    </div>
-    <Switch id="push-notifications-example" />
-  </Field>
+<Field orientation="horizontal" className="justify-between">
+  <div className="flex flex-col gap-1">
+    <FieldLabel htmlFor="push-notifications-example">
+      Push Notifications
+    </FieldLabel>
+    <FieldDescription>
+      Receive push notifications on your devices.
+    </FieldDescription>
+  </div>
+  <Switch id="push-notifications-example" />
+</Field>
 
   <Field orientation="horizontal" className="justify-between">
     <div className="flex flex-col gap-1">
@@ -274,7 +291,7 @@ export function SwitchForm() {
   return (
     <form onSubmit={handleSubmit} className="space-y-6 max-w-md">
       <h3 className="text-lg font-semibold">App Settings</h3>
-      
+
       <div className="flex items-center justify-between">
         <label htmlFor="dark-mode" className="text-sm font-medium">
           Dark Mode
@@ -282,7 +299,7 @@ export function SwitchForm() {
         <Switch
           id="dark-mode"
           checked={settings.darkMode}
-          onCheckedChange={(checked) => 
+          onCheckedChange={(checked) =>
             setSettings({ ...settings, darkMode: checked })
           }
         />
@@ -295,7 +312,7 @@ export function SwitchForm() {
         <Switch
           id="notifications-form"
           checked={settings.notifications}
-          onCheckedChange={(checked) => 
+          onCheckedChange={(checked) =>
             setSettings({ ...settings, notifications: checked })
           }
         />
@@ -308,13 +325,13 @@ export function SwitchForm() {
         <Switch
           id="analytics-form"
           checked={settings.analytics}
-          onCheckedChange={(checked) => 
+          onCheckedChange={(checked) =>
             setSettings({ ...settings, analytics: checked })
           }
         />
       </div>
 
-      <button 
+      <button
         type="submit"
         className="px-4 py-2 bg-primary text-primary-foreground rounded-md"
       >
@@ -394,12 +411,14 @@ The Switch component is perfect for:
 ### Switch vs Checkbox
 
 Use **Switch** when:
+
 - The change takes effect immediately
 - Toggling a feature on/off
 - Representing a binary state (enabled/disabled)
 - In settings or preferences panels
 
 Use **Checkbox** when:
+
 - Part of a form that requires submission
 - Selecting multiple items from a list
 - Accepting terms or agreements

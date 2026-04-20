@@ -307,8 +307,12 @@ export default function StudioWrapper({ children }: StudioWrapperProps) {
       <header className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
-            <h1 className="text-2xl font-bold text-gray-900">Database Studio</h1>
-            <div className="text-sm text-gray-500">Powered by Prisma Studio</div>
+            <h1 className="text-2xl font-bold text-gray-900">
+              Database Studio
+            </h1>
+            <div className="text-sm text-gray-500">
+              Powered by Prisma Studio
+            </div>
           </div>
         </div>
       </header>
@@ -341,7 +345,10 @@ const CORS_HEADERS = {
 export const dynamic = "force-dynamic";
 
 export async function GET() {
-  return Response.json({ message: "Studio API endpoint is running" }, { headers: CORS_HEADERS });
+  return Response.json(
+    { message: "Studio API endpoint is running" },
+    { headers: CORS_HEADERS },
+  );
 }
 
 export async function POST(request: Request) {
@@ -404,9 +411,12 @@ import { useMemo, Suspense } from "react";
 import StudioWrapper from "@/components/StudioWrapper";
 
 // Dynamically import Studio with no SSR to avoid hydration issues
-const Studio = dynamic(() => import("@prisma/studio-core/ui").then((mod) => mod.Studio), {
-  ssr: false,
-});
+const Studio = dynamic(
+  () => import("@prisma/studio-core/ui").then((mod) => mod.Studio),
+  {
+    ssr: false,
+  },
+);
 
 // Loading component
 const StudioLoading = () => (

@@ -17,10 +17,10 @@ tags:
 ---
 
 <center>
-      <i>10 min read</i>
-  </center>
+  <i>10 min read</i>
+</center>
 
-  In this series you are learning how to implement end-to-end type safety using React, GraphQL, Prisma, and some other helpful tools that tie those three together.
+In this series you are learning how to implement end-to-end type safety using React, GraphQL, Prisma, and some other helpful tools that tie those three together.
 
 ## Table Of Contents
 
@@ -43,10 +43,9 @@ tags:
 
 <Youtube videoId="6-P8swlC1jg" />
 
-
 ## Introduction
 
-In this section, you will set up all of the pieces needed to build a GraphQL API. You will start up a TypeScript project, provision a PostgreSQL database, initialize Prisma in your project, and finally seed your database. 
+In this section, you will set up all of the pieces needed to build a GraphQL API. You will start up a TypeScript project, provision a PostgreSQL database, initialize Prisma in your project, and finally seed your database.
 
 In the process, you will set up an important piece of the end-to-end type-safety puzzle: a source of truth for the shape of your data.
 
@@ -72,7 +71,7 @@ These are the main tools you will be using throughout this series:
 
 ### Assumed knowledge
 
-While this series will attempt to cover everything in detail from a beginner's standpoint, the following would be helpful: 
+While this series will attempt to cover everything in detail from a beginner's standpoint, the following would be helpful:
 
 - Basic knowledge of JavaScript or TypeScript
 - Basic knowledge of GraphQL
@@ -95,12 +94,14 @@ To kick things off, create a new folder in your working directory that will cont
 ```shell
 mkdir graphql-server # Example folder
 ```
+
 This project will use [npm](https://www.npmjs.com/), a package manager for Node.js, to manage and install new packages. Navigate into your new folder and initialize npm using the following commands:
 
 ```shell
 cd graphql-server
 npm init -y
 ```
+
 ### Install the basic packages
 
 While building this API, you will install various packages that will help in the development of your application. For now, install the following development packages:
@@ -112,6 +113,7 @@ While building this API, you will install various packages that will help in the
 ```shell
 npm i -D ts-node-dev typescript @types/node
 ```
+
 > **Note**: These dependencies were installed as development dependencies because they are only needed during development. None of them are part of the production deployment.
 
 ### Set up TypeScript
@@ -121,6 +123,7 @@ With TypeScript installed in your project, you can now initialize the TypeScript
 ```shell
 npx tsc --init
 ```
+
 The above command will create a new file named `tsconfig.json` at the root of your project and comes with a default set of configurations for how to compile and handle your TypeScript code.
 For the purposes of this series, you will leave the default settings.
 
@@ -130,17 +133,19 @@ Create a new folder named `src` and within that folder a new file named `index.t
 mkdir src
 touch src/index.ts
 ```
+
 This will be the entry point to your TypeScript code. Within that file, add a simple `console.log`:
 
 ```typescript
 // src/index.ts
 
-console.log('Hey there! 👋');
+console.log("Hey there! 👋");
 ```
+
 ### Add a development script
 
 In order to run your code, you will use `ts-node-dev`, which will compile and run your TypeScript code and watch for file changes.
-When a file is changed in your application, it will re-compile and re-run your code. 
+When a file is changed in your application, it will re-compile and re-run your code.
 
 Within `package.json`, in the `"scripts"` section, add a new script named `"dev"` that uses `ts-node-dev` to run your entry file:
 
@@ -154,16 +159,18 @@ Within `package.json`, in the `"scripts"` section, add a new script named `"dev"
 },
 // ...
 ```
+
 You can now use the following command to run your code:
 
 ```shell
 npm run dev
 ```
+
 ![](/e2e-type-safety-graphql-react-2-j9mEyHY0Ej/imgs/run-dev.png)
 
 ## Set up the database
 
-The next piece you will set up is the database. You will be using a PostgreSQL database for this application. There are many different ways to host and work with a 
+The next piece you will set up is the database. You will be using a PostgreSQL database for this application. There are many different ways to host and work with a
 PostgreSQL database, however, one of the simplest ways is to deploy your database using [Railway](https://railway.app/).
 
 Head over to [https://railway.app](https://railway.app) and, if you don't already have one, create an account.
@@ -195,6 +202,7 @@ To set up Prisma, you first need to install Prisma CLI as a development dependen
 ```shell
 npm i -D prisma
 ```
+
 ### Initialize Prisma
 
 With Prisma CLI installed, you will have access to a set of useful tools and commands provided by Prisma. The command you will use here is called `init`, and will initialize Prisma in your project:
@@ -202,6 +210,7 @@ With Prisma CLI installed, you will have access to a set of useful tools and com
 ```shell
 npx prisma init
 ```
+
 This command will create a new `prisma` folder within your project. Inside this folder you will find a file, `schema.prisma`, which contains the start of a Prisma schema.
 
 That file uses the Prisma Schema Language _(PSL)_ and is where you will define your database's tables and fields. It currently looks as follows:
@@ -218,10 +227,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 ```
-Within the `datasource` block, note the `url` field. This fields equals a value `env("DATABASE_URL")`. This value tells Prisma to look within the environment variables for a 
+
+Within the `datasource` block, note the `url` field. This fields equals a value `env("DATABASE_URL")`. This value tells Prisma to look within the environment variables for a
 variable named `DATABASE_URL` to find the database's connection string.
 
 ### Set the environment variable
+
 `prisma init` also created a `.env` file for you with a single variable named `DATABASE_URL`. This variable holds the connection string Prisma will use to connect to your database.
 
 Replace the current default contents of that variable with the connection string you retrieved via the Railway UI:
@@ -230,8 +241,9 @@ Replace the current default contents of that variable with the connection string
 # .env
 
 # Example: postgresql://postgres:Pb98NuLZM22ptNuR4Erq@containers-us-west-63.railway.app:6049/railway
-DATABASE_URL="<your-connection-string>" 
+DATABASE_URL="<your-connection-string>"
 ```
+
 ### Model your data
 
 The application you are building will need two different database tables: `User` and `Message`. Each "user" will be able to have many associated "messages".
@@ -255,6 +267,7 @@ model User {
   createdAt DateTime @default(now())
 }
 ```
+
 Next, add a `Message` model with the following fields:
 
 - `id`: The unique ID of the database record
@@ -270,10 +283,11 @@ model Message {
   createdAt DateTime @default(now())
 }
 ```
+
 Finally, set up a one-to-many relation between the `User` and `Message` tables.
 
 ```prisma
-diff 
+diff
 // prisma/schema.prisma
 
 model User {
@@ -291,6 +305,7 @@ model Message {
 +  user      User     @relation(fields: [userId], references: [id])
 }
 ```
+
 This data modeling step is an important one. What you have done here is set up the _source of truth_ for the shape of your data.
 You database's schema is now defined in one central place, and used to generate a type-safe API that interacts with that database.
 
@@ -305,8 +320,8 @@ Run the following command to create and apply a migration to your database:
 ```shell
 npx prisma migrate dev --name init
 ```
-The above command will create a new migration file named `init`, apply that migration to your database, and finally generate Prisma Client based off of that schema.
 
+The above command will create a new migration file named `init`, apply that migration to your database, and finally generate Prisma Client based off of that schema.
 
 If you head back over to the Railway UI, in the **Data** tab you should see your tables listed. If so, the migration worked and your database is ready to be put to work!
 
@@ -321,6 +336,7 @@ Within the `prisma` folder, create a new file named `seed.ts`:
 ```shell
 touch prisma/seed.ts
 ```
+
 Paste the following contents into that file:
 
 ```typescript
@@ -385,6 +401,7 @@ main().then(() => {
   console.log("Data seeded...");
 });
 ```
+
 This script clears out the database and then creates three users. Each user is given two messages associated with it.
 
 > **Note**: In the next article, you will dive deeper into the process writing a few queries using Prisma Client.
@@ -400,11 +417,13 @@ Now that the seed script is available, head over to your `package.json` file and
 },
 // ...
 ```
+
 Use the following command to run your seed script:
 
 ```shell
 npx prisma db seed
 ```
+
 After running the script, if you head back to the Railway UI and into the **Data** tab, you should be able to navigate through the newly added data.
 
 ![](/e2e-type-safety-graphql-react-2-j9mEyHY0Ej/imgs/railway-data.png)

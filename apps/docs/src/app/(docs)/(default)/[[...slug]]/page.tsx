@@ -1,10 +1,14 @@
-import { getPageImage, source } from "@/lib/source";
+import { getPageImage, getSource } from "@/lib/source";
 import { withDocsBasePath } from "@/lib/urls";
 import { notFound } from "next/navigation";
 import { getMDXComponents } from "@/mdx-components";
 import type { Metadata } from "next";
 import { createRelativeLink } from "fumadocs-ui/mdx";
-import { CopyPromptButton, LLMCopyButton, ViewOptions } from "@/components/page-actions";
+import {
+  CopyPromptButton,
+  LLMCopyButton,
+  ViewOptions,
+} from "@/components/page-actions";
 import { getPromptContent } from "@/lib/get-prompt-content";
 import {
   DocsBody,
@@ -12,23 +16,37 @@ import {
   DocsPage,
   DocsTitle,
   EditOnGitHub,
-  PageLastUpdate,
 } from "@/components/layout/notebook/page";
-import { TechArticleSchema, BreadcrumbSchema } from "@/components/structured-data";
+import {
+  TechArticleSchema,
+  BreadcrumbSchema,
+} from "@/components/structured-data";
 
 interface PageParams {
   slug?: string[];
 }
 
-export default async function Page({ params }: { params: Promise<PageParams> }) {
+export default async function Page({
+  params,
+}: {
+  params: Promise<PageParams>;
+}) {
   const { slug } = await params;
+  const source = await getSource();
   const page = source.getPage(slug);
   if (!page) notFound();
 
-  const MDX = page.data.body;
+  const { render } = await page.data.load();
+  const { body, toc } = await render(
+    getMDXComponents({
+      a: createRelativeLink(source, page),
+    }),
+  );
 
   const aiPromptSlug = (page.data as { aiPrompt?: string }).aiPrompt;
-  const promptContent = aiPromptSlug ? await getPromptContent(aiPromptSlug) : null;
+  const promptContent = aiPromptSlug
+    ? await getPromptContent(aiPromptSlug)
+    : null;
 
   return (
     <>
@@ -38,15 +56,19 @@ export default async function Page({ params }: { params: Promise<PageParams> }) 
         tableOfContent={{
           style: "normal",
         }}
-        toc={page.data.toc}
-        full={page.data.full}
+        toc={toc}
+        full={page.data.frontmatter.full}
       >
         <div className="flex flex-col md:flex-row items-start gap-4 pt-2 pb-1 md:justify-between">
           <DocsTitle>{page.data.title}</DocsTitle>
           <div className="flex flex-row gap-2 items-center">
-            {promptContent && <CopyPromptButton fullPrompt={promptContent.fullPrompt} />}
+            {promptContent && (
+              <CopyPromptButton fullPrompt={promptContent.fullPrompt} />
+            )}
             {!page.url.startsWith("/management-api/endpoints") && (
-              <LLMCopyButton markdownUrl={`${withDocsBasePath(page.url)}.mdx`} />
+              <LLMCopyButton
+                markdownUrl={`${withDocsBasePath(page.url)}.mdx`}
+              />
             )}
 
             <ViewOptions
@@ -56,20 +78,11 @@ export default async function Page({ params }: { params: Promise<PageParams> }) 
           </div>
         </div>
         <DocsDescription>{page.data.description}</DocsDescription>
-        <DocsBody>
-          <MDX
-            components={getMDXComponents({
-              a: createRelativeLink(source, page),
-            })}
-          />
-        </DocsBody>
+        <DocsBody>{body}</DocsBody>
         <div className="flex flex-row flex-wrap items-center justify-between gap-4 border-t pt-6 text-sm">
           <EditOnGitHub
             href={`https://github.com/prisma/docs/edit/main/apps/docs/content/docs/${page.path}`}
           />
-          {(page.data as { lastModified?: Date }).lastModified && (
-            <PageLastUpdate date={(page.data as { lastModified: Date }).lastModified} />
-          )}
         </div>
       </DocsPage>
     </>
@@ -77,6 +90,7 @@ export default async function Page({ params }: { params: Promise<PageParams> }) 
 }
 
 export async function generateStaticParams() {
+  const source = await getSource();
   return source.generateParams();
 }
 
@@ -86,11 +100,13 @@ export async function generateMetadata({
   params: Promise<PageParams>;
 }): Promise<Metadata> {
   const { slug } = await params;
+  const source = await getSource();
   const page = source.getPage(slug);
   if (!page) notFound();
 
-  const title = page.data.metaTitle ?? page.data.title;
-  const description = page.data.metaDescription ?? page.data.description;
+  const frontmatter = page.data.frontmatter;
+  const title = frontmatter.metaTitle ?? frontmatter.title;
+  const description = frontmatter.metaDescription ?? frontmatter.description;
 
   return {
     title,
@@ -102,7 +118,7 @@ export async function generateMetadata({
       title,
       description,
       url: withDocsBasePath(page.url),
-      images: withDocsBasePath(page.data.image ?? getPageImage(page).url),
+      images: withDocsBasePath(frontmatter.image ?? getPageImage(page).url),
     },
     twitter: {
       card: "summary_large_image",

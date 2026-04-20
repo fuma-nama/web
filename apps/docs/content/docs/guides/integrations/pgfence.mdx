@@ -49,12 +49,12 @@ pgfence parses every SQL statement and reports the lock mode, risk level, and an
 
 pgfence assigns a risk level to each statement based on the PostgreSQL lock it acquires:
 
-| Risk level | Meaning |
-|------------|---------|
-| **LOW** | Safe operations with minimal locking (e.g., `ADD COLUMN` with a constant default on PG 11+) |
-| **MEDIUM** | Operations that block writes but not reads (e.g., `CREATE INDEX` without `CONCURRENTLY`) |
-| **HIGH** | Operations that block writes and competing DDL, but not plain reads (e.g., `ADD FOREIGN KEY` without `NOT VALID`) |
-| **CRITICAL** | Operations that take `ACCESS EXCLUSIVE` locks on large tables (e.g., `DROP TABLE`, `TRUNCATE`) |
+| Risk level   | Meaning                                                                                                           |
+| ------------ | ----------------------------------------------------------------------------------------------------------------- |
+| **LOW**      | Safe operations with minimal locking (e.g., `ADD COLUMN` with a constant default on PG 11+)                       |
+| **MEDIUM**   | Operations that block writes but not reads (e.g., `CREATE INDEX` without `CONCURRENTLY`)                          |
+| **HIGH**     | Operations that block writes and competing DDL, but not plain reads (e.g., `ADD FOREIGN KEY` without `NOT VALID`) |
+| **CRITICAL** | Operations that take `ACCESS EXCLUSIVE` locks on large tables (e.g., `DROP TABLE`, `TRUNCATE`)                    |
 
 Here is an example of pgfence analyzing a migration that adds an index without `CONCURRENTLY`:
 

@@ -1,4 +1,4 @@
-import { getPageImage, source, sourceV6 } from "@/lib/source";
+import { getPageImage, getSource } from "@/lib/source";
 import { notFound } from "next/navigation";
 import { ImageResponse } from "next/og";
 
@@ -9,7 +9,8 @@ const SECTION_BADGE_COLOR = "#71e8df";
 const LONG_TITLE_FONT_SIZE = "3.5rem";
 const DEFAULT_TITLE_FONT_SIZE = "5rem";
 const API_PATH_SEGMENT_REGEX = /(\{[^}]+\})/;
-const GOOGLE_FONT_RESOURCE_REGEX = /src: url\((.+)\) format\('(opentype|truetype)'\)/;
+const GOOGLE_FONT_RESOURCE_REGEX =
+  /src: url\((.+)\) format\('(opentype|truetype)'\)/;
 const BADGE_HORIZONTAL_PADDING = 24;
 const BADGE_VERTICAL_PADDING = 12;
 const BADGE_FONT_SIZE = 24;
@@ -100,10 +101,16 @@ function getApiPathSegments(apiPath?: string) {
     return undefined;
   }
 
-  return apiPath.split(API_PATH_SEGMENT_REGEX).filter(Boolean).map((segment) => ({
-    text: segment,
-    color: segment.startsWith("{") && segment.endsWith("}") ? FALLBACK_METHOD_COLOR : "#a0aec0",
-  }));
+  return apiPath
+    .split(API_PATH_SEGMENT_REGEX)
+    .filter(Boolean)
+    .map((segment) => ({
+      text: segment,
+      color:
+        segment.startsWith("{") && segment.endsWith("}")
+          ? FALLBACK_METHOD_COLOR
+          : "#a0aec0",
+    }));
 }
 
 function PrismaOGImage({
@@ -303,11 +310,17 @@ function getFonts() {
   return fontCache;
 }
 
-export async function GET(_req: Request, { params }: RouteContext<"/og/[...slug]">) {
+export async function GET(
+  _req: Request,
+  { params }: RouteContext<"/og/[...slug]">,
+) {
   const { slug } = await params;
   const pageSlug = slug.slice(0, -1);
+
   // Check v7 first, then v6
-  const page = source.getPage(pageSlug) ?? sourceV6.getPage(pageSlug);
+  const page =
+    (await getSource()).getPage(pageSlug) ??
+    (await getSource("v6")).getPage(pageSlug);
   if (!page) notFound();
 
   const openApiMetadata = (page.data as PageFrontmatter)._openapi;
@@ -323,17 +336,16 @@ export async function GET(_req: Request, { params }: RouteContext<"/og/[...slug]
     titleFontSize: getTitleFontSize(page.data.title),
   };
 
-  return new ImageResponse(
-    <PrismaOGImage {...imageProps} />,
-    {
-      width: 1200,
-      height: 630,
-      fonts,
-    },
-  );
+  return new ImageResponse(<PrismaOGImage {...imageProps} />, {
+    width: 1200,
+    height: 630,
+    fonts,
+  });
 }
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
+  const source = await getSource();
+  const sourceV6 = await getSource("v6");
   // Generate OG images for both v7 and v6 pages
   const v7Pages = source.getPages().map((page) => ({
     lang: page.locale,

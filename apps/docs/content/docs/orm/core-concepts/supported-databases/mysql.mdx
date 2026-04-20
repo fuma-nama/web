@@ -97,12 +97,12 @@ Standard MySQL (5.6+) or MariaDB (10.0+) servers.
 
 **Connection string arguments:**
 
-| Argument | Default | Description |
-|----------|---------|-------------|
-| `connect_timeout` | `5` | Seconds to wait for connection |
-| `sslcert` | | Path to server certificate |
-| `sslidentity` | | Path to PKCS12 certificate |
-| `sslaccept` | `accept_invalid_certs` | Certificate validation mode |
+| Argument          | Default                | Description                    |
+| ----------------- | ---------------------- | ------------------------------ |
+| `connect_timeout` | `5`                    | Seconds to wait for connection |
+| `sslcert`         |                        | Path to server certificate     |
+| `sslidentity`     |                        | Path to PKCS12 certificate     |
+| `sslaccept`       | `accept_invalid_certs` | Certificate validation mode    |
 
 ### PlanetScale
 
@@ -114,12 +114,14 @@ Serverless MySQL-compatible database built on Vitess clustering system.
 - Non-blocking schema changes
 
 **Key features:**
+
 - Enterprise scalability across multiple servers
 - Database branches for schema testing
 - Non-blocking schema deployments
 - Serverless-optimized (avoids connection limits)
 
 **Branch workflow:**
+
 1. **Development branches** - Test schema changes freely
 2. **Production branches** - Protected, require deploy requests
 3. **Deploy requests** - Merge dev changes to production
@@ -175,17 +177,17 @@ model Comment {
 
 ### Type mapping between MySQL and Prisma schema
 
-| Prisma | MySQL/MariaDB |
-|--------|---------------|
-| `String` | `VARCHAR(191)` |
-| `Boolean` | `TINYINT(1)` |
-| `Int` | `INT` |
-| `BigInt` | `BIGINT` |
-| `Float` | `DOUBLE` |
-| `Decimal` | `DECIMAL(65,30)` |
-| `DateTime` | `DATETIME(3)` |
-| `Json` | `JSON` |
-| `Bytes` | `LONGBLOB` |
+| Prisma     | MySQL/MariaDB    |
+| ---------- | ---------------- |
+| `String`   | `VARCHAR(191)`   |
+| `Boolean`  | `TINYINT(1)`     |
+| `Int`      | `INT`            |
+| `BigInt`   | `BIGINT`         |
+| `Float`    | `DOUBLE`         |
+| `Decimal`  | `DECIMAL(65,30)` |
+| `DateTime` | `DATETIME(3)`    |
+| `Json`     | `JSON`           |
+| `Bytes`    | `LONGBLOB`       |
 
 See [full type mapping reference](/orm/reference/prisma-schema-reference#model-field-scalar-types) for complete details.
 
@@ -223,6 +225,7 @@ model User {
 **Connection troubleshooting:**
 
 PlanetScale production branches are read-only for direct DDL. If you get error P3022, ensure you're:
+
 - Using `prisma db push` instead of `prisma migrate`
 - Working on a development branch, or
 - Using a deploy request to update production

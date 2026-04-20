@@ -61,16 +61,16 @@ In the Node.js ecosystem, Prisma is one of the most popular libraries for implem
 We're excited to share the [`@prisma/extension-read-replicas`](https://pris.ly/read-replica-extension) extension, which achieves this with a Prisma Client extension!
 
 ```ts
-import { PrismaClient } from '@prisma/client'
-import { readReplicas } from '@prisma/extension-read-replicas'
+import { PrismaClient } from "@prisma/client";
+import { readReplicas } from "@prisma/extension-read-replicas";
 
-const prisma = new PrismaClient()
-  .$extends(
-    readReplicas({
-      url: 'postgres://johndoe:<password>@jeffery-bezos.us-east-2.aws.com:5432/mydb',
-    }),
-  )
+const prisma = new PrismaClient().$extends(
+  readReplicas({
+    url: "postgres://johndoe:<password>@jeffery-bezos.us-east-2.aws.com:5432/mydb",
+  }),
+);
 ```
+
 Under the hood, the extension creates and manages Prisma Client instances for each database replica. The extension, by default, will route each read request to a random configured replica.
 
 ## Connect to read replicas using `@prisma/extension-read-replicas`
@@ -87,7 +87,7 @@ For the example in this article, we'll use [Neon](https://bit.ly/prisma-neon-rea
   alt="Neon"
 />
 
-Neon is different from traditional PostgreSQL providers because they separate storage from compute. 
+Neon is different from traditional PostgreSQL providers because they separate storage from compute.
 
 Recently they [launched same-region read replicas](https://neon.tech/blog/introducing-same-region-read-replicas-to-serverless-postgres), which uses these [_compute instances_](https://neon.tech/docs/reference/glossary#compute) for read replicas to scale a replica up, down or to zero. This means Neon is much faster in setting up read replicas of your primary database than other providers - it uses the same data storage under the hood.
 
@@ -132,6 +132,7 @@ In your application, create a new environment variable for the database replica 
 #.env
 DATABASE_REPLICA_URL="postgres://daniel:<password>@ep-damp-cell-18160816.us-east-2.aws.neon.tech/neondb"
 ```
+
 ### Connect to your read replicas using `@prisma/extension-read-replicas`
 
 To start using read replicas in your application, install [the extension](https://pris.ly/read-replica-extension) in your project:
@@ -139,33 +140,34 @@ To start using read replicas in your application, install [the extension](https:
 ```shell
 npm install @prisma/extension-read-replicas
 ```
+
 Next, initialize the extension by extending your existing Prisma Client instance and pointing it to a database replica:
 
 ```ts
-import { PrismaClient } from '@prisma/client'
-import { readReplicas } from '@prisma/extension-read-replicas'
+import { PrismaClient } from "@prisma/client";
+import { readReplicas } from "@prisma/extension-read-replicas";
 
-const prisma = new PrismaClient()
-  .$extends(
-    readReplicas({
-      url: process.env.DATABASE_REPLICA_URL,
-    }),
-  )
+const prisma = new PrismaClient().$extends(
+  readReplicas({
+    url: process.env.DATABASE_REPLICA_URL,
+  }),
+);
 ```
+
 If you wish to set up multiple replicas, you can repeat the [steps above](#create-and-connect-to-neon-read-replicas) to create additional replicas. Then, update the `readReplicas` configuration in your application as follows:
 
 ```ts
 // lib/prisma.ts
-const prisma = new PrismaClient()
-  .$extends(
-    readReplicas({
-      url: [
-        process.env.DATABASE_REPLICA_URL_1,
-        process.env.DATABASE_REPLICA_URL_2,
-      ],
-    }),
-  )
+const prisma = new PrismaClient().$extends(
+  readReplicas({
+    url: [
+      process.env.DATABASE_REPLICA_URL_1,
+      process.env.DATABASE_REPLICA_URL_2,
+    ],
+  }),
+);
 ```
+
 And that's it!
 
 When you run your app, the extension will send all read operations, such as `findMany`, to a database replica. A replica will be selected randomly if you have multiple replicas defined.
@@ -175,8 +177,9 @@ Any write queries (e.g., `create`, `update`, ...) as well as [`$transaction`](ht
 If you would like to read from the primary database and bypass read replicas, the extension provides the `$primary()` method on your extended Prisma Client instance:
 
 ```ts
-const feed = await prisma.$primary().post.findMany()
+const feed = await prisma.$primary().post.findMany();
 ```
+
 This Prisma Client query will _always_ be routed to your primary database to ensure up-to-date data.
 
 ## Why did we build read replica support as a Prisma Client extension?

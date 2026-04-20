@@ -8,7 +8,7 @@ metaTitle: "ORM 6.13.0, CI/CD Workflows & pgvector for Prisma Postgres"
 metaDescription: "Prisma ORM v6.13.0 introduces Prisma Config & multi-schema support in GA, pgvector for Prisma Postgres, a new Management API for CI/CD, SQL view enhancements, and a redesigned Prisma Console UI."
 metaImagePath: "/orm-6-13-0-ci-cd-workflows-and-pgvector-for-prisma-postgres/imgs/meta-a34efcbd2a80c31abeee44c4c8da5452619d93c4-1266x711.png"
 heroImagePath: "/orm-6-13-0-ci-cd-workflows-and-pgvector-for-prisma-postgres/imgs/hero-bf92270c0f00a0ec6345ee27d0f6eba08a3a79a5-844x474.svg"
-heroImageAlt: "A promotional graphic for Prisma version 6.13.0 featuring a dark-themed UI preview. On the left, the Prisma logo and \"v6.13.0\" are displayed with a right-pointing arrow. Below are feature highlights in purple pill-shaped boxes with white text: \"MULTI-SCHEMA & PRISMA CONFIG IN GA,\" \"CI/CD & pgvector FOR PRISMA POSTGRES,\" \"NEW CONSOLE UI DESIGN,\" and \"+ MORE…\". On the right, there is a screenshot of the Prisma console showing sections like Dashboard, Studio, Accelerate, API Keys, and Settings, along with panels for Prisma Postgres, Accelerate, Studio, and Optimize."
+heroImageAlt: 'A promotional graphic for Prisma version 6.13.0 featuring a dark-themed UI preview. On the left, the Prisma logo and "v6.13.0" are displayed with a right-pointing arrow. Below are feature highlights in purple pill-shaped boxes with white text: "MULTI-SCHEMA & PRISMA CONFIG IN GA," "CI/CD & pgvector FOR PRISMA POSTGRES," "NEW CONSOLE UI DESIGN," and "+ MORE…". On the right, there is a screenshot of the Prisma console showing sections like Dashboard, Studio, Accelerate, API Keys, and Settings, along with panels for Prisma Postgres, Accelerate, Studio, and Optimize.'
 tags:
   - "announcement"
 ---
@@ -26,10 +26,10 @@ Ever wanted a TypeScript-native way to configure your Prisma ORM project? With [
 This file provides a native way to specify configuration options for your project, including:
 
 - Custom paths for various Prisma assets:
-    - Prisma schema file
-    - Migrations
-    - SQL view definitions
-    - TypedSQL queries
+  - Prisma schema file
+  - Migrations
+  - SQL view definitions
+  - TypedSQL queries
 - A `seed` command to populate your database based on some executable script
 - Externally managed tables (see below)
 - Driver adapters used by the Prisma CLI
@@ -48,7 +48,8 @@ export default defineConfig({
   },
 });
 ```
-Now, when you run Prisma CLI commands, these custom paths will be respected—for instance, migration files will be created in the specified directories. 
+
+Now, when you run Prisma CLI commands, these custom paths will be respected—for instance, migration files will be created in the specified directories.
 
 Check out [the documentation](https://www.prisma.io/docs/orm/reference/prisma-config-reference) to learn more about the Prisma Config file!
 
@@ -56,7 +57,7 @@ Check out [the documentation](https://www.prisma.io/docs/orm/reference/prisma-co
 
 Looking to better organize your database tables? Multi-schema support is now Generally Available in Prisma ORM!
 
-Databases like PostgreSQL and SQL Server allow logical organization of tables through *schemas*. With Prisma ORM, you can assign tables to specific schemas using the `@@schema` attribute:
+Databases like PostgreSQL and SQL Server allow logical organization of tables through _schemas_. With Prisma ORM, you can assign tables to specific schemas using the `@@schema` attribute:
 
 ```tsx
 datasource db {
@@ -80,11 +81,12 @@ model Order {
   @@schema("shop")
 }
 ```
+
 Learn more about multiple schemas [in our docs](https://www.prisma.io/docs/orm/prisma-schema/data-model/multi-schema).
 
 ### More robust support for SQL views (Preview)
 
-SQL views are *virtual* tables defined by a stored query. They don’t store data but reflect the result of a query each time they're accessed.
+SQL views are _virtual_ tables defined by a stored query. They don’t store data but reflect the result of a query each time they're accessed.
 
 We’re continuing to make support for views in Prisma ORM more robust. This release introduces key guardrails:
 
@@ -117,6 +119,7 @@ export default defineConfig({
   ...
 })
 ```
+
 A common use case is the [`users` table from Supabase](https://supabase.com/docs/guides/auth/managing-user-data), which you may want to query but never modify via migrations. Learn more about externally managed tables [in our docs](https://www.prisma.io/docs/orm/prisma-schema/data-model/externally-managed-tables).
 
 ## `pgvector` extension support for Prisma Postgres in Early Access
@@ -132,6 +135,7 @@ Create a migration like this:
 ```shell
 npx prisma migrate dev --name add-pgvector --create-only
 ```
+
 Then customize the migration file:
 
 ```sql
@@ -145,11 +149,13 @@ CREATE TABLE "Document" (
   embedding VECTOR(1536)
 );
 ```
+
 Apply the the migration in your database:
 
 ```tsx
 npx prisma migrate dev
 ```
+
 Use it via TypedSQL:
 
 ```sql
@@ -160,6 +166,7 @@ FROM "Document"
 ORDER BY "embedding" <=> $1
 LIMIT 5;
 ```
+
 Then, run `prisma generate --sql` and use the query in your code:
 
 ```tsx
@@ -173,6 +180,7 @@ const queryEmbedding = [0.12, -0.5, 0.33, ...]; // match your embedding model’
 
 const result = await prisma.$queryRawTyped(semanticSearch(queryEmbedding));
 ```
+
 In addition to `pgvector`, Prisma Postgres now includes Early Access support for `pg_search`, `pg_stat_statements`, `citext`, `pg_trgm`, `fuzzystrmatch`, and `unaccent`. If you don’t see the extension you need, you can [request it here](https://pris.ly/i-want-extensions).
 
 See [the docs](https://www.prisma.io/docs/postgres/database/postgres-extensions) for details on Postgres extensions in Prisma Postgres.
@@ -193,24 +201,25 @@ Here’s an example of creating a project with the `POST /project` endpoint in T
 // Set HTTP headers (auth via a dedicated service token)
 const headers = {
   Authorization: `Bearer ${SERVICE_TOKEN}`, // get your token in Prisma Console
-  'Content-Type': 'application/json',
+  "Content-Type": "application/json",
 };
 
 // Create a new project
 const projectName = `demo-project-${Date.now()}`;
-const region = 'us-east-1';
+const region = "us-east-1";
 
 const createProjectRes = await axios.post(
   `https://api.prisma.io/v1/projects`,
   { name: projectName, region },
-  { headers }
+  { headers },
 );
 
 const project = createProjectRes.data;
 const projectId = project.id || (project.data && project.data.id);
 
-console.log('Created project and databases: \\n', project);
+console.log("Created project and databases: \\n", project);
 ```
+
 Learn more in our guides:
 
 - [Basic usage](https://www.prisma.io/docs/guides/management-api-basic)
@@ -223,7 +232,7 @@ Based on the Management API, we’ve also published two templates for GitHub Act
 - [**Create Prisma Postgres Database Action**](https://github.com/marketplace/actions/create-prisma-postgres-database)
 - [**Delete Prisma Postgres Database Action**](https://github.com/marketplace/actions/delete-prisma-postgres-database)
 
-These Actions serve as the foundational building blocks for integrating Prisma Postgres into CI/CD pipelines. 
+These Actions serve as the foundational building blocks for integrating Prisma Postgres into CI/CD pipelines.
 
 ![GitHub Actions sample](/orm-6-13-0-ci-cd-workflows-and-pgvector-for-prisma-postgres/imgs/d08557fd614a1bcf64b7c3f55bd81d799443f426-2040x1618.png)
 
@@ -236,11 +245,12 @@ We launched a new CLI command that allows you to spin up a new database within s
 ```shell
 npx create-db # no auth required
 ```
-The command doesn’t require authentication, so you can play around with your database without any initial hurdles! 
+
+The command doesn’t require authentication, so you can play around with your database without any initial hurdles!
 
 ![Running npx create-db](/orm-6-13-0-ci-cd-workflows-and-pgvector-for-prisma-postgres/imgs/bd1a52263c6e36773fe0c4b003a81298d7f175f4-800x450.gif)
 
-Your instance will be automatically deleted after 24 hours *but* you can claim it and put it into your [Prisma Console](https://console.prisma.io) account if you want to keep using it after that period. Learn more about the new command [in our docs](https://www.prisma.io/docs/postgres/introduction/npx-create-db).
+Your instance will be automatically deleted after 24 hours _but_ you can claim it and put it into your [Prisma Console](https://console.prisma.io) account if you want to keep using it after that period. Learn more about the new command [in our docs](https://www.prisma.io/docs/postgres/introduction/npx-create-db).
 
 ## New navigation UI for Prisma Console
 

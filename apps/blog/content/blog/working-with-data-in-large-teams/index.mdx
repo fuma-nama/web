@@ -11,9 +11,9 @@ heroImagePath: "/working-with-data-in-large-teams/imgs/hero-3d53c303fc2f5c1cb3e1
 heroImageAlt: "Illustration showing a large team of diverse people collaborating on a shared data dashboard. Individuals are interacting with charts, tables, and code snippets displayed on floating UI panels. The environment suggests an organized, collaborative workspace with digital tools and version control systems. Arrows and icons represent data flows, edits, and teamwork across roles like engineers, analysts, and product managers."
 ---
 
-When multiple teams share a database, things break. Migrations conflict, queries start to bloat, or  ownership gets murky. 
+When multiple teams share a database, things break. Migrations conflict, queries start to bloat, or ownership gets murky.
 
-This post breaks down how large teams can build resilient data workflows—using SQL, ORMs, or both—while maintaining speed and autonomy. We’ll explore real-world patterns like expand-and-contract, schema CI, query conventions, and how to know when to use raw SQL. 
+This post breaks down how large teams can build resilient data workflows—using SQL, ORMs, or both—while maintaining speed and autonomy. We’ll explore real-world patterns like expand-and-contract, schema CI, query conventions, and how to know when to use raw SQL.
 
 If you're scaling teams and databases, this one’s for you.
 
@@ -37,14 +37,13 @@ Giving teams multiple ways to manage the same task might seem flexible—but it 
 
 There are three common approaches teams use to manage schema changes:
 
-| **Approach** | **Examples** | **Description** |
-| --- | --- | --- |
-| **Migration-first** | Prisma, Rails, Knex | Write schema migrations in code and commit them to version control |
-| **Model-first** | Django, Sequelize | Define schema via application models, and generate database changes automatically |
-| **DDL-first** | Raw SQL, Liquibase, Atlas | Write and review SQL statements directly—offering full control and transparency |
+| **Approach**        | **Examples**              | **Description**                                                                   |
+| ------------------- | ------------------------- | --------------------------------------------------------------------------------- |
+| **Migration-first** | Prisma, Rails, Knex       | Write schema migrations in code and commit them to version control                |
+| **Model-first**     | Django, Sequelize         | Define schema via application models, and generate database changes automatically |
+| **DDL-first**       | Raw SQL, Liquibase, Atlas | Write and review SQL statements directly—offering full control and transparency   |
 
 > Tip: DDL stands for Data Definition Language—SQL statements like `CREATE`, `ALTER`, or DROP that define database structure.
-> 
 
 Stick with one approach across teams. Mixing styles without discipline makes your workflow harder to debug and nearly impossible to scale.
 
@@ -83,7 +82,7 @@ SQL and ORMs are complementary—not competing—tools. The key is knowing when 
 - You want to move quickly on product development
 - You prefer readable, maintainable, and type-safe code
 - Your team benefits from abstracting away boilerplate and repetitive tasks
-- You want to *de-risk development* by not requiring every developer to be a SQL expert
+- You want to _de-risk development_ by not requiring every developer to be a SQL expert
 
 **Use raw SQL when:**
 
@@ -139,7 +138,6 @@ This approach works especially well in **microservice architectures** or when mu
 
 ![Screenshot of Swagger UI displaying a REST API for Prisma examples. It shows endpoints for common actions like getting posts, deleting posts, signing up, publishing posts, and viewing drafts. Each HTTP method is color-coded (e.g., GET in blue, POST in green, DELETE in red, PUT in orange), and the interface is hosted locally at localhost:3000.](/working-with-data-in-large-teams/imgs/f95eeb393e9927416c9bd776ac02895cc5775624-1348x932.png)
 
-
 Instead of relying on tribal knowledge or Slack messages to explain how APIs work, developers can explore, prototype, and integrate confidently—powered by accurate, always-up-to-date documentation.
 
 ## Co-locate queries, standardize structure
@@ -177,6 +175,7 @@ db/
         └── query.types.ts
 
 ```
+
 **Why this works:**
 
 - Encourages clear ownership and encapsulation per domain
@@ -249,13 +248,13 @@ Fast teams ship more value than perfectly tuned queries, optimize for workflows 
 
 You’ve made it this far—great! Here’s a quick recap to keep things sticky. Think of this table not as a checklist, but as a lens to diagnose and refine your current setup. Most data challenges at scale are less about technology, more about clarity and alignment.
 
-| Problem | Solution |
-| --- | --- |
-| Conflicting migrations | Use PRs, version control, expand-contract |
-| Schema ownership confusion | Organize queries, share types |
-| Fragile raw SQL | Use typed helpers, CI validation |
-| Teams moving too slow | Choose boring, fast workflows |
-| Surprising API changes | Use OpenAPI and validate in CI |
+| Problem                    | Solution                                  |
+| -------------------------- | ----------------------------------------- |
+| Conflicting migrations     | Use PRs, version control, expand-contract |
+| Schema ownership confusion | Organize queries, share types             |
+| Fragile raw SQL            | Use typed helpers, CI validation          |
+| Teams moving too slow      | Choose boring, fast workflows             |
+| Surprising API changes     | Use OpenAPI and validate in CI            |
 
 A good data workflow is one your team understands, trusts, and can improve. That’s what scales. Choose discipline and clarity. When everyone knows how things work, teams move faster—together.
 

@@ -18,9 +18,10 @@ tags:
 ---
 
 This article is the fourth part of the course where you build a fullstack app with Next.js, GraphQL, TypeScript,
-  Prisma and PostgreSQL. In this article, you will learn how to add image upload using AWS S3.
+Prisma and PostgreSQL. In this article, you will learn how to add image upload using AWS S3.
 
 ## Table of Contents
+
 - [Introduction](#introduction)
 - [Development environment](#development-environment)
 - [Clone the repository](#clone-the-repository)
@@ -28,9 +29,9 @@ This article is the fourth part of the course where you build a fullstack app wi
 - [Project structure and dependencies](#project-structure-and-dependencies)
 - [Using AWS S3 to add support for image upload](#using-aws-s3-to-add-support-for-image-upload)
   - [Create an Identity Access Management user
-](#create-an-identity-access-management-user)
+    ](#create-an-identity-access-management-user)
   - [Create and configure a new S3 bucket
-](#create-and-configure-a-new-s3-bucket)
+    ](#create-and-configure-a-new-s3-bucket)
   - [Add image upload functionality to your application](#add-image-upload-functionality-to-your-application)
 - [Summary and next steps](#summary-and-next-steps)
 
@@ -61,12 +62,14 @@ To get started, navigate into the directory of your choice and run the following
 ```shell
 git clone -b part-4 https://github.com/prisma/awesome-links.git
 ```
+
 Navigate into the cloned application and install the dependencies:
 
 ```shell
 cd awesome-links
 npm install
 ```
+
 ## Seeding the database
 
 After setting up a PostgreSQL database, rename the `env.example` file to `.env` and set the connection string for your database. After that, run the following command to create the tables in your database:
@@ -74,11 +77,13 @@ After setting up a PostgreSQL database, rename the `env.example` file to `.env` 
 ```shell
 npx prisma migrate dev --name init
 ```
+
 If `prisma migrate dev` did not trigger the seed step, run the following command to seed the database:
 
 ```shell
 npx prisma db seed
 ```
+
 > Refer to [Part 1 – Add Prisma to your Project](/fullstack-nextjs-graphql-prisma-oklidw1rhw#add-prisma-to-your-project) for more details on the format of the connection string.
 
 This command will run the `seed.ts` file in the `/prisma` directory. `seed.ts` creates four links and one user in your database using Prisma Client.
@@ -132,6 +137,7 @@ awesome-links/
 ┣ tailwind.config.js
 ┗ tsconfig.json
 ```
+
 This is a Next.js application that uses the following libraries and tools:
 
 - [Prisma](https://www.prisma.io) for database access/CRUD operations
@@ -202,6 +208,7 @@ Finally, copy the "Access Key ID" and the "Secret Access Key" and store them in 
 APP_AWS_ACCESS_KEY = ''
 APP_AWS_SECRET_KEY = ''
 ```
+
 ### Create and configure a new S3 bucket
 
 The next step is to create an AWS S3 bucket which will store the uploaded objects. You can find the S3 service by looking it up in the search bar or by going to [https://s3.console.aws.amazon.com/](https://s3.console.aws.amazon.com/).
@@ -221,6 +228,7 @@ APP_AWS_REGION = ''
 AWS_S3_BUCKET_NAME = ''  # Will be used in an API route.
 NEXT_PUBLIC_AWS_S3_BUCKET_NAME = '' # Will be used on the client-side
 ```
+
 > Note: The bucket name has to be unique and must not contain any spaces or uppercase letters.
 
 Go ahead and create the bucket by navigating to the bottom of the page and clicking the **Create bucket** button. You can stick with the defaults settings for now, but you'll update them in the following steps.
@@ -235,7 +243,6 @@ Navigate to the **Permissions** tab and click on the **Edit** button in the **Bl
 Uncheck **Block _all_ public access** and click on **Save changes**. You need to allow public access because your application needs to access the images uploaded on AWS S3.
 
 ![AWS S3](/fullstack-nextjs-graphql-prisma-4-1k1kc83x3v/imgs/aws-s3-access-settings.png)
-
 
 Next, update the resource policy to grant the application access to the Bucket and its contents. In the **Permissions** of your S3 Bucket, navigate to the **Bucket policy** section. Select **Edit** and add the following while changing "name-of-your-bucket" placeholder to the name of your Bucket:
 
@@ -255,6 +262,7 @@ Next, update the resource policy to grant the application access to the Bucket a
   ]
 }
 ```
+
 ![AWS S3](/fullstack-nextjs-graphql-prisma-4-1k1kc83x3v/imgs/aws-s3-bucket-policy.png)
 
 Next, you need to allow your application, which will be on a different domain, to access the stored images. In the **Permissions** tab of your bucket, scroll to the **Cross-origin Resource Sharing (CORS)** section at the bottom and add the following to it:
@@ -269,6 +277,7 @@ Next, you need to allow your application, which will be on a different domain, t
   }
 ]
 ```
+
 ![AWS S3](/fullstack-nextjs-graphql-prisma-4-1k1kc83x3v/imgs/aws-s3-cors.png)
 
 > Note: Before deploying your application, ensure you update the "AllowedOrigins" array with the URL pointing to your application.
@@ -282,29 +291,33 @@ First, install the `aws-sdk` package by running the following command:
 ```shell
 npm install aws-sdk
 ```
+
 Next, create a new file called `upload-image.ts` located in the `pages/api/` directory and add the following code to it:
 
 ```ts
 // pages/api/upload-image.ts
-import aws from 'aws-sdk'
-import type { NextApiRequest, NextApiResponse } from 'next'
+import aws from "aws-sdk";
+import type { NextApiRequest, NextApiResponse } from "next";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse,
+) {
   try {
     // 1.
     const s3 = new aws.S3({
       accessKeyId: process.env.APP_AWS_ACCESS_KEY,
       secretAccessKey: process.env.APP_AWS_SECRET_KEY,
       region: process.env.APP_AWS_REGION,
-    })
+    });
 
     // 2.
     aws.config.update({
       accessKeyId: process.env.APP_AWS_ACCESS_KEY,
       secretAccessKey: process.env.APP_AWS_SECRET_KEY,
       region: process.env.APP_AWS_REGION,
-      signatureVersion: 'v4',
-    })
+      signatureVersion: "v4",
+    });
 
     // 3.
     const post = await s3.createPresignedPost({
@@ -314,17 +327,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       },
       Expires: 60, // seconds
       Conditions: [
-        ['content-length-range', 0, 5048576], // up to 1 MB
+        ["content-length-range", 0, 5048576], // up to 1 MB
       ],
-    })
+    });
 
     // 4.
-    return res.status(200).json(post)
+    return res.status(200).json(post);
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
 }
 ```
+
 1. Creates a new instance of the S3 Bucket
 1. Updates the main configuration class with the region, credentials, and additional request options
 1. Generates a presigned URL allowing you to write to the S3 Bucket
@@ -334,12 +348,12 @@ Finally, update the `pages/admin.tsx` file with the following code:
 
 ```tsx
 // pages/admin.tsx
-import React from 'react'
-import { type SubmitHandler, useForm } from 'react-hook-form'
-import { gql, useMutation } from '@apollo/client'
-import toast, { Toaster } from 'react-hot-toast'
-import type { GetServerSideProps } from 'next'
-import { getSession } from '@auth0/nextjs-auth0'
+import React from "react";
+import { type SubmitHandler, useForm } from "react-hook-form";
+import { gql, useMutation } from "@apollo/client";
+import toast, { Toaster } from "react-hot-toast";
+import type { GetServerSideProps } from "next";
+import { getSession } from "@auth0/nextjs-auth0";
 
 type FormValues = {
   title: string;
@@ -347,11 +361,23 @@ type FormValues = {
   category: string;
   description: string;
   image: FileList;
-}
+};
 
 const CreateLinkMutation = gql`
-  mutation($title: String!, $url: String!, $imageUrl: String!, $category: String!, $description: String!) {
-    createLink(title: $title, url: $url, imageUrl: $imageUrl, category: $category, description: $description) {
+  mutation (
+    $title: String!
+    $url: String!
+    $imageUrl: String!
+    $category: String!
+    $description: String!
+  ) {
+    createLink(
+      title: $title
+      url: $url
+      imageUrl: $imageUrl
+      category: $category
+      description: $description
+    ) {
       title
       url
       imageUrl
@@ -359,68 +385,72 @@ const CreateLinkMutation = gql`
       description
     }
   }
-`
+`;
 
 const Admin = () => {
-  const [createLink, { data, loading, error }] = useMutation(CreateLinkMutation)
+  const [createLink, { data, loading, error }] =
+    useMutation(CreateLinkMutation);
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormValues>()
+  } = useForm<FormValues>();
 
   // Upload photo function
   const uploadPhoto = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files || e.target.files.length <= 0) return
-    const file = e.target.files[0]
-    const filename = encodeURIComponent(file.name)
-    const res = await fetch(`/api/upload-image?file=${filename}`)
-    const data = await res.json()
-    const formData = new FormData()
+    if (!e.target.files || e.target.files.length <= 0) return;
+    const file = e.target.files[0];
+    const filename = encodeURIComponent(file.name);
+    const res = await fetch(`/api/upload-image?file=${filename}`);
+    const data = await res.json();
+    const formData = new FormData();
 
     Object.entries({ ...data.fields, file }).forEach(([key, value]) => {
       // @ts-ignore
-      formData.append(key, value)
-    })
+      formData.append(key, value);
+    });
 
     toast.promise(
       fetch(data.url, {
-        method: 'POST',
+        method: "POST",
         body: formData,
       }),
       {
-        loading: 'Uploading...',
-        success: 'Image successfully uploaded!🎉',
+        loading: "Uploading...",
+        success: "Image successfully uploaded!🎉",
         error: `Upload failed 😥 Please try again ${error}`,
       },
-    )
-  }
+    );
+  };
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    const { title, url, category, description, image } = data
-    const imageUrl = `https://${process.env.NEXT_PUBLIC_AWS_S3_BUCKET_NAME}.s3.amazonaws.com/${image[0]?.name}`
-    const variables = { title, url, category, description, imageUrl }
+    const { title, url, category, description, image } = data;
+    const imageUrl = `https://${process.env.NEXT_PUBLIC_AWS_S3_BUCKET_NAME}.s3.amazonaws.com/${image[0]?.name}`;
+    const variables = { title, url, category, description, imageUrl };
     try {
       toast.promise(createLink({ variables }), {
-        loading: 'Creating new link..',
-        success: 'Link successfully created!🎉',
+        loading: "Creating new link..",
+        success: "Link successfully created!🎉",
         error: `Something went wrong 😥 Please try again -  ${error}`,
-      })
+      });
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
-  }
+  };
 
   return (
     <div className="container mx-auto max-w-md py-12">
       <Toaster />
       <h1 className="text-3xl font-medium my-5">Create a new link</h1>
-      <form className="grid grid-cols-1 gap-y-6 shadow-lg p-8 rounded-lg" onSubmit={handleSubmit(onSubmit)}>
+      <form
+        className="grid grid-cols-1 gap-y-6 shadow-lg p-8 rounded-lg"
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <label className="block">
           <span className="text-gray-700">Title</span>
           <input
             placeholder="Title"
-            {...register('title', { required: true })}
+            {...register("title", { required: true })}
             name="title"
             type="text"
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
@@ -430,7 +460,7 @@ const Admin = () => {
           <span className="text-gray-700">Description</span>
           <input
             placeholder="Description"
-            {...register('description', { required: true })}
+            {...register("description", { required: true })}
             name="description"
             type="text"
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
@@ -440,7 +470,7 @@ const Admin = () => {
           <span className="text-gray-700">Url</span>
           <input
             placeholder="https://example.com"
-            {...register('url', { required: true })}
+            {...register("url", { required: true })}
             name="url"
             type="text"
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
@@ -450,16 +480,18 @@ const Admin = () => {
           <span className="text-gray-700">Category</span>
           <input
             placeholder="Name"
-            {...register('category', { required: true })}
+            {...register("category", { required: true })}
             name="category"
             type="text"
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
           />
         </label>
         <label className="block">
-          <span className="text-gray-700">Upload a .png or .png image (max 1MB).</span>
+          <span className="text-gray-700">
+            Upload a .png or .png image (max 1MB).
+          </span>
           <input
-            {...register('image', { required: true })}
+            {...register("image", { required: true })}
             onChange={uploadPhoto}
             type="file"
             accept="image/png, image/jpeg"
@@ -490,13 +522,14 @@ const Admin = () => {
         </button>
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default Admin
+export default Admin;
 
 // getServerSideProps code remains unchanged
 ```
+
 The form includes a new input field to handle file upload. The input field accepts images of either `.png` or `.jpeg` formats. Whenever an image is uploaded, the `uploadPhoto` function sends a request to the `/api/upload-image` API endpoint. A toast will be shown as the request is being resolved by the API – success, loading, or error states.
 
 When the form is submitted, the URL of the image is included as a variable in the `createLink` mutation. A toast will appear as the mutation is being executed.
@@ -504,4 +537,3 @@ When the form is submitted, the URL of the image is included as a variable in th
 ## Summary and next steps
 
 You learned how to add support for image upload using AWS S3. In the [next part](/fullstack-nextjs-graphql-prisma-5-m2fna60h7c), you will deploy your app to Vercel and learn how you can use the Prisma Data Proxy to manage your database connection pool to ensure your application doesn't run out of connections.
-

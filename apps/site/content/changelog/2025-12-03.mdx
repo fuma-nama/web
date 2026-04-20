@@ -55,10 +55,10 @@ SELECT "id", "name" FROM "User" /*application='my-app',traceparent='00-abc123...
 Pass an array of SQL commenter plugins to the new `comments` option when creating a `PrismaClient` instance:
 
 ```typescript
-import { PrismaClient } from './generated/prisma/client';
-import { PrismaPg } from '@prisma/adapter-pg';
-import { queryTags } from '@prisma/sqlcommenter-query-tags';
-import { traceContext } from '@prisma/sqlcommenter-trace-context';
+import { PrismaClient } from "./generated/prisma/client";
+import { PrismaPg } from "@prisma/adapter-pg";
+import { queryTags } from "@prisma/sqlcommenter-query-tags";
+import { traceContext } from "@prisma/sqlcommenter-trace-context";
 
 const adapter = new PrismaPg({
   connectionString: `${process.env.DATABASE_URL}`,
@@ -75,7 +75,7 @@ const prisma = new PrismaClient({
 The `@prisma/sqlcommenter-query-tags` package lets you add arbitrary tags to queries within an async context:
 
 ```typescript
-import { queryTags, withQueryTags } from '@prisma/sqlcommenter-query-tags';
+import { queryTags, withQueryTags } from "@prisma/sqlcommenter-query-tags";
 
 const prisma = new PrismaClient({
   adapter,
@@ -84,7 +84,7 @@ const prisma = new PrismaClient({
 
 // Wrap your queries to add tags
 const users = await withQueryTags(
-  { route: '/api/users', requestId: 'abc-123' },
+  { route: "/api/users", requestId: "abc-123" },
   () => prisma.user.findMany(),
 );
 ```
@@ -101,11 +101,11 @@ Use `withMergedQueryTags` to merge tags with outer scopes:
 import {
   withQueryTags,
   withMergedQueryTags,
-} from '@prisma/sqlcommenter-query-tags';
+} from "@prisma/sqlcommenter-query-tags";
 
-await withQueryTags({ requestId: 'req-123', source: 'api' }, async () => {
+await withQueryTags({ requestId: "req-123", source: "api" }, async () => {
   await withMergedQueryTags(
-    { userId: 'user-456', source: 'handler' },
+    { userId: "user-456", source: "handler" },
     async () => {
       // Queries here have: requestId='req-123', userId='user-456', source='handler'
       await prisma.user.findMany();
@@ -119,7 +119,7 @@ await withQueryTags({ requestId: 'req-123', source: 'api' }, async () => {
 The `@prisma/sqlcommenter-trace-context` package adds W3C Trace Context (`traceparent`) headers for distributed tracing correlation:
 
 ```typescript
-import { traceContext } from '@prisma/sqlcommenter-trace-context';
+import { traceContext } from "@prisma/sqlcommenter-trace-context";
 
 const prisma = new PrismaClient({
   adapter,
@@ -140,11 +140,11 @@ Note: Requires @prisma/instrumentation to be configured. The traceparent is only
 Create your own plugins to add custom metadata:
 
 ```typescript
-import type { SqlCommenterPlugin } from '@prisma/sqlcommenter';
+import type { SqlCommenterPlugin } from "@prisma/sqlcommenter";
 
 const applicationTags: SqlCommenterPlugin = (context) => ({
-  application: 'my-service',
-  environment: process.env.NODE_ENV ?? 'development',
+  application: "my-service",
+  environment: process.env.NODE_ENV ?? "development",
   operation: context.query.action,
   model: context.query.modelName,
 });
@@ -160,8 +160,8 @@ const prisma = new PrismaClient({
 SQL comments work seamlessly with popular frameworks, e.g., **Hono**:
 
 ```typescript
-import { createMiddleware } from 'hono/factory';
-import { withQueryTags } from '@prisma/sqlcommenter-query-tags';
+import { createMiddleware } from "hono/factory";
+import { withQueryTags } from "@prisma/sqlcommenter-query-tags";
 
 app.use(
   createMiddleware(async (c, next) => {
@@ -169,7 +169,7 @@ app.use(
       {
         route: c.req.path,
         method: c.req.method,
-        requestId: c.req.header('x-request-id') ?? crypto.randomUUID(),
+        requestId: c.req.header("x-request-id") ?? crypto.randomUUID(),
       },
       () => next(),
     );

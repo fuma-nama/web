@@ -27,9 +27,9 @@ JsDoc is an API documentation generator for JavaScript using multi-line comments
 
 ### Improves code documentation
 
-Documenting code is a valuable skill for developers. Documentation provides information for yourself and other developers - by explaining what the code does and  how it does it. This makes maintenance and code review simpler and reduces the entry barriers for other contributors to your code.
+Documenting code is a valuable skill for developers. Documentation provides information for yourself and other developers - by explaining what the code does and how it does it. This makes maintenance and code review simpler and reduces the entry barriers for other contributors to your code.
 
-JsDoc improves code documentation in a more structured manner using tags to describe arguments, return values, namespaces, modules, etc. 
+JsDoc improves code documentation in a more structured manner using tags to describe arguments, return values, namespaces, modules, etc.
 
 Library authors take advantage of JsDoc to provide as much detail as possible, for example, on types, code examples/ mini-tutorials, and utility functions. An example of well-documented libraries are [Nexus](https://nexusjs.org/).
 
@@ -50,25 +50,27 @@ JsDoc is works seamlessly with both JavaScript and TypeScript. The types declare
 ## How does JsDoc work?
 
 Under the hood of VS Code is the [JavaScript Language Service](https://github.com/microsoft/TypeScript/wiki/JavaScript-Language-Service-in-Visual-Studio) that provides intellisense when working with JavaScript. The language service analyzes types from three different sources to provide great developer experience:
-* Implicitly inferring types from your code based on usage
-* TypeScript declaration files
-* JsDoc
+
+- Implicitly inferring types from your code based on usage
+- TypeScript declaration files
+- JsDoc
 
 VS Code ships with JsDoc support and therefore requires no set up to get started. You can configure VS Code to check types in your JavaScript project in the following ways:
-* Adding `@ts-check` at the top of every file.
-* Modifying the following setting: `"js/ts.implicitProjectConfig.strictFunctionTypes": true`
-* Using `jsconfig.json` or `tsconfig.json` by adding the `"checkJs": true` in the `compilerOptions` configuration
-* Explicitly specifying types using JsDoc
+
+- Adding `@ts-check` at the top of every file.
+- Modifying the following setting: `"js/ts.implicitProjectConfig.strictFunctionTypes": true`
+- Using `jsconfig.json` or `tsconfig.json` by adding the `"checkJs": true` in the `compilerOptions` configuration
+- Explicitly specifying types using JsDoc
 
 If you're working on VS Code, either of the would work just fine for any project. These options complement each other and it's up to you to choose what works better for you.
 
-> **Fun fact**: The former code name of the JavaScript Language Server was *Salsa*.
+> **Fun fact**: The former code name of the JavaScript Language Server was _Salsa_.
 
-The fundamental element needed to document code using JsDoc is a [tag](https://jsdoc.app/about-block-inline-tags.html). JsDoc provides two types of tags: _block tags_ and _inline tags_. 
+The fundamental element needed to document code using JsDoc is a [tag](https://jsdoc.app/about-block-inline-tags.html). JsDoc provides two types of tags: _block tags_ and _inline tags_.
 
 Block tags provide means to _annotate_ variables, functions, arguments, modules, namespaces, return types, and classes and describe what a specific code snippet does. These could be types, arguments, callbacks, modules, namespaces, etc. Inline tags are used to link to other parts of the documentation.
 
-To get started with JsDoc, add an annotation before blocks of code. The annotations are captured between multi-line comments - `/** */` - and use JsDoc's block tags, for example `@type`. 
+To get started with JsDoc, add an annotation before blocks of code. The annotations are captured between multi-line comments - `/** */` - and use JsDoc's block tags, for example `@type`.
 
 The annotations are picked up by the JavaScript Language service and infer types in your project. You can then preview the docs by hovering on the snippets of code, for example functions and variables. Besides documenting the code, JsDoc also adds type-safety to your application.
 
@@ -80,19 +82,20 @@ JavaScript's primitive type types are supported in JsDocs. More advanced TypeScr
 
 ### Primitive types
 
-
 ```js
 /**
  * @type {string}
  */
 let firstName;
 ```
+
 ```js
 /**
  * @type {number}
  */
 let age;
 ```
+
 ```js
 /**
  * @type {boolean}
@@ -100,10 +103,7 @@ let age;
 let isOk;
 ```
 
-
 ### Structural types
-
-
 
 ```js
 /**
@@ -111,6 +111,7 @@ let isOk;
  */
 let user;
 ```
+
 ```js
 /**
  * @type {string[]} names
@@ -123,27 +124,28 @@ let names;
  */
 let names;
 ```
+
 ```js
 /**
  * Function with void return type
  * @type {Function}
  */
-let createUser = () => { };
+let createUser = () => {};
 ```
+
 ```js
 /**
  * Function with arguments and a return type
- * @param {string} name 
- * @param {number} age 
- * @param {boolean} isOk 
+ * @param {string} name
+ * @param {number} age
+ * @param {boolean} isOk
  * @returns {{name: string, age: number, isOk: boolean}} user
  */
 const createUser = (name, age, isOk) => {
-  let user = { name, age, isOk }
-  return user
-}
+  let user = { name, age, isOk };
+  return user;
+};
 ```
-
 
 ### Nullable types
 
@@ -153,6 +155,7 @@ const createUser = (name, age, isOk) => {
  */
 let userName;
 ```
+
 ### Built-in objects
 
 JsDoc allows you to reference the standard built-in objects in JavaScript such as `Promise`, `Document`, `Window` etc.
@@ -163,6 +166,7 @@ JsDoc allows you to reference the standard built-in objects in JavaScript such a
  */
 let document;
 ```
+
 ### Union Types
 
 ```js
@@ -171,16 +175,20 @@ let document;
  */
 let orderBy;
 ```
-### Generic Types 
+
+### Generic Types
 
 ```js
-/** 
+/**
  * @template D
  * @param {D} data
  * @return {D} data
-*/
-const createData = (data) => { return data };
+ */
+const createData = (data) => {
+  return data;
+};
 ```
+
 ## Type inference with Prisma
 
 [Prisma](https://www.prisma.io/) is a database ORM that provides developers with a type-safe database client. Prisma provides an intuitive API that makes modelling and querying data fun for all developers. Currently, Prisma supports PostgreSQL, MySQL, SQLite, SQL Server and MongoDB _preview_.
@@ -195,6 +203,7 @@ Create a project directory and navigate into it:
 mkdir awesome-project # Give your project a memorable name
 cd awesome-project
 ```
+
 Next, install Prisma CLI as a development dependency and Prisma client:
 
 ```shell
@@ -202,13 +211,15 @@ npm init -y
 npm install -D prisma
 npm install @prisma/client
 ```
+
 The [Prisma CLI](https://www.prisma.io/docs/reference/api-reference/command-reference) is as a development dependency used for the following:
-* Initializing Prisma in your project
-* Running database migrations
-* Generating Prisma Client
-* Managing the database schema and lifecycle
-* Introspecting your existing database.
-* Opening [Prisma Studio](https://www.prisma.io/studio) - a database GUI for interacting with data
+
+- Initializing Prisma in your project
+- Running database migrations
+- Generating Prisma Client
+- Managing the database schema and lifecycle
+- Introspecting your existing database.
+- Opening [Prisma Studio](https://www.prisma.io/studio) - a database GUI for interacting with data
 
 [Prisma Client](https://www.prisma.io/docs/concepts/components/prisma-client) is the database client for querying data in your JavaScript or TypeScript application.
 Initialize Prisma in your project:
@@ -216,14 +227,16 @@ Initialize Prisma in your project:
 ```shell
 npx prisma init
 ```
+
 This command does the following creates:
-* A folder called `prisma` at the root of your project
-* A `.env` file at the root of your project
-* A `schema.prisma` file. You will define your database models here.
+
+- A folder called `prisma` at the root of your project
+- A `.env` file at the root of your project
+- A `schema.prisma` file. You will define your database models here.
 
 ### Connect to your database
 
-To connect to your database, set the `url` field in the `datasource` block in your Prisma schema to the connection URL pointing to your database. For simplicity, this guide will use SQLite. 
+To connect to your database, set the `url` field in the `datasource` block in your Prisma schema to the connection URL pointing to your database. For simplicity, this guide will use SQLite.
 
 ```prisma
 datasource db {
@@ -241,12 +254,15 @@ model Post {
   content  String?
 }
 ```
+
 With your database models set up, run the command to create the database and the table as well.
 
 ```shell
 npx prisma migrate dev --name init
 ```
+
 This creates and applies a database migration against your database. A SQLite database is also created in the `prisma` directory. Prisma CLI generates the Prisma Client for you after a successful migration.
+
   </Accordion>
 </Accordions>
 
@@ -268,6 +284,7 @@ model Post {
   content  String?
 }
 ```
+
 In a JavaScript file within your project add the following:
 
 ```js
@@ -277,19 +294,20 @@ In a JavaScript file within your project add the following:
  */
 
 const { PrismaClient } = require("@prisma/client");
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 
 /**
  * This function creates one post record
- * @param {postCreateInput} data 
+ * @param {postCreateInput} data
  * @returns {Promise<Post>} post
  */
 const createOnePost = async (data) => {
   return await prisma.post.create({
-    data
-  })
-}
+    data,
+  });
+};
 ```
+
 Hovering on the function declaration, function arguments, the `data` property will bring up the different types and descriptions referenced in the code. The types generated by the Prisma CLI are TypeScript types derived from your models. They are imported using the TypeScript syntax.
 
 {/* <Video src="/blog/type-safe-js-with-jsdoc-typeSaf3js/imgs/146181009-04fc37e4-d8ba-4ba6-af76-479bfd2e0379.mov" alt="Prisma Types in JavaScript" width={740} height={416}/> */}
@@ -298,12 +316,8 @@ Hovering on the function declaration, function arguments, the `data` property wi
 
 Learn more about [Productive Development With Prisma's Zero-Cost Type Safety](https://dev.to/prisma/productive-development-with-prisma-s-zero-cost-type-safety-4od2) and the [Learn TypeScript: A Pocketguide Tutorial](https://www.prisma.io/blog/learn-typescript-a-pocketguide-tutorial-q329XmXQHUjz).
 
-
 ## Conclusion
 
 In summary, JsDoc makes a great tool for code documentation and provide a level of type safety when working with JavaScript. JsDoc also provides an incremental way of adopting types in your application without migrating your codebase to TypeScript.
 
-If you have any questions regarding JsDoc, type safety, code documentation or Prisma, feel free to reach out to us on [X/Twitter](https://pris.ly/x), ask a question on [GitHub](https://github.com/prisma/prisma/discussions). 
-
-
-
+If you have any questions regarding JsDoc, type safety, code documentation or Prisma, feel free to reach out to us on [X/Twitter](https://pris.ly/x), ask a question on [GitHub](https://github.com/prisma/prisma/discussions).

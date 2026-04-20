@@ -487,7 +487,11 @@ export interface AuthRequest extends Request {
   prisma?: typeof prisma;
 }
 
-export const authenticate = (req: AuthRequest, res: Response, next: NextFunction): void => {
+export const authenticate = (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction,
+): void => {
   const userEmail = req.headers["x-user-email"] as string;
 
   if (!userEmail) {
@@ -639,7 +643,6 @@ If everything is set up correctly, the console will display:
 🚀 Server running at http://localhost:3000
 🔐 ReBAC filtering is now active
 ```
-
 
 ### 9.3 Test your API
 

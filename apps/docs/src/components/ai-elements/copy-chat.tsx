@@ -4,7 +4,11 @@ import { CheckIcon, CopyIcon } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@prisma-docs/ui/lib/cn";
 import { buttonVariants } from "@/components/ui/button";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@prisma-docs/ui/components/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@prisma-docs/ui/components/tooltip";
 import type { ChatMessage } from "@/hooks/use-chat-persistence";
 
 export type CopyChatProps = {
@@ -43,7 +47,7 @@ export const CopyChat = ({ messages }: CopyChatProps) => {
             onClick={handleCopyChat}
             className={cn(
               buttonVariants({ variant: "ghost", size: "icon-sm" }),
-              "disabled:opacity-50"
+              "disabled:opacity-50",
             )}
           >
             <Icon className="size-3.5" />

@@ -2,9 +2,8 @@
 title: Upgrade to v3
 description: Comprehensive guide for upgrading to Prisma ORM v3
 url: /guides/upgrade-prisma-orm/v3
-metaTitle: 'Upgrade to Prisma ORM 3'
-metaDescription: 'Guides on how to upgrade to Prisma ORM 3'
-
+metaTitle: "Upgrade to Prisma ORM 3"
+metaDescription: "Guides on how to upgrade to Prisma ORM 3"
 ---
 
 This guide helps you upgrade your project to Prisma ORM v3. Version 3 includes several important changes that may affect your application, so please review this guide carefully before proceeding.
@@ -51,8 +50,8 @@ model User {
 model Post {
   id       Int  @id @default(autoincrement())
   author   User @relation(
-    fields: [authorId], 
-    references: [id], 
+    fields: [authorId],
+    references: [id],
     onDelete: Cascade,  // Explicit action required
     onUpdate: Cascade   // Optional: define update behavior
   )
@@ -109,7 +108,7 @@ The `$queryRaw` method now only supports template literals for security:
 
 ```typescript
 // String syntax (no longer supported in v3)
-const result = await prisma.$queryRaw('SELECT * FROM User WHERE id = 1');
+const result = await prisma.$queryRaw("SELECT * FROM User WHERE id = 1");
 ```
 
 #### After (Prisma 3.x):
@@ -121,8 +120,8 @@ const result = await prisma.$queryRaw`SELECT * FROM User WHERE id = ${userId}`;
 
 // Or use $queryRawUnsafe (use with caution)
 const unsafeResult = await prisma.$queryRawUnsafe(
-  'SELECT * FROM User WHERE id = $1', 
-  userId
+  "SELECT * FROM User WHERE id = $1",
+  userId,
 );
 ```
 
@@ -145,49 +144,49 @@ Prisma ORM 3 introduces more precise handling of null values in JSON fields:
 const result = await prisma.log.findMany({
   where: {
     meta: {
-      equals: null // Could mean either JSON null or database NULL
-    }
-  }
+      equals: null, // Could mean either JSON null or database NULL
+    },
+  },
 });
 ```
 
 #### After (Prisma 3.x):
 
 ```typescript
-import { Prisma } from '@prisma/client';
+import { Prisma } from "@prisma/client";
 
 // Check for JSON null
 const jsonNullResults = await prisma.log.findMany({
   where: {
     meta: {
-      equals: Prisma.JsonNull
-    }
-  }
+      equals: Prisma.JsonNull,
+    },
+  },
 });
 
 // Check for database NULL
 const dbNullResults = await prisma.log.findMany({
   where: {
     meta: {
-      equals: Prisma.DbNull
-    }
-  }
+      equals: Prisma.DbNull,
+    },
+  },
 });
 
 // Check for either
 const anyNullResults = await prisma.log.findMany({
   where: {
     meta: {
-      equals: Prisma.AnyNull
-    }
-  }
+      equals: Prisma.AnyNull,
+    },
+  },
 });
 
 // Creating with specific null types
 await prisma.log.create({
   data: {
-    meta: Prisma.JsonNull // or Prisma.DbNull
-  }
+    meta: Prisma.JsonNull, // or Prisma.DbNull
+  },
 });
 ```
 
@@ -243,10 +242,12 @@ Before you upgrade, check each breaking change below to see how the upgrade migh
 ### Common Issues
 
 1. **Missing Referential Actions**
+
    - **Symptom**: Unexpected behavior with cascading deletes
    - **Solution**: Add explicit `onDelete` and `onUpdate` actions to your relations
 
 2. **JSON Null Handling**
+
    - **Symptom**: Type errors when filtering JSON fields
    - **Solution**: Use `Prisma.JsonNull`, `Prisma.DbNull`, or `Prisma.AnyNull`
 

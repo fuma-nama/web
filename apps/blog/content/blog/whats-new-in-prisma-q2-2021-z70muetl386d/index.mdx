@@ -78,6 +78,7 @@ model Post {
   author   User   @relation(fields: [authorId], onDelete: Cascade, onUpdate: Cascade)
 }
 ```
+
 If you run into any questions or have any feedback, we’re available in this [issue](https://github.com/prisma/prisma/issues/7816).
 
 ### `prisma db push` is now generally available 🚀
@@ -110,6 +111,7 @@ While this is thew only command that uses this notation in today's release, we p
   [*] Altered column `isGoodDog` (arity changed from Nullable to Required, default changed from `None` to `Some(Value(Boolean(true)))`)
   [+] Added unique index on columns (weight)
 ```
+
 ### New features for the Prisma Client API
 
 We regularly add new features to the Prisma Client API to enable more powerful database queries that were previously only possible via plain SQL and the `$queryRaw` escape hatch.
@@ -117,12 +119,14 @@ We regularly add new features to the Prisma Client API to enable more powerful d
 #### Support for .env files in Prisma Client Go
 
 You can now use a .env file with Prisma Client Go. This makes it easier to keep database credentials outside your Prisma schema and potentially work with multiple clients at the same time:
+
 ```
 example/
 ├── .env
 ├── main.go
 └── schema.prisma
 ```
+
 Learn more about using the .env file in our [documentation](https://www.prisma.io/docs/guides/development-environment/environment-variables#using-env-files).
 
 #### MongoDB gets Json and Enum Support
@@ -151,6 +155,7 @@ enum Level {
   Error
 }
 ```
+
 As a reminder, the mongodb provider is still in [Early Access](https://www.prisma.io/docs/about/prisma/releases#early-access). If you'd like to use MongoDB with Prisma, please fill out this [2-minute Typeform](https://prisma-data.typeform.com/to/FriDuIeM) and we'll get you an invite to our Getting Started guide and private Slack channel right away!
 
 #### JSON filtering (preview)
@@ -171,23 +176,22 @@ Assuming we have the following data in a database:
 
 We can now filter logs by the data inside the meta field.
 
-
-
 ```ts
 const logs = await prisma.log.findMany({
   where: {
     meta: {
       // path looks for the request_id key inside meta
-      path: ['request_id'],
+      path: ["request_id"],
       // and we select rows whose request_id is 10
       equals: 10,
     },
   },
   orderBy: {
-    id: 'asc',
+    id: "asc",
   },
-})
+});
 ```
+
 ```prisma
 generator client {
   provider        = "prisma-client-js"
@@ -208,12 +212,9 @@ enum Level {
 }
 ```
 
-
 #### Order by an aggregate in groupBy (preview)
 
 Since [2.21.0](https://github.com/prisma/prisma/releases/tag/2.21.0), you can Order by an aggregate in groupBy. Let's say you want to group your users by the city they live in and then order the results by the cities with the most users.
-
-
 
 ```ts
 const userRatingsCount = await prisma.user.groupBy({
@@ -228,6 +229,7 @@ const userRatingsCount = await prisma.user.groupBy({
   },
 }
 ```
+
 ```prisma
 model User {
   id    Int     @id @default(autoincrement())
@@ -237,8 +239,8 @@ model User {
 }
 ```
 
-
 The query returns the following data:
+
 ```
 [
   { city: 'Berlin', count: { city: 3 } },
@@ -246,6 +248,7 @@ The query returns the following data:
   { city: 'Amsterdam', count: { city: 1 } },
 ]
 ```
+
 ## Community
 
 We wouldn't be where we are today without our amazing [community](https://www.prisma.io/community) of developers. Our [Slack](https://slack.prisma.io) has more than 40k members and is a great place to ask questions, share feedback and initiate discussions all around Prisma.
@@ -277,117 +280,118 @@ We wouldn't be where we are today without our amazing [community](https://www.pr
     imagePath="/blog/meetups/meetup-prisma.png"
   />
 
-  <Meetup
-    title="Connect Dev Africa Meetup #1"
-    meetupLink="https://www.meetup.com/connect-dev-africa/events/278245682/"
-    youtubeLink="https://youtu.be/7Hs2D8V0uvk"
-    talks={[
-      {
-        title: 'Personal Branding for Software Engineers',
-        author: 'Gift Egwuenu',
-      },
-      {
-        title: 'Building large sites on the Jamstack with On-demand builders (ODB)',
-        author: 'Ekene Eze',
-      },
-      {
-        title:'The Beginner’s Guide to GraphQL',
-        author:'Mahmoud Abdelwahab'
-      }
-    ]}
-    imagePath="/blog/meetups/meetup-connect-dev-africa.png"
-  />
-  <Meetup
-    title="TypeScript Berlin Meetup #6"
-    meetupLink="https://www.meetup.com/TypeScript-Berlin/events/278178824/"
-    youtubeLink="https://www.youtube.com/watch?v=biAsioxl2Vc"
-    talks={[
-      {
-        title: 'End-to-end typesafe APIs with tRPC',
-        author: 'Alexander Johansson',
-      },
-      {
-        title: 'Introduction to Shelter',
-        author: 'David Barrat',
-      },
-    ]}
-    imagePath="/blog/meetups/meetup-typescript.png"
-  />
-  <Meetup
-    title="Prisma Meetup #5 + a raffle!"
-    meetupLink="https://www.meetup.com/Berlin-Prisma-Meetup/events/277753565/"
-    youtubeLink="https://www.youtube.com/watch?v=svmOmnNL9h8"
-    talks={[
-      {
-        title: 'Dungeons & Dragons themed introduction to graph databases',
-        author: 'Guy Royse',
-      },
-      {
-        title: "Prisma's Developer Experience",
-        author: 'Julieta Curdi',
-      },
-      {
-        title:'Building a World-class Multi-region Application',
-        author:'Andy Woods & Adam Storm'
-      }
-    ]}
-    imagePath="/blog/meetups/meetup-prisma.png"
-  />
-  <Meetup
-    title="TypeScript Berlin/Sevilla Meetup"
-    meetupLink="https://www.meetup.com/TypeScript-Berlin/events/277610945/"
-    youtubeLink="https://www.youtube.com/watch?v=RH49aarW6sU"
-    talks={[
-      {
-        title: 'Understanding Variance in the Typescript Type System',
-        author: 'Tițian Cericova-Dragomir',
-      },
-      {
-        title: 'PropTypes vs TypeScript',
-        author: 'Dillion Megida',
-      },
-      {
-        title:'Elm, a delightful language for learning functional programming',
-        author:'Kajetan Świątek'
-      }
-    ]}
-    imagePath="/blog/meetups/meetup-typescript.png"
-  />
-  <Meetup
-    title="GraphQL Berlin Meetup #22"
-    meetupLink="https://www.meetup.com/graphql-berlin/events/277280108/"
-    youtubeLink="https://www.youtube.com/watch?v=1QHBjeJW5xg"
-    talks={[
-      {
-        title: 'The Case For Lighter GraphQL Client Libraries',
-        author: 'Matheus Cardoso',
-      },
-      {
-        title: 'Introduction to urql',
-        author: 'Phil Plückthun',
-      },
-      {
-        title: 'Scaling GraphQL at Zalando',
-        author: 'Aditya Pratap Singh & Mariano Carballal',
-      },
-    ]}
-    imagePath="/blog/meetups/meetup-graphql.png"
-  />
-  <Meetup
-    title="Prisma Meetup #4"
-    meetupLink="https://www.meetup.com/Berlin-Prisma-Meetup/events/277236269/"
-    youtubeLink="https://www.youtube.com/watch?v=2g525rJdYFU"
-    imagePath="/blog/meetups/meetup-prisma.png"
-    talks={[
-      {
-        title: 'Prisma at Iopool',
-        author: 'Luc Matagne',
-      },
-      {
-        title: 'Launching the Prisma Data Platform',
-        author: 'Spiros Martzoukos',
-      },
-    ]}
+<Meetup
+  title="Connect Dev Africa Meetup #1"
+  meetupLink="https://www.meetup.com/connect-dev-africa/events/278245682/"
+  youtubeLink="https://youtu.be/7Hs2D8V0uvk"
+  talks={[
+    {
+      title: "Personal Branding for Software Engineers",
+      author: "Gift Egwuenu",
+    },
+    {
+      title:
+        "Building large sites on the Jamstack with On-demand builders (ODB)",
+      author: "Ekene Eze",
+    },
+    {
+      title: "The Beginner’s Guide to GraphQL",
+      author: "Mahmoud Abdelwahab",
+    },
+  ]}
+  imagePath="/blog/meetups/meetup-connect-dev-africa.png"
+/>
+<Meetup
+  title="TypeScript Berlin Meetup #6"
+  meetupLink="https://www.meetup.com/TypeScript-Berlin/events/278178824/"
+  youtubeLink="https://www.youtube.com/watch?v=biAsioxl2Vc"
+  talks={[
+    {
+      title: "End-to-end typesafe APIs with tRPC",
+      author: "Alexander Johansson",
+    },
+    {
+      title: "Introduction to Shelter",
+      author: "David Barrat",
+    },
+  ]}
+  imagePath="/blog/meetups/meetup-typescript.png"
+/>
+<Meetup
+  title="Prisma Meetup #5 + a raffle!"
+  meetupLink="https://www.meetup.com/Berlin-Prisma-Meetup/events/277753565/"
+  youtubeLink="https://www.youtube.com/watch?v=svmOmnNL9h8"
+  talks={[
+    {
+      title: "Dungeons & Dragons themed introduction to graph databases",
+      author: "Guy Royse",
+    },
+    {
+      title: "Prisma's Developer Experience",
+      author: "Julieta Curdi",
+    },
+    {
+      title: "Building a World-class Multi-region Application",
+      author: "Andy Woods & Adam Storm",
+    },
+  ]}
+  imagePath="/blog/meetups/meetup-prisma.png"
+/>
+<Meetup
+  title="TypeScript Berlin/Sevilla Meetup"
+  meetupLink="https://www.meetup.com/TypeScript-Berlin/events/277610945/"
+  youtubeLink="https://www.youtube.com/watch?v=RH49aarW6sU"
+  talks={[
+    {
+      title: "Understanding Variance in the Typescript Type System",
+      author: "Tițian Cericova-Dragomir",
+    },
+    {
+      title: "PropTypes vs TypeScript",
+      author: "Dillion Megida",
+    },
+    {
+      title: "Elm, a delightful language for learning functional programming",
+      author: "Kajetan Świątek",
+    },
+  ]}
+  imagePath="/blog/meetups/meetup-typescript.png"
+/>
+<Meetup
+  title="GraphQL Berlin Meetup #22"
+  meetupLink="https://www.meetup.com/graphql-berlin/events/277280108/"
+  youtubeLink="https://www.youtube.com/watch?v=1QHBjeJW5xg"
+  talks={[
+    {
+      title: "The Case For Lighter GraphQL Client Libraries",
+      author: "Matheus Cardoso",
+    },
+    {
+      title: "Introduction to urql",
+      author: "Phil Plückthun",
+    },
+    {
+      title: "Scaling GraphQL at Zalando",
+      author: "Aditya Pratap Singh & Mariano Carballal",
+    },
+  ]}
+  imagePath="/blog/meetups/meetup-graphql.png"
+/>
+<Meetup
+  title="Prisma Meetup #4"
+  meetupLink="https://www.meetup.com/Berlin-Prisma-Meetup/events/277236269/"
+  youtubeLink="https://www.youtube.com/watch?v=2g525rJdYFU"
+  imagePath="/blog/meetups/meetup-prisma.png"
+  talks={[
+    {
+      title: "Prisma at Iopool",
+      author: "Luc Matagne",
+    },
+    {
+      title: "Launching the Prisma Data Platform",
+      author: "Spiros Martzoukos",
+    },
+  ]}
 />
 
 </MeetupList>
@@ -419,7 +423,8 @@ We planted a total of **269 trees 🌳** for our [Prisma forrest](https://tree-n
 We love seeing laptops that are decorated with Prisma stickers, so we're shipping sticker packs for free to our community members! In this quarter, we've sent out over 300 sticker packs to developers that are excited about Prisma!
 
 <br />
-[Order Stickers](https://gist.github.com/nikolasburk/5b64014d41bc21594808cea82621df83)
+[Order
+Stickers](https://gist.github.com/nikolasburk/5b64014d41bc21594808cea82621df83)
 
 ---
 
@@ -550,4 +555,3 @@ Also, **we are hiring** for various roles! If you're interested in joining us an
 The best places to stay up-to-date about what we are currently working on are [GitHub issues](https://github.com/prisma/prisma/issues) and our public [roadmap](https://pris.ly/roadmap). (Mongo DB support coming soon 👀)
 
 You can also engage in conversations in our [Slack channel](https://slack.prisma.io), start a discussion on [GitHub](https://github.com/prisma/prisma/discussions) or join one of the many [Prisma meetups](https://www.prisma.io/community) around the world.
-

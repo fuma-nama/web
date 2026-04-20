@@ -2,7 +2,7 @@
 title: API Reference
 description: API reference documentation for Accelerate
 url: /accelerate/reference/api-reference
-metaTitle: 'Accelerate: API Reference'
+metaTitle: "Accelerate: API Reference"
 metaDescription: API reference documentation for Accelerate.
 ---
 
@@ -26,10 +26,10 @@ With the Accelerate extension for Prisma Client, you can use the `cacheStrategy`
 
 The `cacheStrategy` parameter takes an option with the following keys:
 
-| Option | Example    | Type       | Required | Description                                                                                                                                                                                                                                                                                                                                      |
-| ------ | ---------- | ---------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `swr`  | `60`       | `Int`      | No       | The stale-while-revalidate time in seconds.                                                                                                                                                                                                                                                                                                      |
-| `ttl`  | `60`       | `Int`      | No       | The time-to-live time in seconds.                                                                                                                                                                                                                                                                                                                |
+| Option | Example    | Type       | Required | Description                                                                                                                                                                                                                                                                                                                                   |
+| ------ | ---------- | ---------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `swr`  | `60`       | `Int`      | No       | The stale-while-revalidate time in seconds.                                                                                                                                                                                                                                                                                                   |
+| `ttl`  | `60`       | `Int`      | No       | The time-to-live time in seconds.                                                                                                                                                                                                                                                                                                             |
 | `tags` | `["user"]` | `String[]` | No       | The `tag` serves as a variable to control the invalidation of specific queries within your application. It is an optional array of strings to [invalidate](/accelerate/reference/api-reference#accelerateinvalidate) the cache, with each tag containing only alphanumeric characters and underscores, and a maximum length of 64 characters. |
 
 |
@@ -151,7 +151,9 @@ try {
   if (e instanceof Prisma.PrismaClientKnownRequestError) {
     // The .code property can be accessed in a type-safe manner
     if (e.code === "P6003") {
-      console.log("The cache invalidation rate limit has been reached. Please try again later.");
+      console.log(
+        "The cache invalidation rate limit has been reached. Please try again later.",
+      );
     }
   }
   throw e;
@@ -193,7 +195,9 @@ try {
 } catch (e) {
   if (e instanceof Prisma.PrismaClientKnownRequestError) {
     if (e.code === "P6003") {
-      console.log("The cache invalidation rate limit has been reached. Please try again later.");
+      console.log(
+        "The cache invalidation rate limit has been reached. Please try again later.",
+      );
     }
   }
   throw e;

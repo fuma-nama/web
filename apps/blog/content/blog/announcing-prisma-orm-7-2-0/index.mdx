@@ -28,6 +28,7 @@ npm install @prisma/client@latest
 # The adapter for your database
 npm install @prisma/adapter-pg@latest
 ```
+
 ## Bringing back the `--url` flag to Prisma CLI
 
 In v7, we removed the `--url` flag from various `prisma db` subcommands. This flag was mostly undocumented, and we didn’t think many people were using it. However, community feedback showed that this flag was extremely useful. As a result, we’ve brought it back in v7.2.0 and made updates to support the new Prisma config setup.
@@ -60,6 +61,7 @@ export default defineConfig({
   },
 });
 ```
+
 This works most of the time, but it makes some assumptions that aren’t always valid. For instance, we explicitly import `dotenv` here, which is only needed in Node and not required in Bun. To address this, we’ve added runtime-specific config output based on the JavaScript environment.
 
 If `prisma init` is run in Bun, it will generate the following:
@@ -78,6 +80,7 @@ export default defineConfig({
   },
 });
 ```
+
 For Node environments (`npx`, `pnpm`, `bunx`, `bun run`):
 
 ```tsx
@@ -96,6 +99,7 @@ export default defineConfig({
   },
 });
 ```
+
 Here, we still need `dotenv` and can remove the need to use the `env` helper function.
 
 ## Optional URL for `prisma generate` and better error messages
@@ -107,11 +111,13 @@ We also improved error messages when you choose to use the `env` helper function
 ```shell
 Failed to load config file "[path]/prisma.config.ts" as a TypeScript/JavaScript module. Error: PrismaConfigEnvError: Cannot resolve environment variable: UNDEFINED_VARIABLE
 ```
+
 As a bonus, if you try to run `prisma db ...` without a valid URL, you’ll now get a clearer error message:
 
 ```shell
 Error: The datasource.url property is required in your Prisma config file when using prisma db push.
 ```
+
 ## `[DecimalError] Invalid argument` when using the `@db.Money` type
 
 If you’ve been using the `@db.Money` type in your Prisma schema, you might have run into an issue where values over 999.99 would throw an error like `[DecimalError] Invalid argument: X,XXX`. Parsing money values from Postgres is complicated due to locale differences and the wide range of accepted formats.
@@ -129,4 +135,3 @@ Be sure to follow us on social media to stay up to date with the latest releases
 - [YouTube](https://www.youtube.com/@PrismaData)
 - [LinkedIn](https://www.linkedin.com/company/prisma-io/)
 - [Discord](https://pris.ly/discord)
-

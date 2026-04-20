@@ -23,7 +23,8 @@ export const ExpandCapabilities = () => {
           Expand your capabilities
         </h2>
         <p className="text-foreground-neutral-weak! text-base max-w-2xl mx-auto">
-          Built on Prisma Client, TypedSQL pairs well with all Prisma products and features.
+          Built on Prisma Client, TypedSQL pairs well with all Prisma products
+          and features.
         </p>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-[900px] mx-auto">
@@ -31,14 +32,20 @@ export const ExpandCapabilities = () => {
           <Card key={item.title} className="p-6!">
             <CardContent className="flex flex-col gap-4">
               <div className="flex items-center gap-3">
-                <Action color="orm" size="4xl" className="bg-background-orm-strong shrink-0">
+                <Action
+                  color="orm"
+                  size="4xl"
+                  className="bg-background-orm-strong shrink-0"
+                >
                   <i className={`text-xl ${item.icon}`} />
                 </Action>
                 <h3 className="text-foreground-neutral font-sans-display text-lg font-bold m-0">
                   {item.title}
                 </h3>
               </div>
-              <p className="text-foreground-neutral-weak text-sm m-0">{item.description}</p>
+              <p className="text-foreground-neutral-weak text-sm m-0">
+                {item.description}
+              </p>
             </CardContent>
           </Card>
         ))}

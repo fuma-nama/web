@@ -54,7 +54,9 @@ Create a JSON file in `src/data/prisma-with/[tech-name].json` following the stru
     "tabs": {
       "defaultValue": "static-data",
       "head": [{ "title": "Static Data", "value": "static-data" }],
-      "body": [{ "value": "static-data", "content": "<h4>Title</h4><p>...</p>" }]
+      "body": [
+        { "value": "static-data", "content": "<h4>Title</h4><p>...</p>" }
+      ]
     }
   },
   "why_prisma": {
@@ -139,6 +141,7 @@ export default async function NextJsPage() {
 Main layout component that orchestrates all sections.
 
 **Props:**
+
 - `data: PrismaWithData` - Complete page data from JSON
 - `codeExamples: Record<string, string>` - Code snippets keyed by tab value
 
@@ -167,6 +170,7 @@ import { Hero, WhySection, HowSection } from "@/components/prisma-with";
 ## Styling
 
 All components use:
+
 - Tailwind CSS utilities
 - Eclipse design system components (`@prisma/eclipse`)
 - CSS variables for theming (light/dark mode compatible)

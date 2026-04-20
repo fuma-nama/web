@@ -1,11 +1,13 @@
 import { getLLMText } from "@/lib/get-llm-text";
-import { source, sourceV6 } from "@/lib/source";
+import { getSource } from "@/lib/source";
 import { notFound } from "next/navigation";
 
 export const revalidate = false;
 
-function resolvePage(slug: string[] | undefined) {
+async function resolvePage(slug: string[] | undefined) {
   const slugs = slug ?? [];
+  const source = await getSource();
+  const sourceV6 = await getSource("v6");
 
   return (
     source.getPage(slugs) ||
@@ -14,9 +16,12 @@ function resolvePage(slug: string[] | undefined) {
   );
 }
 
-export async function GET(_req: Request, { params }: RouteContext<"/llms.mdx/[[...slug]]">) {
+export async function GET(
+  _req: Request,
+  { params }: RouteContext<"/llms.mdx/[[...slug]]">,
+) {
   const { slug } = await params;
-  const page = resolvePage(slug);
+  const page = await resolvePage(slug);
   if (!page) notFound();
 
   const content = await getLLMText(page);
@@ -28,7 +33,9 @@ export async function GET(_req: Request, { params }: RouteContext<"/llms.mdx/[[.
   });
 }
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
+  const source = await getSource();
+  const sourceV6 = await getSource("v6");
   // Only pre-render leaf pages to avoid file/dir conflicts during static export.
   // A slug is considered non-leaf if it is a prefix of any other slug.
   const v7Params = source.generateParams();

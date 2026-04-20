@@ -77,16 +77,19 @@ For `Point` geometries, coordinates are `[longitude, latitude]`, not `[latitude,
 The SRID (Spatial Reference System Identifier) determines the coordinate system used for storing and calculating positions. Different SRIDs are optimized for different purposes:
 
 - `4326` - **WGS 84** (GPS coordinates, latitude/longitude)
+
   - Most common for worldwide data
   - Used by GPS devices and most location APIs
   - Distance calculations use spherical geometry (accurate across the globe)
 
 - `3857` - **Web Mercator** (web maps like Google Maps, OpenStreetMap)
+
   - Optimized for web mapping applications
   - Uses planar geometry (faster but less accurate for distances)
   - Best for visualization, not for precise measurements
 
 - `2154` - **RGF93 / Lambert-93** (France)
+
   - Official coordinate system for France
   - Highly accurate for locations within France
 
@@ -550,7 +553,7 @@ const canDeliver = availableZones.length > 0;
 
 if (canDeliver) {
   console.log(
-    `Delivery available in zones: ${availableZones.map((z) => z.name).join(", ")}`
+    `Delivery available in zones: ${availableZones.map((z) => z.name).join(", ")}`,
   );
 } else {
   console.log("Sorry, we don't deliver to this address yet");
@@ -612,7 +615,9 @@ const activitiesInPark = await prisma.activity.findMany({
   },
 });
 
-console.log(`Found ${activitiesInPark.length} activities that went through the park`);
+console.log(
+  `Found ${activitiesInPark.length} activities that went through the park`,
+);
 ```
 
 ## TypeScript types
@@ -764,15 +769,14 @@ If you're using **PostgreSQL 16** with datasets containing thousands of records,
 **Workaround:** Use the `withSpatialOptimization` helper from `@prisma/adapter-pg`:
 
 ```typescript
-import { PrismaClient } from '@prisma/client'
-import { withSpatialOptimization } from '@prisma/adapter-pg'
+import { PrismaClient } from "@prisma/client";
+import { withSpatialOptimization } from "@prisma/adapter-pg";
 
-const userLocation = [13.4, 52.5] as [number, number]
+const userLocation = [13.4, 52.5] as [number, number];
 
 // The helper automatically detects PostgreSQL 16 and applies optimization only when needed
-const nearby = await withSpatialOptimization(
-  prisma,
-  (client) => client.location.findMany({
+const nearby = await withSpatialOptimization(prisma, (client) =>
+  client.location.findMany({
     where: {
       position: {
         near: {
@@ -787,26 +791,26 @@ const nearby = await withSpatialOptimization(
       },
     },
     take: 20,
-  })
-)
+  }),
+);
 
 // Works with all spatial filters:
-const zonesContaining = await withSpatialOptimization(
-  prisma,
-  (client) => client.deliveryZone.findMany({
+const zonesContaining = await withSpatialOptimization(prisma, (client) =>
+  client.deliveryZone.findMany({
     where: {
       boundary: {
         intersects: {
-          type: 'Point',
+          type: "Point",
           coordinates: userLocation,
         },
       },
     },
-  })
-)
+  }),
+);
 ```
 
 The helper:
+
 - **Automatically detects** PostgreSQL version (cached for performance)
 - **Only applies optimization** on PostgreSQL 16
 - **Skips optimization** on PostgreSQL 17+ (where the bug is fixed)
@@ -850,7 +854,9 @@ The SRID affects both coordinate interpretation and distance calculations. Choos
   ```ts
   // ❌ Bad: Fetch all and filter in JavaScript
   const all = await prisma.location.findMany();
-  const nearby = all.filter((loc) => calculateDistance(loc.position, myPoint) < 1000);
+  const nearby = all.filter(
+    (loc) => calculateDistance(loc.position, myPoint) < 1000,
+  );
 
   // ✅ Good: Filter in database
   const nearby = await prisma.location.findMany({

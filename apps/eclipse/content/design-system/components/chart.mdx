@@ -17,8 +17,6 @@ import {
   CustomStyledChartExample,
 } from "@/components/chart-examples/interactive-examples";
 
-
-
 ### Overview
 
 The Chart component provides a powerful way to visualize data using Recharts. It includes a configuration system for theming, tooltips, legends, and various chart types with built-in responsive behavior.
@@ -36,7 +34,11 @@ npm install recharts
 **Basic Bar Chart**
 
 ```tsx
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@prisma/eclipse";
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@prisma/eclipse";
 import { Bar, BarChart, XAxis, YAxis } from "recharts";
 
 const chartData = [
@@ -78,7 +80,11 @@ export function MyChart() {
 **Line Chart**
 
 ```tsx
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@prisma/eclipse";
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@prisma/eclipse";
 import { Line, LineChart, XAxis, YAxis, CartesianGrid } from "recharts";
 
 const chartData = [
@@ -103,11 +109,11 @@ export function LineChartExample() {
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="date" />
         <YAxis />
-        <Line 
-          type="monotone" 
-          dataKey="connections" 
-          stroke="var(--color-connections)" 
-          strokeWidth={2} 
+        <Line
+          type="monotone"
+          dataKey="connections"
+          stroke="var(--color-connections)"
+          strokeWidth={2}
         />
         <ChartTooltip content={<ChartTooltipContent />} />
       </LineChart>
@@ -125,7 +131,11 @@ export function LineChartExample() {
 **Area Chart**
 
 ```tsx
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@prisma/eclipse";
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@prisma/eclipse";
 import { Area, AreaChart, XAxis, YAxis, CartesianGrid } from "recharts";
 
 const chartData = [
@@ -154,19 +164,19 @@ export function AreaChartExample() {
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="month" />
         <YAxis />
-        <Area 
-          type="monotone" 
-          dataKey="requests" 
+        <Area
+          type="monotone"
+          dataKey="requests"
           stackId="1"
-          stroke="var(--color-requests)" 
-          fill="var(--color-requests)" 
+          stroke="var(--color-requests)"
+          fill="var(--color-requests)"
         />
-        <Area 
-          type="monotone" 
-          dataKey="cached" 
+        <Area
+          type="monotone"
+          dataKey="cached"
           stackId="1"
-          stroke="var(--color-cached)" 
-          fill="var(--color-cached)" 
+          stroke="var(--color-cached)"
+          fill="var(--color-cached)"
         />
         <ChartTooltip content={<ChartTooltipContent />} />
       </AreaChart>
@@ -184,12 +194,12 @@ export function AreaChartExample() {
 **Chart with Legend**
 
 ```tsx
-import { 
-  ChartContainer, 
-  ChartTooltip, 
+import {
+  ChartContainer,
+  ChartTooltip,
   ChartTooltipContent,
   ChartLegend,
-  ChartLegendContent 
+  ChartLegendContent,
 } from "@prisma/eclipse";
 import { Bar, BarChart, XAxis, YAxis } from "recharts";
 
@@ -235,7 +245,11 @@ export function ChartWithLegend() {
 **Pie Chart**
 
 ```tsx
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@prisma/eclipse";
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@prisma/eclipse";
 import { Pie, PieChart } from "recharts";
 
 const chartData = [
@@ -445,17 +459,17 @@ The Chart component works with all Recharts chart types:
   <AreaChart data={chartData}>
     <XAxis dataKey="date" />
     <YAxis />
-    <Area 
-      type="monotone" 
-      dataKey="cached" 
-      stackId="1" 
-      fill="var(--color-cached)" 
+    <Area
+      type="monotone"
+      dataKey="cached"
+      stackId="1"
+      fill="var(--color-cached)"
     />
-    <Area 
-      type="monotone" 
-      dataKey="uncached" 
-      stackId="1" 
-      fill="var(--color-uncached)" 
+    <Area
+      type="monotone"
+      dataKey="uncached"
+      stackId="1"
+      fill="var(--color-uncached)"
     />
     <ChartTooltip content={<ChartTooltipContent />} />
   </AreaChart>
@@ -471,30 +485,27 @@ The Chart component works with all Recharts chart types:
 **Custom Tooltip Formatting**
 
 ```tsx
-<ChartTooltip 
+<ChartTooltip
   content={
-    <ChartTooltipContent 
+    <ChartTooltipContent
       labelFormatter={(value) => `Date: ${value}`}
       formatter={(value) => [`${value}ms`, "Response Time"]}
     />
-  } 
+  }
 />
 ```
 
 **Chart with Custom Styling**
 
 ```tsx
-<ChartContainer 
-  config={chartConfig}
-  className="h-[400px] w-full"
->
+<ChartContainer config={chartConfig} className="h-[400px] w-full">
   <LineChart data={chartData}>
     <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
     <XAxis dataKey="month" />
     <YAxis />
-    <Line 
-      type="monotone" 
-      dataKey="value" 
+    <Line
+      type="monotone"
+      dataKey="value"
       stroke="var(--color-value)"
       strokeWidth={3}
       dot={{ r: 6 }}
@@ -566,7 +577,7 @@ The Chart component works seamlessly with your data fetching:
 ```tsx
 async function DataChart() {
   const data = await fetchChartData();
-  
+
   return (
     <ChartContainer config={chartConfig}>
       <BarChart data={data}>
@@ -649,16 +660,19 @@ For more advanced chart configurations, refer to the [Recharts documentation](ht
 ### Troubleshooting
 
 **Chart not displaying:**
+
 - Ensure data is in the correct format
 - Check that dataKey values match your data properties
 - Verify ChartContainer has a defined height or aspect ratio
 
 **Colors not applying:**
+
 - Use `var(--color-keyname)` format for fill and stroke
 - Ensure keys in chartConfig match dataKey values
 - Check theme configuration for dark mode
 
 **Tooltip not showing:**
+
 - Verify ChartTooltip and ChartTooltipContent are included
 - Check that data values are not null/undefined
 - Ensure proper z-index stacking

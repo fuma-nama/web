@@ -12,7 +12,7 @@ tags:
   - "release"
 ---
 
-Prisma ORM now provides Early Access support for React Native and Expo, fulfilling a popular community request. The integration introduces *reactive queries*, using React hooks to auto-update the UI when the underlying data changes.
+Prisma ORM now provides Early Access support for React Native and Expo, fulfilling a popular community request. The integration introduces _reactive queries_, using React hooks to auto-update the UI when the underlying data changes.
 
 Prisma ORM is the preferred way to work with databases in backend JavaScript applications. This is due to its excellent type-safety, easy migration system and tight integration into your favorite IDE.
 
@@ -49,20 +49,23 @@ export default function TransactionList() {
   );
 }
 ```
+
 In this component, we declare the data dependency at the top. Instead of using Prisma ORM’s normal `findMany()` query function, we use the new `useFindMany()` query function which integrates directly with the React `useState()` and `useEffect()` mechanisms to re-render the component when the underlying data changes.
 
 This line initially returns an empty array and then re-renders the component as soon as the list of transactions is fetched from the local database:
 
 ```ts
-prisma.transactions.useFindMany({ orderBy: { date: "desc" }})
+prisma.transactions.useFindMany({ orderBy: { date: "desc" } });
 ```
+
 > It is customary for hooks in React to be free standing functions - for example `useFindManyTransactions()`. To conform with the regular Prisma ORM API, we have chosen the alternative format `prisma.transactions.useFindMany()`. During this Early Access period, we are soliciting feedback on this decision. Please share your thoughts on [Discord](pris.ly/discord).
 
 In the `LongPress` handler, the database row is deleted, automatically triggering a re-render of the component. It’s important to note that data changes can happen anywhere in your application, and it will trigger a re-render of any active component that relies on that data.
 
 ```ts
-() => prisma.transactions.delete({ where: { id: transaction.id } })
+() => prisma.transactions.delete({ where: { id: transaction.id } });
 ```
+
 By taking advantage of Reactive Queries, many applications can be refactored to remove brittle and manual state management in favor of a simple automated reactivity model.
 
 ## Prisma ORM in your Expo App today

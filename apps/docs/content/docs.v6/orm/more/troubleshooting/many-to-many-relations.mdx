@@ -1,6 +1,6 @@
 ---
 title: Many-to-many relations
-description: 'Learn how to model, query, and convert many-to-many relations with Prisma ORM'
+description: "Learn how to model, query, and convert many-to-many relations with Prisma ORM"
 url: /v6/orm/more/troubleshooting/many-to-many-relations
 metaTitle: Modeling and querying many-to-many relations
 metaDescription: Learn how you can model and query implicit and explicit many-to-many relations with Prisma ORM
@@ -107,7 +107,10 @@ await prisma.post.create({
   data: {
     title: "Types of relations",
     tags: {
-      create: [{ tag: { create: { name: "dev" } } }, { tag: { create: { name: "prisma" } } }],
+      create: [
+        { tag: { create: { name: "dev" } } },
+        { tag: { create: { name: "prisma" } } },
+      ],
     },
   },
 });

@@ -248,7 +248,9 @@ TypedSQL does not natively support constructing SQL queries with dynamically add
 
 ```typescript
 const columns = "name, email, age"; // Columns determined at runtime
-const result = await prisma.$queryRawUnsafe(`SELECT ${columns} FROM Users WHERE active = true`);
+const result = await prisma.$queryRawUnsafe(
+  `SELECT ${columns} FROM Users WHERE active = true`,
+);
 ```
 
 In this example, the columns to be selected are defined dynamically and included in the SQL query. While this approach provides flexibility, it requires careful attention to security, particularly to [avoid SQL injection vulnerabilities](/orm/prisma-client/using-raw-sql/raw-queries#sql-injection-prevention). Additionally, using raw SQL queries means foregoing the type-safety and DX of TypedSQL.

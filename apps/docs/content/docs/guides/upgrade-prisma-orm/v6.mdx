@@ -2,9 +2,8 @@
 title: Upgrade to v6
 description: Comprehensive guide for upgrading to Prisma ORM v6
 url: /guides/upgrade-prisma-orm/v6
-metaTitle: 'Upgrade to Prisma ORM 6'
-metaDescription: 'Guides on how to upgrade to Prisma ORM 6'
-
+metaTitle: "Upgrade to Prisma ORM 6"
+metaDescription: "Guides on how to upgrade to Prisma ORM 6"
 ---
 
 Prisma ORM v6 introduces a number of **breaking changes** when you upgrade from an earlier Prisma ORM version. This guide explains how this upgrade might affect your application and gives instructions on how to handle any changes.
@@ -98,7 +97,7 @@ CREATE TABLE "_PostToTag" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "_PostToTag_AB_unique" ON "_PostToTag"("A", "B"); 
+CREATE UNIQUE INDEX "_PostToTag_AB_unique" ON "_PostToTag"("A", "B");
 
 -- CreateIndex
 CREATE INDEX "_PostToTag_B_index" ON "_PostToTag"("B");
@@ -118,7 +117,7 @@ CREATE TABLE "_PostToTag" (
     "A" INTEGER NOT NULL,
     "B" INTEGER NOT NULL,
 
-    CONSTRAINT "_PostToTag_AB_pkey" PRIMARY KEY ("A","B") 
+    CONSTRAINT "_PostToTag_AB_pkey" PRIMARY KEY ("A","B")
 );
 
 -- CreateIndex
@@ -165,7 +164,7 @@ datasource db {
 
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["fullTextSearch"] 
+  previewFeatures = ["fullTextSearch"]
 }
 ```
 
@@ -179,7 +178,7 @@ datasource db {
 
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["fullTextSearchPostgres"] 
+  previewFeatures = ["fullTextSearchPostgres"]
 }
 ```
 

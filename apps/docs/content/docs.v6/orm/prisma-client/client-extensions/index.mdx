@@ -207,7 +207,11 @@ const prisma = new PrismaClient().$extends({
   },
 });
 
-type ExtendedUser = Prisma.Result<typeof prisma.user, { select: { id: true } }, "findFirstOrThrow">;
+type ExtendedUser = Prisma.Result<
+  typeof prisma.user,
+  { select: { id: true } },
+  "findFirstOrThrow"
+>;
 
 async function main() {
   const user: ExtendedUser = await prisma.user.findFirstOrThrow({

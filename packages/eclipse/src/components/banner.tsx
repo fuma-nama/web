@@ -14,12 +14,16 @@ const bannerVariants = cva(
   {
     variants: {
       color: {
-        default: "bg-background-neutral-reverse text-foreground-neutral-reverse",
+        default:
+          "bg-background-neutral-reverse text-foreground-neutral-reverse",
         ppg: "bg-background-ppg-reverse-strong text-foreground-ppg-reverse",
         orm: "bg-background-orm-reverse-strong text-foreground-orm-reverse",
-        error: "bg-background-error-reverse-strong text-foreground-error-reverse",
-        success: "bg-background-success-reverse-strong text-foreground-success-reverse",
-        warning: "bg-background-warning-reverse-strong text-foreground-warning-reverse",
+        error:
+          "bg-background-error-reverse-strong text-foreground-error-reverse",
+        success:
+          "bg-background-success-reverse-strong text-foreground-success-reverse",
+        warning:
+          "bg-background-warning-reverse-strong text-foreground-warning-reverse",
         gradient: "bg-gradient-ppg-orm text-foreground-neutral",
       },
     },
@@ -33,8 +37,7 @@ const bannerVariants = cva(
  * Banner props
  */
 export interface BannerProps
-  extends
-    Omit<React.HTMLAttributes<HTMLDivElement>, "color">,
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, "color">,
     VariantProps<typeof bannerVariants> {
   /**
    * The color variant of the banner
@@ -138,7 +141,9 @@ export const Banner = React.forwardRef<HTMLDivElement, BannerProps>(
               : `:root { --fd-banner-height: ${height ?? "3rem"}; }`}
           </style>
         ) : null}
-        {globalKey ? <style>{`.${globalKey} #${id} { display: none; }`}</style> : null}
+        {globalKey ? (
+          <style>{`.${globalKey} #${id} { display: none; }`}</style>
+        ) : null}
         {globalKey ? (
           <script
             dangerouslySetInnerHTML={{

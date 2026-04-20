@@ -79,9 +79,10 @@ export default function Login() {
     <div className="h-screen flex justify-center items-center">
       <h2 className="text-yellow-300 font-extrabold text-5xl">Login Route</h2>
     </div>
-  )
+  );
 }
 ```
+
 The default export of a route file is the component Remix renders into the browser.
 
 Start the development server using `npm run dev` and navigate to [`http://localhost:3000/login`](http://localhost:3000/login), and you should see the route rendered.
@@ -98,17 +99,17 @@ First, create a component you will wrap your routes in to provide some shared fo
   <Accordion title="Click to learn more about the composition pattern!">
 ### Composition
 
-  **Composition** is a pattern where you provide a component a set of child elements via its `props`. The `children` prop represents the elements defined between the opening and closing tag of the parent component. For example, consider this usage of a component named `Parent`:
+**Composition** is a pattern where you provide a component a set of child elements via its `props`. The `children` prop represents the elements defined between the opening and closing tag of the parent component. For example, consider this usage of a component named `Parent`:
 
-  ```tsx   <Parent>
-    <p>The child</p>
-  </Parent>
-  ```
+```tsx <Parent>
+  <p>The child</p>
+</Parent>
+```
 
-  In this case, the `<p>` tag is a child of the `Parent` component and will be rendered into the `Parent` component wherever you decide to render the `children` prop value.
+In this case, the `<p>` tag is a child of the `Parent` component and will be rendered into the `Parent` component wherever you decide to render the `children` prop value.
+
   </Accordion>
 </Accordions>
-
 
 To see this in action, create a new folder inside the `app` folder named `components`. Inside of that folder create a new file named `layout.tsx`.
 
@@ -117,26 +118,27 @@ In that file, export the following [function component](https://reactjs.org/docs
 ```tsx
 // app/components/layout.tsx
 export function Layout({ children }: { children: React.ReactNode }) {
-  return <div className="h-screen w-full bg-blue-600 font-mono">{children}</div>
+  return (
+    <div className="h-screen w-full bg-blue-600 font-mono">{children}</div>
+  );
 }
 ```
+
 This component uses Tailwind classes to specify you want anything wrapped in the component to take up the full width and height of the screen, use the mono font, and show a moderately dark blue as the background.
 
 Notice the `children` prop is rendered inside the `<div>`. To see how this will get rendered when put to use, check out the snippets below:
-
-
 
 ```tsx
 <Layout>
   <p>Child Element</p>
 </Layout>
 ```
+
 ```tsx
 <div className="h-screen w-full bg-blue-600 font-mono">
   <p>Child Element</p>
 </div>
 ```
-
 
 ## Create the sign in form
 
@@ -144,41 +146,56 @@ Now you can import that component into the `app/routes/login.tsx` file and wrap 
 
 ```tsx
 // app/routes/login.tsx
-import { Layout } from '~/components/layout'
+import { Layout } from "~/components/layout";
 
 export default function Login() {
   return (
     <Layout>
       <h2 className="text-yellow-300 font-extrabold text-5xl">Login Route</h2>
     </Layout>
-  )
+  );
 }
 ```
+
 ### Build the form
 
 Next add a sign in form that takes in `email` and `password` inputs and displays a submit button. Add a nice welcome message at the top to greet users when they enter your site and center the entire form on the screen using [Tailwind's flex classes](https://tailwindcss.com/docs/flex).
 
 ```tsx
 // app/routes/login.tsx
-import { Layout } from '~/components/layout'
+import { Layout } from "~/components/layout";
 
 export default function Login() {
   return (
     <Layout>
       <div className="h-full justify-center items-center flex flex-col gap-y-4">
-        <h2 className="text-5xl font-extrabold text-yellow-300">Welcome to Kudos!</h2>
-        <p className="font-semibold text-slate-300">Log In To Give Some Praise!</p>
+        <h2 className="text-5xl font-extrabold text-yellow-300">
+          Welcome to Kudos!
+        </h2>
+        <p className="font-semibold text-slate-300">
+          Log In To Give Some Praise!
+        </p>
 
         <form method="post" className="rounded-2xl bg-gray-200 p-6 w-96">
           <label htmlFor="email" className="text-blue-600 font-semibold">
             Email
           </label>
-          <input type="text" id="email" name="email" className="w-full p-2 rounded-xl my-2" />
+          <input
+            type="text"
+            id="email"
+            name="email"
+            className="w-full p-2 rounded-xl my-2"
+          />
 
           <label htmlFor="password" className="text-blue-600 font-semibold">
             Password
           </label>
-          <input type="password" id="password" name="password" className="w-full p-2 rounded-xl my-2" />
+          <input
+            type="password"
+            id="password"
+            name="password"
+            className="w-full p-2 rounded-xl my-2"
+          />
 
           <div className="w-full text-center">
             <input
@@ -190,9 +207,10 @@ export default function Login() {
         </form>
       </div>
     </Layout>
-  )
+  );
 }
 ```
+
 ![](/fullstack-remix-prisma-mongodb-2-ZTmOy58p4re8/imgs/login-form.png)
 
 At this point, you don't need to worry about where the `<form>`'s action is pointing, just that it has a `method` value of `"post"`. Later on you will check out some cool Remix magic that sets up the action for us!
@@ -206,14 +224,20 @@ Create a new file in `app/components` named `form-field.tsx` where you will buil
 ```tsx
 // app/components/form-field.tsx
 interface FormFieldProps {
-  htmlFor: string
-  label: string
-  type?: string
-  value: any
-  onChange?: (...args: any) => any
+  htmlFor: string;
+  label: string;
+  type?: string;
+  value: any;
+  onChange?: (...args: any) => any;
 }
 
-export function FormField({ htmlFor, label, type = 'text', value, onChange = () => {} }: FormFieldProps) {
+export function FormField({
+  htmlFor,
+  label,
+  type = "text",
+  value,
+  onChange = () => {},
+}: FormFieldProps) {
   return (
     <>
       <label htmlFor={htmlFor} className="text-blue-600 font-semibold">
@@ -228,9 +252,10 @@ export function FormField({ htmlFor, label, type = 'text', value, onChange = () 
         value={value}
       />
     </>
-  )
+  );
 }
 ```
+
 This will define and export the exact same label and input combination you had before in the sign in form, except this component will have configurable options:
 
 - `htmlFor`: The value to use for the `id` and `name` attributes of the input field, and the `htmlFor` attribute of the label.
@@ -243,40 +268,47 @@ You may now replace the existing labels and inputs with this component:
 
 ```tsx
 // app/routes/login.tsx
-import { useState } from 'react'
-import { Layout } from '~/components/layout'
-import { FormField } from '~/components/form-field'
+import { useState } from "react";
+import { Layout } from "~/components/layout";
+import { FormField } from "~/components/form-field";
 
 export default function Login() {
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-  })
+    email: "",
+    password: "",
+  });
 
   // Updates the form data when an input changes
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>, field: string) => {
-    setFormData(form => ({ ...form, [field]: event.target.value }))
-  }
+  const handleInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    field: string,
+  ) => {
+    setFormData((form) => ({ ...form, [field]: event.target.value }));
+  };
 
   return (
     <Layout>
       <div className="h-full justify-center items-center flex flex-col gap-y-4">
-        <h2 className="text-5xl font-extrabold text-yellow-300">Welcome to Kudos!</h2>
-        <p className="font-semibold text-slate-300">Log In To Give Some Praise!</p>
+        <h2 className="text-5xl font-extrabold text-yellow-300">
+          Welcome to Kudos!
+        </h2>
+        <p className="font-semibold text-slate-300">
+          Log In To Give Some Praise!
+        </p>
 
         <form method="POST" className="rounded-2xl bg-gray-200 p-6 w-96">
           <FormField
             htmlFor="email"
             label="Email"
             value={formData.email}
-            onChange={e => handleInputChange(e, 'email')}
+            onChange={(e) => handleInputChange(e, "email")}
           />
           <FormField
             htmlFor="password"
             type="password"
             label="Password"
             value={formData.password}
-            onChange={e => handleInputChange(e, 'password')}
+            onChange={(e) => handleInputChange(e, "password")}
           />
           <div className="w-full text-center">
             <input
@@ -288,9 +320,10 @@ export default function Login() {
         </form>
       </div>
     </Layout>
-  )
+  );
 }
 ```
+
 This will import the new `FormField` component whose state will be managed by the parent _(the sign in form in this case)_. Any updates to the values will be tracked using the `handleInputChange` function.
 
 You will come back to the `FormField` component a little bit later to add error message handling, but this will do what it needs to for now!
@@ -315,10 +348,11 @@ At the top of the `Login` component, create another variable in state to hold yo
 ```tsx
 // app/routes/login.tsx
 export default function Login() {
-  const [action, setAction] = useState('login')
+  const [action, setAction] = useState("login");
   // ...
 }
 ```
+
 > **Note**: The default state will be the login screen.
 
 Next you will need some way to switch change which state you want to view. Above the "Welcome to Kudos" message, add the following button:
@@ -329,16 +363,17 @@ return (
   <Layout>
     <div className="h-full justify-center items-center flex flex-col gap-y-4">
       <button
-        onClick={() => setAction(action == 'login' ? 'register' : 'login')}
+        onClick={() => setAction(action == "login" ? "register" : "login")}
         className="absolute top-8 right-8 rounded-xl bg-yellow-300 font-semibold text-blue-600 px-3 py-2 transition duration-300 ease-in-out hover:bg-yellow-400 hover:-translate-y-1"
       >
-        {action === 'login' ? 'Sign Up' : 'Sign In'}
+        {action === "login" ? "Sign Up" : "Sign In"}
       </button>
       {/* ... */}
     </div>
   </Layout>
-)
+);
 ```
+
 This button's text will change based on the `action` state. The `onClick` method will toggle the state back and forth between `'login`' and `'register`' values.
 
 There are a few places with static text on this page that you will want to adjust depending on which form you are viewing. Specifically the "Log In To Give Some Praise!" sub-header and the "Sign In" button within the form itself.
@@ -346,12 +381,19 @@ There are a few places with static text on this page that you will want to adjus
 Change the form's sub-header to show a different message on each form:
 
 ```tsx
-diff // app/routes/login.tsx
-- <p className="font-semibold text-slate-300">Log In To Give Some Praise!</p>
-+ <p className="font-semibold text-slate-300">
-+  {action === 'login' ? 'Log In To Give Some Praise!' : 'Sign Up To Get Started!'}
-+ </p>
+diff - // app/routes/login.tsx
+  <p className="font-semibold text-slate-300">Log In To Give Some Praise!</p> +
+  (
+    <p className="font-semibold text-slate-300">
+      +{" "}
+      {action === "login"
+        ? "Log In To Give Some Praise!"
+        : "Sign Up To Get Started!"}
+      +{" "}
+    </p>
+  );
 ```
+
 Get rid of the _Sign In_ button altogether and replace it with the following `<button>`:
 
 ```tsx
@@ -367,6 +409,7 @@ diff // app/routes/login.tsx
 +    }
 + </button>
 ```
+
 This new button has a `name` and a `value` attribute. The value is set to whatever the state's `action` is. When your form is submitted, this value will be passed as along with the form data as `_action`.
 
 > **Note**: This trick only works on a `<button>` if the `name` attribute begins with an underscore.
@@ -390,12 +433,12 @@ export default function Login() {
   // ...
   // 1
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
+    email: "",
+    password: "",
     // 👇 New fields
-    firstName: '',
-    lastName: '',
-  })
+    firstName: "",
+    lastName: "",
+  });
   // ...
 
   return (
@@ -405,18 +448,18 @@ export default function Login() {
         <form method="POST" className="rounded-2xl bg-gray-200 p-6 w-96">
           {/* Other input fields ... */}
           {/* 2 */}
-          {action === 'register' && (
+          {action === "register" && (
             <>
               <FormField
                 htmlFor="firstName"
                 label="First Name"
-                onChange={e => handleInputChange(e, 'firstName')}
+                onChange={(e) => handleInputChange(e, "firstName")}
                 value={formData.firstName}
               />
               <FormField
                 htmlFor="lastName"
                 label="Last Name"
-                onChange={e => handleInputChange(e, 'lastName')}
+                onChange={(e) => handleInputChange(e, "lastName")}
                 value={formData.lastName}
               />
             </>
@@ -425,9 +468,10 @@ export default function Login() {
         </form>
       </div>
     </Layout>
-  )
+  );
 }
 ```
+
 Two changes were made here:
 
 1. You added two new keys to the `formData` state.
@@ -446,6 +490,7 @@ Before moving on, however, you will need a new dependency in your project. Run t
 ```shell
 npm i bcryptjs && npm i -D @types/bcryptjs
 ```
+
 This installs the [`bcryptjs`](https://www.npmjs.com/package/bcryptjs) library and its type definitions. You will use this later on to hash and compare passwords.
 
 Authentication will be session-based, following the same patterns used in the [authentication](https://remix.run/docs/en/v1/tutorials/jokes#authentication) for Remix's [Jokes App](https://remix.run/docs/en/v1/tutorials/jokes) tutorial.
@@ -479,24 +524,27 @@ Export an async function from `app/utils/auth.server.ts` named `register`:
 // app/utils/auth.server.ts
 export async function register() {}
 ```
+
 Create and export a `type` defining the fields the register form will provide in another new file within `app/utils` named `types.server.ts`.
 
 ```tsx
 // app/utils/types.server.ts
 export type RegisterForm = {
-  email: string
-  password: string
-  firstName: string
-  lastName: string
-}
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+};
 ```
+
 Import that `type` into `app/utils/auth.server.ts` and use it in the `register` function to describe a `user` parameter, which will contain the sign up form's data:
 
 ```tsx
 // app/utils/auth.server.ts
-import type { RegisterForm } from './types.server'
+import type { RegisterForm } from "./types.server";
 export async function register(user: RegisterForm) {}
 ```
+
 When this `register` function is called and supplied a `user`, the first thing you will need to check is whether or not a user already exists with the email provided.
 
 > **Note**: Remember, the `email` field is defined as unique in your schema.
@@ -509,26 +557,27 @@ Create a new file in the `app/utils` folder named `prisma.server.ts` where you w
 
 ```tsx
 // app/utils/prisma.server.ts
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from "@prisma/client";
 
-let prisma: PrismaClient
+let prisma: PrismaClient;
 declare global {
-  var __db: PrismaClient | undefined
+  var __db: PrismaClient | undefined;
 }
 
-if (process.env.NODE_ENV === 'production') {
-  prisma = new PrismaClient()
-  prisma.$connect()
+if (process.env.NODE_ENV === "production") {
+  prisma = new PrismaClient();
+  prisma.$connect();
 } else {
   if (!global.__db) {
-    global.__db = new PrismaClient()
-    global.__db.$connect()
+    global.__db = new PrismaClient();
+    global.__db.$connect();
   }
-  prisma = global.__db
+  prisma = global.__db;
 }
 
-export { prisma }
+export { prisma };
 ```
+
 > **Note**: There are precautions put into place above that prevent live-reloads from saturating your database with connections while developing.
 
 You now have a way to access your database. In `app/utils/auth.server.ts`, import the instantiated `PrismaClient` and add the following to the `register` function:
@@ -536,17 +585,21 @@ You now have a way to access your database. In `app/utils/auth.server.ts`, impor
 ```tsx
 // app/utils/auth.server.ts
 
-import type { RegisterForm } from './types.server'
-import { prisma } from './prisma.server'
-import { json } from '@remix-run/node'
+import type { RegisterForm } from "./types.server";
+import { prisma } from "./prisma.server";
+import { json } from "@remix-run/node";
 
 export async function register(user: RegisterForm) {
-  const exists = await prisma.user.count({ where: { email: user.email } })
+  const exists = await prisma.user.count({ where: { email: user.email } });
   if (exists) {
-    return json({ error: `User already exists with that email` }, { status: 400 })
+    return json(
+      { error: `User already exists with that email` },
+      { status: 400 },
+    );
   }
 }
 ```
+
 The register funciton will now query for any user in your database with the email provided.
 
 The `count` function was used here becuase it returns a numeric value. If there are no records matching the query, it will return `0` which evaluates to `false`. Otherwise, a value greater than `0` will be returned which evaluates to `true`.
@@ -571,6 +624,7 @@ type Profile {
   lastName  String
 }
 ```
+
 The `type` keyword is used to define a composite type – allowing you to define a document inside the document. The benefit of using a composite type over a JSON type is that you get type-safety when querying documents.
 
 This is _super_ helpful as it gives you the capability of explicitly defining the shape of data that would otherwise have been fluid and capable of containing anything due to MongoDB's flexible nature.
@@ -593,11 +647,13 @@ model User {
 
 // ...
 ```
+
 Awesome, your `User` model will now contain a `profile` embedded document. Re-generate Prisma Client to account for these new changes:
 
 ```shell
 npx prisma generate
 ```
+
 > **Note**: You do not need to run `prisma db push` because you have not added any new collections or indexes.
 
 ### Add a user service
@@ -606,12 +662,12 @@ Create another file in `app/utils` named `user.server.ts` where any user-specifi
 
 ```tsx
 // app/utils/user.server.ts
-import bcrypt from 'bcryptjs'
-import type { RegisterForm } from './types.server'
-import { prisma } from './prisma.server'
+import bcrypt from "bcryptjs";
+import type { RegisterForm } from "./types.server";
+import { prisma } from "./prisma.server";
 
 export const createUser = async (user: RegisterForm) => {
-  const passwordHash = await bcrypt.hash(user.password, 10)
+  const passwordHash = await bcrypt.hash(user.password, 10);
   const newUser = await prisma.user.create({
     data: {
       email: user.email,
@@ -621,10 +677,11 @@ export const createUser = async (user: RegisterForm) => {
         lastName: user.lastName,
       },
     },
-  })
-  return { id: newUser.id, email: user.email }
-}
+  });
+  return { id: newUser.id, email: user.email };
+};
 ```
+
 This `createUser` function does a couple of things:
 
 1. It hashes the password provided in the registration form because you should not store it as plain-text.
@@ -665,6 +722,7 @@ export async function register(user: RegisterForm) {
 +  }
 }
 ```
+
 Now, when a user registers, if another user does not already exist with the provided email a new one will be created. If something goes wrong during the creation of the user, an error will be returned to the client along with the values that were passed in for the `email` and `password`.
 
 ## Build the login function
@@ -677,18 +735,19 @@ The `login` function will take in an `email` and a `password`, so to start this 
 // ...
 
 export type LoginForm = {
-  email: string
-  password: string
-}
+  email: string;
+  password: string;
+};
 ```
+
 Then create the `login` function by adding the following to `app/utils/auth.server.ts`:
 
 ```ts
 // app/utils/auth.server.ts
 
 // 1
-import { RegisterForm, LoginForm } from './types.server'
-import bcrypt from 'bcryptjs'
+import { RegisterForm, LoginForm } from "./types.server";
+import bcrypt from "bcryptjs";
 
 //...
 
@@ -696,16 +755,17 @@ export async function login({ email, password }: LoginForm) {
   // 2
   const user = await prisma.user.findUnique({
     where: { email },
-  })
+  });
 
   // 3
   if (!user || !(await bcrypt.compare(password, user.password)))
-    return json({ error: `Incorrect login` }, { status: 400 })
+    return json({ error: `Incorrect login` }, { status: 400 });
 
   // 4
-  return { id: user.id, email }
+  return { id: user.id, email };
 }
 ```
+
 The code above ...
 
 1. ... imports the new `type` and the `bcryptjs` library.
@@ -725,29 +785,30 @@ Import that function into `app/utils/auth.server.ts` and add a new cookie sessio
 // app/utils/auth.server.ts
 
 // Added the createCookieSessionStorage function 👇
-import { json, createCookieSessionStorage } from '@remix-run/node'
+import { json, createCookieSessionStorage } from "@remix-run/node";
 
 // ...
 
-const sessionSecret = process.env.SESSION_SECRET
+const sessionSecret = process.env.SESSION_SECRET;
 if (!sessionSecret) {
-  throw new Error('SESSION_SECRET must be set')
+  throw new Error("SESSION_SECRET must be set");
 }
 
 const storage = createCookieSessionStorage({
   cookie: {
-    name: 'kudos-session',
-    secure: process.env.NODE_ENV === 'production',
+    name: "kudos-session",
+    secure: process.env.NODE_ENV === "production",
     secrets: [sessionSecret],
-    sameSite: 'lax',
-    path: '/',
+    sameSite: "lax",
+    path: "/",
     maxAge: 60 * 60 * 24 * 30,
     httpOnly: true,
   },
-})
+});
 
 // login & register functions...
 ```
+
 The code above creates a session storage with a couple of settings:
 
 - `name`: The name of the cookie.
@@ -766,26 +827,28 @@ You will also need to set up a session secret in the `.env` file. Add a variable
 // .env
 SESSION_SECRET="supersecretvalue"
 ```
+
 The session storage is now set up. Create one more function in `app/utils/auth.server.ts` that will actually create the cookie session:
 
 ```ts
 // app/utils/auth.server.ts
 
 // 👇 Added the redirect function
-import { redirect, json, createCookieSessionStorage } from '@remix-run/node'
+import { redirect, json, createCookieSessionStorage } from "@remix-run/node";
 
 // ...
 
 export async function createUserSession(userId: string, redirectTo: string) {
-  const session = await storage.getSession()
-  session.set('userId', userId)
+  const session = await storage.getSession();
+  session.set("userId", userId);
   return redirect(redirectTo, {
     headers: {
-      'Set-Cookie': await storage.commitSession(session),
+      "Set-Cookie": await storage.commitSession(session),
     },
-  })
+  });
 }
 ```
+
 This function ...
 
 - ... creates a new session.
@@ -834,6 +897,7 @@ export async function login({ email, password }: LoginForm) {
 +  return createUserSession(user.id, "/");
 }
 ```
+
 ### Handle the login and register form submissions
 
 You have created all of the functions needed to create new users and log them in. Now you will put those to use in the forms you built.
@@ -845,11 +909,12 @@ In `app/routes/login.tsx`, export an [`action`](https://remix.run/docs/en/v1/tut
 
 // ...
 
-import { ActionFunction } from '@remix-run/node'
-export const action: ActionFunction = async ({ request }) => {}
+import { ActionFunction } from "@remix-run/node";
+export const action: ActionFunction = async ({ request }) => {};
 
 // ...
 ```
+
 > **Note**: Remix looks for an exported function named `action` to set up a POST request on the route you are defining.
 
 Now create a couple of validator functions in a new file inside of `app/utils` named `validators.server.ts` that will be used to validate the form input.
@@ -858,64 +923,85 @@ Now create a couple of validator functions in a new file inside of `app/utils` n
 // app/utils/validators.server.ts
 
 export const validateEmail = (email: string): string | undefined => {
-  var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+  var validRegex =
+    /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
   if (!email.length || !validRegex.test(email)) {
-    return "Please enter a valid email address"
+    return "Please enter a valid email address";
   }
-}
+};
 
 export const validatePassword = (password: string): string | undefined => {
   if (password.length < 5) {
-    return "Please enter a password that is at least 5 characters long"
+    return "Please enter a password that is at least 5 characters long";
   }
-}
+};
 
 export const validateName = (name: string): string | undefined => {
-  if (!name.length) return `Please enter a value`
-}
+  if (!name.length) return `Please enter a value`;
+};
 ```
+
 Within the `action` function in `app/routes/login.tsx`, grab the form data from the request and validate it is of the correct format.
 
 ```tsx
 // app/routes/login.tsx
 // ...
 // Added the json function 👇
-import { ActionFunction, json } from '@remix-run/node'
-import { validateEmail, validateName, validatePassword } from '~/utils/validators.server'
+import { ActionFunction, json } from "@remix-run/node";
+import {
+  validateEmail,
+  validateName,
+  validatePassword,
+} from "~/utils/validators.server";
 
 export const action: ActionFunction = async ({ request }) => {
-  const form = await request.formData()
-  const action = form.get('_action')
-  const email = form.get('email')
-  const password = form.get('password')
-  let firstName = form.get('firstName')
-  let lastName = form.get('lastName')
+  const form = await request.formData();
+  const action = form.get("_action");
+  const email = form.get("email");
+  const password = form.get("password");
+  let firstName = form.get("firstName");
+  let lastName = form.get("lastName");
 
-  if (typeof action !== 'string' || typeof email !== 'string' || typeof password !== 'string') {
-    return json({ error: `Invalid Form Data`, form: action }, { status: 400 })
+  if (
+    typeof action !== "string" ||
+    typeof email !== "string" ||
+    typeof password !== "string"
+  ) {
+    return json({ error: `Invalid Form Data`, form: action }, { status: 400 });
   }
 
-  if (action === 'register' && (typeof firstName !== 'string' || typeof lastName !== 'string')) {
-    return json({ error: `Invalid Form Data`, form: action }, { status: 400 })
+  if (
+    action === "register" &&
+    (typeof firstName !== "string" || typeof lastName !== "string")
+  ) {
+    return json({ error: `Invalid Form Data`, form: action }, { status: 400 });
   }
 
   const errors = {
     email: validateEmail(email),
     password: validatePassword(password),
-    ...(action === 'register'
+    ...(action === "register"
       ? {
-          firstName: validateName((firstName as string) || ''),
-          lastName: validateName((lastName as string) || ''),
+          firstName: validateName((firstName as string) || ""),
+          lastName: validateName((lastName as string) || ""),
         }
       : {}),
-  }
+  };
 
   if (Object.values(errors).some(Boolean))
-    return json({ errors, fields: { email, password, firstName, lastName }, form: action }, { status: 400 })
-}
+    return json(
+      {
+        errors,
+        fields: { email, password, firstName, lastName },
+        form: action,
+      },
+      { status: 400 },
+    );
+};
 
 // ...
 ```
+
 The code above may look a bit scary, but in a nutshell it ...
 
 - ... pulls the form data out of the request object.
@@ -948,6 +1034,7 @@ export const action: ActionFunction = async ({ request }) => {
 
 // ...
 ```
+
 The `switch` statement will allow you to conditionally run the `login` and `register` functions depending on what the `_action` value from the form contains.
 
 In order to actually trigger this action, the forms need to post to this route. Fortunately, Remix will take care of this, as it automatically configures `POST` requests to the `/login` route when it recognizes the exported `action` function.
@@ -966,53 +1053,57 @@ In `app/utils/auth.server.ts` you will need to add a few helper functions.
 // app/utils/auth.server.ts
 // ...
 
-export async function requireUserId(request: Request, redirectTo: string = new URL(request.url).pathname) {
-  const session = await getUserSession(request)
-  const userId = session.get('userId')
-  if (!userId || typeof userId !== 'string') {
-    const searchParams = new URLSearchParams([['redirectTo', redirectTo]])
-    throw redirect(`/login?${searchParams}`)
+export async function requireUserId(
+  request: Request,
+  redirectTo: string = new URL(request.url).pathname,
+) {
+  const session = await getUserSession(request);
+  const userId = session.get("userId");
+  if (!userId || typeof userId !== "string") {
+    const searchParams = new URLSearchParams([["redirectTo", redirectTo]]);
+    throw redirect(`/login?${searchParams}`);
   }
-  return userId
+  return userId;
 }
 
 function getUserSession(request: Request) {
-  return storage.getSession(request.headers.get('Cookie'))
+  return storage.getSession(request.headers.get("Cookie"));
 }
 
 async function getUserId(request: Request) {
-  const session = await getUserSession(request)
-  const userId = session.get('userId')
-  if (!userId || typeof userId !== 'string') return null
-  return userId
+  const session = await getUserSession(request);
+  const userId = session.get("userId");
+  if (!userId || typeof userId !== "string") return null;
+  return userId;
 }
 
 export async function getUser(request: Request) {
-  const userId = await getUserId(request)
-  if (typeof userId !== 'string') {
-    return null
+  const userId = await getUserId(request);
+  if (typeof userId !== "string") {
+    return null;
   }
 
   try {
     const user = await prisma.user.findUnique({
       where: { id: userId },
       select: { id: true, email: true, profile: true },
-    })
-    return user
+    });
+    return user;
   } catch {
-    throw logout(request)
+    throw logout(request);
   }
 }
 
 export async function logout(request: Request) {
-  const session = await getUserSession(request)
-  return redirect('/login', {
+  const session = await getUserSession(request);
+  return redirect("/login", {
     headers: {
-      'Set-Cookie': await storage.destroySession(session),
+      "Set-Cookie": await storage.destroySession(session),
     },
-  })
+  });
 }
 ```
+
 This is a lot of new functionality. Here is what the functions above will do:
 
 - `requireUserId` checks for a user's session. If one exists, it is a success and just returns the `userId`. If it fails, however, it will redirect the user to the login screen.
@@ -1028,16 +1119,17 @@ In `app/routes/index.tsx`, return the user to the login screen if they are not l
 ```tsx
 // app/routes/index.tsx
 
-import { LoaderFunction } from '@remix-run/node'
-import { requireUserId } from '~/utils/auth.server'
+import { LoaderFunction } from "@remix-run/node";
+import { requireUserId } from "~/utils/auth.server";
 
 export const loader: LoaderFunction = async ({ request }) => {
-  await requireUserId(request)
-  return null
-}
+  await requireUserId(request);
+  return null;
+};
 
 // ...
 ```
+
 > **Note**: Remix runs the [`loader`](https://remix.run/docs/en/v1/api/conventions#loader) function **before** serving your page. This means any redirects in a loader will trigger before your page can be served.
 
 If you try to navigate to the base route _(`/`)_ of your application while not logged in you should be redirected to the login screen with a `redirectTo` param in the URL.
@@ -1049,15 +1141,21 @@ Next, do essentially the opposite. If a logged in user tries to get to the login
 ```tsx
 // app/routes/login.tsx
 // ...
-import { ActionFunction, json, LoaderFunction, redirect } from '@remix-run/node'
-import { login, register, getUser } from '~/utils/auth.server'
+import {
+  ActionFunction,
+  json,
+  LoaderFunction,
+  redirect,
+} from "@remix-run/node";
+import { login, register, getUser } from "~/utils/auth.server";
 
 export const loader: LoaderFunction = async ({ request }) => {
   // If there's already a user in the session, redirect to the home page
-  return (await getUser(request)) ? redirect('/') : null
-}
+  return (await getUser(request)) ? redirect("/") : null;
+};
 // ...
 ```
+
 ## Add form validation
 
 Great! Your sign in and sign up forms are working and you have set up authorization and redirects on your private routes. You're almost at the finish line!
@@ -1107,6 +1205,7 @@ export function FormField({
     </>
 }
 ```
+
 This component will now take in an error message. When the user starts to type in that field, if any error message was being shown it will be cleared out.
 
 In the login form you will need to get access to the data returned from the action using Remix's [`useActionData`](https://remix.run/docs/en/v1/api/remix#useactiondata) hook in order to pull out the error messages.
@@ -1115,27 +1214,28 @@ In the login form you will need to get access to the data returned from the acti
 // app/routes/login.tsx
 
 // ...
-import { useActionData } from '@remix-run/react'
-import { useRef, useEffect } from 'react'
+import { useActionData } from "@remix-run/react";
+import { useRef, useEffect } from "react";
 // ...
 export default function Login() {
   // ...
   // 1
-  const actionData = useActionData()
+  const actionData = useActionData();
   // 2
-  const firstLoad = useRef(true)
-  const [errors, setErrors] = useState(actionData?.errors || {})
-  const [formError, setFormError] = useState(actionData?.error || '')
+  const firstLoad = useRef(true);
+  const [errors, setErrors] = useState(actionData?.errors || {});
+  const [formError, setFormError] = useState(actionData?.error || "");
   // 3
   const [formData, setFormData] = useState({
-    email: actionData?.fields?.email || '',
-    password: actionData?.fields?.password || '',
-    firstName: actionData?.fields?.lastName || '',
-    lastName: actionData?.fields?.firstName || '',
-  })
+    email: actionData?.fields?.email || "",
+    password: actionData?.fields?.password || "",
+    firstName: actionData?.fields?.lastName || "",
+    lastName: actionData?.fields?.firstName || "",
+  });
   // ...
 }
 ```
+
 This code adds the following:
 
 1. Hooks into the data returned from the `action` function.
@@ -1152,27 +1252,30 @@ export default function Login() {
   useEffect(() => {
     if (!firstLoad.current) {
       const newState = {
-        email: '',
-        password: '',
-        firstName: '',
-        lastName: '',
-      }
-      setErrors(newState)
-      setFormError('')
-      setFormData(newState)
+        email: "",
+        password: "",
+        firstName: "",
+        lastName: "",
+      };
+      setErrors(newState);
+      setFormError("");
+      setFormData(newState);
     }
-  }, [action])
+  }, [action]);
 
   useEffect(() => {
     if (!firstLoad.current) {
-      setFormError('')
+      setFormError("");
     }
-  }, [formData])
+  }, [formData]);
 
-  useEffect(() => { firstLoad.current = false }, [])
+  useEffect(() => {
+    firstLoad.current = false;
+  }, []);
 }
 // ...
 ```
+
 With those in place, you can finally let your form and fields know which errors to display.
 
 ```tsx
@@ -1222,6 +1325,7 @@ diff // app/routes/login.tsx
 </form>
 // ...
 ```
+
 Now you should see error messages and form resets working properly on your sign up and sign in forms!
 
 ![](/fullstack-remix-prisma-mongodb-2-ZTmOy58p4re8/imgs/error-message.png)
@@ -1237,4 +1341,3 @@ Now you should see error messages and form resets working properly on your sign 
 - How to store and query your data using Prisma when creating and authenticating users.
 
 In the next section of this series you will build the home page of Kudos and the kudos-sharing functionality. You will also add searching and filtering capabilities to the kudos feed.
-

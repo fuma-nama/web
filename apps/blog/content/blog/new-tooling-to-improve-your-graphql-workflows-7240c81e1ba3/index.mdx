@@ -11,11 +11,10 @@ heroImageAlt: "New Tooling to Improve Your GraphQL Workflows"
 ---
 
 Together with many awesome contributors from the community including the GraphQL team at Facebook, we have developed
-  graphql-config — a unified way to configure GraphQL projects. We’re also excited to present the beta version of a new
-  command-line tool to improve your local GraphQL development workflow: graphql-cli.
+graphql-config — a unified way to configure GraphQL projects. We’re also excited to present the beta version of a new
+command-line tool to improve your local GraphQL development workflow: graphql-cli.
 
-> ⚠️ **This article is outdated!** The `graphql-config` and `graphql-cli` projects have been [handed over to the Guild](https://www.prisma.io/blog/the-guild-takes-over-oss-libraries-vvluy2i4uevs) in the meantime. ⚠️ 
-
+> ⚠️ **This article is outdated!** The `graphql-config` and `graphql-cli` projects have been [handed over to the Guild](https://www.prisma.io/blog/the-guild-takes-over-oss-libraries-vvluy2i4uevs) in the meantime. ⚠️
 
 ## Fragmentation in GraphQL Tooling
 
@@ -44,6 +43,7 @@ The format specified by [graphql-config](https://github.com/graphcool/graphql-co
   "schemaPath": "./schema.graphql"
 }
 ```
+
 Note that the referenced schema file might as well be in JSON format (as would be the case if it was generated based on the introspection dump from the GraphQL server).
 
 In more complex setups, you might want to configure additional endpoints for multiple environments or for a subscription server:
@@ -69,6 +69,7 @@ In more complex setups, you might want to configure additional endpoints for mul
   }
 }
 ```
+
 For a complete overview of the different options that can be used in a .graphqlconfig, you can refer to the full [specification](https://github.com/graphcool/graphql-config/blob/master/specification.md#use-cases).
 
 ## graphql-cli - The Swiss Army Knife for your GraphQL Project
@@ -96,4 +97,3 @@ graphql-config and the graphql-cli are both community projects and as such will 
 **If you’re the author or maintainer of a GraphQL library or another related tool, we encourage you to adopt the graphql-config standard.** Please link to this [GitHub issue](https://github.com/graphcool/graphql-config/issues/27) to track the progress.
 
 As mentioned before, the graphql-cli can be extended with plugins to support custom use cases. **Feel free to start building your own plugins to support your GraphQL development workflow or tackle further use cases.** Ideas for more features could be plugins for code generation or letting people quickly spin up their own GraphQL server with graphql-up. We're excited to see what you're going to build!
-

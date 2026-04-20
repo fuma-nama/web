@@ -82,7 +82,10 @@ export function writeStoredUtmParams(utmParams: UtmParams) {
   }
 
   try {
-    window.sessionStorage.setItem(UTM_STORAGE_KEY, JSON.stringify(validUtmParams));
+    window.sessionStorage.setItem(
+      UTM_STORAGE_KEY,
+      JSON.stringify(validUtmParams),
+    );
   } catch {
     // Ignore storage failures in restricted environments.
   }

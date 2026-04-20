@@ -1,9 +1,9 @@
 ---
 title: Connection URLs
-description: 'Learn about the format and syntax Prisma ORM uses for defining database connection URLs for PostgreSQL, MySQL and SQLite'
+description: "Learn about the format and syntax Prisma ORM uses for defining database connection URLs for PostgreSQL, MySQL and SQLite"
 url: /orm/reference/connection-urls
 metaTitle: Connection URLs (Reference)
-metaDescription: 'Learn about the format and syntax Prisma ORM uses for defining database connection URLs for PostgreSQL, MySQL and SQLite.'
+metaDescription: "Learn about the format and syntax Prisma ORM uses for defining database connection URLs for PostgreSQL, MySQL and SQLite."
 ---
 
 Prisma ORM needs a connection URL to be able to connect to your database, e.g. when sending queries with [Prisma Client](/orm/prisma-client/setup-and-configuration/introduction) or when changing the database schema with [Prisma Migrate](/orm/prisma-migrate).
@@ -81,7 +81,7 @@ When connecting via Prisma Accelerate, the connection string doesn't require a u
 ```ts title="prisma.config.ts"
 export default defineConfig({
   datasource: {
-    url: "prisma+postgres://accelerate.prisma-data.net/?api_key=API_KEY"
+    url: "prisma+postgres://accelerate.prisma-data.net/?api_key=API_KEY",
   },
 });
 ```
@@ -91,7 +91,7 @@ In this snippet, `API_KEY` is a placeholder for the API key you are receiving wh
 ```ts title="prisma.config.ts"
 export default defineConfig({
   datasource: {
-    url: "prisma+postgres://accelerate.prisma-data.net/?api_key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlfa2V5IjoiMGNkZTFlMjQtNzhiYi00NTY4LTkyM2EtNWUwOTEzZWUyNjU1IiwidGVuYW50X2lkIjoiNzEyZWRlZTc1Y2U2MDk2ZjI4NDg3YjE4NWMyYzA2OTNhNGMxNzJkMjhhOWFlNGUwZTYxNWE4NWIxZWY1YjBkMCIsImludGVybmFsX3NlY3JldCI6IjA4MzQ2Y2RlLWI5ZjktNDQ4Yy04NThmLTMxNjg4ODEzNmEzZCJ9.N1Za6q6NfInzHvRkud6Ojt_-RFg18a0601vdYWGKOrk"
+    url: "prisma+postgres://accelerate.prisma-data.net/?api_key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlfa2V5IjoiMGNkZTFlMjQtNzhiYi00NTY4LTkyM2EtNWUwOTEzZWUyNjU1IiwidGVuYW50X2lkIjoiNzEyZWRlZTc1Y2U2MDk2ZjI4NDg3YjE4NWMyYzA2OTNhNGMxNzJkMjhhOWFlNGUwZTYxNWE4NWIxZWY1YjBkMCIsImludGVybmFsX3NlY3JldCI6IjA4MzQ2Y2RlLWI5ZjktNDQ4Yy04NThmLTMxNjg4ODEzNmEzZCJ9.N1Za6q6NfInzHvRkud6Ojt_-RFg18a0601vdYWGKOrk",
   },
 });
 ```
@@ -103,7 +103,7 @@ The connection string for connecting to a [local Prisma Postgres](/postgres/data
 ```ts title="prisma.config.ts"
 export default defineConfig({
   datasource: {
-    url: "prisma+postgres://accelerate.prisma-data.net/?api_key=API_KEY"
+    url: "prisma+postgres://accelerate.prisma-data.net/?api_key=API_KEY",
   },
 });
 ```
@@ -115,7 +115,7 @@ However, in this case the `API_KEY` doesn't provide authentication details. Inst
 ```ts title="prisma.config.ts"
 export default defineConfig({
   datasource: {
-    url: "postgresql://janedoe:mypassword@localhost:5432/mydb?schema=sample"
+    url: "postgresql://janedoe:mypassword@localhost:5432/mydb?schema=sample",
   },
 });
 ```
@@ -125,7 +125,7 @@ export default defineConfig({
 ```ts title="prisma.config.ts"
 export default defineConfig({
   datasource: {
-    url: "mysql://janedoe:mypassword@localhost:3306/mydb"
+    url: "mysql://janedoe:mypassword@localhost:3306/mydb",
   },
 });
 ```
@@ -135,7 +135,7 @@ export default defineConfig({
 ```ts title="prisma.config.ts"
 export default defineConfig({
   datasource: {
-    url: "sqlserver://localhost:1433;initial catalog=sample;user=sa;password=mypassword;"
+    url: "sqlserver://localhost:1433;initial catalog=sample;user=sa;password=mypassword;",
   },
 });
 ```
@@ -145,7 +145,7 @@ export default defineConfig({
 ```ts title="prisma.config.ts"
 export default defineConfig({
   datasource: {
-    url: "file:./dev.db"
+    url: "file:./dev.db",
   },
 });
 ```
@@ -155,7 +155,7 @@ export default defineConfig({
 ```ts title="prisma.config.ts"
 export default defineConfig({
   datasource: {
-    url: "postgresql://janedoe:mypassword@localhost:26257/mydb?schema=public"
+    url: "postgresql://janedoe:mypassword@localhost:26257/mydb?schema=public",
   },
 });
 ```

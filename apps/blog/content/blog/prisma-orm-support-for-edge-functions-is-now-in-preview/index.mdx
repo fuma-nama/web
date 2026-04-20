@@ -61,7 +61,6 @@ Additionally, we have been able to drastically reduce the size of Prisma ORM's q
 ## How to use Prisma ORM in an edge function
 
 > 🔬 If you're interested in seeing an example in action, we put together a little [GitHub repository](https://github.com/prisma/nextjs-edge-functions/) demonstrating how to access your database using Prisma ORM with Vercel Edge Functions.
-> 
 
 Follow along to learn how to get up and running with Prisma ORM in a **Cloudflare Worker** using a **PlanetScale database** (or [check our docs](https://www.prisma.io/docs/orm/prisma-client/deployment/edge/overview) to use a different combination of edge deployment and database provider).
 
@@ -76,20 +75,26 @@ Before running through the following steps, make sure you have:
 ### 1. Set up your application
 
 Initialize your project using the [`create-cloudflare-cli`](https://www.npmjs.com/package/create-cloudflare) and follow the steps in the CLI wizard and select the default options for the prompts:
+
 ```
 npm create cloudflare@latest prisma-cloudflare-worker-example -- --type hello-world
 ```
+
 ### 2. Set up Prisma
 
 Navigate into the new directory and install the Prisma CLI:
+
 ```
 cd prisma-cloudflare-worker-example
 npm install --save-dev prisma
 ```
+
 Next, initialize Prisma in your project with the following command:
+
 ```
 npx prisma init --datasource-provider mysql
 ```
+
 The above command:
 
 - Created the Prisma schema file in `prisma/schema.prisma`
@@ -103,7 +108,8 @@ Update the value with the actual connection string that connects to your PlanetS
 # .env
 DATABASE_URL="mysql://USERNAME:PASSWORD@aws.connect.psdb.cloud/DATABASE?sslaccept=strict"
 ```
-> **Note:** The connection string above uses placeholders for the *username*, *password* and *name* of your database. Be sure to replace these with the values for your own database.
+
+> **Note:** The connection string above uses placeholders for the _username_, _password_ and _name_ of your database. Be sure to replace these with the values for your own database.
 
 Update your Prisma schema to look as follows:
 
@@ -132,15 +138,18 @@ enum Level {
   Error
 }
 ```
+
 The above Prisma schema:
 
 - Enables the `driverAdapters` Preview feature flag
 - Defines a `Log` model and `Level` enum
 
 To map your data model to the database, you need to use the `prisma db push` CLI command:
+
 ```
 npx prisma db push
 ```
+
 This created a new `Log` table in your database that you can now view in the PlanetScale dashboard.
 
 ### 3. Write the Cloudflare Worker function
@@ -157,79 +166,98 @@ compatibility_date = "2022-11-07"
 [vars]
 DATABASE_URL = "mysql://USERNAME:PASSWORD@aws.connect.psdb.cloud/DATABASE?sslaccept=strict"
 ```
+
 > **Note:** Since this is a demo app, we're adding the plain connection string into `wrangler.toml`. However, as this file is typically committed into version control, you should never do this in production because that would publicly expose your database connection. Instead, use [Cloudflare's configuration for secrets](https://developers.cloudflare.com/workers/configuration/secrets/).
 
-
 Next, install the PlanetScale serverless database driver and its [driver adapter](https://www.prisma.io/docs/orm/overview/databases/database-drivers#serverless-driver-adapters):
+
 ```
 npm install @prisma/adapter-planetscale @planetscale/database
 ```
+
 Update the example Cloudflare Worker snippet in the `src/index.ts` file with the following code:
 
 ```ts
-import { PrismaClient } from '@prisma/client'
-import { Client } from '@planetscale/database'
-import { PrismaPlanetScale } from '@prisma/adapter-planetscale'
+import { PrismaClient } from "@prisma/client";
+import { Client } from "@planetscale/database";
+import { PrismaPlanetScale } from "@prisma/adapter-planetscale";
 
 export interface Env {
-  DATABASE_URL: string
+  DATABASE_URL: string;
 }
 
 export default {
-  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
+  async fetch(
+    request: Request,
+    env: Env,
+    ctx: ExecutionContext,
+  ): Promise<Response> {
     const config = {
       url: env.DATABASE_URL,
       // see https://github.com/cloudflare/workerd/issues/698
       fetch: (url: any, init: any) => {
-        delete init['cache']
-        return fetch(url, init)
+        delete init["cache"];
+        return fetch(url, init);
       },
-    }
+    };
 
-    const client = new Client(config)
-    const adapter = new PrismaPlanetScale(client)
-    const prisma = new PrismaClient({ adapter })
+    const client = new Client(config);
+    const adapter = new PrismaPlanetScale(client);
+    const prisma = new PrismaClient({ adapter });
 
     await prisma.log.create({
       data: {
-        level: 'Info',
+        level: "Info",
         message: `${request.method} ${request.url}`,
         meta: {
           headers: JSON.stringify(request.headers),
         },
       },
-    })
+    });
 
     const logs = await prisma.log.findMany({
       take: 20,
       orderBy: {
-        id: 'desc',
+        id: "desc",
       },
-    })
+    });
 
-    console.log(JSON.stringify(logs))
+    console.log(JSON.stringify(logs));
 
-    return new Response(JSON.stringify(logs))
+    return new Response(JSON.stringify(logs));
   },
-}
+};
 ```
+
 Start up the application:
+
 ```
 npm run dev
 ```
+
 From the terminal output, you can now open the URL pointing to `localhost` or hit the `b` key to open your browser and invoke the Worker function.
 
 If everything went well, you'll see output looking similar to this:
 
 ```js
-[{ "id": 1, "level": "Info", "message": "GET http://localhost:63098/", "meta": { "headers": "{}" } }]
+[
+  {
+    id: 1,
+    level: "Info",
+    message: "GET http://localhost:63098/",
+    meta: { headers: "{}" },
+  },
+];
 ```
+
 ### 4. Publish to Cloudflare Workers
 
 You can now deploy the application by running the following command:
+
 ```
 npm run deploy
 ```
+
 This command will deploy your edge function to Cloudflare and output the URL where it can be accessed.
 
 ## Try it out and share your feedback

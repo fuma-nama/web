@@ -22,7 +22,13 @@ import {
 A simple empty state with an icon, title, and description:
 
 ```tsx
-import { Empty, EmptyHeader, EmptyMedia, EmptyTitle, EmptyDescription } from "@prisma/eclipse";
+import {
+  Empty,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+  EmptyDescription,
+} from "@prisma/eclipse";
 
 export function BasicEmpty() {
   return (
@@ -78,7 +84,8 @@ export function EmptyWithAction() {
         </EmptyMedia>
         <EmptyTitle>No Projects Yet</EmptyTitle>
         <EmptyDescription>
-          You haven't created any projects yet. Get started by creating your first project.
+          You haven't created any projects yet. Get started by creating your
+          first project.
         </EmptyDescription>
       </EmptyHeader>
       <EmptyContent>
@@ -100,7 +107,8 @@ export function EmptyWithAction() {
       </EmptyMedia>
       <EmptyTitle>No Projects Yet</EmptyTitle>
       <EmptyDescription>
-        You haven't created any projects yet. Get started by creating your first project.
+        You haven't created any projects yet. Get started by creating your first
+        project.
       </EmptyDescription>
     </EmptyHeader>
     <EmptyContent>
@@ -133,7 +141,8 @@ export function EmptyMultipleActions() {
         </EmptyMedia>
         <EmptyTitle>No Projects Yet</EmptyTitle>
         <EmptyDescription>
-          You haven't created any projects yet. Get started by creating your first project.
+          You haven't created any projects yet. Get started by creating your
+          first project.
         </EmptyDescription>
       </EmptyHeader>
       <EmptyContent>
@@ -161,7 +170,8 @@ export function EmptyMultipleActions() {
       </EmptyMedia>
       <EmptyTitle>No Projects Yet</EmptyTitle>
       <EmptyDescription>
-        You haven't created any projects yet. Get started by creating your first project.
+        You haven't created any projects yet. Get started by creating your first
+        project.
       </EmptyDescription>
     </EmptyHeader>
     <EmptyContent>
@@ -276,7 +286,9 @@ export function BackgroundEmpty() {
         <i className="fa-duotone fa-regular fa-bell"></i>
       </EmptyMedia>
       <EmptyTitle>No Notifications</EmptyTitle>
-      <EmptyDescription>You're all caught up. New notifications will appear here.</EmptyDescription>
+      <EmptyDescription>
+        You're all caught up. New notifications will appear here.
+      </EmptyDescription>
     </EmptyHeader>
     <EmptyContent>
       <Button variant="default-weak">Refresh</Button>
@@ -356,7 +368,8 @@ export function SearchEmpty() {
         </EmptyMedia>
         <EmptyTitle>404 - Not Found</EmptyTitle>
         <EmptyDescription>
-          The page you're looking for doesn't exist. Try searching for what you need below.
+          The page you're looking for doesn't exist. Try searching for what you
+          need below.
         </EmptyDescription>
       </EmptyHeader>
       <EmptyContent>
@@ -381,7 +394,8 @@ export function SearchEmpty() {
       </EmptyMedia>
       <EmptyTitle>404 - Not Found</EmptyTitle>
       <EmptyDescription>
-        The page you're looking for doesn't exist. Try searching for what you need below.
+        The page you're looking for doesn't exist. Try searching for what you
+        need below.
       </EmptyDescription>
     </EmptyHeader>
     <EmptyContent>
@@ -416,7 +430,9 @@ export function LargeIconEmpty() {
           <i className="fa-duotone fa-regular fa-users"></i>
         </EmptyMedia>
         <EmptyTitle>No Team Members</EmptyTitle>
-        <EmptyDescription>Invite your team to collaborate on this project.</EmptyDescription>
+        <EmptyDescription>
+          Invite your team to collaborate on this project.
+        </EmptyDescription>
       </EmptyHeader>
       <EmptyContent>
         <Button>Invite Members</Button>
@@ -435,7 +451,9 @@ export function LargeIconEmpty() {
         <i className="fa-duotone fa-solid fa-command" />
       </EmptyMedia>
       <EmptyTitle>No Team Members</EmptyTitle>
-      <EmptyDescription>Invite your team to collaborate on this project.</EmptyDescription>
+      <EmptyDescription>
+        Invite your team to collaborate on this project.
+      </EmptyDescription>
     </EmptyHeader>
     <EmptyContent>
       <Button>Invite Members</Button>
@@ -657,11 +675,16 @@ Customize by passing `className` props:
 ```tsx
 <Empty className="border border-stroke-error">
   <EmptyHeader>
-    <EmptyMedia variant="icon" className="bg-background-error text-foreground-error">
+    <EmptyMedia
+      variant="icon"
+      className="bg-background-error text-foreground-error"
+    >
       <AlertCircle />
     </EmptyMedia>
     <EmptyTitle>Connection Error</EmptyTitle>
-    <EmptyDescription>Unable to load data. Check your connection and try again.</EmptyDescription>
+    <EmptyDescription>
+      Unable to load data. Check your connection and try again.
+    </EmptyDescription>
   </EmptyHeader>
   <EmptyContent>
     <Button onClick={retry}>Retry</Button>

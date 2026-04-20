@@ -1,6 +1,6 @@
-import { source } from '@/lib/source';
-import { baseOptions } from '@/lib/layout.shared';
-import { DocsLayout } from '@/components/layout/notebook';
+import { source } from "@/lib/source";
+import { baseOptions } from "@/lib/layout.shared";
+import { DocsLayout } from "@/components/layout/notebook";
 export default async function Layout({
   children,
 }: {

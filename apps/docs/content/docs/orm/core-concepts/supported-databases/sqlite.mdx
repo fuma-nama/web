@@ -1,6 +1,6 @@
 ---
 title: SQLite
-description: 'Use Prisma ORM with SQLite databases including local SQLite, Turso (libSQL), and Cloudflare D1'
+description: "Use Prisma ORM with SQLite databases including local SQLite, Turso (libSQL), and Cloudflare D1"
 url: /orm/core-concepts/supported-databases/sqlite
 metaTitle: SQLite database connector
 metaDescription: This page explains how Prisma can connect to a SQLite database using the SQLite database connector.
@@ -100,6 +100,7 @@ Edge-hosted, distributed SQLite-compatible database.
 - Use local SQLite file + Turso CLI for migrations (see [Turso docs](https://docs.turso.tech/))
 
 **Key differences:**
+
 - Remote access over HTTP
 - Replication and automated backups
 - Schema changes via `prisma migrate diff` + Turso CLI
@@ -113,6 +114,7 @@ Serverless SQLite database for Cloudflare Workers.
 - Local (`.wrangler/state`) and remote versions available
 
 **Key differences:**
+
 - No transaction support currently
 - Migrations via Wrangler: `wrangler d1 migrations apply`
 - Deploy with Cloudflare Workers
@@ -147,7 +149,7 @@ Configure how `DateTime` values are stored:
 ```ts
 const adapter = new PrismaBetterSqlite3(
   { url: "file:./dev.db" },
-  { timestampFormat: "unixepoch-ms" } // For backward compatibility
+  { timestampFormat: "unixepoch-ms" }, // For backward compatibility
 );
 ```
 

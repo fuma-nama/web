@@ -32,7 +32,7 @@ A purely internet-trained LLM won't be able to help with these because it doesn'
 
 ### "Tool access" enables LLMs to interact with the outside world
 
-In such scenarios, an LLM needs additional capabilities to interact with the "outside world"—to go beyond its knowledge of the web and perform actions on other systems. 
+In such scenarios, an LLM needs additional capabilities to interact with the "outside world"—to go beyond its knowledge of the web and perform actions on other systems.
 
 LLM providers have responded to this need by implementing so-called _tool_ access. Individual providers use different names for it: OpenAI calls it [function calling](https://platform.openai.com/docs/guides/function-calling?api-mode=responses), Anthropic refers to it as [tool use](https://docs.anthropic.com/en/docs/build-with-claude/tool-use/overview), and others use terms like "plugins" or "actions."
 
@@ -42,8 +42,6 @@ This approach was messy because each LLM had a different interface for interacti
 
 For example, if you wanted multiple LLMs to access your file system, you would need to implement the same "file system access tool" multiple times, each tailored to a specific LLM. Here's what that might have looked like:
 
-
-
 ```ts
 // OpenAI SDK
 import { OpenAI } from "openai";
@@ -52,16 +50,21 @@ const openai = new OpenAI({ apiKey: OPENAI_API_KEY });
 const response = await openai.chat.completions.create({
   model: "gpt-4",
   messages: [{ role: "user", content: "Find all invoices from last year" }],
-  functions: [{ name: "findInvoices", parameters: { year: { type: "number" } } }],
+  functions: [
+    { name: "findInvoices", parameters: { year: { type: "number" } } },
+  ],
 });
 
 if (response.function_call?.name === "findInvoices") {
   const { year } = JSON.parse(response.function_call.arguments);
   const files = fs.readdirSync("/invoices");
-  const matches = files.filter(f => f.includes(year));
-  const contents = matches.map(f => fs.readFileSync(`/invoices/${f}`, "utf-8"));
+  const matches = files.filter((f) => f.includes(year));
+  const contents = matches.map((f) =>
+    fs.readFileSync(`/invoices/${f}`, "utf-8"),
+  );
 }
 ```
+
 ```ts
 // Anthropic SDK
 import { Anthropic } from "@anthropic-ai/sdk";
@@ -77,12 +80,13 @@ const output = await anthropic.completions.create({ prompt });
 if (output.includes("find_invoices")) {
   const year = extractYear(output);
   const files = fs.readdirSync("/invoices");
-  const matches = files.filter(f => f.includes(year));
-  const contents = matches.map(f => fs.readFileSync(`/invoices/${f}`, "utf-8"));
+  const matches = files.filter((f) => f.includes(year));
+  const contents = matches.map((f) =>
+    fs.readFileSync(`/invoices/${f}`, "utf-8"),
+  );
 }
 ```
 
-    
 With new LLMs popping up left and right, you can imagine how chaotic this will become if every LLM has its own, proprietary interface for accessing the outside world.
 
 ### Introducing MCP: Standardizing tool access for LLMs
@@ -108,14 +112,15 @@ server.tool({
   parameters: { year: "number" },
   handler: ({ year }) => {
     const files = fs.readdirSync("/invoices");
-    const matches = files.filter(f => f.includes(year));
-    return matches.map(f => fs.readFileSync(`/invoices/${f}`, "utf-8"));
+    const matches = files.filter((f) => f.includes(year));
+    return matches.map((f) => fs.readFileSync(`/invoices/${f}`, "utf-8"));
   },
 });
 
 const transport = new StdioServerTransport();
 await server.connect(transport);
 ```
+
 Anthropic clearly struck a chord with this standard. If you were on X at the time, you probably saw multiple MCP posts a day. Google Trends for "MCP" tell the same story:
 
 ![](/about-mcp-servers-and-how-we-built-one-for-prisma/imgs/03cc8051d3cdfcabcb6037fcb5fbe1d33856fc99-1816x1400.png)
@@ -134,11 +139,12 @@ All you need to augment an LLM with MCP server functionality is a CLI command to
   }
 }
 ```
+
 The AI tool runs the `command`, passes the `args`, and the LLM gains access to the server's tools.
 
 ## Building the Prisma MCP server
 
-At Prisma, we've built the [most popular TypeScript ORM](https://www.prisma.io/blog/how-prisma-orm-became-the-most-downloaded-orm-for-node-js) and the [world's most efficient Postgres database](https://www.prisma.io/blog/announcing-prisma-postgres-early-access) running on unikernels. 
+At Prisma, we've built the [most popular TypeScript ORM](https://www.prisma.io/blog/how-prisma-orm-became-the-most-downloaded-orm-for-node-js) and the [world's most efficient Postgres database](https://www.prisma.io/blog/announcing-prisma-postgres-early-access) running on unikernels.
 
 Naturally, we wondered how we could use MCP to simplify database workflows for developers.
 
@@ -180,43 +186,48 @@ The Prisma MCP server is quite simple and lightweight—[you can explore it on G
 ```shell
 prisma mcp
 ```
+
 Here's its basic structure:
 
 ```ts
-import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
-import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
-import type { PrismaConfigInternal } from '@prisma/config'
-import { Command } from '@prisma/internals'
-import execa from 'execa'
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import type { PrismaConfigInternal } from "@prisma/config";
+import { Command } from "@prisma/internals";
+import execa from "execa";
 
 async function runCommand({ args, cwd }: { args: string[]; cwd: string }) {
-  const result = await execa.node(process.argv[1], args, { cwd })
-  return `${result.stdout}\n${result.stderr}`
+  const result = await execa.node(process.argv[1], args, { cwd });
+  return `${result.stdout}\n${result.stderr}`;
 }
 
 export class Mcp implements Command {
   public static new(): Mcp {
-    return new Mcp()
+    return new Mcp();
   }
 
-  public async parse(_argv: string[], _config: PrismaConfigInternal): Promise<string | Error> {
+  public async parse(
+    _argv: string[],
+    _config: PrismaConfigInternal,
+  ): Promise<string | Error> {
     const server = new McpServer({
-      name: 'Prisma',
+      name: "Prisma",
       version,
-    })
+    });
 
     /**
      * The capabilities of the MCP are implemented here via
      * the `server.tool(...)` API.
      */
 
-    const transport = new StdioServerTransport()
-    await server.connect(transport)
+    const transport = new StdioServerTransport();
+    await server.connect(transport);
 
-    return ''
+    return "";
   }
 }
 ```
+
 The `parse` function is being executed when the `prisma mcp --early-access` CLI command is invoked. It starts an MCP server that uses the `StdioServerTransport` (as opposed to `StreamableHTTPServerTransport`) because it’s running locally.
 
 What’s not shown in the above snippet is the actual implementation of the CLI commands, let’s zoom into the `parse` function and look at the `prisma migrate dev` and `prisma init --db` commands as examples:
@@ -227,7 +238,7 @@ public async parse(_argv: string[], _config: PrismaConfigInternal): Promise<stri
     name: 'Prisma',
     version,
   })
-  
+
   server.tool(
     'migrate-dev',
     `Prisma Migrate Dev is used to update Prisma whenever the schema.prisma file has been modified. Always provide a descriptive name argument describing the change that was made to the Prisma Schema.
@@ -272,6 +283,7 @@ public async parse(_argv: string[], _config: PrismaConfigInternal): Promise<stri
   return ''
 }
 ```
+
 Each tool is registered via `server.tool()` with:
 
 1. A **name** (so the LLM can reference it)
@@ -295,6 +307,7 @@ If you're curious to try it, paste this snippet into the MCP config section of y
   }
 }
 ```
+
 Or check out our [docs](https://www.prisma.io/docs/postgres/integrations/mcp-server) for specific instructions for Cursor, Windsurf, Claude, or the OpenAI Agents SDK.
 
 Once added, your AI tool will show the MCP server's status and available tools. Here's how it looks in Cursor:

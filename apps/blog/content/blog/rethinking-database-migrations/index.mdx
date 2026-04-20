@@ -79,7 +79,7 @@ migrations/
 {
   "from": "ce46fb3", // This hash tells us the schema before
   "to": "ab864ff", // and this tells us the schema after (we'll show you how in a moment)
-  "description": "Create users table" // This is informative
+  "description": "Create users table", // This is informative
 }
 ```
 
@@ -104,11 +104,12 @@ Migrations promise to transition your database from one schema to another, which
       { "description": "Table user does not exist", "sql": "SELECT ..." }
     ],
     "execute": [
-      { "description": "Create table user", "sql": "CREATE TABLE \\\"user\\\" (...)" }
+      {
+        "description": "Create table user",
+        "sql": "CREATE TABLE \\\"user\\\" (...)"
+      }
     ],
-    "postcheck": [
-      { "description": "Table user exists", "sql": "SELECT ..." }
-    ]
+    "postcheck": [{ "description": "Table user exists", "sql": "SELECT ..." }]
   }
 ]
 ```
@@ -129,7 +130,7 @@ Here's what that looks like in practice. Two developers have branched from the s
 * ∅          (empty database)
 |
 * abc123     createTable(user)      ◄── YOU ARE HERE
-|\ 
+|\
 | * def456   addColumn(user.email)  (other branch)
 |
 * ghi789     addColumn(user.name)   ◄── TARGET
@@ -143,7 +144,7 @@ This idea isn't entirely new, tools like [Sqitch](https://sqitch.org/) and [Atla
 
 Remember the local-drift scenario? You iterate on a migration locally, your DB ends up in a slightly different state, and the migration fails in CI. With Prisma Next, the runner checks the database's current schema hash against the migration's `from` hash before doing anything. If they don't match, the migration stops immediately with a clear error. Not halfway through, leaving the database in an unknown state.
 
-What if a migration *does* fail partway through? Because every operation carries a precheck and a postcheck, the migration is safe to retry. Operations whose postchecks already pass are skipped; operations whose prechecks fail produce a clear error. The database never ends up in a state the system can't reason about.
+What if a migration _does_ fail partway through? Because every operation carries a precheck and a postcheck, the migration is safe to retry. Operations whose postchecks already pass are skipped; operations whose prechecks fail produce a clear error. The database never ends up in a state the system can't reason about.
 
 ## Resolving conflicts between branches
 

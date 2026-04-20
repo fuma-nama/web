@@ -1,15 +1,15 @@
-import { source } from '@/lib/source';
-import { notFound } from 'next/navigation';
-import { getMDXComponents } from '@/mdx-components';
-import type { Metadata } from 'next';
-import { createRelativeLink } from 'fumadocs-ui/mdx';
+import { source } from "@/lib/source";
+import { notFound } from "next/navigation";
+import { getMDXComponents } from "@/mdx-components";
+import type { Metadata } from "next";
+import { createRelativeLink } from "fumadocs-ui/mdx";
 import {
   DocsBody,
   DocsDescription,
   DocsPage,
   DocsTitle,
   PageLastUpdate,
-} from '@/components/layout/notebook/page';
+} from "@/components/layout/notebook/page";
 
 interface PageParams {
   slug?: string[];
@@ -29,7 +29,7 @@ export default async function Page({
   return (
     <DocsPage
       tableOfContent={{
-        style: 'normal',
+        style: "normal",
       }}
       toc={page.data.toc}
       full={page.data.full}

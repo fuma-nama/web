@@ -384,7 +384,10 @@ export function SignOut() {
     <form>
       {" "}
       // [!code ++]
-      <button className="bg-neutral-700 text-white p-2 rounded-md">Sign Out</button> // [!code ++]
+      <button className="bg-neutral-700 text-white p-2 rounded-md">
+        Sign Out
+      </button>{" "}
+      // [!code ++]
     </form> // [!code ++]
   ); // [!code ++]
 } // [!code ++]
@@ -404,7 +407,9 @@ export function SignIn({ provider }: { provider?: string }) {
         await signIn(provider); // [!code ++]
       }} // [!code ++]
     >
-      <button className="bg-neutral-700 text-white p-2 rounded-md">Sign In with {provider}</button>
+      <button className="bg-neutral-700 text-white p-2 rounded-md">
+        Sign In with {provider}
+      </button>
     </form>
   );
 }
@@ -419,7 +424,9 @@ export function SignOut() {
       }} // [!code ++]
       className="w-full"
     >
-      <button className="bg-neutral-700 text-white p-2 rounded-md">Sign Out</button>
+      <button className="bg-neutral-700 text-white p-2 rounded-md">
+        Sign Out
+      </button>
     </form>
   );
 }
@@ -442,7 +449,10 @@ const Page = async () => {
       <div className="bg-neutral-800 rounded-lg p-6 max-w-xl w-full">
         {" "}
         // [!code ++]
-        <h1 className="text-white text-xl mb-4 text-center">Auth.js + Prisma</h1> // [!code ++]
+        <h1 className="text-white text-xl mb-4 text-center">
+          Auth.js + Prisma
+        </h1>{" "}
+        // [!code ++]
       </div>{" "}
       // [!code ++]
     </div> // [!code ++]
@@ -469,7 +479,9 @@ const Page = async () => {
   return (
     <div className="min-h-screen bg-black flex items-center justify-center p-4">
       <div className="bg-neutral-800 rounded-lg p-6 max-w-xl w-full">
-        <h1 className="text-white text-xl mb-4 text-center">Auth.js + Prisma</h1>
+        <h1 className="text-white text-xl mb-4 text-center">
+          Auth.js + Prisma
+        </h1>
       </div>
     </div>
   );
@@ -492,7 +504,9 @@ const Page = async () => {
   return (
     <div className="min-h-screen bg-black flex items-center justify-center p-4">
       <div className="bg-neutral-800 rounded-lg p-6 max-w-xl w-full">
-        <h1 className="text-white text-xl mb-4 text-center">Auth.js + Prisma</h1>
+        <h1 className="text-white text-xl mb-4 text-center">
+          Auth.js + Prisma
+        </h1>
 
         {!session ? (
           <div className="text-center">
@@ -552,7 +566,9 @@ const Page = async () => {
   return (
     <div className="min-h-screen bg-black flex items-center justify-center p-4">
       <div className="bg-neutral-800 rounded-lg p-6 max-w-xl w-full">
-        <h1 className="text-white text-xl mb-4 text-center">Auth.js + Prisma</h1>
+        <h1 className="text-white text-xl mb-4 text-center">
+          Auth.js + Prisma
+        </h1>
 
         {!session ? (
           <div className="text-center">
@@ -570,8 +586,10 @@ const Page = async () => {
             <div className="bg-neutral-900 rounded p-3">
               {" "}
               // [!code ++]
-              <pre className="text-xs text-gray-300">{JSON.stringify(user, null, 2)}</pre> // [!code
-              ++]
+              <pre className="text-xs text-gray-300">
+                {JSON.stringify(user, null, 2)}
+              </pre>{" "}
+              // [!code ++]
             </div>{" "}
             // [!code ++]
             <div className="text-center">

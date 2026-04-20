@@ -1,31 +1,128 @@
-import { docs, docsV6 } from "../../.source/server";
-import { type InferPageType, loader } from "fumadocs-core/source";
 import { lucideIconsPlugin } from "fumadocs-core/source/lucide-icons";
 import { openapiPlugin } from "fumadocs-openapi/server";
-import { type Version } from "./version";
+import { localMd } from "@fumadocs/local-md";
+import { pageSchema } from "fumadocs-core/source/schema";
+import z from "zod";
+import remarkDirective from "remark-directive";
+import {
+  remarkDirectiveAdmonition,
+  remarkImage,
+  remarkMdxFiles,
+} from "fumadocs-core/mdx-plugins";
+import { dynamicLoader } from "fumadocs-core/source/dynamic";
+import remarkConsoleUtm from "@/lib/remark-console-utm";
+
+const docs = localMd({
+  dir: "content/docs",
+  frontmatterSchema: pageSchema.extend({
+    image: z.string().optional(),
+    badge: z.enum(["early-access", "deprecated", "preview"]).optional(),
+    url: z.string(),
+    metaTitle: z.string(),
+    metaDescription: z.string(),
+    aiPrompt: z.string().optional(),
+  }),
+  mdxOptions: {
+    remarkPlugins: [
+      remarkDirective,
+      [remarkImage, { useImport: false }],
+      [
+        remarkDirectiveAdmonition,
+        {
+          types: {
+            note: "info",
+            tip: "info",
+            info: "info",
+            warn: "warning",
+            warning: "warning",
+            danger: "error",
+            success: "success",
+            ppg: "ppg",
+            error: "error",
+          },
+        },
+      ],
+      remarkMdxFiles,
+      remarkConsoleUtm,
+    ],
+    remarkCodeTabOptions: {
+      parseMdx: true,
+    },
+    remarkNpmOptions: {
+      persist: {
+        id: "package-manager",
+      },
+    },
+  },
+});
+
+// v6 docs collection
+const docsV6 = localMd({
+  dir: "content/docs.v6",
+  frontmatterSchema: pageSchema.extend({
+    image: z.string().optional(),
+    badge: z.enum(["early-access", "deprecated", "preview"]).optional(),
+    url: z.string().optional(),
+    metaTitle: z.string().optional(),
+    metaDescription: z.string().optional(),
+    aiPrompt: z.string().optional(),
+  }),
+  mdxOptions: {
+    remarkPlugins: [
+      remarkDirective,
+      [remarkImage, { useImport: false }],
+      [
+        remarkDirectiveAdmonition,
+        {
+          types: {
+            note: "info",
+            tip: "info",
+            info: "info",
+            warn: "warning",
+            warning: "warning",
+            danger: "error",
+            success: "success",
+            ppg: "ppg",
+            error: "error",
+          },
+        },
+      ],
+      remarkMdxFiles,
+      remarkConsoleUtm,
+    ],
+    remarkCodeTabOptions: {
+      parseMdx: true,
+    },
+    remarkNpmOptions: {
+      persist: {
+        id: "package-manager",
+      },
+    },
+  },
+});
 
 // See https://fumadocs.dev/docs/headless/source-api for more info
-export const source = loader({
+const source = dynamicLoader(docs.dynamicSource(), {
   baseUrl: "/",
-  source: docs.toFumadocsSource(),
   plugins: [lucideIconsPlugin(), openapiPlugin()],
 });
 
 // v6 source - URLs with /v6/ prefix
-export const sourceV6 = loader({
+const sourceV6 = dynamicLoader(docsV6.dynamicSource(), {
   baseUrl: "/v6",
-  source: docsV6.toFumadocsSource(),
   plugins: [lucideIconsPlugin()],
 });
 
-// Get the appropriate source for a version
-export function getSource(version: Version) {
-  return version === "v6" ? sourceV6 : source;
+export async function getSource(
+  version: "v6" | "latest" = "latest",
+): ReturnType<(typeof source)["get"]> {
+  return version === "latest"
+    ? source.get()
+    : (sourceV6.get() as ReturnType<(typeof source)["get"]>);
 }
 
-
 export function getPageImage(
-  page: InferPageType<typeof source> | InferPageType<typeof sourceV6>
+  page: (typeof source)["$inferPage"] | (typeof sourceV6)["$inferPage"],
 ) {
   const segments = [...page.slugs, "image.png"];
 
@@ -35,10 +132,13 @@ export function getPageImage(
   };
 }
 
-export async function getLLMText(page: InferPageType<typeof source> | InferPageType<typeof sourceV6>) {
-  const processed = await page.data.getText("processed");
-
+export async function getLLMText(
+  page: (typeof source)["$inferPage"] | (typeof sourceV6)["$inferPage"],
+) {
   return `# ${page.data.title}
 
-${processed}`;
+${page.data.content}`;
 }
+
+export type DocsPage = (typeof source)["$inferPage"];
+export type DocsPageV6 = (typeof sourceV6)["$inferPage"];

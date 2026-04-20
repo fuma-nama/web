@@ -1,9 +1,9 @@
 ---
 title: Fine-Grained Authorization (Permit)
-description: 'Learn how to implement RBAC, ABAC, and ReBAC authorization in your Prisma applications'
+description: "Learn how to implement RBAC, ABAC, and ReBAC authorization in your Prisma applications"
 url: /v6/orm/prisma-client/client-extensions/shared-extensions/permit-rbac
 metaTitle: Fine-Grained Authorization (Permit)
-metaDescription: 'Learn how to implement RBAC, ABAC, and ReBAC authorization in your Prisma applications'
+metaDescription: "Learn how to implement RBAC, ABAC, and ReBAC authorization in your Prisma applications"
 ---
 
 :::info[Quick summary]
@@ -128,7 +128,10 @@ ABAC extends access control by considering user attributes, resource attributes,
 ```typescript
 const prisma = new PrismaClient().$extends(
   createPermitClientExtension({
-    permitConfig: { token: process.env.PERMIT_API_KEY, pdp: "http://localhost:7766" },
+    permitConfig: {
+      token: process.env.PERMIT_API_KEY,
+      pdp: "http://localhost:7766",
+    },
     enableAutomaticChecks: true,
   }),
 );
@@ -157,7 +160,10 @@ ReBAC models permissions based on relationships between users and specific resou
 ```typescript
 const prisma = new PrismaClient().$extends(
   createPermitClientExtension({
-    permitConfig: { token: process.env.PERMIT_API_KEY, pdp: "http://localhost:7766" },
+    permitConfig: {
+      token: process.env.PERMIT_API_KEY,
+      pdp: "http://localhost:7766",
+    },
     accessControlModel: "rebac",
     enableAutomaticChecks: true,
     enableResourceSync: true, // Sync resource instances with Permit.io

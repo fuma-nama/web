@@ -281,7 +281,11 @@ export function DynamicPagination({
   }
 
   // Show pages around current page
-  for (let i = Math.max(2, currentPage - 1); i <= Math.min(totalPages - 1, currentPage + 1); i++) {
+  for (
+    let i = Math.max(2, currentPage - 1);
+    i <= Math.min(totalPages - 1, currentPage + 1);
+    i++
+  ) {
     pages.push(i);
   }
 

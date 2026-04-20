@@ -54,10 +54,16 @@
     "tabs": {
       "defaultValue": "react-server-components",
       "head": [
-        { "title": "React Server Components", "value": "react-server-components" },
+        {
+          "title": "React Server Components",
+          "value": "react-server-components"
+        },
         { "title": "Next.js App Router", "value": "nextjs-app-router" },
         { "title": "Remix", "value": "remix" },
-        { "title": "React Router 7 Framework", "value": "react-router-7-framework" }
+        {
+          "title": "React Router 7 Framework",
+          "value": "react-router-7-framework"
+        }
       ],
       "body": [
         {

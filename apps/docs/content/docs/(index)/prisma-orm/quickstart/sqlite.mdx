@@ -2,7 +2,7 @@
 title: SQLite
 description: Create a new TypeScript project from scratch by connecting Prisma ORM to SQLite and generating a Prisma Client for database access
 url: /prisma-orm/quickstart/sqlite
-metaTitle: 'Quickstart: Prisma ORM with SQLite (5 min)'
+metaTitle: "Quickstart: Prisma ORM with SQLite (5 min)"
 metaDescription: Create a new TypeScript project from scratch by connecting Prisma ORM to SQLite and generating a Prisma Client for database access.
 ---
 
@@ -199,6 +199,7 @@ export { prisma };
 ```
 
 ### Using SQLite with Bun
+
 When targeting Bun, use the `@prisma/adapter-libsql` adapter instead of `@prisma/adapter-better-sqlite3`. Bun doesn’t support the native SQLite driver that `better-sqlite3` relies on (see the [`node:sqlite` reference](https://bun.com/reference/node/sqlite)). Instantiate Prisma Client like so:
 
 ```ts
@@ -214,7 +215,6 @@ const prisma = new PrismaClient({ adapter });
 
 export { prisma };
 ```
-
 
 ## 8. Write your first query
 
@@ -304,8 +304,6 @@ You've successfully set up Prisma ORM. Here's what you can explore next:
 - **Performance optimization**: Discover [query optimization techniques](/orm/prisma-client/queries/advanced/query-optimization-performance)
 - **Build a full application**: Check out our [framework guides](/guides) to integrate Prisma ORM with Next.js, Express, and more
 - **Join the community**: Connect with other developers on [Discord](https://pris.ly/discord)
-
-
 
 ## More info
 

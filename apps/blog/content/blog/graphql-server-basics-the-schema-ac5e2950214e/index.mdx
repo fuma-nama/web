@@ -30,6 +30,7 @@ type User {
   name: String
 }
 ```
+
 The `User` type alone doesn’t expose any functionality to client applications, it simply defines the structure of a user _model_ in your application. In order to add functionality to the API, you need to add fields to the [root types](http://graphql.org/learn/schema/#the-query-and-mutation-types) of the GraphQL schema: `Query`, `Mutation` and `Subscription`. These types define the _entry points_ for a GraphQL API.
 
 For example, consider the following query:
@@ -42,6 +43,7 @@ query {
   }
 }
 ```
+
 This query is only valid if the corresponding GraphQL schema defines the `Query` root type with the following `user` field:
 
 ```graphql
@@ -49,6 +51,7 @@ type Query {
   user(id: ID!): User
 }
 ```
+
 So, the schema’s root types determine the shape of the queries and mutations that will be accepted by the server.
 
 > **The GraphQL schema provides a clear contract for client-server communication.**
@@ -64,16 +67,16 @@ For the example above, the `GraphQLSchema` object looks as follows:
 
 ```js
 const UserType = new GraphQLObjectType({
-  name: 'User',
+  name: "User",
   fields: {
     id: { type: GraphQLID },
     name: { type: GraphQLString },
   },
-})
+});
 
 const schema = new GraphQLSchema({
   query: new GraphQLObjectType({
-    name: 'Query',
+    name: "Query",
     fields: {
       user: {
         type: UserType,
@@ -83,8 +86,9 @@ const schema = new GraphQLSchema({
       },
     },
   }),
-})
+});
 ```
+
 As you see, the SDL-version of the schema can be directly translated into a JavaScript representation of type `GraphQLSchema`. Note that this schema doesn’t have any resolvers — it thus wouldn’t allow you to actually _execute_ any queries or mutations. More about that in the next section.
 
 ## Resolvers implement the API
@@ -104,7 +108,7 @@ When using GraphQL.js, each of the fields on a type in the `GraphQLSchema` objec
 ```js
 const schema = new GraphQLSchema({
   query: new GraphQLObjectType({
-    name: 'Query',
+    name: "Query",
     fields: {
       user: {
         type: UserType,
@@ -112,14 +116,15 @@ const schema = new GraphQLSchema({
           id: { type: GraphQLID },
         },
         resolve: (root, args, context, info) => {
-          const { id } = args // the `id` argument for this field is declared above
-          return fetchUserById(id) // hit the database
+          const { id } = args; // the `id` argument for this field is declared above
+          return fetchUserById(id); // hit the database
         },
       },
     },
   }),
-})
+});
 ```
+
 Assuming a function `fetchUserById` is actually available and returns a `User` instance (a JS object with `id` and `name` fields), the `resolve` function now enables [_execution_](https://spec.graphql.org/October2016/#sec-Executing-Requests) of the schema.
 
 Before we dive deeper, let’s take a second to understand the four arguments passed into the resolver:
@@ -133,23 +138,24 @@ Earlier we stated that _each field in the GraphQL schema is backed by a resolver
 
 ```js
 const UserType = new GraphQLObjectType({
-  name: 'User',
+  name: "User",
   fields: {
     id: {
       type: GraphQLID,
       resolve: (root, args, context, info) => {
-        return root.id
+        return root.id;
       },
     },
     name: {
       type: GraphQLString,
       resolve: (root, args, context, info) => {
-        return root.name
+        return root.name;
       },
     },
   },
-})
+});
 ```
+
 ### Query execution
 
 Considering our query from above, let’s understand how it’s executed and data is collected. The query in total contains three fields: `user` (the _root field_), `id` and `name`. This means that when the query arrives at the server, the server needs to call three resolver functions — one per field. Let’s walk through the execution flow:
@@ -172,6 +178,7 @@ Considering our query from above, let’s understand how it’s executed and dat
   }
 }
 ```
+
 Now, do you really need to write resolvers for `user.id` and `user.name` yourself? When using GraphQL.js, you don’t have to implement the resolver if the implementation is as trivial as in the example. You can thus omit their implementation since GraphQL.js already infers what it needs to return based on the names of the fields and the root argument.
 
 ### Optimizing requests: The DataLoader pattern
@@ -193,6 +200,7 @@ query {
   }
 }
 ```
+
 Notice how we’re asking for a specific `article` from a given `user`, as well as for its `comments` and the `name`s of the users who wrote them.
 
 Let’s assume this article has five comments, all written by the same user. This would mean we’d hit the `writtenBy` resolver five times but it would just return the same data every time. The [DataLoader](https://github.com/facebook/dataloader) allows you to optimize in these kinds of situations to avoid the N+1 query problem — the general idea is that resolver calls are batched and thus the database (or other data source) only has to be hit once.
@@ -219,8 +227,9 @@ Let’s take a quick tour through the functions that GraphQL.js provides. Note t
 Note that the most important function in GraphQL.js is `graphql` which takes a `GraphQLSchema` instance and a query — and then calls `validate` and `execute`:
 
 ```js
-graphql(schema, query).then(result => console.log(result))
+graphql(schema, query).then((result) => console.log(result));
 ```
+
 > To get a sense of all these functions, take a look at [this simple node script](https://github.com/nikolasburk/plain-graphql/blob/graphql-js/src/index.js) that uses them in a straightforward example.
 
 The `graphql` function is executing a GraphQL query against a schema which in itself already contains _structure_ as well as _behaviour_. The main role of `graphql` thus is to orchestrate the invocations of the resolver functions and package the response data according to the shape of the provided query. In that regard, the functionality implemented by the `graphql` function is also referred to as a _GraphQL engine_.
@@ -236,7 +245,7 @@ As mentioned above, you can create a `GraphQLSchema` instance from SDL using `pa
 `graphql-tools` fills this gap with one important piece of functionality: [`addResolveFunctionsToSchema`](https://github.com/apollographql/graphql-tools/blob/master/src/schemaGenerator.ts#L339). This is very useful as it can be used to provide a nicer, SDL-based API for creating your schema. And that’s precisely what `graphql-tools` does with [`makeExecutableSchema`](https://github.com/apollographql/graphql-tools/blob/master/src/schemaGenerator.ts#L96):
 
 ```js
-const { makeExecutableSchema } = require('graphql-tools')
+const { makeExecutableSchema } = require("graphql-tools");
 
 const typeDefs = `
 type Query {
@@ -245,21 +254,22 @@ type Query {
 type User {
   id: ID!
   name: String
-}`
+}`;
 
 const resolvers = {
   Query: {
     user: (root, args, context, info) => {
-      return fetchUserById(args.id)
+      return fetchUserById(args.id);
     },
   },
-}
+};
 
 const schema = makeExecutableSchema({
   typeDefs,
   resolvers,
-})
+});
 ```
+
 So, the biggest benefit of using `graphql-tools` is its nice API for connecting your declarative schema with resolvers!
 
 ### When not to use `graphql-tools`?
@@ -283,4 +293,3 @@ In this article, we unveiled the mechanics and inner workings of a GraphQL execu
 Generally, it’s important to note that [GraphQL.js](https://github.com/graphql/graphql-js) provides all the functionality you need for building GraphQL servers — `graphql-tools` simply implements a convenience layer on top that caters most use cases and provides a great “Getting Started”-experience. Only with more advanced requirements for building your GraphQL schema, it might make sense to take the gloves off and use plain GraphQL.js.
 
 In the [next article](https://www.prisma.io/blog/graphql-server-basics-the-network-layer-51d97d21861), we’ll discuss the network layer and different libraries for implementing GraphQL servers like [express-graphql](https://github.com/graphql/express-graphql), [apollo-server](https://github.com/apollographql/apollo-server) and [graphql-yoga](https://github.com/graphcool/graphql-yoga/). [Part 3](https://www.prisma.io/blog/graphql-server-basics-demystifying-the-info-argument-in-graphql-resolvers-6f26249f613a) then covers the structure and role of the info object in GraphQL resolvers.
-

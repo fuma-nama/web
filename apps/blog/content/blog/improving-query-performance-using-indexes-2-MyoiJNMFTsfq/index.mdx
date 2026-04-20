@@ -19,6 +19,7 @@ tags:
 One strategy for improving performance for your database queries is using indexes. This article will dive a deeper into B-Tree indexes: taking a look at the data structure used and improve the performance of an existing query with an index using Prisma.
 
 ## Overview
+
 - [Introduction](#introduction)
 - [The data structure that powers indexes](#the-data-structure-that-powers-indexes)
 - [The time complexity of a B-tree](#the-time-complexity-of-a-b-tree)
@@ -44,6 +45,7 @@ In this part, you will dive a little deeper into indexes: learning the data stru
 ## The data structure that powers indexes
 
 Database indexes are smaller secondary data structure used by the database to store a subset of a table's data. They're collections of key-value pairs:
+
 - **key**: the column(s) that will be used to create an index
 - **value**: a pointer to the record in the specific table
 
@@ -78,9 +80,11 @@ In some special situations, the database can utilize a B-tree index using string
 With the theory out of the way, let's take a look at a concrete example. We'll examine an example query that's relatively slow and improve its performance with an index using Prisma.
 
 ### Prerequisites
+
 #### Assumed knowledge
 
 To follow along, the following knowledge will be assumed:
+
 - Some familiarity with JavaScript/TypeScript
 - Some experience working with REST APIs
 - A basic understanding of working with Git
@@ -88,6 +92,7 @@ To follow along, the following knowledge will be assumed:
 #### Development environment
 
 You will also be expected to have the following tools set up in your development environment:
+
 - [Node.js](https://nodejs.org/)
 - [Git](https://git-scm.com/downloads)
 - [Docker](https://www.docker.com/) or [MySQL](https://www.mysql.com/downloads/)
@@ -97,7 +102,6 @@ You will also be expected to have the following tools set up in your development
 > **Note**:
 >
 > - If you don't have Docker or MySQL installed, you can set up a free database on [Railway](http://railway.app/).
->
 > - This tutorial uses MySQL on Docker because it allows disabling [query caching](https://dev.mysql.com/doc/refman/5.7/en/query-cache.html). This option setting is only used to showcase the speed of a database query without the database cache getting in the way. You can find this option under the `command` property in the [`docker-compose.yml`](https://github.com/ruheni/prisma-indexes/blob/main/docker-compose.yml) file.
 
 ### Clone the repository and install dependencies
@@ -107,29 +111,30 @@ Navigate to your directory of choice and clone the repository:
 ```shell
 git clone git@github.com:ruheni/prisma-indexes.git
 ```
-Change the directory to the cloned repository and install dependencies: 
+
+Change the directory to the cloned repository and install dependencies:
 
 ```shell
 cd prisma-indexes
 npm install
 ```
+
 Next, rename the `.env.example` file to `.env`.
-
-
 
 ```shell
 mv .env.example .env
 ```
+
 ```cmd
 ren .env.example .env
 ```
-
 
 ### Project walkthrough
 
 The sample project is a minimal REST API built with TypeScript and [Fastify](https://www.fastify.io/).
 
 The project contains the following file structure:
+
 ```
 prisma-indexes
   ├── .github/workflows
@@ -151,6 +156,7 @@ prisma-indexes
   ├── requests.http
   └── tsconfig.json
 ```
+
 The notable files and directories for this project are:
 
 - The `prisma` folder containing:
@@ -173,32 +179,36 @@ model User {
   email     String
 }
 ```
+
 The `src/index.ts` file contains _primitive_ [logging middleware](https://www.prisma.io/docs/orm/prisma-client/client-extensions/middleware/logging-middleware) to measure the time taken by a Prisma query:
 
 ```typescript
 // src/index.ts
 prisma.$use(async (params, next) => {
-  const before = Date.now()
-  const result = await next(params)
-  const after = Date.now()
+  const before = Date.now();
+  const result = await next(params);
+  const after = Date.now();
 
-  logger.info(`Query took ${after - before}ms`)
-  return result
-})
+  logger.info(`Query took ${after - before}ms`);
+  return result;
+});
 ```
+
 You can use the logged data to determine which Prisma queries are slow. You can use the logs to gauge queries that could require some performance improvements.
 
 `src/index.ts` also logs Prisma `query` events and parameters to the terminal. The `query` event and parameters contains the SQL query and parameters that Prisma executes against your database.
+
 ```typescript
 const prisma = new PrismaClient({
-  log: [{ emit: "event", level: "query", },],
-})
+  log: [{ emit: "event", level: "query" }],
+});
 
 prisma.$on("query", async (e) => {
-  logger.info(`Query: ${e.query}`)
-  logger.info(`Params: ${e.params}`)
+  logger.info(`Query: ${e.query}`);
+  logger.info(`Params: ${e.params}`);
 });
 ```
+
 The SQL queries (with filled in parameters) can be copied and prefixed with `EXPLAIN` to view the query plan the database will provide.
 
 ### Create and seed the database
@@ -208,11 +218,13 @@ Start up the MySQL database with docker:
 ```shell
 docker-compose up -d
 ```
+
 Next, apply the existing database migration in `prisma/migrations`:
 
 ```shell
 npx prisma migrate dev
 ```
+
 The above command will:
 
 1. Create a new database called `users-db` (inferred from the connection string defined in the `.env` file)
@@ -226,6 +238,7 @@ Start up the application server:
 ```shell
 npm run dev
 ```
+
 ### Make an API request
 
 The cloned repository contains a `requests.http` file that contains sample requests to `http://localhost:3000/users` that can be used by the installed REST Client VS Code extension. The requests contain different `firstName` query parameters.
@@ -234,7 +247,7 @@ The cloned repository contains a `requests.http` file that contains sample reque
 >
 > You can also use other API testing tools such as [Postman](https://www.postman.com/), [Insomnia](https://www.insomnia.rest/) or your preferred tool of choice.
 
-Click the **Send Request** button right above the request to make the request. 
+Click the **Send Request** button right above the request to make the request.
 
 ![](/improving-query-performance-using-indexes-2-MyoiJNMFTsfq/imgs/184096935-1a680505-14fc-47ef-8862-126ef0d15708.png)
 
@@ -246,16 +259,13 @@ You should also see information logged on the terminal.
 
 ![](/improving-query-performance-using-indexes-2-MyoiJNMFTsfq/imgs/184093478-92dea6ed-6486-46b8-b99e-62a0af29c01a.png)
 
-In the screenshot above, the query took 174ms to be executed. The sample data  174ms might not sound like much because the existing dataset is fairly small — roughly 31 MB.
+In the screenshot above, the query took 174ms to be executed. The sample data 174ms might not sound like much because the existing dataset is fairly small — roughly 31 MB.
 
 <Accordions type="single">
   <Accordion title="How to get the size of your database in MySQL">
-```sql
-SELECT table_schema AS "Database",
-      ROUND(SUM(data_length + index_length) / 1024 / 1024, 2) AS "Size(MB)" 
-    FROM information_schema.TABLES
-    WHERE table_schema = "users-db"
-```
+    ```sql SELECT table_schema AS "Database", ROUND(SUM(data_length +
+    index_length) / 1024 / 1024, 2) AS "Size(MB)" FROM information_schema.TABLES
+    WHERE table_schema = "users-db" ```
   </Accordion>
 </Accordions>
 
@@ -274,29 +284,33 @@ diff
   const firstName = faker.name.firstName()
   const lastName = faker.name.lastName()
   const email = faker.internet.email(firstName, lastName)
-  
+
   return {
     firstName, lastName, email
   }
 })
 ```
+
 Re-run `prisma db seed`:
 
 ```shell
 npx prisma db seed
 ```
+
 The data will first be cleared and then seeded with the new data.
 
 Next, make an API request in the `requests.http` file and watch logs to see the time taken query the database. In the screenshot below, the request took 504ms.
 
 ![](/improving-query-performance-using-indexes-2-MyoiJNMFTsfq/imgs/188598587-7ff4c4c8-c91c-4ff0-b32c-c4ab5a45db97.png)
+
   </Accordion>
 </Accordions>
 
 ### Improve query performance with an index
 
 You can add an index to a field in the Prisma schema using the `@@index()` attribute function. `@@index()` accepts multiple arguments such as:
-- `fields`: a list of fields to be indexed 
+
+- `fields`: a list of fields to be indexed
 - `map`: the name of the index created in the database
 
 `@@index` supports more arguments. You can learn more in the [Prisma Schema API Reference](https://www.prisma.io/docs/orm/reference/prisma-schema-reference#index).
@@ -315,22 +329,21 @@ model User {
 +  @@index(fields: [firstName])
 }
 ```
+
 After making the change, create and run another migration to update the database schema with the index:
 
 ```shell
 npx prisma migrate dev --name add-index
 ```
+
 <Accordions type="single">
   <Accordion title="Generated SQL migration">
-```sql
---- prisma/migrations/[timestamp]_add_index/migration.sql
--- CreateIndex
-CREATE INDEX `User_firstName_idx` ON `User`(`firstName`);
-```
+    ```sql --- prisma/migrations/[timestamp]_add_index/migration.sql --
+    CreateIndex CREATE INDEX `User_firstName_idx` ON `User`(`firstName`); ```
   </Accordion>
 </Accordions>
 
-Next, navigate to the `requests.http` file again and send the requests to `/users`. 
+Next, navigate to the `requests.http` file again and send the requests to `/users`.
 
 ![](/improving-query-performance-using-indexes-2-MyoiJNMFTsfq/imgs/184093462-b8ec58e9-3540-4a60-9408-84e51a4f9f19.png)
 
@@ -354,15 +367,17 @@ model User {
 +  @@index(fields: [firstName, lastName])
 }
 ```
+
 Run a migration to apply the index in the database:
 
 ```shell
 npx prisma migrate dev --name add-lastname-to-index
 ```
+
 You can take this a step further by sorting the `firstName` column in the index in descending order.
 
 ```prisma
-diff 
+diff
 // prisma/schema.prisma
 model User {
   id        Int    @id @default(autoincrement())
@@ -373,11 +388,13 @@ model User {
 +  @@index(fields: [firstName(sort: "Desc"), lastName])
 }
 ```
+
 Re-run a migration to apply the sort order to the index:
 
 ```shell
 npx prisma migrate dev --name add-sort-order
 ```
+
 ## Summary and next steps
 
 In this part, you learned what the structure of indexes look like, and significantly improved a query's response time by merely adding an index to the field.
@@ -385,4 +402,3 @@ In this part, you learned what the structure of indexes look like, and significa
 You also learned how you can add indexes to multiple columns, and how to define the indexes sort order.
 
 In the next article, you will learn how to work with Hash indexes in your application using Prisma.
-

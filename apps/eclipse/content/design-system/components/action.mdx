@@ -4,7 +4,15 @@ description: A flexible container component for icons with multiple color varian
 ---
 
 import { Action } from "@prisma/eclipse";
-import { Command, Heart, Star, Zap, CheckCircle, AlertTriangle, Info } from "lucide-react";
+import {
+  Command,
+  Heart,
+  Star,
+  Zap,
+  CheckCircle,
+  AlertTriangle,
+  Info,
+} from "lucide-react";
 
 ### Usage
 
@@ -378,7 +386,11 @@ The Action component uses design tokens:
 Customize by passing `className`:
 
 ```tsx
-<Action className="shadow-lg hover:scale-110 transition-transform" color="ppg" size="2xl">
+<Action
+  className="shadow-lg hover:scale-110 transition-transform"
+  color="ppg"
+  size="2xl"
+>
   <Command className="h-5 w-5" />
 </Action>
 ```

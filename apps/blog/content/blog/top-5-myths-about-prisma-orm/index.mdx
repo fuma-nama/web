@@ -22,12 +22,11 @@ Discover the truth behind five common misconceptions about Prisma ORM. In this a
 - [Myth 5: Prisma doesn't work well with Serverless/Edge](#myth-5-prisma-doesnt-work-well-with-serverlessedge)
 - [Help us make Prisma ORM the best DB library 💚](#help-us-make-prisma-orm-the-best-db-library-💚)
 
-
 ## Myth 1: Prisma ORM is slow
 
 When we initially released [Prisma ORM for production](https://www.prisma.io/blog/prisma-the-complete-orm-inw24qjeawmb) in 2021, we followed the _"Make it work, make it right, make it fast_" approach. This means the initial version of Prisma ORM hadn't been particularly optimized for speed.
 
-However, since then we have invested heavily into performance and have released performance improvements in almost every release. 
+However, since then we have invested heavily into performance and have released performance improvements in almost every release.
 
 We also created open-source [ORM benchmarks](https://benchmarks.prisma.io/) comparing the three most popular ORMs in the TypeScript ecosystem and found that Prisma ORM's performance is similar to the others, sometimes even faster.
 
@@ -41,17 +40,17 @@ We are also working on rewriting the Rust-based Query Engine from Rust to TypeSc
 
 Another huge win for developers using Prisma ORM was the [ability to pick the best JOIN strategy](https://www.prisma.io/blog/prisma-6-better-performance-more-flexibility-and-type-safe-sql) for their relation queries.
 
-In principle, there are two different approaches when you need to query data from multiple tables that are related via _foreign keys_:
+In principle, there are two different approaches when you need to query data from multiple tables that are related via *foreign keys*:
 
 #### Database-level: Using the `JOIN` keyword in a single query
 
-With this approach, you send a single query to the database using the SQL `JOIN` keyword and let the data be _joined_ by the database directly:
+With this approach, you send a single query to the database using the SQL `JOIN` keyword and let the data be *joined* by the database directly:
 
 ![](/top-5-myths-about-prisma-orm/imgs/aa38701684dfb2dcfc9308f698bada759477f88f-3200x2390.png)
 
 #### Application-level: Send multiple queries and join in application
 
-When joining on the application-level, you send multiple queries to individual tables to the database and _join_ the data yourself in your application:
+When joining on the application-level, you send multiple queries to individual tables to the database and *join* the data yourself in your application:
 
 ![](/top-5-myths-about-prisma-orm/imgs/8c960545b98a710c8856495120cba3e3d6dbc612-3200x2280.png)
 
@@ -59,15 +58,15 @@ When joining on the application-level, you send multiple queries to individual t
 
 Depending on your use case, dataset, schema, and several other factors, one strategy may be more performant than the other. The application-level joining method is also called _join decomposition_ and often used in high-performance environments:
 
-> Many high-performance web sites use join decomposition. You can decompose a join by running multiple single-table queries instead of a multitable join, and then performing the join in the application. 
-> 
+> Many high-performance web sites use join decomposition. You can decompose a join by running multiple single-table queries instead of a multitable join, and then performing the join in the application.
+>
 > [High Performance MySQL, 2nd Edition](https://www.oreilly.com/library/view/high-performance-mysql/9780596101718/ch04.html#join_decomposition) | O'Reilly
 
-Up until Prisma ORM [5.7.0](https://github.com/prisma/prisma/releases/tag/5.7.0), Prisma ORM would always use the application-level JOIN strategy. However, with the 5.7.0 release, we now allow you to pick the best JOIN strategy for your use case, ensuring you can always get the best performance for your queries. 
+Up until Prisma ORM [5.7.0](https://github.com/prisma/prisma/releases/tag/5.7.0), Prisma ORM would always use the application-level JOIN strategy. However, with the 5.7.0 release, we now allow you to pick the best JOIN strategy for your use case, ensuring you can always get the best performance for your queries.
 
 ### ORM benchmarks: No major performance differences
 
-After all these improvements, we wanted to know where Prisma ORM stands in terms of performance in comparison to other ORM libraries. So, we created transparent [benchmarks](https://benchmarks.prisma.io/) comparing the query performance of TypeORM, Drizzle ORM and Prisma ORM. 
+After all these improvements, we wanted to know where Prisma ORM stands in terms of performance in comparison to other ORM libraries. So, we created transparent [benchmarks](https://benchmarks.prisma.io/) comparing the query performance of TypeORM, Drizzle ORM and Prisma ORM.
 
 The benchmark repo is [open-source](https://github.com/prisma/orm-benchmarks) and we're inviting everyone to reproduce the results and share them with us.
 
@@ -75,13 +74,13 @@ The benchmark repo is [open-source](https://github.com/prisma/orm-benchmarks) an
 
 So, what did the benchmarks show?
 
-TLDR: Based on the data we've collected, it's not possible to conclude that one ORM _always_ performs better than the other. Instead, it depends on the respective query, dataset, schema, and the infrastructure on which the query is executed..
+TLDR: Based on the data we've collected, it's not possible to conclude that one ORM *always* performs better than the other. Instead, it depends on the respective query, dataset, schema, and the infrastructure on which the query is executed..
 
 You can read more about the setup, methodology and results of the benchmarks here: [Performance Benchmarks: Comparing Query Latency across TypeScript ORMs & Databases](https://www.prisma.io/blog/performance-benchmarks-comparing-query-latency-across-typescript-orms-and-databases).
 
 ### Make your queries faster with Prisma Optimize
 
-One major insight from running the benchmarks was that it's possible to write fast and slow queries, regardless which tools you use. Meaning that in the end, a lot of the burden to ensure database queries are fast is actually on the developer themself. 
+One major insight from running the benchmarks was that it's possible to write fast and slow queries, regardless which tools you use. Meaning that in the end, a lot of the burden to ensure database queries are fast is actually on the developer themself.
 
 ![](/top-5-myths-about-prisma-orm/imgs/acff3e3fd1fd16c0b9d6c0831613ee362b013881-1570x1215.gif)
 
@@ -89,7 +88,7 @@ To ensure developers using Prisma ORM are making their queries as fast as possib
 
 ## Myth 2: You can't use low-level DB features
 
-Prisma ORM—by nature of being an ORM—provides a higher-level abstraction over SQL in order to improve productivity, confidence and overall developer experience when working with databases. 
+Prisma ORM—by nature of being an ORM—provides a higher-level abstraction over SQL in order to improve productivity, confidence and overall developer experience when working with databases.
 
 This higher-level abstraction manifests in the _human-readable_ Prisma schema (to describe the structure of your database) and the _intuitive_ Prisma Client API (for querying the database).
 
@@ -99,7 +98,7 @@ So, in order to not sacrifice important features that may be needed in more adva
 
 ### Customized migrations let developers use any SQL feature
 
-While it's not possible to represent _all_ the features a database may have in the Prisma schema, you can still make use of these by [customizing the migration files](https://www.prisma.io/docs/orm/prisma-migrate/workflows/development-and-production#customizing-migrations) that are generated by Prisma Migrate. 
+While it's not possible to represent _all_ the features a database may have in the Prisma schema, you can still make use of these by [customizing the migration files](https://www.prisma.io/docs/orm/prisma-migrate/workflows/development-and-production#customizing-migrations) that are generated by Prisma Migrate.
 
 To do so, you can simply use the `--create-only` flag whenever you create a new migration and make edits to it before it's applied against the database.
 
@@ -133,17 +132,19 @@ FROM (
 ) AS "counts"
 ORDER BY "conversion" DESC
 ```
+
 After a generation step, you'll be able to use the `conversionByVariant` query via the new `$queryRawTyped` method in Prisma Client:
 
 ```ts
-import { PrismaClient } from '@prisma/client'
-import { conversionByVariant } from '@prisma/client/sql'
+import { PrismaClient } from "@prisma/client";
+import { conversionByVariant } from "@prisma/client/sql";
 // `result` is fully typed!
-const result = await prisma.$queryRawTyped(conversionByVariant())
+const result = await prisma.$queryRawTyped(conversionByVariant());
 ```
+
 Learn more about this on our blog: [Announcing TypedSQL: Make your raw SQL queries type-safe with Prisma ORM](https://www.prisma.io/blog/announcing-typedsql-make-your-raw-sql-queries-type-safe-with-prisma-orm)
 
-#### Use the Kysely  SQL query building extensions
+#### Use the Kysely SQL query building extensions
 
 Another alternative is to use the Prisma Client extensions for [Kysely](https://github.com/eoin-obrien/prisma-extension-kysely) which lets developers build SQL queries using its TypeScript API. For example, using the Kysely extension you can write SQL queries with Prisma as follows:
 
@@ -156,6 +157,7 @@ const query = prisma.$kysely
 // Thanks to kysely's magic, everything is type-safe!
 const result = await query.execute();
 ```
+
 This enables you to write advanced SQL queries without leaving TypeScript and Prisma ORM.
 
 > **Fun fact**: Kysely's core maintainer [Igal](https://x.com/prisma/status/1813559287316185573) recently joined our team at Prisma 😄
@@ -195,6 +197,7 @@ However, `node_modules` is just the _default_ location to provide a familiar dev
 
 import { PrismaClient } from "@prisma/client";
 ```
+
 That location can be easily customized by providing a custom `output` path on the `generator` block:
 
 ```ts
@@ -203,6 +206,7 @@ generator client {
   output   = "../src/generated/client"
 }
 ```
+
 In that case, you need to adjust the `import` statements and import Prisma Client from your file system. Considering the example above, the `import` would now look like this:
 
 ```ts
@@ -210,11 +214,12 @@ In that case, you need to adjust the `import` statements and import Prisma Clien
 
 import { PrismaClient } from "./generated/client";
 ```
+
 This can be really useful when you are working in a monorepo or other special environment where generating Prisma Client into `node_modules` may cause problems.
 
 ## Myth 5: Prisma doesn't work well with Serverless/Edge
 
-When Prisma ORM was designed, Serverless and Edge deployments still were early and emerging technologies. Since then, they have become a popular deployment model that a lot of development teams rely on. 
+When Prisma ORM was designed, Serverless and Edge deployments still were early and emerging technologies. Since then, they have become a popular deployment model that a lot of development teams rely on.
 
 The initial architecture of Prisma ORM, with the Query Engine binary and the internal GraphQL server, wasn't optimized for Serverless environments and there were numerous problems:
 

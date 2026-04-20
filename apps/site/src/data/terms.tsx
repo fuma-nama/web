@@ -33,7 +33,8 @@ export const termsSections: TermsSection[] = [
           In order to use the Prisma Services, you must first agree to the
           Terms. You can agree to the Terms by actually using the Prisma
           Services. You understand and agree that Prisma will treat your use of
-          the Prisma Services as acceptance of the Terms from that point onwards.
+          the Prisma Services as acceptance of the Terms from that point
+          onwards.
         </p>
         <p>
           You may not use the Prisma Services if (a) you are not of legal age to
@@ -50,10 +51,10 @@ export const termsSections: TermsSection[] = [
           Early Access products or features are provided &quot;as is&quot; and
           may contain bugs, errors, or other issues. They are subject to
           significant changes during the development period, and any data stored
-          during this period may be wiped upon the conclusion of the Early Access
-          phase. Prisma Optimize is intended for testing and development purposes
-          only and should not be used in production environments due to potential
-          data loss risks.
+          during this period may be wiped upon the conclusion of the Early
+          Access phase. Prisma Optimize is intended for testing and development
+          purposes only and should not be used in production environments due to
+          potential data loss risks.
         </p>
       </>
     ),
@@ -76,12 +77,12 @@ export const termsSections: TermsSection[] = [
         </p>
         <p>
           You agree not to (a) access the administrative interface of the Prisma
-          Services by any means other than through the interface that is provided
-          by Prisma in connection with the Prisma Services, unless you have been
-          specifically allowed to do so in a separate agreement with Prisma, or
-          (b) engage in any activity that interferes with or disrupts the Prisma
-          Services (or the servers and networks which are connected to the
-          Service).
+          Services by any means other than through the interface that is
+          provided by Prisma in connection with the Prisma Services, unless you
+          have been specifically allowed to do so in a separate agreement with
+          Prisma, or (b) engage in any activity that interferes with or disrupts
+          the Prisma Services (or the servers and networks which are connected
+          to the Service).
         </p>
         <p>
           You may use the Prisma Services only to develop and run applications
@@ -130,10 +131,10 @@ export const termsSections: TermsSection[] = [
         <p>
           For all purchased resources and services, Prisma will bill your credit
           card on a monthly basis. Late payments bear interest at the rate of
-          1.5% per month (or the highest rate permitted by law, if less). Charges
-          are exclusive of taxes. You are responsible for paying all taxes and
-          government charges. Prisma reserves the right to discontinue service
-          for late payment.
+          1.5% per month (or the highest rate permitted by law, if less).
+          Charges are exclusive of taxes. You are responsible for paying all
+          taxes and government charges. Prisma reserves the right to discontinue
+          service for late payment.
         </p>
         <p>
           Any refunds remain at Prisma&apos;s sole discretion and are provided
@@ -190,15 +191,16 @@ export const termsSections: TermsSection[] = [
         <p>
           You agree that you are solely responsible for (and that Prisma has no
           responsibility to you or to any third party for) the Application or
-          any Content that you create, transmit or display while using the Prisma
-          Services and for the consequences of your actions (including any loss
-          or damage which Prisma may suffer) by doing so.
+          any Content that you create, transmit or display while using the
+          Prisma Services and for the consequences of your actions (including
+          any loss or damage which Prisma may suffer) by doing so.
         </p>
         <p>
           You agree that Prisma has no responsibility or liability for the
           deletion or failure to store any Content and other communications
           maintained or transmitted through use of the Service. You are solely
-          responsible for securing and backing up your applications and any data.
+          responsible for securing and backing up your applications and any
+          data.
         </p>
       </>
     ),
@@ -218,13 +220,13 @@ export const termsSections: TermsSection[] = [
           Prisma acknowledges and agrees that it obtains no right, title or
           interest from you (or your licensors) under these Terms in or to any
           Content or Applications that you create, submit, post, transmit or
-          display on, or through, the Prisma Services, including any intellectual
-          property rights which subsist in that Content and the Application
-          (whether those rights happen to be registered or not, and wherever in
-          the world those rights may exist). Unless you have agreed otherwise in
-          writing with Prisma, you agree that you are responsible for protecting
-          and enforcing those rights and that Prisma has no obligation to do so
-          on your behalf.
+          display on, or through, the Prisma Services, including any
+          intellectual property rights which subsist in that Content and the
+          Application (whether those rights happen to be registered or not, and
+          wherever in the world those rights may exist). Unless you have agreed
+          otherwise in writing with Prisma, you agree that you are responsible
+          for protecting and enforcing those rights and that Prisma has no
+          obligation to do so on your behalf.
         </p>
       </>
     ),
@@ -235,23 +237,23 @@ export const termsSections: TermsSection[] = [
       <>
         <p>
           Prisma gives you a personal, worldwide, royalty-free, non-assignable
-          and non-exclusive license to use the software provided to you by Prisma
-          as part of the Prisma Services as provided to you by Prisma. This
-          license is for the sole purpose of enabling you to use and enjoy the
-          benefit of the Prisma Services as provided by Prisma, in the manner
-          permitted by the Terms.
+          and non-exclusive license to use the software provided to you by
+          Prisma as part of the Prisma Services as provided to you by Prisma.
+          This license is for the sole purpose of enabling you to use and enjoy
+          the benefit of the Prisma Services as provided by Prisma, in the
+          manner permitted by the Terms.
         </p>
         <p>
           You may not (and you may not permit anyone else to): (a) copy, modify,
           create a derivative work of, reverse engineer, decompile or otherwise
           attempt to extract the source code of the Prisma Services or any part
           thereof, unless this is expressly permitted or required by law, or
-          unless you have been specifically told that you may do so by Prisma, in
-          writing; (b) attempt to disable or circumvent any security mechanisms
-          used by the Prisma Services or any applications running on the Prisma
-          Services; or (c) use the Prisma Services in any manner that would
-          subject Prisma&apos;s intellectual property or technology to any other
-          license terms.
+          unless you have been specifically told that you may do so by Prisma,
+          in writing; (b) attempt to disable or circumvent any security
+          mechanisms used by the Prisma Services or any applications running on
+          the Prisma Services; or (c) use the Prisma Services in any manner that
+          would subject Prisma&apos;s intellectual property or technology to any
+          other license terms.
         </p>
         <p>
           Open source software licenses for components of the Prisma Services
@@ -296,17 +298,17 @@ export const termsSections: TermsSection[] = [
           about the Prisma Services, including without limitation about how to
           improve the Prisma Services or our products (&quot;Ideas&quot;). By
           submitting any Idea, you agree that your disclosure is gratuitous,
-          unsolicited and without restriction and will not place Prisma under any
-          fiduciary or other obligation, and that we are free to use the Idea
-          without any additional compensation to you, and/or to disclose the Idea
-          on a non-confidential basis or otherwise to anyone.
+          unsolicited and without restriction and will not place Prisma under
+          any fiduciary or other obligation, and that we are free to use the
+          Idea without any additional compensation to you, and/or to disclose
+          the Idea on a non-confidential basis or otherwise to anyone.
         </p>
         <p>
           Prisma, in its sole discretion, may use your trade names, trademarks,
-          service marks, logos, domain names and other distinctive brand features
-          in presentations, marketing materials, customer lists, financial
-          reports and website listings for the purposes of advertising and
-          publicizing your use of the Prisma Services.
+          service marks, logos, domain names and other distinctive brand
+          features in presentations, marketing materials, customer lists,
+          financial reports and website listings for the purposes of advertising
+          and publicizing your use of the Prisma Services.
         </p>
       </>
     ),
@@ -341,9 +343,9 @@ export const termsSections: TermsSection[] = [
         <p>
           For Free Tier users, Prisma may discontinue access with reasonable
           opportunities for upgrade or data export. You are solely responsible
-          for exporting your Content prior to termination of your account for any
-          reason, provided that if Prisma terminates your account, Prisma will
-          provide you a reasonable opportunity to retrieve your Content.
+          for exporting your Content prior to termination of your account for
+          any reason, provided that if Prisma terminates your account, Prisma
+          will provide you a reasonable opportunity to retrieve your Content.
         </p>
         <p>
           Upon any termination of the Prisma Services or your account these
@@ -364,15 +366,15 @@ export const termsSections: TermsSection[] = [
         </p>
         <p>
           You expressly understand and agree that your use of the Prisma
-          Services is at your sole risk and that the Prisma Services are provided
-          &quot;as is&quot; and &quot;as available.&quot;
+          Services is at your sole risk and that the Prisma Services are
+          provided &quot;as is&quot; and &quot;as available.&quot;
         </p>
         <p>
           Prisma, its subsidiaries and affiliates, and its licensors make no
           express warranties and disclaim all implied warranties regarding the
           Prisma Services, including implied warranties of merchantability,
-          fitness for a particular purpose and non-infringement. Without limiting
-          the generality of the foregoing, Prisma, its subsidiaries and
+          fitness for a particular purpose and non-infringement. Without
+          limiting the generality of the foregoing, Prisma, its subsidiaries and
           affiliates, and its licensors do not represent or warrant to you that
           (a) your use of the Prisma Services will meet your requirements, (b)
           your use of the Prisma Services will be uninterrupted, timely, secure
@@ -497,10 +499,10 @@ export const termsSections: TermsSection[] = [
     content: (
       <>
         <p>
-          Fair Use guidelines ensure equitable access for all customers, applying
-          to primary account holders, administrators, and end-users. Usage limits
-          may apply to API calls, storage, user accounts, and data processing to
-          optimize performance.
+          Fair Use guidelines ensure equitable access for all customers,
+          applying to primary account holders, administrators, and end-users.
+          Usage limits may apply to API calls, storage, user accounts, and data
+          processing to optimize performance.
         </p>
         <p>Prohibited activities include:</p>
         <ul>
@@ -535,7 +537,8 @@ export const termsSections: TermsSection[] = [
         <p>
           The Prisma Services may include hyperlinks to other web sites or
           content or resources. Prisma may have no control over any web sites or
-          resources which are provided by companies or persons other than Prisma.
+          resources which are provided by companies or persons other than
+          Prisma.
         </p>
         <p>
           You acknowledge and agree that Prisma is not responsible for the
@@ -591,8 +594,8 @@ export const termsSections: TermsSection[] = [
         </p>
         <p>
           There are no third party beneficiaries to these Terms. The parties are
-          independent contractors. The Terms do not create an agency, partnership
-          or joint venture.
+          independent contractors. The Terms do not create an agency,
+          partnership or joint venture.
         </p>
         <p>
           If Prisma provides you with a translation of the English language
@@ -614,17 +617,18 @@ export const termsSections: TermsSection[] = [
         </p>
         <p>
           Prisma shall not be liable for failing or delaying performance of its
-          obligations resulting from any condition beyond its reasonable control,
-          including but not limited to, governmental action, acts of terrorism,
-          earthquake, fire, flood or other acts of God, labor conditions, power
-          failures, and Internet disturbances.
+          obligations resulting from any condition beyond its reasonable
+          control, including but not limited to, governmental action, acts of
+          terrorism, earthquake, fire, flood or other acts of God, labor
+          conditions, power failures, and Internet disturbances.
         </p>
         <p>
           The Terms, and your relationship with Prisma under the Terms, shall be
           governed by the laws of the State of California without regard to its
           conflict of laws provisions. You and Prisma agree to submit to the
-          exclusive jurisdiction of the courts located within the county of Santa
-          Clara, California to resolve any legal matter arising from the Terms.
+          exclusive jurisdiction of the courts located within the county of
+          Santa Clara, California to resolve any legal matter arising from the
+          Terms.
         </p>
         <p>
           Neither party may assign any of its rights or obligations under these
@@ -656,17 +660,17 @@ export const termsSections: TermsSection[] = [
           end-user misuse.
         </p>
         <p>
-          Users bear sole responsibility for regulatory compliance, especially in
-          regulated sectors. Prisma disclaims all compliance-related warranties.
-          Users acknowledge that Embeddable Prisma Studio is not designed for
-          regulated industries (such as healthcare or finance) and assume full
-          compliance responsibility.
+          Users bear sole responsibility for regulatory compliance, especially
+          in regulated sectors. Prisma disclaims all compliance-related
+          warranties. Users acknowledge that Embeddable Prisma Studio is not
+          designed for regulated industries (such as healthcare or finance) and
+          assume full compliance responsibility.
         </p>
         <p>
           The free version includes telemetry collection to support service
-          improvements. Repository contributors license their contributions under
-          Apache 2.0, granting Prisma usage, modification, and distribution
-          rights.
+          improvements. Repository contributors license their contributions
+          under Apache 2.0, granting Prisma usage, modification, and
+          distribution rights.
         </p>
       </>
     ),

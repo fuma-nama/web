@@ -118,7 +118,8 @@ function collectViolations(filePath: string): Violation[] {
 
     while ((match = regex.exec(content)) !== null) {
       const rawUrl = regex === MARKDOWN_IMAGE_REGEX ? match[1] : match[2];
-      const extracted = regex === MARKDOWN_IMAGE_REGEX ? extractMarkdownUrl(rawUrl) : rawUrl;
+      const extracted =
+        regex === MARKDOWN_IMAGE_REGEX ? extractMarkdownUrl(rawUrl) : rawUrl;
       const normalized = stripQueryAndHash(extracted);
 
       if (!isLocalUrl(normalized) || !hasImageExtension(normalized)) continue;
@@ -155,7 +156,9 @@ function main(): void {
   const violations = files.flatMap((file) => collectViolations(file));
 
   if (violations.length === 0) {
-    console.log("✅ All local image references in content resolve to public assets.");
+    console.log(
+      "✅ All local image references in content resolve to public assets.",
+    );
     process.exit(0);
   }
 

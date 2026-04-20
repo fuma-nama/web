@@ -125,8 +125,7 @@ const actionVariants = cva(
 );
 
 export interface ActionProps
-  extends
-    Omit<React.HTMLAttributes<HTMLDivElement>, "color">,
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, "color">,
     VariantProps<typeof actionVariants> {}
 
 const Action = React.forwardRef<HTMLDivElement, ActionProps>(

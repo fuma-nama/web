@@ -18,7 +18,7 @@ Yesterday, we released [Prisma ORM v6.14.0](https://pris.ly/release/6.14.0) with
 
 ## Relationships & `findUnique` queries for SQL views (Preview)
 
-In the [last release](https://pris.ly/release/6.13.0), we improved the robustness of [SQL views](https://www.prisma.io/docs/orm/prisma-schema/data-model/views) defined in the Prisma schema. Views are _virtual_ tables that don't allow for defining foreign keys in the underlying database. 
+In the [last release](https://pris.ly/release/6.13.0), we improved the robustness of [SQL views](https://www.prisma.io/docs/orm/prisma-schema/data-model/views) defined in the Prisma schema. Views are _virtual_ tables that don't allow for defining foreign keys in the underlying database.
 
 However, as an application developer, it can be convenient to also define relations across them. We've received this feedback from several people who had been using views in that way with Prisma ORM. So, in this release we're re-introducing the `@unique` attribute for views. This attribute enables:
 
@@ -34,6 +34,7 @@ view UserInfo {
   bio   String
 }
 ```
+
 ## Various fixes & stability improvements in Prisma ORM
 
 As we're getting closer to Prisma ORM v7, we're focusing a lot on increasing the stability of the new, ESM-compatible `prisma-client` generator as well the Rust-free Prisma ORM (aka `queryCompiler`). In the last sprint, we fixed several issues related to both of these. This combination will become the default in v7 and we're working hard on bringing these features into General Availability. You can try them out with your favorite stack with our [ready-to-run examples](https://github.com/prisma/prisma-examples/tree/latest/generator-prisma-client).
@@ -61,13 +62,13 @@ We also published several guides that show you how to get started with it:
 
 What else are you using the new Management API for? Share your use cases [with us on X](https://pris.ly/x).
 
-## Revoke OAuth tokens  in Prisma Console
+## Revoke OAuth tokens in Prisma Console
 
 If you use OAuth to authorize third-party applications to act on your behalf in the Prisma Console, you can now revoke any app's access at any time. The Prisma Console shows a list of your authorized (connected) apps, and you can easily remove one to immediately block further access.
 
 ## ICYMI: Last release was packed with new features
 
-In case you missed it: Our [last release](https://pris.ly/release/6.14.0) was *huge* and packed with new features! Here's the TLDR of what we put out last time:
+In case you missed it: Our [last release](https://pris.ly/release/6.14.0) was _huge_ and packed with new features! Here's the TLDR of what we put out last time:
 
 - **Prisma ORM**
   - **Prisma Config file (`prisma.config.ts`) is Generally Available** – Native way to configure schema paths, migrations, seeds, and more; no need for `earlyAccess` flag anymore.
@@ -75,7 +76,7 @@ In case you missed it: Our [last release](https://pris.ly/release/6.14.0) was *h
   - **Improved SQL views support (still in Preview)** – Adds guardrails for views by disabling unsupported features.
   - **Externally managed tables** – Lets you exclude specific tables from Prisma Migrate while still querying them via Prisma Client.
 - **Prisma Postgres**
-  - **Extension support for Prisma Postgres** – Prisma Postgres now supports `pgvector`, `pg_search`, `pg_stat_statements`, `citext`, `pg_trgm`, `fuzzystrmatch`, and `unaccent`. If you don't see the extension you need, you can [request it here](https://pris.ly/i-want-extensions). Extensions only work on *new* instances, if you want to use any of them on your existing instance, [reach out to us](mailto:support@prisma.io).
+  - **Extension support for Prisma Postgres** – Prisma Postgres now supports `pgvector`, `pg_search`, `pg_stat_statements`, `citext`, `pg_trgm`, `fuzzystrmatch`, and `unaccent`. If you don't see the extension you need, you can [request it here](https://pris.ly/i-want-extensions). Extensions only work on _new_ instances, if you want to use any of them on your existing instance, [reach out to us](mailto:support@prisma.io).
   - **Management API for Prisma Postgres** – REST API to provision, delete, and manage Prisma Postgres instances programmatically, perfect for CI/CD and scripting workflows.
   - **GitHub Actions for Prisma Postgres** – Actions for creating and deleting databases in CI/CD workflows, available on GitHub Marketplace.
   - **New CLI: `npx create-db`** – Instantly spin up a new Postgres database—no authentication required.

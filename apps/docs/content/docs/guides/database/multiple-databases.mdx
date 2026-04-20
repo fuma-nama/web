@@ -1,10 +1,10 @@
 ---
 title: Multiple databases
-description: 'Learn how to use multiple Prisma Clients in a single app to connect to multiple databases, handle migrations, and deploy your application to Vercel'
+description: "Learn how to use multiple Prisma Clients in a single app to connect to multiple databases, handle migrations, and deploy your application to Vercel"
 image: /img/guides/multiple-databases.png
 url: /guides/database/multiple-databases
 metaTitle: How to use Prisma ORM with multiple databases in a single app
-metaDescription: 'Learn how to use multiple Prisma Clients in a single app to connect to multiple databases, handle migrations, and deploy your application to Vercel.'
+metaDescription: "Learn how to use multiple Prisma Clients in a single app to connect to multiple databases, handle migrations, and deploy your application to Vercel."
 ---
 
 ## Introduction
@@ -286,7 +286,8 @@ const globalForUserDBPrismaClient = global as unknown as {
   userDBPrismaClient: ReturnType<typeof getPrisma>; // [!code ++]
 }; // [!code ++]
 // [!code ++]
-export const userDBPrismaClient = globalForUserDBPrismaClient.userDBPrismaClient || getPrisma(); // [!code ++] // [!code ++]
+export const userDBPrismaClient =
+  globalForUserDBPrismaClient.userDBPrismaClient || getPrisma(); // [!code ++] // [!code ++]
 // [!code ++]
 if (process.env.NODE_ENV !== "production")
   // [!code ++]
@@ -317,7 +318,8 @@ const globalForPostDBPrismaClient = global as unknown as {
   postDBPrismaClient: ReturnType<typeof getPrisma>; // [!code ++]
 }; // [!code ++]
 // [!code ++]
-export const postDBPrismaClient = globalForPostDBPrismaClient.postDBPrismaClient || getPrisma(); // [!code ++] // [!code ++]
+export const postDBPrismaClient =
+  globalForPostDBPrismaClient.postDBPrismaClient || getPrisma(); // [!code ++] // [!code ++]
 // [!code ++]
 if (process.env.NODE_ENV !== "production")
   // [!code ++]

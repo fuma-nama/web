@@ -3,7 +3,14 @@ title: Radio Group
 description: A radio group component built on Radix UI for mutually exclusive selections with keyboard navigation.
 ---
 
-import { RadioGroup, RadioGroupItem, Field, FieldLabel, FieldDescription, FieldError } from "@prisma/eclipse";
+import {
+  RadioGroup,
+  RadioGroupItem,
+  Field,
+  FieldLabel,
+  FieldDescription,
+  FieldError,
+} from "@prisma/eclipse";
 
 ### Usage
 
@@ -17,11 +24,15 @@ export function BasicRadioGroup() {
     <RadioGroup defaultValue="option-one">
       <div className="flex items-center gap-2">
         <RadioGroupItem value="option-one" id="option-one" />
-        <label htmlFor="option-one" className="text-sm font-medium">Option One</label>
+        <label htmlFor="option-one" className="text-sm font-medium">
+          Option One
+        </label>
       </div>
       <div className="flex items-center gap-2">
         <RadioGroupItem value="option-two" id="option-two" />
-        <label htmlFor="option-two" className="text-sm font-medium">Option Two</label>
+        <label htmlFor="option-two" className="text-sm font-medium">
+          Option Two
+        </label>
       </div>
     </RadioGroup>
   );
@@ -34,11 +45,15 @@ export function BasicRadioGroup() {
   <RadioGroup defaultValue="option-one">
     <div className="flex items-center gap-2">
       <RadioGroupItem value="option-one" id="option-one-basic" />
-      <label htmlFor="option-one-basic" className="text-sm font-medium">Option One</label>
+      <label htmlFor="option-one-basic" className="text-sm font-medium">
+        Option One
+      </label>
     </div>
     <div className="flex items-center gap-2">
       <RadioGroupItem value="option-two" id="option-two-basic" />
-      <label htmlFor="option-two-basic" className="text-sm font-medium">Option Two</label>
+      <label htmlFor="option-two-basic" className="text-sm font-medium">
+        Option Two
+      </label>
     </div>
   </RadioGroup>
 </div>
@@ -54,22 +69,34 @@ export function RadioGroupWithDescriptions() {
       <div className="flex items-center gap-2">
         <RadioGroupItem value="default" id="default" />
         <div className="flex flex-col gap-1">
-          <label htmlFor="default" className="text-sm font-medium">Default</label>
-          <span className="text-sm text-foreground-neutral-weak">The standard option for most users.</span>
+          <label htmlFor="default" className="text-sm font-medium">
+            Default
+          </label>
+          <span className="text-sm text-foreground-neutral-weak">
+            The standard option for most users.
+          </span>
         </div>
       </div>
       <div className="flex items-center gap-2">
         <RadioGroupItem value="comfortable" id="comfortable" />
         <div className="flex flex-col gap-1">
-          <label htmlFor="comfortable" className="text-sm font-medium">Comfortable</label>
-          <span className="text-sm text-foreground-neutral-weak">More spacing for better readability.</span>
+          <label htmlFor="comfortable" className="text-sm font-medium">
+            Comfortable
+          </label>
+          <span className="text-sm text-foreground-neutral-weak">
+            More spacing for better readability.
+          </span>
         </div>
       </div>
       <div className="flex items-center gap-2">
         <RadioGroupItem value="compact" id="compact" />
         <div className="flex flex-col gap-1">
-          <label htmlFor="compact" className="text-sm font-medium">Compact</label>
-          <span className="text-sm text-foreground-neutral-weak">Minimal spacing to fit more content.</span>
+          <label htmlFor="compact" className="text-sm font-medium">
+            Compact
+          </label>
+          <span className="text-sm text-foreground-neutral-weak">
+            Minimal spacing to fit more content.
+          </span>
         </div>
       </div>
     </RadioGroup>
@@ -84,22 +111,38 @@ export function RadioGroupWithDescriptions() {
     <div className="flex gap-2">
       <RadioGroupItem value="default" id="default-desc" className="mt-0.5" />
       <div className="flex flex-col gap-1">
-        <label htmlFor="default-desc" className="text-sm font-medium">Default</label>
-        <span className="text-sm text-foreground-neutral-weak">The standard option for most users.</span>
+        <label htmlFor="default-desc" className="text-sm font-medium">
+          Default
+        </label>
+        <span className="text-sm text-foreground-neutral-weak">
+          The standard option for most users.
+        </span>
       </div>
     </div>
     <div className="flex gap-2">
-      <RadioGroupItem value="comfortable" id="comfortable-desc" className="mt-0.5" />
+      <RadioGroupItem
+        value="comfortable"
+        id="comfortable-desc"
+        className="mt-0.5"
+      />
       <div className="flex flex-col gap-1">
-        <label htmlFor="comfortable-desc" className="text-sm font-medium">Comfortable</label>
-        <span className="text-sm text-foreground-neutral-weak">More spacing for better readability.</span>
+        <label htmlFor="comfortable-desc" className="text-sm font-medium">
+          Comfortable
+        </label>
+        <span className="text-sm text-foreground-neutral-weak">
+          More spacing for better readability.
+        </span>
       </div>
     </div>
     <div className="flex gap-2">
       <RadioGroupItem value="compact" id="compact-desc" className="mt-0.5" />
       <div className="flex flex-col gap-1">
-        <label htmlFor="compact-desc" className="text-sm font-medium">Compact</label>
-        <span className="text-sm text-foreground-neutral-weak">Minimal spacing to fit more content.</span>
+        <label htmlFor="compact-desc" className="text-sm font-medium">
+          Compact
+        </label>
+        <span className="text-sm text-foreground-neutral-weak">
+          Minimal spacing to fit more content.
+        </span>
       </div>
     </div>
   </RadioGroup>
@@ -108,25 +151,39 @@ export function RadioGroupWithDescriptions() {
 **With Field Component**
 
 ```tsx
-import { RadioGroup, RadioGroupItem, Field, FieldLabel, FieldDescription } from "@prisma/eclipse";
+import {
+  RadioGroup,
+  RadioGroupItem,
+  Field,
+  FieldLabel,
+  FieldDescription,
+} from "@prisma/eclipse";
 
 export function RadioGroupWithField() {
   return (
     <Field>
       <FieldLabel>Notification Frequency</FieldLabel>
-      <FieldDescription>Choose how often you want to receive notifications.</FieldDescription>
+      <FieldDescription>
+        Choose how often you want to receive notifications.
+      </FieldDescription>
       <RadioGroup defaultValue="daily">
         <div className="flex items-center gap-2">
           <RadioGroupItem value="realtime" id="realtime" />
-          <label htmlFor="realtime" className="text-sm font-medium">Real-time</label>
+          <label htmlFor="realtime" className="text-sm font-medium">
+            Real-time
+          </label>
         </div>
         <div className="flex items-center gap-2">
           <RadioGroupItem value="daily" id="daily" />
-          <label htmlFor="daily" className="text-sm font-medium">Daily digest</label>
+          <label htmlFor="daily" className="text-sm font-medium">
+            Daily digest
+          </label>
         </div>
         <div className="flex items-center gap-2">
           <RadioGroupItem value="weekly" id="weekly" />
-          <label htmlFor="weekly" className="text-sm font-medium">Weekly summary</label>
+          <label htmlFor="weekly" className="text-sm font-medium">
+            Weekly summary
+          </label>
         </div>
       </RadioGroup>
     </Field>
@@ -139,19 +196,27 @@ export function RadioGroupWithField() {
 <div className="max-w-md my-4">
   <Field>
     <FieldLabel>Notification Frequency</FieldLabel>
-    <FieldDescription>Choose how often you want to receive notifications.</FieldDescription>
+    <FieldDescription>
+      Choose how often you want to receive notifications.
+    </FieldDescription>
     <RadioGroup defaultValue="daily">
       <div className="flex items-center gap-2">
         <RadioGroupItem value="realtime" id="realtime-field" />
-        <label htmlFor="realtime-field" className="text-sm font-medium">Real-time</label>
+        <label htmlFor="realtime-field" className="text-sm font-medium">
+          Real-time
+        </label>
       </div>
       <div className="flex items-center gap-2">
         <RadioGroupItem value="daily" id="daily-field" />
-        <label htmlFor="daily-field" className="text-sm font-medium">Daily digest</label>
+        <label htmlFor="daily-field" className="text-sm font-medium">
+          Daily digest
+        </label>
       </div>
       <div className="flex items-center gap-2">
         <RadioGroupItem value="weekly" id="weekly-field" />
-        <label htmlFor="weekly-field" className="text-sm font-medium">Weekly summary</label>
+        <label htmlFor="weekly-field" className="text-sm font-medium">
+          Weekly summary
+        </label>
       </div>
     </RadioGroup>
   </Field>
@@ -171,11 +236,15 @@ export function ControlledRadioGroup() {
       <RadioGroup value={value} onValueChange={setValue}>
         <div className="flex items-center gap-2">
           <RadioGroupItem value="option-one" id="controlled-one" />
-          <label htmlFor="controlled-one" className="text-sm font-medium">Option One</label>
+          <label htmlFor="controlled-one" className="text-sm font-medium">
+            Option One
+          </label>
         </div>
         <div className="flex items-center gap-2">
           <RadioGroupItem value="option-two" id="controlled-two" />
-          <label htmlFor="controlled-two" className="text-sm font-medium">Option Two</label>
+          <label htmlFor="controlled-two" className="text-sm font-medium">
+            Option Two
+          </label>
         </div>
       </RadioGroup>
       <span className="text-sm text-foreground-neutral-weak">
@@ -192,11 +261,15 @@ export function ControlledRadioGroup() {
   <RadioGroup defaultValue="option-one">
     <div className="flex items-center gap-2">
       <RadioGroupItem value="option-one" id="controlled-one-example" />
-      <label htmlFor="controlled-one-example" className="text-sm font-medium">Option One</label>
+      <label htmlFor="controlled-one-example" className="text-sm font-medium">
+        Option One
+      </label>
     </div>
     <div className="flex items-center gap-2">
       <RadioGroupItem value="option-two" id="controlled-two-example" />
-      <label htmlFor="controlled-two-example" className="text-sm font-medium">Option Two</label>
+      <label htmlFor="controlled-two-example" className="text-sm font-medium">
+        Option Two
+      </label>
     </div>
   </RadioGroup>
 </div>
@@ -211,15 +284,27 @@ export function DisabledRadioGroup() {
     <RadioGroup defaultValue="option-one">
       <div className="flex items-center gap-2">
         <RadioGroupItem value="option-one" id="disabled-one" disabled />
-        <label htmlFor="disabled-one" className="text-sm font-medium opacity-70 cursor-not-allowed">Disabled option (selected)</label>
+        <label
+          htmlFor="disabled-one"
+          className="text-sm font-medium opacity-70 cursor-not-allowed"
+        >
+          Disabled option (selected)
+        </label>
       </div>
       <div className="flex items-center gap-2">
         <RadioGroupItem value="option-two" id="disabled-two" disabled />
-        <label htmlFor="disabled-two" className="text-sm font-medium opacity-70 cursor-not-allowed">Disabled option</label>
+        <label
+          htmlFor="disabled-two"
+          className="text-sm font-medium opacity-70 cursor-not-allowed"
+        >
+          Disabled option
+        </label>
       </div>
       <div className="flex items-center gap-2">
         <RadioGroupItem value="option-three" id="enabled-three" />
-        <label htmlFor="enabled-three" className="text-sm font-medium">Enabled option</label>
+        <label htmlFor="enabled-three" className="text-sm font-medium">
+          Enabled option
+        </label>
       </div>
     </RadioGroup>
   );
@@ -232,15 +317,27 @@ export function DisabledRadioGroup() {
   <RadioGroup defaultValue="option-one">
     <div className="flex items-center gap-2">
       <RadioGroupItem value="option-one" id="disabled-one-example" disabled />
-      <label htmlFor="disabled-one-example" className="text-sm font-medium opacity-70 cursor-not-allowed">Disabled option (selected)</label>
+      <label
+        htmlFor="disabled-one-example"
+        className="text-sm font-medium opacity-70 cursor-not-allowed"
+      >
+        Disabled option (selected)
+      </label>
     </div>
     <div className="flex items-center gap-2">
       <RadioGroupItem value="option-two" id="disabled-two-example" disabled />
-      <label htmlFor="disabled-two-example" className="text-sm font-medium opacity-70 cursor-not-allowed">Disabled option</label>
+      <label
+        htmlFor="disabled-two-example"
+        className="text-sm font-medium opacity-70 cursor-not-allowed"
+      >
+        Disabled option
+      </label>
     </div>
     <div className="flex items-center gap-2">
       <RadioGroupItem value="option-three" id="enabled-three-example" />
-      <label htmlFor="enabled-three-example" className="text-sm font-medium">Enabled option</label>
+      <label htmlFor="enabled-three-example" className="text-sm font-medium">
+        Enabled option
+      </label>
     </div>
   </RadioGroup>
 </div>
@@ -255,15 +352,21 @@ export function HorizontalRadioGroup() {
     <RadioGroup defaultValue="small" className="flex gap-4">
       <div className="flex items-center gap-2">
         <RadioGroupItem value="small" id="size-small" />
-        <label htmlFor="size-small" className="text-sm font-medium">Small</label>
+        <label htmlFor="size-small" className="text-sm font-medium">
+          Small
+        </label>
       </div>
       <div className="flex items-center gap-2">
         <RadioGroupItem value="medium" id="size-medium" />
-        <label htmlFor="size-medium" className="text-sm font-medium">Medium</label>
+        <label htmlFor="size-medium" className="text-sm font-medium">
+          Medium
+        </label>
       </div>
       <div className="flex items-center gap-2">
         <RadioGroupItem value="large" id="size-large" />
-        <label htmlFor="size-large" className="text-sm font-medium">Large</label>
+        <label htmlFor="size-large" className="text-sm font-medium">
+          Large
+        </label>
       </div>
     </RadioGroup>
   );
@@ -276,15 +379,21 @@ export function HorizontalRadioGroup() {
   <RadioGroup defaultValue="small" className="flex gap-4">
     <div className="flex items-center gap-2">
       <RadioGroupItem value="small" id="size-small-horizontal" />
-      <label htmlFor="size-small-horizontal" className="text-sm font-medium">Small</label>
+      <label htmlFor="size-small-horizontal" className="text-sm font-medium">
+        Small
+      </label>
     </div>
     <div className="flex items-center gap-2">
       <RadioGroupItem value="medium" id="size-medium-horizontal" />
-      <label htmlFor="size-medium-horizontal" className="text-sm font-medium">Medium</label>
+      <label htmlFor="size-medium-horizontal" className="text-sm font-medium">
+        Medium
+      </label>
     </div>
     <div className="flex items-center gap-2">
       <RadioGroupItem value="large" id="size-large-horizontal" />
-      <label htmlFor="size-large-horizontal" className="text-sm font-medium">Large</label>
+      <label htmlFor="size-large-horizontal" className="text-sm font-medium">
+        Large
+      </label>
     </div>
   </RadioGroup>
 </div>
@@ -299,43 +408,64 @@ export function RadioGroupForm() {
     <form className="space-y-6 max-w-md">
       <div className="space-y-4">
         <h3 className="text-lg font-semibold">Shipping Method</h3>
-        
+
         <RadioGroup defaultValue="standard" name="shipping">
           <div className="flex items-center justify-between p-4 border rounded-lg">
             <div className="flex items-center gap-3">
               <RadioGroupItem value="standard" id="standard-shipping" />
               <div className="flex flex-col gap-1">
-                <label htmlFor="standard-shipping" className="text-sm font-medium">Standard Shipping</label>
-                <span className="text-sm text-foreground-neutral-weak">5-7 business days</span>
+                <label
+                  htmlFor="standard-shipping"
+                  className="text-sm font-medium"
+                >
+                  Standard Shipping
+                </label>
+                <span className="text-sm text-foreground-neutral-weak">
+                  5-7 business days
+                </span>
               </div>
             </div>
             <span className="text-sm font-medium">Free</span>
           </div>
-          
+
           <div className="flex items-center justify-between p-4 border rounded-lg">
             <div className="flex items-center gap-3">
               <RadioGroupItem value="express" id="express-shipping" />
               <div className="flex flex-col gap-1">
-                <label htmlFor="express-shipping" className="text-sm font-medium">Express Shipping</label>
-                <span className="text-sm text-foreground-neutral-weak">2-3 business days</span>
+                <label
+                  htmlFor="express-shipping"
+                  className="text-sm font-medium"
+                >
+                  Express Shipping
+                </label>
+                <span className="text-sm text-foreground-neutral-weak">
+                  2-3 business days
+                </span>
               </div>
             </div>
             <span className="text-sm font-medium">$15.00</span>
           </div>
-          
+
           <div className="flex items-center justify-between p-4 border rounded-lg">
             <div className="flex items-center gap-3">
               <RadioGroupItem value="overnight" id="overnight-shipping" />
               <div className="flex flex-col gap-1">
-                <label htmlFor="overnight-shipping" className="text-sm font-medium">Overnight Shipping</label>
-                <span className="text-sm text-foreground-neutral-weak">Next business day</span>
+                <label
+                  htmlFor="overnight-shipping"
+                  className="text-sm font-medium"
+                >
+                  Overnight Shipping
+                </label>
+                <span className="text-sm text-foreground-neutral-weak">
+                  Next business day
+                </span>
               </div>
             </div>
             <span className="text-sm font-medium">$30.00</span>
           </div>
         </RadioGroup>
       </div>
-      
+
       <Button type="submit">Continue to payment</Button>
     </form>
   );
@@ -347,36 +477,57 @@ export function RadioGroupForm() {
 <form className="space-y-6 max-w-md my-4">
   <div className="space-y-4">
     <h3 className="text-lg font-semibold">Shipping Method</h3>
-    
+
     <RadioGroup defaultValue="standard" name="shipping">
       <div className="flex items-center justify-between p-4 border rounded-lg">
         <div className="flex items-center gap-3">
           <RadioGroupItem value="standard" id="standard-shipping-form" />
           <div className="flex flex-col gap-1">
-            <label htmlFor="standard-shipping-form" className="text-sm font-medium">Standard Shipping</label>
-            <span className="text-sm text-foreground-neutral-weak">5-7 business days</span>
+            <label
+              htmlFor="standard-shipping-form"
+              className="text-sm font-medium"
+            >
+              Standard Shipping
+            </label>
+            <span className="text-sm text-foreground-neutral-weak">
+              5-7 business days
+            </span>
           </div>
         </div>
         <span className="text-sm font-medium">Free</span>
       </div>
-      
+
       <div className="flex items-center justify-between p-4 border rounded-lg">
         <div className="flex items-center gap-3">
           <RadioGroupItem value="express" id="express-shipping-form" />
           <div className="flex flex-col gap-1">
-            <label htmlFor="express-shipping-form" className="text-sm font-medium">Express Shipping</label>
-            <span className="text-sm text-foreground-neutral-weak">2-3 business days</span>
+            <label
+              htmlFor="express-shipping-form"
+              className="text-sm font-medium"
+            >
+              Express Shipping
+            </label>
+            <span className="text-sm text-foreground-neutral-weak">
+              2-3 business days
+            </span>
           </div>
         </div>
         <span className="text-sm font-medium">$15.00</span>
       </div>
-      
+
       <div className="flex items-center justify-between p-4 border rounded-lg">
         <div className="flex items-center gap-3">
           <RadioGroupItem value="overnight" id="overnight-shipping-form" />
           <div className="flex flex-col gap-1">
-            <label htmlFor="overnight-shipping-form" className="text-sm font-medium">Overnight Shipping</label>
-            <span className="text-sm text-foreground-neutral-weak">Next business day</span>
+            <label
+              htmlFor="overnight-shipping-form"
+              className="text-sm font-medium"
+            >
+              Overnight Shipping
+            </label>
+            <span className="text-sm text-foreground-neutral-weak">
+              Next business day
+            </span>
           </div>
         </div>
         <span className="text-sm font-medium">$30.00</span>

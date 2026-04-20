@@ -142,11 +142,17 @@ This setup gives you fine-grained control over instrumentation and tracing. You 
 
 ```ts
 // Imports
-import { ATTR_SERVICE_NAME, ATTR_SERVICE_VERSION } from "@opentelemetry/semantic-conventions";
+import {
+  ATTR_SERVICE_NAME,
+  ATTR_SERVICE_VERSION,
+} from "@opentelemetry/semantic-conventions";
 import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-http";
 import { SimpleSpanProcessor } from "@opentelemetry/sdk-trace-base";
 import { NodeTracerProvider } from "@opentelemetry/sdk-trace-node";
-import { PrismaInstrumentation, registerInstrumentations } from "@prisma/instrumentation";
+import {
+  PrismaInstrumentation,
+  registerInstrumentations,
+} from "@prisma/instrumentation";
 import { resourceFromAttributes } from "@opentelemetry/resources";
 
 // Configure the trace provider
@@ -255,12 +261,21 @@ The following example sends output tracing to the console with `ConsoleSpanExpor
 
 ```ts
 // Imports
-import { ATTR_SERVICE_NAME, ATTR_SERVICE_VERSION } from "@opentelemetry/semantic-conventions";
-import { ConsoleSpanExporter, SimpleSpanProcessor } from "@opentelemetry/sdk-trace-base";
+import {
+  ATTR_SERVICE_NAME,
+  ATTR_SERVICE_VERSION,
+} from "@opentelemetry/semantic-conventions";
+import {
+  ConsoleSpanExporter,
+  SimpleSpanProcessor,
+} from "@opentelemetry/sdk-trace-base";
 import { NodeTracerProvider } from "@opentelemetry/sdk-trace-node";
 import { AsyncHooksContextManager } from "@opentelemetry/context-async-hooks";
 import * as api from "@opentelemetry/api";
-import { PrismaInstrumentation, registerInstrumentations } from "@prisma/instrumentation";
+import {
+  PrismaInstrumentation,
+  registerInstrumentations,
+} from "@prisma/instrumentation";
 import { resourceFromAttributes } from "@opentelemetry/resources";
 
 // Export the tracing
@@ -423,7 +438,10 @@ In a production environment, you can use OpenTelemetry's `BatchSpanProcessor` to
 You can configure your tracing configuration to use the appropriate span processor, depending on the environment, as follows:
 
 ```ts
-import { SimpleSpanProcessor, BatchSpanProcessor } from "@opentelemetry/sdk-trace-base";
+import {
+  SimpleSpanProcessor,
+  BatchSpanProcessor,
+} from "@opentelemetry/sdk-trace-base";
 import { NodeTracerProvider } from "@opentelemetry/sdk-trace-node";
 
 const spanProcessors = [];
@@ -446,7 +464,10 @@ Another way to reduce the performance impact is to [use probability sampling](ht
 An example implementation looks like this:
 
 ```ts highlight=3,7;add
-import { ATTR_SERVICE_NAME, ATTR_SERVICE_VERSION } from "@opentelemetry/semantic-conventions";
+import {
+  ATTR_SERVICE_NAME,
+  ATTR_SERVICE_VERSION,
+} from "@opentelemetry/semantic-conventions";
 import { NodeTracerProvider } from "@opentelemetry/sdk-trace-node";
 import { TraceIdRatioBasedSampler } from "@opentelemetry/core";
 import { resourceFromAttributes } from "@opentelemetry/resources";

@@ -19,6 +19,7 @@ tags:
 One strategy for improving the performance of your database queries is using _indexes_. This article covers the fundamentals of database indexes: what they are, how they work, and their cost and benefits.
 
 ## Overview
+
 - [What we can learn about databases from a book library](#what-we-can-learn-about-databases-from-a-book-library)
   - [Storing books in smaller shelves (partitioning)](#storing-books-in-smaller-shelves-partitioning)
   - [More people searching leads to faster searches (query parallelization)](#more-people-searching-leads-to-faster-searches-query-parallelization)
@@ -35,9 +36,9 @@ One strategy for improving the performance of your database queries is using _in
 
 ## What we can learn about databases from a book library
 
-A database is like a library. Books in a library are usually well organized, much like data in a database. Both provide great structures for storing vast amounts of information for later retrieval. 
+A database is like a library. Books in a library are usually well organized, much like data in a database. Both provide great structures for storing vast amounts of information for later retrieval.
 
-Continuing with the library analogy, libraries store large amounts of data.  The more books you have, the longer the time it takes to find a book. The time taken to retrieve a book can be influenced by the strategy for **storing** and **searching**  books in the library.
+Continuing with the library analogy, libraries store large amounts of data. The more books you have, the longer the time it takes to find a book. The time taken to retrieve a book can be influenced by the strategy for **storing** and **searching** books in the library.
 
 ### Storing books in smaller shelves (partitioning)
 
@@ -69,9 +70,10 @@ The rest of the article will explore database indexes: what they are and how the
 
 A database index is a smaller, secondary data structure used by the database server to store a subset of a table's data. Indexes are commonly used to improve the read performance of a given table.
 
-Indexes contain key-value pairs: 
+Indexes contain key-value pairs:
+
 - **key**: the column(s) that will be used to create an index
-- **value**: and a pointer to the record in the specific table 
+- **value**: and a pointer to the record in the specific table
 
 You can index more than one column in a table. For example, if you have a table called `User` with 3 columns:`id`, `firstName`, and `lastName`, you can create one index on the `firstName` and `lastName` columns.
 
@@ -86,13 +88,13 @@ There are different types of indexes, each one suitable for a different use case
 - **Unique indexes**: used to enforce uniqueness of a value in a column, preventing duplicate values
 - **Full-text indexes**: used on text columns and enables [full-text search](https://www.joshgraham.com/full-text-search-explained/)
 
-There are more specialized types of indexes different databases support. Some of the other types include hash indexes, GIN indexes for PostgreSQL, and clustered indexes for SQL server. 
+There are more specialized types of indexes different databases support. Some of the other types include hash indexes, GIN indexes for PostgreSQL, and clustered indexes for SQL server.
 
 > The tutorial series will cover more specialized indexes that Prisma supports in future articles. Stay tuned!
 
 ### Anatomy of a database query
 
-When the database receives a query, it first creates a _query plan_. A query plan is a list of instructions the database needs to follow to execute a given query. 
+When the database receives a query, it first creates a _query plan_. A query plan is a list of instructions the database needs to follow to execute a given query.
 
 The query plan specifies how the database intends to retrieve records. The database chooses the most optimal query strategy.
 
@@ -102,7 +104,7 @@ You can prefix your SQL query with `EXPLAIN` to see information about your datab
 
 ### Sequential scans go through the entire table
 
-One path the database might choose is look through each row in a table to find the records matching the filters. This is known as a _sequential scan_ or _full table scan_. 
+One path the database might choose is look through each row in a table to find the records matching the filters. This is known as a _sequential scan_ or _full table scan_.
 
 If you're working with a large dataset, sequential scans will slow down your queries. The time taken to find a record is influenced by the size of your dataset. The bigger the dataset, the longer it takes to retrieve a record.
 
@@ -117,6 +119,7 @@ The database might also choose to return the matching records from the index wit
 ```sql
 SELECT firstName from 'User' where firstName = 'Jimmy';
 ```
+
 Other database providers such as PostgreSQL support other types of query plans such as [bitmap heap scan](https://pganalyze.com/docs/explain/scan-nodes/bitmap-heap-scan) and [bitmap index scans](https://pganalyze.com/docs/explain/scan-nodes/bitmap-index-scan) will not be covered in this series.
 
 ### The price you pay for faster reads
@@ -134,4 +137,3 @@ The other cost of indexes is that they require additional resources from the dat
 In this article, you learned what a database index is, the different types of database indexes, the anatomy of a database query, and the cost of using database indexes to optimize your queries.
 
 In the next article, you will learn how you can improve the performance of your existing query using indexes in your application with Prisma.
-

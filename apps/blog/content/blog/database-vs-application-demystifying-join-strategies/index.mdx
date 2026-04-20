@@ -50,23 +50,24 @@ As a developer, you're probably used to working with _nested_ objects, which loo
   }
 }
 ```
+
 In this example, the "object hierarchy" is as follows: `post` → `author` → `profile`.
 
-This kind of nested structure is how data is represented in most programming languages that have the concept of an _object_. 
+This kind of nested structure is how data is represented in most programming languages that have the concept of an _object_.
 
-However, if you've worked with a SQL database before, you're probably aware that related data is represented differently there, namely in a _flat_ (or [_normalized_](https://en.wikipedia.org/wiki/Database_normalization)) way. With that approach, relations between entities are represented via _foreign keys_ that specify _references_ across tables.
+However, if you've worked with a SQL database before, you're probably aware that related data is represented differently there, namely in a *flat* (or [_normalized_](https://en.wikipedia.org/wiki/Database_normalization)) way. With that approach, relations between entities are represented via *foreign keys* that specify _references_ across tables.
 
 Here's a visual representation of the two approaches:
 
 ![](/database-vs-application-demystifying-join-strategies/imgs/47ca5a5f744cde64f8caaa359a2870df758d3c91-3200x1256.png)
 
-This is a huge difference, not only in the way data is _physically_ laid out on disk and in memory, but also when it comes to the _mental model_ and to reasoning about the data.
+This is a huge difference, not only in the way data is *physically* laid out on disk and in memory, but also when it comes to the *mental model* and to reasoning about the data.
 
 ### What does "joining" data mean?
 
 The process of joining data refers to getting the data from the _flat_ layout in a SQL database into a _nested_ structure that an application developer can use in their application.
 
-This can happen in one of two places: 
+This can happen in one of two places:
 
 - In the **database**: A single SQL query is sent to the database. The query uses the `JOIN` keyword (or potentially a [correlated subquery](https://www.geeksforgeeks.org/sql-correlated-subqueries/)) to let the database perform the join across multiple tables and returns the nested structures. There are multiple ways of doing this join that we'll look at in the next section.
 - In the **application**: Multiple queries are sent to the database. Each query only accesses a single table and the query results are then joined in the application layer.
@@ -75,9 +76,7 @@ Database-level joins have their benefits, but also some drawbacks if they're bec
 
 ## Three JOIN strategies: Naive, smart & application-level JOINs
 
-At a high-level there are three different join strategies that can be applied, **"naive"** and **"smart"** JOINs on the DB-level, as well as **"application-level"** joins. Let's examine these one by one by use of the following schema: 
-
-
+At a high-level there are three different join strategies that can be applied, **"naive"** and **"smart"** JOINs on the DB-level, as well as **"application-level"** joins. Let's examine these one by one by use of the following schema:
 
 ```prisma
 model comments {
@@ -105,6 +104,7 @@ model users {
   posts posts[]
 }
 ```
+
 ```sql
 CREATE TABLE users (
     id SERIAL NOT NULL,
@@ -132,8 +132,6 @@ CREATE INDEX idx_posts_author_id ON posts(author_id);
 CREATE INDEX idx_comments_post_id ON comments(post_id)
 ```
 
-
-
 ### Naive DB-level JOINs lead to redundant data
 
 A naive DB-level JOIN refers to JOIN operations that don't take any additional measure for optimizations. These kinds of JOINs are often bad for performance for several reasons, let's explore!
@@ -153,11 +151,12 @@ LEFT JOIN
 ORDER BY
     users.id, posts.id;
 ```
+
 The results returned by the database may look similar to this:
 
 ![](/database-vs-application-demystifying-join-strategies/imgs/aecb797ff9a4fec41786e1acfd8ea81be54ba073-404x571.png)
 
-Do you notice something? There's _a lot_ of repetition in the data on the `user_name` column. 
+Do you notice something? There's _a lot_ of repetition in the data on the `user_name` column.
 
 Now, let's add the `comments` to the query:
 
@@ -178,6 +177,7 @@ LEFT JOIN
 ORDER BY
     users.id, posts.id, comments.id
 ```
+
 Now that's even worse! Not only `user_name` repeats, but `post_title` does so as well:
 
 ![](/database-vs-application-demystifying-join-strategies/imgs/14d97834abcc4a48970178b9357c95b7c69773e1-1242x1694.png)
@@ -186,8 +186,8 @@ The redundancy of the data has several negative implications:
 
 - Increased amount of (unnecessary) data that's sent over the wire, costing network bandwidth and increasing overall query latency.
 - The application layer needs to do additional work to arrive at the desired nested objects:
-    - deduplicate the redundant data
-    - re-construct the relationships between the data records
+  - deduplicate the redundant data
+  - re-construct the relationships between the data records
 
 Additionally, this kind of operation incurs a high CPU cost on the database, because it will query all three tables and perform its own in-memory mapping to join the data into one result set.
 
@@ -203,9 +203,9 @@ In TypeScript, an example for this could look as follows (using a plain Postgres
 
 ```ts
 // Fetch data individually
-const usersResult = await client.query('SELECT * FROM users');
-const postsResult = await client.query('SELECT * FROM posts');
-const commentsResult = await client.query('SELECT * FROM comments');
+const usersResult = await client.query("SELECT * FROM users");
+const postsResult = await client.query("SELECT * FROM posts");
+const commentsResult = await client.query("SELECT * FROM comments");
 
 // Convert results to objects for easier processing
 const users = usersResult.rows;
@@ -242,6 +242,7 @@ const joinedData = users.map((user) => {
   };
 });
 ```
+
 There are several benefits to this approach:
 
 - The database will generate a highly optimal execution plan for each of these queries and do virtually no CPU work since it's simply returning data from a single table.
@@ -258,7 +259,7 @@ A major drawback, however, is that it requires multiple round trips to the datab
 
 Naive DB-level joins are almost never the best way to retrieve related data from your database, but does that mean your database should _never_ be responsible for joining data? Certainly not!
 
-Database engines have become very powerful in the past years and constantly improved the ways how they optimize queries. In order to enable a database to generate the most optimal query plan, the most important thing is that it can understand the _intent_ of a query. 
+Database engines have become very powerful in the past years and constantly improved the ways how they optimize queries. In order to enable a database to generate the most optimal query plan, the most important thing is that it can understand the _intent_ of a query.
 
 There are two different factors to this:
 
@@ -305,6 +306,7 @@ LEFT JOIN LATERAL (
 GROUP BY
   u.id;
 ```
+
 Such a query produces the following results:
 
 ![](/database-vs-application-demystifying-join-strategies/imgs/ee53bcfbca9834771ff6856d9fcd6e77aef7bf04-1228x1708.png)
@@ -318,11 +320,11 @@ While this query may yield better formatted results than the naive strategy, it 
 
 ## The evolution of JOIN strategies in Prisma ORM
 
-When Prisma ORM was [initially released in 2021](https://www.prisma.io/blog/prisma-the-complete-orm-inw24qjeawmb), it implemented the application-level join strategy for all its relation queries. 
+When Prisma ORM was [initially released in 2021](https://www.prisma.io/blog/prisma-the-complete-orm-inw24qjeawmb), it implemented the application-level join strategy for all its relation queries.
 
-This strategy works really well when the application server and database are located closely to each other, helps with portability across database engines and  increases scalability of the overall system (since application-layer CPU is easier and cheaper to scale than DB-level CPU).
+This strategy works really well when the application server and database are located closely to each other, helps with portability across database engines and increases scalability of the overall system (since application-layer CPU is easier and cheaper to scale than DB-level CPU).
 
-While the approach of application-level joins has served most developers well, it sometimes caused problems when application server and database couldn't be hosted closely to each other and the additional round trips negatively impacted overall query performance. 
+While the approach of application-level joins has served most developers well, it sometimes caused problems when application server and database couldn't be hosted closely to each other and the additional round trips negatively impacted overall query performance.
 
 That's why [we've added the smart DB-level joins as an alternative one year ago](https://www.prisma.io/blog/prisma-orm-now-lets-you-choose-the-best-join-strategy-preview), so developers have the option to always choose the most performant join strategy for their individual use case.
 
@@ -332,9 +334,9 @@ Being able to use DB-level joins had been one of the [most popular feature reque
 
 ## Conclusion
 
-Figuring out the most performant way to join data from multiple tables in a database is a complicated topic. In this article, we looked at three different approaches, _naive_ and _smart_ joins on the DB-level as well as _application-level_ joins. 
+Figuring out the most performant way to join data from multiple tables in a database is a complicated topic. In this article, we looked at three different approaches, _naive_ and _smart_ joins on the DB-level as well as _application-level_ joins.
 
-Naive DB-level joins incur high CPU costs on the database server and lead to network overhead due to the unnecessary transfer of redundant data. 
+Naive DB-level joins incur high CPU costs on the database server and lead to network overhead due to the unnecessary transfer of redundant data.
 
 Application-level joins may be better suited for many scenarios due to their simplicity and cheap execution on the database-level. Systems using this strategy are also typically easier and less expensive to scale.
 

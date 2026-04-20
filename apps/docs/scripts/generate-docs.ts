@@ -46,12 +46,15 @@ void generateFiles({
     return output.item.name;
   },
   beforeWrite(files) {
-    const operationByFilePath = new Map<string, {
-      path: string;
-      method: string;
-      title: string;
-      description?: string;
-    }>();
+    const operationByFilePath = new Map<
+      string,
+      {
+        path: string;
+        method: string;
+        title: string;
+        description?: string;
+      }
+    >();
 
     for (const entries of Object.values(this.generatedEntries)) {
       for (const entry of entries) {
@@ -117,7 +120,8 @@ void generateFiles({
       }
 
       const description =
-        typeof operation.description === "string" && operation.description.trim().length > 0
+        typeof operation.description === "string" &&
+        operation.description.trim().length > 0
           ? stripEmoji(operation.description.trim())
           : `${operation.method} ${operation.path}.`;
       const metaDescription = description.startsWith("Management API:")
@@ -140,7 +144,7 @@ void generateFiles({
         parsed.content,
         withDescriptionFirst(data, description),
         {
-        lineWidth: -1,
+          lineWidth: -1,
         } as Parameters<typeof matter.stringify>[2],
       );
     }

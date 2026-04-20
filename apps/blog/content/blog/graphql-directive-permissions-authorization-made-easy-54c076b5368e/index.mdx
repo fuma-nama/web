@@ -11,7 +11,7 @@ heroImageAlt: "GraphQL Directive Permissions — Authorization Made Easy"
 ---
 
 Directive permissions are a declarative way of implementing authorization rules in GraphQL servers. In this article,
-  our guest author [Dennis Walsh](https://twitter.com/lawjolla) explains how to use them in order to protect your data.
+our guest author [Dennis Walsh](https://twitter.com/lawjolla) explains how to use them in order to protect your data.
 
 > If you're interested in writing an article for our blog as well, [drop us an email](mailto:burk@prisma.io).
 
@@ -58,6 +58,7 @@ type User {
   role: String!
 }
 ```
+
 Several fields should scream _“malicious user fun”._ To protect the API, let’s make up a few permissions rules for it:
 
 - `updateVehicleAskingPrice` should be restricted to _managers_
@@ -70,22 +71,30 @@ Using [Prisma](https://www.prismagraphql.com) in combination with [Prisma bindin
 
 ```js
 const Mutation = {
-  updateVehicleAskingPrice: async (parent, { id, askingPrice }, context, info) => {
-    const userId = getUserId(context)
+  updateVehicleAskingPrice: async (
+    parent,
+    { id, askingPrice },
+    context,
+    info,
+  ) => {
+    const userId = getUserId(context);
     const isRequestingUserManager = await context.db.exists.User({
       id: userId,
       role: `MANAGER`,
-    })
+    });
     if (isRequestingUserManager) {
       return await context.db.mutation.updateVehicle({
         where: { id },
         data: { askingPrice },
-      })
+      });
     }
-    throw new Error(`Invalid permissions, you must be a manager to update vehicle year`)
+    throw new Error(
+      `Invalid permissions, you must be a manager to update vehicle year`,
+    );
   },
-}
+};
 ```
+
 We’re using the [`exists`](https://github.com/graphcool/prisma-binding#exists) function on the `Prisma` binding instance (_line 4_) to ensure the requesting user has proper access rights for this mutation. If this is not the case, the mutation is not performed and will fail with an “Invalid permissions”-error instead.
 
 Field-level constraints get even more interesting. Here is how we can protect the `numberOfOffers` and `costBasis` fields on `Vehicle`:
@@ -95,17 +104,19 @@ const Query = {
   vehicles: async (parent, args, context, info) => {
     const vehicles = await context.db.query.vehicles({
       where: { dealership: args.id },
-    })
-    const user = getUser(context)
+    });
+    const user = getUser(context);
 
-    return vehicles.map(vehicle => ({
+    return vehicles.map((vehicle) => ({
       ...vehicle,
-      costBasis: user && user.role.includes(`MANAGER`) ? vehicle.costBasis : null,
+      costBasis:
+        user && user.role.includes(`MANAGER`) ? vehicle.costBasis : null,
       numberOfOffers: user ? vehicle.numberOfOffers : null,
-    }))
+    }));
   },
-}
+};
 ```
+
 With this approach, our resolvers become cluttered with redundant permission logic. As a first improvement, we can write a *wrapping function *that abstracts away some of the redundant authorization logic:
 
 ```js
@@ -113,16 +124,20 @@ const Query = {
   vehicles: async (parent, args, context, info) => {
     const vehicles = await context.db.query.vehicles({
       where: { dealership: args.id },
-    })
-    const user = getUser(context)
+    });
+    const user = getUser(context);
     return protectFieldsByRole(
-      [{ field: `costBasis`, role: `MANAGER` }, { field: `numberOfOffers`, role: `MANAGER` }],
+      [
+        { field: `costBasis`, role: `MANAGER` },
+        { field: `numberOfOffers`, role: `MANAGER` },
+      ],
       vehicles,
       user,
-    )
+    );
   },
-}
+};
 ```
+
 That looks a lot cleaner already. However, there is no straightforward way to figure out which fields are protected. This will always require digging into the resolver implementations and actually read the code.
 
 ## A Declarative Approach to GraphQL Permissions Based on GraphQL Directives
@@ -153,6 +168,7 @@ type Vehicle {
   numberOfOffers: Int @isAuthenticated
 }
 ```
+
 At a glance, we know what is protected and what is not. In my book, that’s a win! 🍻 How do we get to such magic? You guessed it — [directive resolvers](https://www.apollographql.com/docs/graphql-tools/schema-directives.html#directiveResolvers-option).
 
 ### Realizing Directive Resolvers Into Permissions is Straightforward
@@ -170,13 +186,16 @@ const directiveResolvers = {
   ...
 }
 ```
+
 Enforcing permission rules with GraphQL directives allows to remove any authorization logic from the field resolvers:
 
 ```js
 const Query = {
-  vehicles: (parent, args, context, info) => context.db.query.vehicles({ where: { dealership: args.id } }),
-}
+  vehicles: (parent, args, context, info) =>
+    context.db.query.vehicles({ where: { dealership: args.id } }),
+};
 ```
+
 Note that setting up directiveResolvers with graphql-tools is straightforward:
 
 ```js
@@ -184,8 +203,9 @@ export const schema = makeExecutableSchema({
   typeDefs,
   resolvers,
   directiveResolvers,
-})
+});
 ```
+
 ### Changing Directive Permissions Takes Little Work
 
 Now, let’s change the requirements:
@@ -206,6 +226,7 @@ type Vehicle {
   numberOfOffers: Int @hasRole(role: “MANAGER”)
 }
 ```
+
 …Done! We can update our permissions simply by adjusting the directives in the schema definition, without touching the actual implementation. The generic directive resolvers take care of enforcing the rules.
 
 ### Demo: Experimenting With Directive Permissions
@@ -225,6 +246,7 @@ mutation {
   }
 }
 ```
+
 Change the directives on the schema to see how the permissions change. Note that Launchpad’s GraphiQL shows errors first, scroll down to see data.
 
 > I also made a [demo repo](https://github.com/LawJolla/prisma-auth0-example) combining Prisma, [Auth0](http://www.auth0.com), and directive permissions.
@@ -248,4 +270,3 @@ I believe this emerging directive permissions pattern finally gives GraphQL a cl
 ---
 
 I like blogging about new software patterns and intellectual property law. If we share those interests, please consider following me [here](https://medium.com/@dwalsh.sdlr) and on Twitter [@LawJolla](https://twitter.com/lawjolla).
-

@@ -1,9 +1,9 @@
 ---
 title: SafeQL & Prisma Client
-description: 'Learn how to use SafeQL and Prisma Client extensions to work around features not natively supported by Prisma, such as PostGIS'
+description: "Learn how to use SafeQL and Prisma Client extensions to work around features not natively supported by Prisma, such as PostGIS"
 url: /orm/prisma-client/using-raw-sql/safeql
 metaTitle: Integrate SafeQL with Prisma Client
-metaDescription: 'Learn how to use SafeQL and Prisma Client extensions to work around features not natively supported by Prisma, such as PostGIS.'
+metaDescription: "Learn how to use SafeQL and Prisma Client extensions to work around features not natively supported by Prisma, such as PostGIS."
 ---
 
 ## Overview
@@ -262,7 +262,11 @@ Next, you can add a `create` query to the `pointOfInterest` property of your Pri
 const prisma = new PrismaClient().$extends({
   model: {
     pointOfInterest: {
-      async create(data: { name: string; latitude: number; longitude: number }) {
+      async create(data: {
+        name: string;
+        latitude: number;
+        longitude: number;
+      }) {
         // Create an object using the custom types from above
         const poi: MyPointOfInterest = {
           name: data.name,
@@ -312,7 +316,11 @@ Now let's make a Prisma Client extension in order to query this model. We will b
 const prisma = new PrismaClient().$extends({
   model: {
     pointOfInterest: {
-      async create(data: { name: string; latitude: number; longitude: number }) {
+      async create(data: {
+        name: string;
+        latitude: number;
+        longitude: number;
+      }) {
         // ... same code as before
       },
 
@@ -351,7 +359,10 @@ const prisma = new PrismaClient().$extends({
 Now, you can use our Prisma Client as normal to find close points of interest to a given longitude and latitude using the custom method created on the `PointOfInterest` model.
 
 ```ts
-const closestPointOfInterest = await prisma.pointOfInterest.findClosestPoints(53.5488, 9.9872);
+const closestPointOfInterest = await prisma.pointOfInterest.findClosestPoints(
+  53.5488,
+  9.9872,
+);
 ```
 
 Similar to before, we again have the benefit of SafeQL to add extra type safety to our raw queries. For example, if we removed the cast to `geometry` for `location` by changing `location::geometry` to just `location`, we would get linting errors in the `ST_X`, `ST_Y` or `ST_DistanceSphere` functions respectively.

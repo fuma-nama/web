@@ -91,12 +91,14 @@ You will need to create the down migration first, before creating the correspond
    ```
 
 2. Generate the SQL file for the down migration. To do this, you will use `migrate diff` to make a comparison:
+
    - from the newly edited schema
    - to the state of the schema after the last migration
 
    and output this to a SQL script, `down.sql`.
 
    There are two potential options for specifying the 'to' state:
+
    - Using `--to-migrations`: this makes a comparison to the state of the migrations given in the migrations directory. This is the preferred option, as it is more robust. To use this option, run:
 
      ```bash wrap

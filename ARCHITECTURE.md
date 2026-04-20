@@ -34,11 +34,11 @@ That means the apps are separate deployable zones, but they still present a most
 
 ## App Roles
 
-| App | Local port | Runtime role | Key routing config |
-|------|------|------|------|
-| `apps/site` | `3000` | Main website host and multi-zone entrypoint | `assetPrefix: "/site-static"` and cross-zone `rewrites()` |
-| `apps/docs` | `3001` | Standalone docs zone | `basePath: "/docs"` and `assetPrefix: "/docs-static"` |
-| `apps/blog` | `3002` | Standalone blog zone | `basePath: "/blog"` and `assetPrefix: "/blog-static"` |
+| App         | Local port | Runtime role                                | Key routing config                                        |
+| ----------- | ---------- | ------------------------------------------- | --------------------------------------------------------- |
+| `apps/site` | `3000`     | Main website host and multi-zone entrypoint | `assetPrefix: "/site-static"` and cross-zone `rewrites()` |
+| `apps/docs` | `3001`     | Standalone docs zone                        | `basePath: "/docs"` and `assetPrefix: "/docs-static"`     |
+| `apps/blog` | `3002`     | Standalone blog zone                        | `basePath: "/blog"` and `assetPrefix: "/blog-static"`     |
 
 ## `apps/site`
 

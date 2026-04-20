@@ -1,9 +1,9 @@
 ---
 title: SQLite
-description: 'Add Prisma ORM to an existing TypeScript project with SQLite and learn database introspection, baselining, and querying'
+description: "Add Prisma ORM to an existing TypeScript project with SQLite and learn database introspection, baselining, and querying"
 url: /prisma-orm/add-to-existing-project/sqlite
 metaTitle: How to add Prisma ORM to an existing project using SQLite (15 min)
-metaDescription: 'Add Prisma ORM to an existing TypeScript project with SQLite and learn database introspection, baselining, and querying.'
+metaDescription: "Add Prisma ORM to an existing TypeScript project with SQLite and learn database introspection, baselining, and querying."
 ---
 
 [SQLite](https://sqlite.org) is a lightweight, file-based database that's perfect for development, prototyping, and small applications. It requires no setup and stores data in a local file. In this guide, you will learn how to add Prisma ORM to an existing TypeScript project, connect it to SQLite, introspect your existing database schema, and start querying with type-safe Prisma Client.
@@ -153,6 +153,7 @@ export { prisma };
 ```
 
 ### Using SQLite with Bun
+
 Bun doesn't support the native SQLite driver that `better-sqlite3` relies on (see the [`node:sqlite` reference](https://bun.com/reference/node/sqlite)). When targeting Bun, use the `@prisma/adapter-libsql` adapter instead:
 
 ```ts
@@ -168,7 +169,6 @@ const prisma = new PrismaClient({ adapter });
 
 export { prisma };
 ```
-
 
 ## 8. Query your database
 
@@ -262,7 +262,6 @@ This command:
 - Temporarily installs `better-sqlite3` without adding it to your project dependencies
 - Runs Prisma Studio with the specified SQLite database file
 - Avoids the 10MB overhead of `better-sqlite3` in your project
-
 
 ## Next steps
 

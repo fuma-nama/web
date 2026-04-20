@@ -30,7 +30,10 @@ Prisma provides its own [Model Context Protocol](https://modelcontextprotocol.io
   rel="noopener noreferrer"
   aria-label="Install Prisma MCP server in Cursor"
 >
-  <img src="https://cursor.com/deeplink/mcp-install-dark.svg" alt="Install MCP Server" />
+  <img
+    src="https://cursor.com/deeplink/mcp-install-dark.svg"
+    alt="Install MCP Server"
+  />
 </a>
 
 This will prompt you to open the Cursor app in your browser. Once opened, you'll be guided to install the Prisma MCP server directly into your Cursor configuration.
@@ -269,7 +272,7 @@ enum SubscriptionStatus {
   PAST_DUE
 }
 
-````
+```
 
 ## Generating Prisma queries
 
@@ -277,7 +280,7 @@ Cursor can help you create queries tailored to your Prisma schema, whether for b
 
 ```text tab="Prompt to generate a database query"
 "Generate a query to retrieve all User records associated with an Organization that has an `active` Subscription, while excluding any records where the deletedAt field is set."
-````
+```
 
 ```typescript tab="Result"
 const activeUsers = await prisma.user.findMany({

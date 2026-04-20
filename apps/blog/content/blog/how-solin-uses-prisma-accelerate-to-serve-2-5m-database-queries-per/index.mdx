@@ -26,9 +26,9 @@ This story highlights how Prisma Accelerate has contributed to Solin's platform,
 
 ## The stack: Fullstack Remix + Prisma ORM
 
-Solin uses Remix as a *fullstack* framework for their application. They initially started out with a traditional Node.js API that was hosted on Heroku, but after a while, they decided to go all-in with Remix and switched to Vercel as their new hosting provider.
+Solin uses Remix as a _fullstack_ framework for their application. They initially started out with a traditional Node.js API that was hosted on Heroku, but after a while, they decided to go all-in with Remix and switched to Vercel as their new hosting provider.
 
-They leverage Remix’ server-side capabilities and implement the entire API layer using serverless functions, which use Prisma ORM to query the database and are deployed via Vercel. 
+They leverage Remix’ server-side capabilities and implement the entire API layer using serverless functions, which use Prisma ORM to query the database and are deployed via Vercel.
 
 Their PostgreSQL database is hosted on Heroku.
 
@@ -40,15 +40,15 @@ When accessing a database from serverless functions, it’s easy to exhaust the 
 
 ![](/how-solin-uses-prisma-accelerate-to-serve-2-5m-database-queries-per/imgs/542523ef4a619afc3ce8475550c08c8bbc6c8551-1850x678.png)
 
-For these situations, it’s crucial to add an external connection pool that can keep connections open and ensure their reuse. That’s why Solin decided to integrate Prisma Accelerate into their application stack! With its scalable connection pool and seamless integration with Prisma ORM, Prisma Accelerate is the perfect companion for building data-driven applications in a serverless environment. 
+For these situations, it’s crucial to add an external connection pool that can keep connections open and ensure their reuse. That’s why Solin decided to integrate Prisma Accelerate into their application stack! With its scalable connection pool and seamless integration with Prisma ORM, Prisma Accelerate is the perfect companion for building data-driven applications in a serverless environment.
 
 For Solin, this means they can easily keep up with the rapidly growing demand for their fitness platform, scaling it to thousands of users and serving more 2.5M database queries per day.
 
-Learn more about dealing with sudden traffic spikes in our recent post, [Saving Black Friday With Connection Pooling](https://www.prisma.io/blog/saving-black-friday-with-connection-pooling). 
+Learn more about dealing with sudden traffic spikes in our recent post, [Saving Black Friday With Connection Pooling](https://www.prisma.io/blog/saving-black-friday-with-connection-pooling).
 
 ## Blazing fast response times thanks to database caching
 
-Prisma Accelerate not only offers a connection pool, but also comes with a global [cache](https://www.prisma.io/docs/accelerate/caching) that can be enabled on a per-query level. Because caching works especially well with content that rarely changes, Solin powers all of their landing pages with Prisma Accelerate. Thanks to the cache, Solin’s users get blazing fast response times when accessing their site. 
+Prisma Accelerate not only offers a connection pool, but also comes with a global [cache](https://www.prisma.io/docs/accelerate/caching) that can be enabled on a per-query level. Because caching works especially well with content that rarely changes, Solin powers all of their landing pages with Prisma Accelerate. Thanks to the cache, Solin’s users get blazing fast response times when accessing their site.
 
 > "Accelerate is a perfect fit for landing pages. We are able to take advantage of caching to speed up queries and reduce latency, making them lightning fast. This obviously means we have a faster landing page, leading to better conversion." – Blake Carroll, CTO @ Solin
 
@@ -62,8 +62,9 @@ const myExpensiveQuery = await prisma.widget.findMany({
     ttl: 60 * 5, // serve from cache for 5 minutes
     swr: 60 * 2, // serve from cache for 2 more minutes and revalidate in the background
   },
-})
+});
 ```
+
 Fast responses are not the only benefit of integrating a database cache! It also notably reduces load on the database server, freeing up resources for more complex queries. The reduced load on the database server also shrinks the monetary cost for running it.
 
 ![](/how-solin-uses-prisma-accelerate-to-serve-2-5m-database-queries-per/imgs/6eb1d966a877e30a33103ea5b451f09928de7ce1-2888x1110.png)
@@ -83,4 +84,4 @@ To summarize, Solin benefits from using Prisma Accelerate in the following ways:
 
 Convince yourself of the speed gains you can get with Prisma Accelerate by running the [Accelerate Speed Test](https://accelerate-speed-test.prisma.io/) or watch this 5min explainer video demoing how Accelerate improves query performance and application uptime:
 
-<Youtube  videoId="cnL75if6Aq0"/ >
+<Youtube videoId="cnL75if6Aq0" />

@@ -357,7 +357,10 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(users);
   } catch (error) {
     console.error("Error fetching users:", error);
-    return NextResponse.json({ error: "Failed to fetch users" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to fetch users" },
+      { status: 500 },
+    );
   }
 }
 
@@ -373,7 +376,10 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(user, { status: 201 });
   } catch (error) {
     console.error("Error creating user:", error);
-    return NextResponse.json({ error: "Failed to create user" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to create user" },
+      { status: 500 },
+    );
   }
 }
 ```
@@ -451,6 +457,7 @@ User should follow these steps (AI should provide these instructions):
    ```
 
    The user should follow the terminal prompts to:
+
    - Authenticate with Prisma Console (if needed)
    - Choose a region (e.g., us-east-1)
    - Name your project

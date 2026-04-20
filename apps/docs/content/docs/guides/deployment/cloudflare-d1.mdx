@@ -255,7 +255,11 @@ export interface Env {
 }
 
 export default {
-  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
+  async fetch(
+    request: Request,
+    env: Env,
+    ctx: ExecutionContext,
+  ): Promise<Response> {
     const adapter = new PrismaD1(env.DB);
     const prisma = new PrismaClient({ adapter });
 

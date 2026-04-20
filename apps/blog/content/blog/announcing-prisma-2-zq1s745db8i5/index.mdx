@@ -103,15 +103,13 @@ The data model is at the heart of your Photon and Lift workflows. It serves as a
 
 You can install the [Prisma 2 CLI](https://github.com/prisma/prisma2/blob/master/docs/prisma-2-cli.md) using npm or Yarn:
 
-
-
 ```shell
 npm install -g prisma2
 ```
+
 ```shell
 yarn global add prisma2
 ```
-
 
 ### 2. Run the interactive `prisma2 init` flow & select boilerplate
 
@@ -120,6 +118,7 @@ Run the following command to get started:
 ```shell
 prisma2 init hello-prisma2
 ```
+
 Select the following in the interactive prompts:
 
 1. Select **SQLite**
@@ -135,6 +134,7 @@ Move into the `hello-prisma2` directory and install the Node dependencies.
 cd hello-prisma2
 npm install
 ```
+
 ### 3. Migrate your database with Lift
 
 Migrating your database with Lift follows a 2-step process:
@@ -148,6 +148,7 @@ In CLI commands, these steps can be performed as follows (_the CLI steps are in 
 prisma2 lift save --name 'init'
 prisma2 lift up
 ```
+
 ### 4. Access your database with Photon
 
 The script in `src/script.ts` contains some sample API calls, e.g.:
@@ -175,16 +176,19 @@ const postsByUser = await photon.users
   .posts()
 }
 ```
+
 You can seed your database using the seed script from `package.json`:
 
 ```shell
 npm run seed
 ```
+
 You can execute the script with the following command:
 
 ```shell
 npm run start
 ```
+
 ### 5. Build an app
 
 With Photon being connected to your database, you can now start building your application. In the [`photonjs`](https://github.com/prisma/photonjs/) repository, you can find reference examples for the following use cases (for JavaScript and TypeScript):
@@ -192,7 +196,7 @@ With Photon being connected to your database, you can now start building your ap
 - [GraphQL example](https://github.com/prisma/photonjs/tree/master/examples/typescript/graphql)
 - [REST example](https://github.com/prisma/photonjs/tree/master/examples/typescript/rest-express)
 - [gRPC example](https://github.com/prisma/photonjs/tree/master/examples/typescript/grpc)
-</Accordion>
+  </Accordion>
 </Accordions>
 
 ---
@@ -221,63 +225,70 @@ While most traditional ORMs try to simply abstract SQL into a programming langua
 
 Especially when working with _relations_, Photon's API is a lot more developer-friendly compared to traditional ORMs. JOINs and atomic transactions are abstracted elegantly into nested API calls. Here are a few examples:
 
-
-
 ```ts
 // Retrieve the posts of a user
-const postsByUser: Post[] = await photon.users.findOne({ where: { email: 'ada@prisma.io' } }).posts()
+const postsByUser: Post[] = await photon.users
+  .findOne({ where: { email: "ada@prisma.io" } })
+  .posts();
 
 // Retrieve the categories of a post
-const categoriesOfPost: Category[] = await photon.posts.findOne({ where: { id: 1 } }).categories()
+const categoriesOfPost: Category[] = await photon.posts
+  .findOne({ where: { id: 1 } })
+  .categories();
 ```
+
 ```ts
 // The returned post objects will only have the  `id` and
 // `author` property which carries the respective user object
 const allPosts: Post[] = await photon.posts.findMany({
   select: { id: true, author: true },
-})
+});
 
 // The returned posts objects will have all scalar fields of the `Post` model and additionally all the categories for each post
 const allPosts: Post[] = await photon.posts.findMany({
   include: { categories: true },
-})
+});
 ```
+
 ```ts
 // Retrieve all posts of a particular user
 // that start with "Hello"
 const posts: Post[] = await photon.users
   .findOne({
-    where: { email: 'ada@prisma.io' },
+    where: { email: "ada@prisma.io" },
   })
   .posts({
     where: {
-      title: { startsWith: 'Hello' },
+      title: { startsWith: "Hello" },
     },
-  })
+  });
 ```
+
 ```ts
 // Create a new user with two posts in a
 // single transaction
 const newUser: User = await photon.users.create({
   data: {
-    email: 'alice@prisma.io',
+    email: "alice@prisma.io",
     posts: {
-      create: [{ title: 'Join the Prisma Slack on https://slack.prisma.io' }, { title: 'Follow @prisma on Twitter' }],
+      create: [
+        { title: "Join the Prisma Slack on https://slack.prisma.io" },
+        { title: "Follow @prisma on Twitter" },
+      ],
     },
   },
-})
+});
 
 // Change the author of a post in a single transaction
 const updatedPost: Post = await photon.posts.update({
   where: { id: 5424 },
   data: {
     author: {
-      connect: { email: 'alice@prisma.io' },
+      connect: { email: "alice@prisma.io" },
     },
   },
-})
+});
 ```
-
 
 Learn more about Photon's relations API in the [docs](https://github.com/prisma/prisma2/blob/master/docs/relations.md#relations-in-the-generated-Photon-API).
 
@@ -291,6 +302,7 @@ In the vast majority of cases, developers can simple adjust their declarative [d
 prisma2 lift save # stores a new migration folder on the file system
 prisma2 lift up   # applies the migration from the previous step
 ```
+
 Whenever this workflow doesn't match your needs, you can extend it using "before/after"-hooks to run custom code before or after the migration is performed.
 
 The migration folders (and the migrations history table in the database) let developers further do easy rollbacks of migration.
@@ -337,6 +349,7 @@ model Post {
   author      User
 }
 ```
+
 Prisma 2 also comes with a [VS Code extension](https://marketplace.visualstudio.com/items?itemName=Prisma.prisma) that provides **auto-formatting** and **syntax highlighting** (and more features like auto-completion, jump-to-definition and linting coming soon) for the data modeling syntax!
 
 Learn more about the improved data modeling syntax in the [docs](https://github.com/prisma/prisma2/blob/master/docs/data-modeling.md).
@@ -351,31 +364,29 @@ Photon provides a powerful data access API with some slight changes and improvem
 
 The CRUD operations are _unified_ across models and are accessible via a property on your Photon instance, e.g. for the model `User` you can access the operations to read and write data as follows:
 
-
-
 ```ts
 const newUser = await photon.users.create({
   data: {
-    name: 'Alice',
+    name: "Alice",
   },
-})
+});
 
-const allUsers = await photon.users.findMany()
+const allUsers = await photon.users.findMany();
 const oneUser = await photon.users.findOne({
   where: { id: 1 },
-})
+});
 ```
+
 ```ts
 const newUser = await prisma.createUser({
-  name: 'Alice',
-})
+  name: "Alice",
+});
 
-const allUsers = await prisma.users()()
+const allUsers = await prisma.users()();
 const oneUser = await prisma.user({
   id: 1,
-})
+});
 ```
-
 
 Note that the name of the `users` property is generated using the [`pluralize`](https://github.com/blakeembrey/pluralize) package. You can find the API reference for Photon.js in the [docs](https://github.com/prisma/prisma2/blob/master/docs/photon/api.md).
 
@@ -394,23 +405,24 @@ Assume you your Photon API was generated from the data model [above](#improved-d
 // Default selection
 const oneUser = await photon.users.findOne({
   where: { id: 1 },
-})
+});
 // oneUser = { id: 1, name: "Alice", email: "alice@prisma.io" }
 
 // Select exclusively
 const oneUser = await photon.users.findOne({
   where: { id: 1 },
   select: { email: true },
-})
+});
 // oneUser = { email: "alice@prisma.io" }
 
 // Include additionally
 const oneUser = await photon.users.findOne({
   where: { id: 1 },
   include: { posts: true },
-})
+});
 // oneUser = { id: 1, name: "Alice", email: "alice@prisma.io", posts: [ ... ] }
 ```
+
 This code snippet only highlights `select` and `include` for `findOne`, but you can provide these options to any other CRUD operation: `findMany`, `create`, `update` and `delete`.
 
 You can learn more about the field selection API of Photon.js in the [docs](https://github.com/prisma/prisma2/blob/master/docs/photon/api.md#field-selection).
@@ -459,4 +471,3 @@ The Prisma 2 Preview is not the only exciting thing happening this week. We are 
 - [GraphQL Conf](https://www.graphqlconf.org/) (**Late bird tickets still available**)
 
 We are especially looking forward to welcoming the Prisma community at Prisma Day for a day of inspiring talks and great conversations. See you all tomorrow! 🙌
-

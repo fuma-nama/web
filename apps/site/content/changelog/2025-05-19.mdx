@@ -32,7 +32,7 @@ This command spins up a local Prisma Postgres instance and prints the connection
 
 ```typescript
 datasource db {
-  provider = "postgresql"  
+  provider = "postgresql"
   url      = "prisma+postgres://localhost:51213/?api_key=ey..."
 }
 ```
@@ -45,8 +45,8 @@ We’ve removed the `deno` Preview feature from the `prisma-client-js` gener
 
 ```typescript
 generator client {
-  provider = "prisma-client"  
-  output   = "../src/generated/prisma"  
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
   runtime = "deno"
 }
 ```

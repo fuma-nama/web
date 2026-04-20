@@ -11,7 +11,7 @@ heroImageAlt: "Open Sourcing GraphQL Middleware - Library to Simplify Your Resol
 ---
 
 [GraphQL Middleware](https://github.com/prismagraphql/graphql-middleware) lets you run arbitrary code before or after
-  a resolver is invoked. It improves your code structure by enabling code reuse and a clear separation of concerns.
+a resolver is invoked. It improves your code structure by enabling code reuse and a clear separation of concerns.
 
 ## Middleware keeps resolvers clean
 
@@ -34,32 +34,33 @@ When using GraphQL Middleware, you're removing functionality from your resolvers
 Here is how you would implement a simple example of a logging middleware that prints the input arguments and return value of a resolver:
 
 ```js
-const { makeExecutableSchema } = require('graphql-tools')
-const { applyMiddleware } = require('graphql-middleware')
+const { makeExecutableSchema } = require("graphql-tools");
+const { applyMiddleware } = require("graphql-middleware");
 
 const loggingMiddleware = async (resolve, root, args, context, info) => {
-  console.log(`Input arguments: ${JSON.stringify(args)}`)
-  const result = await resolve(root, args, context, info)
-  console.log(`Result: ${JSON.stringify(result)}`)
-  return result
-}
+  console.log(`Input arguments: ${JSON.stringify(args)}`);
+  const result = await resolve(root, args, context, info);
+  console.log(`Result: ${JSON.stringify(result)}`);
+  return result;
+};
 
 const typeDefs = `
 type Query {
   hello(name: String): String
 }
-`
+`;
 const resolvers = {
   Query: {
-    hello: (root, { name }, context) => `Hello ${name ? name : 'world'}!`,
+    hello: (root, { name }, context) => `Hello ${name ? name : "world"}!`,
   },
-}
+};
 
-const schema = makeExecutableSchema({ typeDefs, resolvers })
-const schemaWithMiddleware = applyMiddleware(schema, loggingMiddleware)
+const schema = makeExecutableSchema({ typeDefs, resolvers });
+const schemaWithMiddleware = applyMiddleware(schema, loggingMiddleware);
 
 // instantiate your GraphQL server with `schemaWithMiddleware`
 ```
+
 ### Diving deeper
 
 #### Applying middleware to _all_ resolvers
@@ -67,50 +68,51 @@ const schemaWithMiddleware = applyMiddleware(schema, loggingMiddleware)
 Let's take a look at another example where we're using two middleware functions to _log the query arguments and the returned result_ of all resolvers in our schema. The numbers at the beginning of each `console.log` statement indicate the execution order:
 
 ```js
-const { GraphQLServer } = require('graphql-yoga')
+const { GraphQLServer } = require("graphql-yoga");
 
 const typeDefs = `
 type Query {
   hello(name: String): String
   bye(name: String): String
 }
-`
+`;
 const resolvers = {
   Query: {
     hello: (root, args, context, info) => {
-      console.log(`3. resolver: hello`)
-      return `Hello ${args.name ? args.name : 'world'}!`
+      console.log(`3. resolver: hello`);
+      return `Hello ${args.name ? args.name : "world"}!`;
     },
     bye: (root, args, context, info) => {
-      console.log(`3. resolver: bye`)
-      return `Bye ${args.name ? args.name : 'world'}!`
+      console.log(`3. resolver: bye`);
+      return `Bye ${args.name ? args.name : "world"}!`;
     },
   },
-}
+};
 
 const logInput = async (resolve, root, args, context, info) => {
-  console.log(`1. logInput: ${JSON.stringify(args)}`)
-  const result = await resolve(root, args, context, info)
-  console.log(`5. logInput`)
-  return result
-}
+  console.log(`1. logInput: ${JSON.stringify(args)}`);
+  const result = await resolve(root, args, context, info);
+  console.log(`5. logInput`);
+  return result;
+};
 
 const logResult = async (resolve, root, args, context, info) => {
-  console.log(`2. logResult`)
-  const result = await resolve(root, args, context, info)
-  console.log(`4. logResult: ${JSON.stringify(result)}`)
-  return result
-}
+  console.log(`2. logResult`);
+  const result = await resolve(root, args, context, info);
+  console.log(`4. logResult: ${JSON.stringify(result)}`);
+  return result;
+};
 
-const middlewares = [logInput, logResult]
+const middlewares = [logInput, logResult];
 
 const server = new GraphQLServer({
   typeDefs,
   resolvers,
   middlewares,
-})
-server.start(() => console.log('Server is running on http://localhost:4000'))
+});
+server.start(() => console.log("Server is running on http://localhost:4000"));
 ```
+
 [▶ Run Example](https://glitch.com/edit/#!/remix/graphql-middleware-demo)
 
 #### Understanding the middleware execution flow
@@ -122,7 +124,9 @@ query {
   hello(name: "Bob")
 }
 ```
+
 Here is what will be printed to the console:
+
 ```
 1. logInput: {"name":"Bob"}
 2. logResult
@@ -130,6 +134,7 @@ Here is what will be printed to the console:
 4. logResult: "Hello Bob!"
 5. logInput
 ```
+
 Execution of the middleware and resolver functions follow the "onion"-principle, meaning each middleware function adds a layer _before_ and _after_ the actual resolver invocation.
 
 ![Example of the onion principle](/graphql-middleware-zie3iphithxy/imgs/ygKiXlA.png)
@@ -137,6 +142,7 @@ Execution of the middleware and resolver functions follow the "onion"-principle,
 The order of the middleware functions in the `middlewares` array is important. The first resolver is the "most-outer" layer, so it gets executed first and last. The second resolver is the "second-outer" layer, so it gets executed second and second to last... And so forth.
 
 If the two functions in the array were switched, the following would be printed:
+
 ```
 2. logResult
 1. logInput: {"name":"Bob"}
@@ -144,6 +150,7 @@ If the two functions in the array were switched, the following would be printed:
 5. logInput
 4. logResult: "Hello Bob!"
 ```
+
 #### Applying middleware to _specific_ resolvers
 
 Rather than applying your middlewares to your entire schema, you can also apply them to specific resolvers (on a field- as well as on a type-level). For example, to apply only the `logInput` to the `Query.hello` resolver and both middlewares to the `Query.bye` resolver, you can use the following syntax:
@@ -154,28 +161,31 @@ const middleware1 = {
     hello: logInput,
     bye: logInput,
   },
-}
+};
 
 const middleware2 = {
   Query: {
     bye: logResult,
   },
-}
+};
 
-const middlewares = [middleware1, middleware2]
+const middlewares = [middleware1, middleware2];
 
 const server = new GraphQLServer({
   typeDefs,
   resolvers,
   middlewares,
-})
+});
 ```
+
 Processing the same `hello` query from above, this would produce the following console output:
+
 ```
 1. logInput: {"name":"Bob"}
 3. resolver: hello
 5. logInput
 ```
+
 Here is an illustration of the execution flow:
 
 ![Middleware execution flow](/graphql-middleware-zie3iphithxy/imgs/mbm2Syg.png)
@@ -207,14 +217,15 @@ npm install graphql-middleware --save
 # or
 yarn add graphql-middleware
 ```
+
 When using with `graphql-yoga`, the middleware functions can be passed directly into the `GraphQLServer` constructor. Other servers require you to create an executable schema first and then _apply_ the middleware functions to it (using the `applyMiddleware` function as shown in the first example).
 
 ## Made by the awesome GraphQL community
 
 At Prisma, we deeply care about the GraphQL ecosystem and are especially excited about this project as it was driven primarily by our awesome community. Most notably by [**Matic Zavadlal**](https://www.twitter.com/maticzav) who did an amazing job as the core maintainer of the project! 💚
 
-<br/>
-<br/>
+<br />
+<br />
 
 [🌟 Star on GitHub 🌟](https://www.github.com/prismagraphql/graphql-middleware)
 
@@ -225,4 +236,3 @@ Matic also already built several libraries on top of `graphql-middleware` that y
 - [`graphql-middleware-sentry`](https://github.com/maticzav/graphql-middleware-sentry): Reports errors to [Sentry](https://sentry.io/welcome/).
 
 We're excited to see what you're going to build with GraphQL Middleware!
-

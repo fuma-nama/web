@@ -40,16 +40,16 @@ With Prisma ORM 6.4.0, we’re introducing a new configuration file for Prisma O
 If you’d like to give it a try, just create a `prisma.config.ts` file like this one:
 
 ```typescript
-import path from 'node:path'
+import path from "node:path";
 
 export default {
   earlyAccess: true, // required while in Early Access
 
   schema: {
-    kind: 'single', // use 'multi' if you're using the `prismaSchemaFolder` preview feature
-    filePath: path.join('custom', 'prisma', 'schema.prisma') // key should be 'folderPath' if you're using the `prismaSchemaFolder` preview feature.
+    kind: "single", // use 'multi' if you're using the `prismaSchemaFolder` preview feature
+    filePath: path.join("custom", "prisma", "schema.prisma"), // key should be 'folderPath' if you're using the `prismaSchemaFolder` preview feature.
   },
-}
+};
 ```
 
 To learn more, check out [our documentation](https://www.prisma.io/docs/orm/reference/prisma-config-reference).

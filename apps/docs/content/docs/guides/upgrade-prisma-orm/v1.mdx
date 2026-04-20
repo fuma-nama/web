@@ -2,9 +2,8 @@
 title: Upgrade to v1
 description: Comprehensive guide for upgrading from Prisma 1 to Prisma ORM v1
 url: /guides/upgrade-prisma-orm/v1
-metaTitle: 'Upgrade from Prisma 1 to Prisma ORM 2'
-metaDescription: 'Upgrading your project from Prisma 1 to Prisma ORM 2'
-
+metaTitle: "Upgrade from Prisma 1 to Prisma ORM 2"
+metaDescription: "Upgrading your project from Prisma 1 to Prisma ORM 2"
 ---
 
 This guide provides a comprehensive roadmap for migrating your project from Prisma 1 to the latest version of Prisma ORM. The migration process involves significant architectural changes and requires careful planning and execution.
@@ -20,13 +19,13 @@ This guide provides a comprehensive roadmap for migrating your project from Pris
 
 ### Architectural changes
 
-| Feature | Prisma 1 | Prisma ORM |
-|---------|----------|------------|
-| **Database Connection** | Uses Prisma Server as a proxy | Direct database connection |
-| **API** | GraphQL API for database | Programmatic access via Prisma Client |
-| **Schema** | GraphQL SDL + `prisma.yml` | Unified Prisma schema |
-| **Modeling** | GraphQL SDL | Prisma Schema Language (PSL) |
-| **Workflow** | `prisma deploy` | `prisma migrate` and `prisma db` commands |
+| Feature                 | Prisma 1                      | Prisma ORM                                |
+| ----------------------- | ----------------------------- | ----------------------------------------- |
+| **Database Connection** | Uses Prisma Server as a proxy | Direct database connection                |
+| **API**                 | GraphQL API for database      | Programmatic access via Prisma Client     |
+| **Schema**              | GraphQL SDL + `prisma.yml`    | Unified Prisma schema                     |
+| **Modeling**            | GraphQL SDL                   | Prisma Schema Language (PSL)              |
+| **Workflow**            | `prisma deploy`               | `prisma migrate` and `prisma db` commands |
 
 ### Feature changes
 
@@ -108,12 +107,12 @@ model Post {
 
 #### 3.1 Handling Special Types
 
-| Prisma 1 Type | Prisma ORM Equivalent | Notes |
-|---------------|----------------------|-------|
-| `ID` | `String @id @default(cuid())` | Add `@id` directive |
-| `DateTime` | `DateTime` | No change needed |
-| `Json` | `Json` | No change needed |
-| `Enum` | `Enum` | Define enums in the schema |
+| Prisma 1 Type | Prisma ORM Equivalent         | Notes                      |
+| ------------- | ----------------------------- | -------------------------- |
+| `ID`          | `String @id @default(cuid())` | Add `@id` directive        |
+| `DateTime`    | `DateTime`                    | No change needed           |
+| `Json`        | `Json`                        | No change needed           |
+| `Enum`        | `Enum`                        | Define enums in the schema |
 
 #### 3.2 Relation Handling
 
@@ -139,19 +138,19 @@ model Post {
 
 ```typescript
 // Before (Prisma 1)
-import { prisma } from './generated/prisma-client';
+import { prisma } from "./generated/prisma-client";
 
 async function getUser(id: string) {
   return prisma.user({ id });
 }
 
 // After (Prisma ORM)
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 async function getUser(id: number) {
   return prisma.user.findUnique({
-    where: { id }
+    where: { id },
   });
 }
 ```
@@ -168,7 +167,7 @@ const posts = await prisma.user({ id: 1 }).posts();
 // After (Prisma ORM)
 const user = await prisma.user.findUnique({
   where: { id: 1 },
-  include: { posts: true }
+  include: { posts: true },
 });
 const posts = user?.posts;
 ```
@@ -178,16 +177,16 @@ const posts = user?.posts;
 ```typescript
 // Before (Prisma 1)
 const newUser = await prisma.createUser({
-  name: 'Alice',
-  email: 'alice@example.com'
+  name: "Alice",
+  email: "alice@example.com",
 });
 
 // After (Prisma ORM)
 const newUser = await prisma.user.create({
   data: {
-    name: 'Alice',
-    email: 'alice@example.com'
-  }
+    name: "Alice",
+    email: "alice@example.com",
+  },
 });
 ```
 
@@ -200,23 +199,23 @@ Test all CRUD operations to ensure data consistency:
 ```typescript
 // Test create
 const user = await prisma.user.create({
-  data: { name: 'Test', email: 'test@example.com' }
+  data: { name: "Test", email: "test@example.com" },
 });
 
 // Test read
 const foundUser = await prisma.user.findUnique({
-  where: { id: user.id }
+  where: { id: user.id },
 });
 
 // Test update
 const updatedUser = await prisma.user.update({
   where: { id: user.id },
-  data: { name: 'Updated Name' }
+  data: { name: "Updated Name" },
 });
 
 // Test delete
 await prisma.user.delete({
-  where: { id: user.id }
+  where: { id: user.id },
 });
 ```
 
@@ -230,25 +229,25 @@ const userWithPosts = await prisma.user.findUnique({
   where: { id: 1 },
   include: {
     posts: true,
-    profile: true
-  }
+    profile: true,
+  },
 });
 
 // Test nested writes
 const userWithNewPost = await prisma.user.create({
   data: {
-    name: 'Bob',
-    email: 'bob@example.com',
+    name: "Bob",
+    email: "bob@example.com",
     posts: {
       create: {
-        title: 'Hello World',
-        content: 'This is my first post'
-      }
-    }
+        title: "Hello World",
+        content: "This is my first post",
+      },
+    },
   },
   include: {
-    posts: true
-  }
+    posts: true,
+  },
 });
 ```
 
@@ -281,14 +280,14 @@ FOR EACH ROW EXECUTE FUNCTION notify_new_post();
 // Publish event when creating a post
 const post = await prisma.post.create({
   data: {
-    title: 'New Post',
-    content: 'Content',
-    author: { connect: { id: userId }}
-  }
+    title: "New Post",
+    content: "Content",
+    author: { connect: { id: userId } },
+  },
 });
 
 // Publish event to your pub/sub system
-await pubsub.publish('POST_CREATED', { postCreated: post });
+await pubsub.publish("POST_CREATED", { postCreated: post });
 ```
 
 ### 2. Authentication
@@ -296,16 +295,16 @@ await pubsub.publish('POST_CREATED', { postCreated: post });
 If you were using Prisma 1's built-in authentication, you'll need to implement your own solution:
 
 ```typescript
-import { compare } from 'bcryptjs';
-import { sign } from 'jsonwebtoken';
+import { compare } from "bcryptjs";
+import { sign } from "jsonwebtoken";
 
 export async function login(email: string, password: string) {
   const user = await prisma.user.findUnique({ where: { email } });
-  if (!user) throw new Error('User not found');
-  
+  if (!user) throw new Error("User not found");
+
   const valid = await compare(password, user.password);
-  if (!valid) throw new Error('Invalid password');
-  
+  if (!valid) throw new Error("Invalid password");
+
   const token = sign({ userId: user.id }, process.env.APP_SECRET!);
   return { token, user };
 }
@@ -326,6 +325,7 @@ prisma1-upgrade
 ```
 
 This tool helps with:
+
 - Converting your Prisma 1 datamodel to Prisma schema
 - Identifying potential issues in your schema
 - Providing migration recommendations
@@ -333,14 +333,15 @@ This tool helps with:
 ## Performance Considerations
 
 1. **Connection Pooling**: Configure connection pooling for better performance:
+
    ```typescript
    const prisma = new PrismaClient({
-     log: ['query', 'info', 'warn', 'error'],
+     log: ["query", "info", "warn", "error"],
      datasources: {
        db: {
-         url: process.env.DATABASE_URL + '&connection_limit=20'
-       }
-     }
+         url: process.env.DATABASE_URL + "&connection_limit=20",
+       },
+     },
    });
    ```
 
@@ -351,8 +352,8 @@ This tool helps with:
      select: {
        id: true,
        name: true,
-       email: true
-     }
+       email: true,
+     },
    });
    ```
 
@@ -367,6 +368,7 @@ This tool helps with:
 ## Getting Help
 
 If you encounter issues during migration:
+
 1. Search the [GitHub Issues](https://github.com/prisma/prisma/issues)
 2. Ask for help in the [Prisma Slack](https://slack.prisma.io/)
 3. Open a [GitHub Discussion](https://github.com/prisma/prisma/discussions)

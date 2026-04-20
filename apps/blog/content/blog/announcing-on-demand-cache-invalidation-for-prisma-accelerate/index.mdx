@@ -22,7 +22,6 @@ Caching stores frequently accessed data in a temporary layer for quicker access,
 
 > Explore our [speed test](https://accelerate-speed-test.prisma.io/) to experience firsthand how caching can dramatically improve your application's performance.
 > ![Prisma Accelerate speed test result GIF](/announcing-on-demand-cache-invalidation-for-prisma-accelerate/imgs/46cf59b4dcf666cc403923788d01a5eb0c959970-870x804.gif)
->
 
 **Benefits of caching:**
 
@@ -38,9 +37,9 @@ However, keeping cached data accurate is key. On-demand cache invalidation, whic
 
 On-demand cache invalidation is crucial for maintaining data integrity while benefiting from the speed of having cached data. With earlier versions of Prisma Accelerate, depending on the cache strategy, you had to wait for TTL or SWR timers to expire, limiting control over data refresh timing. Now, with on-demand cache invalidation, you can refresh your cache exactly when needed, allowing for a more dynamic and responsive experience.
 
-### Use-case: *Hackernews* forum
+### Use-case: _Hackernews_ forum
 
-Imagine a scenario with [*Hackernews*](https://news.ycombinator.com/), where new posts and upvotes are constantly being added. Caching can dramatically speed up fetching popular stories, reducing server load. However, without proper on-demand invalidation, users could be shown outdated rankings, comments, or even entirely removed posts. This delay can mislead users with outdated data, degrading the experience and lowering engagement.
+Imagine a scenario with [_Hackernews_](https://news.ycombinator.com/), where new posts and upvotes are constantly being added. Caching can dramatically speed up fetching popular stories, reducing server load. However, without proper on-demand invalidation, users could be shown outdated rankings, comments, or even entirely removed posts. This delay can mislead users with outdated data, degrading the experience and lowering engagement.
 
 For example, a post gaining significant upvotes won’t reflect in real-time without on-demand invalidation, leaving the top posts list inaccurate. By employing this technique, updates like votes, comments, or edits are consistently reflected, keeping the feed fresh and users engaged.
 
@@ -53,73 +52,70 @@ const { data, info } = await prisma.post
   .findMany({
     take: 20,
     orderBy: {
-      createdAt: 'desc',
+      createdAt: "desc",
     },
     cacheStrategy: {
       ttl: 120,
     },
   })
-  .withAccelerateInfo()
-
+  .withAccelerateInfo();
 ```
+
 Now, with Prisma Accelerate, you can invalidate the cache by using tags, which group cached query results for easier management. Let’s look at an example:
 
 1. First, add a tag to the `cacheStrategy` of your query:
-    
-    ```ts
-    const { data, info } = await prisma.post
-      .findMany({
-        take: 20,
-        orderBy: {
-          createdAt: 'desc',
-        },
-        cacheStrategy: {
-          ttl: 600,
-          // add the tags option and label the cached query result
-          tags: ['posts'],
-        },
-      })
-      .withAccelerateInfo()
-    
-    ```
-    
+
+   ```ts
+   const { data, info } = await prisma.post
+     .findMany({
+       take: 20,
+       orderBy: {
+         createdAt: "desc",
+       },
+       cacheStrategy: {
+         ttl: 600,
+         // add the tags option and label the cached query result
+         tags: ["posts"],
+       },
+     })
+     .withAccelerateInfo();
+   ```
+
 2. Then, when adding a new post, use the `$accelerate.invalidate` to refresh the cache immediately with on-demand invalidation:
-    
-    ```ts
-    const newPost = await prisma.post.create({
-      data: {
-        title: title,
-        content: text,
-        url: url,
-        vote: 0,
-      },
-    })
-    
-    await prisma.$accelerate.invalidate({
-      tags: ['posts'],
-    })
-    
-    ```
-    
+
+   ```ts
+   const newPost = await prisma.post.create({
+     data: {
+       title: title,
+       content: text,
+       url: url,
+       vote: 0,
+     },
+   });
+
+   await prisma.$accelerate.invalidate({
+     tags: ["posts"],
+   });
+   ```
+
 3. Similarly, when you upvote a post, you can invalidate the cache as well:
-    
-    ```ts
-    await prisma.post.update({
-      where: {
-        id: id,
-      },
-      data: {
-        vote: {
-          increment: 1,
-        },
-      },
-    })
-    
-    await prisma.$accelerate.invalidate({
-      tags: ['posts'],
-    })
-    
-    ```
+
+   ```ts
+   await prisma.post.update({
+     where: {
+       id: id,
+     },
+     data: {
+       vote: {
+         increment: 1,
+       },
+     },
+   });
+
+   await prisma.$accelerate.invalidate({
+     tags: ["posts"],
+   });
+   ```
 
 And that’s how simple it is to achieve on-demand cache revalidation. Check out the [example app](https://pris.ly/cache-invalidation-acc-example) to see how it works.
 

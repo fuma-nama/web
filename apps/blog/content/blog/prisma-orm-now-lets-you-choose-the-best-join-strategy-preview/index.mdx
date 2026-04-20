@@ -41,13 +41,12 @@ generator client {
   previewFeatures = ["relationJoins"]
 }
 ```
+
 > **Note**: The `relationLoadStrategy` is only available for PostgreSQL and MySQL databases.
 
 Once that's done, you'll need to re-run `prisma generate` for this change to take effect and pick a relation load strategy in your queries.
 
 Here is an example that uses the new `join` strategy:
-
-
 
 ```ts
 const usersWithPosts = await prisma.user.findMany({
@@ -57,6 +56,7 @@ const usersWithPosts = await prisma.user.findMany({
   },
 });
 ```
+
 ```prisma
 model User {
   id      Int      @id @default(autoincrement())
@@ -72,14 +72,13 @@ model Post {
 }
 ```
 
-
 Note that because `"join"` is the default, the `relationLoadStrategy` option could technically also be omitted in the code snippet above. We just show it here for illustration purposes.
 
 ## `join` vs `query` — when to use which?
 
 Now with these two query strategies, you'll wonder: When to use which?
 
-Because of the lateral, aggregated JOINs that Prisma ORM uses on PostgreSQL and the correlated subqueries on MySQL, the `join` strategy is likely to be more efficient in the majority of cases (a [later section](#whats-happening-under-the-hoods) will have more details on this). Database engines are very powerful and great at optimizing query plans. This new relation load strategy pays tribute to that. 
+Because of the lateral, aggregated JOINs that Prisma ORM uses on PostgreSQL and the correlated subqueries on MySQL, the `join` strategy is likely to be more efficient in the majority of cases (a [later section](#whats-happening-under-the-hoods) will have more details on this). Database engines are very powerful and great at optimizing query plans. This new relation load strategy pays tribute to that.
 
 However, there may be cases where you may still want to use the `query` strategy to perform one query per table and merge data at the application-level. Depending on the dataset and the indexes that are configured in the schema, sending multiple queries could be more performant. Profiling and benchmarking your queries will be crucial to identify these situations.
 
@@ -118,7 +117,7 @@ Which approach is more desirable depends on the database that's used, the size a
 
 ## What's happening under the hood?
 
-Prisma ORM implements the new `join` relation load strategy using `LATERAL` joins and DB-level JSON aggregation (e.g. via `json_agg`) in PostgreSQL and correlated subqueries on MySQL. 
+Prisma ORM implements the new `join` relation load strategy using `LATERAL` joins and DB-level JSON aggregation (e.g. via `json_agg`) in PostgreSQL and correlated subqueries on MySQL.
 
 In the following sections, we'll investigate why the `LATERAL` joins and DB-level JSON aggregation approach on PostgreSQL is more efficient than plain, traditional JOINs.
 
@@ -147,6 +146,7 @@ CREATE TABLE "Post" (
 -- AddForeignKey
 ALTER TABLE "Post" ADD CONSTRAINT "Post_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 ```
+
 To retrieve all users with their posts, you can use a simple `LEFT JOIN` query:
 
 ```sql
@@ -162,6 +162,7 @@ LEFT JOIN
 ORDER BY
     u.id, p.id;
 ```
+
 This is what the result could look like with some sample data:
 
 ![](/prisma-orm-now-lets-you-choose-the-best-join-strategy-preview/imgs/0d275322775fddbf52e1e3e95cfabaaa9bafd778-874x798.png)
@@ -188,6 +189,7 @@ ORDER BY
     u.id, p.id, c.id;
 
 ```
+
 Now, assume the first post had multiple comments:
 
 ![](/prisma-orm-now-lets-you-choose-the-best-join-strategy-preview/imgs/c6bf66d1ff9bac1bc0543020819db31da69ba26a-946x324.png)
@@ -217,6 +219,7 @@ GROUP BY
 ORDER BY
     u.id;
 ```
+
 The result set this time doesn't contain redundant data. Additionally, the data structure conveniently already has the shape that's returned by Prisma Client which saves the extra work of transforming results in the query engine:
 
 ![](/prisma-orm-now-lets-you-choose-the-best-join-strategy-preview/imgs/c39d9673195c2414f9ca2be1cedcb0229fa58188-1154x652.png)
@@ -237,6 +240,7 @@ await prisma.user.findMany({
   },
 });
 ```
+
 When writing this in raw SQL, you might be tempted to use a `LIMIT` clause inside the sub-query, e.g.:
 
 ```sql
@@ -250,6 +254,7 @@ FROM ("user"
          LIMIT 5) AS p ON (p.author_id = "user".id))
 LIMIT 10;
 ```
+
 However, this won't work because the inner `SELECT` doesn't actually return five posts _per user_ — instead it returns two posts _in total_ which is of course not at all the desired outcome.
 
 Using a traditional JOIN, this could be resolved by using the `row_number()` function to assign incrementing integers to the records in the result set with which the computation of the pagination could be performed manually.
@@ -271,6 +276,7 @@ WHERE p.rn >= 1
   OR p.rn IS NULL
 LIMIT 10;
 ```
+
 Maintaining, scaling and debugging these kinds of SQL queries is daunting and can consume hours of development time.
 
 Thankfully, newer database versions solve this with a new kind of query: the _lateral JOIN_.
@@ -289,6 +295,7 @@ FROM ("user"
          LIMIT 5) AS p ON TRUE)
 LIMIT 10;
 ```
+
 This not only makes the query more readable, but the database engine also likely is more capable of optimizing the query because it can understand more about the _intent_ of the query.
 
 ### Conclusion
@@ -299,18 +306,14 @@ In the past, Prisma only supported the application-level join strategy which sen
 
 ![](/prisma-orm-now-lets-you-choose-the-best-join-strategy-preview/imgs/c7adac832f583577880d8f6d308c7446c9d5f27c-3200x2280.png)
 
-
 Using plain, traditional JOINs, the merging of the data would be delegated to the database. However, as explained above, there are problems with data redundancy (the result sets grow exponentially with the number of tables in the relation query) and the complexity of queries that contain filters and pagination:
 
 ![](/prisma-orm-now-lets-you-choose-the-best-join-strategy-preview/imgs/de503bc689a9489f6d97c0151adda8f98fd910bb-3200x2390.png)
-
 
 To work around these issues, Prisma ORM implements modern, lateral JOINs accompanied with JSON aggregation on the database-level. That way, all the heavy lifting that's needed to resolve the query and bring the data into the expected JavaScript object structures is done on the database-level:
 
 ![](/prisma-orm-now-lets-you-choose-the-best-join-strategy-preview/imgs/87f24086f41106526cd3e6178ef56e71682d5855-1600x1140.svg)
 
-
 ## Try it out and share your feedback
 
 We'd love for you to try out to the new loading strategy for relation queries. Let us know what you think and [share your feedback with us](https://github.com/prisma/prisma/discussions/22288)!
-

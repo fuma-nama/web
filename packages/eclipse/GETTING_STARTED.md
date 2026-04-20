@@ -161,9 +161,7 @@ export function App() {
     <div className={isDark ? "dark" : ""}>
       <div className="bg-background-default text-foreground-neutral">
         {/* All colors automatically adjust for dark mode */}
-        <button onClick={() => setIsDark(!isDark)}>
-          Toggle Dark Mode
-        </button>
+        <button onClick={() => setIsDark(!isDark)}>Toggle Dark Mode</button>
       </div>
     </div>
   );
@@ -242,26 +240,23 @@ import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@prisma/eclipse/lib/cn";
 
-const cardVariants = cva(
-  "rounded-square-high border",
-  {
-    variants: {
-      variant: {
-        default: "bg-background-default border-stroke-neutral",
-        elevated: "bg-background-default border-stroke-neutral shadow-lg",
-      },
-      padding: {
-        sm: "p-4",
-        md: "p-6",
-        lg: "p-12",
-      },
+const cardVariants = cva("rounded-square-high border", {
+  variants: {
+    variant: {
+      default: "bg-background-default border-stroke-neutral",
+      elevated: "bg-background-default border-stroke-neutral shadow-lg",
     },
-    defaultVariants: {
-      variant: "default",
-      padding: "md",
+    padding: {
+      sm: "p-4",
+      md: "p-6",
+      lg: "p-12",
     },
-  }
-);
+  },
+  defaultVariants: {
+    variant: "default",
+    padding: "md",
+  },
+});
 
 interface CardProps
   extends React.HTMLAttributes<HTMLDivElement>,
@@ -276,7 +271,7 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(
         {...props}
       />
     );
-  }
+  },
 );
 
 Card.displayName = "Card";
@@ -307,9 +302,7 @@ const fontFamily = tokens.typography.fontFamily.sans; // "Inter"
 ### Responsive Design
 
 ```tsx
-<div className="p-4 md:p-6 lg:p-12">
-  Responsive padding
-</div>
+<div className="p-4 md:p-6 lg:p-12">Responsive padding</div>
 ```
 
 ### Hover States
@@ -331,13 +324,15 @@ const fontFamily = tokens.typography.fontFamily.sans; // "Inter"
 ### Combining Tokens
 
 ```tsx
-<div className="
+<div
+  className="
   bg-background-default
   text-foreground-neutral
   rounded-square-high
   border border-stroke-neutral
   shadow-lg
-">
+"
+>
   Well-styled component
 </div>
 ```

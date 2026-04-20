@@ -12,7 +12,7 @@ heroImageAlt: "Improving Performance with Apollo Query Batching"
 ---
 
 Learn about transport-level query batching, an advanced Apollo feature that enables you to significantly improve
-  performance of complex applications.
+performance of complex applications.
 
 > **Note**: In the meantime, we released Prisma. It features an improved architecture, a more powerful GraphQL API and provides a flexible development setup. You can check it out here.
 
@@ -45,6 +45,7 @@ The performance of this combined query is almost as good as a single query from 
 ## Enabling Apollo Query Batching
 
 Enabling Query Batching is super simple. The original Pokedex app looked like this:
+
 ```
 import ApolloClient, { createNetworkInterface } from *'apollo-client'*
 
@@ -53,7 +54,9 @@ import ApolloClient, { createNetworkInterface } from *'apollo-client'*
       dataIdFromObject: o => o.id
     })
 ```
+
 To enable Query Batching, simply use the BatchingNetworkInterface:
+
 ```
 import ApolloClient, { createBatchingNetworkInterface } from *'apollo-client'*
 
@@ -62,6 +65,7 @@ import ApolloClient, { createBatchingNetworkInterface } from *'apollo-client'*
       dataIdFromObject: o => o.id
     })
 ```
+
 Query Batching is supported out of the box by the [Apollo Server](https://github.com/apollostack/graphql-server) and [Graphcool](https://www.graph.cool/).
 
 ## [Under the hood](https://www.prisma.io/blog/improving-performance-with-apollo-query-batching-66455ea9d8b#under-the-hood)
@@ -69,6 +73,7 @@ Query Batching is supported out of the box by the [Apollo Server](https://github
 If you are familiar with the GraphQL specification you might be wondering how Apollo is able to batch 12 queries into one. Let’s have a look at what actually goes over the wire.
 
 A single request without Batching:
+
 ```
 {
       "query": "query TrainerQuery($name: String!, $first: Int!, $skip: Int!) {  Trainer(name: $name) {    id    name    ownedPokemons(first: $first, skip: $skip) {      id      name      url      __typename    }    _ownedPokemonsMeta {      count      __typename    }    __typename  }}",
@@ -80,7 +85,9 @@ A single request without Batching:
       "operationName": "TrainerQuery"
     }
 ```
+
 12 batched requests:
+
 ```
 [
       {
@@ -104,7 +111,9 @@ A single request without Batching:
       [ 10 additional queries ]
     ]
 ```
+
 normal response:
+
 ```
 {
       "data": {
@@ -136,7 +145,9 @@ normal response:
       }
     }
 ```
+
 batched response:
+
 ```
 [{
       "data": {
@@ -170,6 +181,7 @@ batched response:
       // [ 11 additional responses ]
     ]
 ```
+
 ## Query deduplication
 
 Enabling Query Batching already provided a significant boost to performance. Can we do even better? Remember how the BatchingNetworkInterface queues up all requests for a predetermined amount of time before sending them all in one batch. Query deduplication takes this a step further by inspecting all queries in the batch to find and remove duplicates. Let's see how this affects our performance:
@@ -179,6 +191,7 @@ Enabling Query Batching already provided a significant boost to performance. Can
 As you can see the request size is slightly smaller and the request is now just as fast as a single unbatched request.
 
 To enable Query Deduplication simply pass an extra argument to ApolloCLient:
+
 ```
 import ApolloClient, { createBatchingNetworkInterface } from 'apollo-client'
 
@@ -191,7 +204,7 @@ import ApolloClient, { createBatchingNetworkInterface } from 'apollo-client'
       queryDeduplication: true
     })
 ```
+
 Please be aware that both Query Batching and query de-duplication are recent features in Apollo, so make sure you are using the latest version.
 
 Do you have questions about Query Batching using Apollo Client? Tell us in our [Slack channel](http://slack.graph.cool/) to start a discussion. If you want to benefit from Query Batching, setup your own GraphQL backend in less than 5 minutes on [Graphcool](https://graph.cool/).
-

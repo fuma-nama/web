@@ -10,10 +10,10 @@ Prisma Postgres routes application traffic through a tenant-isolated PgBouncer i
 
 ## Connection limits
 
-|                        | Free | Starter | Pro  | Business |
-| ---------------------- | ---- | ------- | ---- | -------- |
-| **Pooled connections** | 50   | 50      | 250  | 500      |
-| **Direct connections** | 10   | 10      | 50   | 100      |
+|                        | Free | Starter | Pro | Business |
+| ---------------------- | ---- | ------- | --- | -------- |
+| **Pooled connections** | 50   | 50      | 250 | 500      |
+| **Direct connections** | 10   | 10      | 50  | 100      |
 
 These are concurrent connection limits per plan. 5 direct connections are reserved for platform operations (maintenance, monitoring) and are not available to your workload.
 

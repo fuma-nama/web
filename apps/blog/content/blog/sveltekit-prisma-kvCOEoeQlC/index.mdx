@@ -22,24 +22,24 @@ SvelteKit is a metaframework built on top of Svelte. In this article, you will l
 - [1. Set up your SvelteKit starter project](#1-set-up-your-sveltekit-starter-project)
 - [2. Set up Prisma](#2-set-up-prisma)
 - [3. Create your database schema and connect your SQLite database](#3-create-your-database-schema-and-connect-your-sqlite-database)
-  * [Set up seeding for your database](#set-up-seeding-for-your-database)
-  * [Create your first database migration](#create-your-first-database-migration)
-  * [Set up a Prisma Client singleton](#set-up-a-prisma-client-singleton)
+  - [Set up seeding for your database](#set-up-seeding-for-your-database)
+  - [Create your first database migration](#create-your-first-database-migration)
+  - [Set up a Prisma Client singleton](#set-up-a-prisma-client-singleton)
 - [4. Define SvelteKit load functions](#4-define-sveltekit-load-functions)
-  * [`/`: Get all published posts](#-get-all-published-posts)
-  * [`/drafts`: Get all drafted posts](#drafts-get-all-drafted-posts)
-  * [`/p/[id]`: Get a *single* post by its `id`](#pid-get-a-single-post-by-its-id)
+  - [`/`: Get all published posts](#-get-all-published-posts)
+  - [`/drafts`: Get all drafted posts](#drafts-get-all-drafted-posts)
+  - [`/p/[id]`: Get a _single_ post by its `id`](#pid-get-a-single-post-by-its-id)
 - [5. Define SvelteKit action functions](#5-define-sveltekit-action-functions)
-  * [`/create`: Create a new post in your database](#create-create-a-new-post-in-your-database)
-  * [`/p/[id]`: Publish and Delete a post by its `id`](#pid-publish-and-delete-a-post-by-its-id)
-  * [`/signup`: Create a new user](#signup-create-a-new-user)
+  - [`/create`: Create a new post in your database](#create-create-a-new-post-in-your-database)
+  - [`/p/[id]`: Publish and Delete a post by its `id`](#pid-publish-and-delete-a-post-by-its-id)
+  - [`/signup`: Create a new user](#signup-create-a-new-user)
 - [Conclusion](#conclusion)
 
-## Introduction 
+## Introduction
 
-SvelteKit is a meta framework built on top of Svelte; it’s what Next.js is to React. SvelteKit 1.0 introduced *[load](https://kit.svelte.dev/docs/load)* and *[action](https://kit.svelte.dev/docs/form-actions)* functions that open up multiple possibilities. For instance, building full-stack applications that query data directly from your application.
+SvelteKit is a meta framework built on top of Svelte; it’s what Next.js is to React. SvelteKit 1.0 introduced _[load](https://kit.svelte.dev/docs/load)_ and _[action](https://kit.svelte.dev/docs/form-actions)_ functions that open up multiple possibilities. For instance, building full-stack applications that query data directly from your application.
 
-This guide will teach you how to use *load* and *action* functions with Prisma to build a simple blog application. You will add a database and Prisma ORM to an existing application that currently only stores data in memory.
+This guide will teach you how to use _load_ and _action_ functions with Prisma to build a simple blog application. You will add a database and Prisma ORM to an existing application that currently only stores data in memory.
 
 The application is built using these technologies:
 
@@ -60,12 +60,14 @@ To get started, navigate to the directory of your choice and run the following c
 git clone https://github.com/sonylomo/demo-sveltekit.git
 cd demo-sveltekit
 ```
+
 Install dependencies and fire up the application:
 
 ```shell
 npm install
 npm run dev
 ```
+
 Awesome! Your application should be running on [http://localhost:5173/](http://localhost:5173/) .
 
 ![](/sveltekit-prisma-kvCOEoeQlC/imgs/sveltekit-fullstack-app.png)
@@ -105,6 +107,7 @@ demo-sveltekit/
 ├ tsconfig.json
 └ vite.config.js
 ```
+
 Currently, the project uses dummy data from a `data.json` file to display published posts on the `/` route and unpublished posts on the `drafts` route. You currently cannot view individual posts and sign up as a user or create a post draft. You’ll implement these functionalities with SvelteKit functions and Prisma ORM later in the guide. Moreover, you’ll also replace data fetching from dummy data with a database.
 
 It’s now time to get your hands dirty!
@@ -116,14 +119,16 @@ Start by installing Prisma’s CLI as a development dependency with the followin
 ```shell
 npm install prisma --save-dev
 ```
+
 You can now set up Prisma in the project by running the following command:
 
 ```shell
 npx prisma init --datasource-provider sqlite
 ```
-`prisma init` created a new `prisma` directory with a `schema.prisma` file inside it and a `.env` ([dotenv](https://github.com/motdotla/dotenv)) file at the root folder in your project. 
 
-The `schema.prisma` defines your database connection and the Prisma Client generator. For this project, you’ll use SQLite as your database provider for an easier setup. The `--datasource-provider sqlite` shorthand automatically sets up Prisma using SQLite. However, you can use another database provider simply by changing the database provider from `sqlite` to your preferred choice and updating the [connection URL](https://www.prisma.io/docs/orm/reference/connection-urls). 
+`prisma init` created a new `prisma` directory with a `schema.prisma` file inside it and a `.env` ([dotenv](https://github.com/motdotla/dotenv)) file at the root folder in your project.
+
+The `schema.prisma` defines your database connection and the Prisma Client generator. For this project, you’ll use SQLite as your database provider for an easier setup. The `--datasource-provider sqlite` shorthand automatically sets up Prisma using SQLite. However, you can use another database provider simply by changing the database provider from `sqlite` to your preferred choice and updating the [connection URL](https://www.prisma.io/docs/orm/reference/connection-urls).
 
 The Prisma schema looks should resemble this:
 
@@ -137,6 +142,7 @@ generator client {
   provider = "prisma-client-js"
 }
 ```
+
 The `DATABASE_URL` environment variable is stored in the `.env` file. It specifies the path to the database. The database does not yet currently exist but will be created in the next step.
 
 ## 3. Create your database schema and connect your SQLite database
@@ -173,6 +179,7 @@ model User {
   posts Post[]
 }
 ```
+
 ### Set up seeding for your database
 
 Currently, the application uses dummy data directly from the `data.json` file. Since the database will be empty when created, you will set up a script to seed some data when it's created.
@@ -182,13 +189,13 @@ Create a `seed.ts` file in the `prisma` folder and add the seed script below:
 ```tsx
 // prisma/seed.ts
 
-import { PrismaClient } from '@prisma/client'
-import userData from "../src/lib/data.json" assert { type: "json" }
+import { PrismaClient } from "@prisma/client";
+import userData from "../src/lib/data.json" assert { type: "json" };
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 
 async function main() {
-  console.log(`Start seeding ...`)
+  console.log(`Start seeding ...`);
 
   for (const p of userData) {
     const user = await prisma.user.create({
@@ -202,23 +209,24 @@ async function main() {
             published: p.published,
           },
         },
-      }
-    })
-    console.log(`Created user with id: ${user.id}`)
+      },
+    });
+    console.log(`Created user with id: ${user.id}`);
   }
-  console.log(`Seeding finished.`)
+  console.log(`Seeding finished.`);
 }
 
 main()
   .then(async () => {
-    await prisma.$disconnect()
+    await prisma.$disconnect();
   })
   .catch(async (e) => {
-    console.error(e)
-    await prisma.$disconnect()
-    process.exit(1)
-  })
+    console.error(e);
+    await prisma.$disconnect();
+    process.exit(1);
+  });
 ```
+
 > **Note**: The `@prisma/client` package has not yet been installed and should see a squiggly line next to the import. The package will be installed in the next step when you generate a migration.
 
 Then add this property to your `package.json` file:
@@ -230,6 +238,7 @@ Then add this property to your `package.json` file:
   "seed": "ts-node prisma/seed.ts"
 }
 ```
+
 <Accordions type="single">
   <Accordion title="Expand to view the full contents of the package.json file">
 ```json
@@ -284,6 +293,7 @@ To apply the defined schema to your database, you'll need to create a migration.
 ```shell
 npx prisma migrate dev --name init
 ```
+
 The above command will execute the following:
 
 1. Create a migration called `init` located in the `/prisma/migrations` directory.
@@ -325,11 +335,13 @@ Seeding finished.
 
 🌱  The seed command has been executed.
 ```
+
 You can browse the data in your database using [Prisma Studio](https://www.prisma.io/docs/orm/reference/prisma-cli-reference#studio). Run the following command:
 
 ```shell
 npx prisma studio
 ```
+
 ### Set up a Prisma Client singleton
 
 Create a `prisma.ts` file in the `src/lib` folder to create a Prisma Client instance that you’ll use throughout your application. Paste in the code below:
@@ -337,22 +349,23 @@ Create a `prisma.ts` file in the `src/lib` folder to create a Prisma Client inst
 ```tsx
 // src/lib/prisma.ts
 
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from "@prisma/client";
 
-const prisma = new PrismaClient()
-export default prisma
+const prisma = new PrismaClient();
+export default prisma;
 ```
+
 ## 4. Define SvelteKit load functions
 
 A [SvelteKit load](https://kit.svelte.dev/docs/load) function provides data when rendering a `+page.svelte` component. Load functions perform `GET` requests to a route.
 
 For this project, you’ll implement the following load functions:
 
-| Route with load function | Description |
-| --- | --- |
-| `/` | Get all published posts |
-| `/drafts` | Get all drafted posts |
-| `/p/[id]` | Get a single post by its id |
+| Route with load function | Description                 |
+| ------------------------ | --------------------------- |
+| `/`                      | Get all published posts     |
+| `/drafts`                | Get all drafted posts       |
+| `/p/[id]`                | Get a single post by its id |
 
 ### `/`: Get all published posts
 
@@ -361,49 +374,48 @@ Create a `+page.server.ts` file inside `src/routes` folder and add the code belo
 ```tsx
 // src/routes/+page.server.ts
 
-import prisma from '$lib/prisma';
-import type { PageServerLoad } from './$types';
+import prisma from "$lib/prisma";
+import type { PageServerLoad } from "./$types";
 
 export const load = (async () => {
-// 1.
-const response = await prisma.post.findMany({
+  // 1.
+  const response = await prisma.post.findMany({
     where: { published: true },
     include: { author: true },
-  })
+  });
 
-// 2.
-return { feed: response };
+  // 2.
+  return { feed: response };
 }) satisfies PageServerLoad;
 ```
+
 The function above does the following:
 
 1. Queries all published posts, including their authors, using the [`include` option](https://www.prisma.io/docs/orm/reference/prisma-client-reference#include).
 2. Assigns the `response` result to the `feed` object response.
 
-Currently, the client is still using dummy data from `data.json` instead of the SQLite database. Replace the code in `src/routes/+page.svelte` with the code below to rectify this: 
+Currently, the client is still using dummy data from `data.json` instead of the SQLite database. Replace the code in `src/routes/+page.svelte` with the code below to rectify this:
 
 ```html
-
-
 <script lang="ts">
-  import Post from '$lib/components/Post.svelte'
-  import type { PageData } from './$types'
+  import Post from "$lib/components/Post.svelte";
+  import type { PageData } from "./$types";
 
-  export let data: PageData
+  export let data: PageData;
 </script>
 
 <div>
   <h1>My Blog</h1>
   <main>
     <div>
-      
       {#each data.feed as post (post.id)}
-        <Post {post} />
+      <Post {post} />
       {/each}
     </div>
   </main>
 </div>
 ```
+
 1. `data` prop to receive the returned response from the load function.
 2. Iterates through a list of `feed` values that are then displayed through the `Post` component.
 
@@ -415,20 +427,21 @@ Create a `+page.server.ts` file inside `src/routes/drafts` folder and add the co
 
 ```tsx
 // src/routes/drafts/+page.server.ts
-import prisma from '$lib/prisma';
-import type { PageServerLoad } from './$types';
+import prisma from "$lib/prisma";
+import type { PageServerLoad } from "./$types";
 
 export const load = (async () => {
-    // 1.
-    const response = await prisma.post.findMany({
-        where: { published: false },
-        include: { author: true },
-    })
+  // 1.
+  const response = await prisma.post.findMany({
+    where: { published: false },
+    include: { author: true },
+  });
 
-    // 2.
-    return { drafts: response };
+  // 2.
+  return { drafts: response };
 }) satisfies PageServerLoad;
 ```
+
 The function above does the following:
 
 1. Queries all unpublished posts, including their authors relation.
@@ -437,8 +450,6 @@ The function above does the following:
 Similar to the previous step, you’re going to connect the client side to your SQLite database instead of `data.json` file. Replace the existing code with the code below:
 
 ```html
-
-
 <script lang="ts">
   import Post from "$lib/components/Post.svelte";
   import type { PageData } from "./$types";
@@ -450,14 +461,14 @@ Similar to the previous step, you’re going to connect the client side to your 
   <h1>Drafts</h1>
   <main>
     <div>
-      
       {#each data.drafts as post (post.id)}
-        <Post {post} />
+      <Post {post} />
       {/each}
     </div>
   </main>
 </div>
 ```
+
 1. `data` prop to receive the returned response from the load function.
 2. Iterates through a list of `drafts` values that are then displayed through the `Post` component.
 
@@ -468,20 +479,21 @@ Create a `+page.server.ts` file inside `src/routes/p/[id]` folder, and add the c
 ```tsx
 // src/routes/p/[id]/+page.server.ts
 import prisma from "$lib/prisma";
-import type { PageServerLoad } from './$types';
+import type { PageServerLoad } from "./$types";
 
 // 1.
 export const load = (async ({ params: { id } }) => {
-    // 2.
-    const post = await prisma.post.findUnique({
-        where: { id: Number(id) },
-        include: { author: true },
-    });
+  // 2.
+  const post = await prisma.post.findUnique({
+    where: { id: Number(id) },
+    include: { author: true },
+  });
 
-    // 3.
-    return { post };
+  // 3.
+  return { post };
 }) satisfies PageServerLoad;
 ```
+
 The load function above does the following:
 
 1. Leverages the load function [`data` prop](https://www.prisma.io/docs/orm/reference/prisma-client-reference#include) to get the post `id`.
@@ -494,72 +506,77 @@ You’ve added Prisma queries to load data into your application. At this point,
 
 ## 5. Define SvelteKit action functions
 
-A [SvelteKit action](https://kit.svelte.dev/docs/form-actions) is a server-only function that handles data mutations. Actions execute non-GET requests (POST, PUT, PATCH, DELETE) made to your route. 
+A [SvelteKit action](https://kit.svelte.dev/docs/form-actions) is a server-only function that handles data mutations. Actions execute non-GET requests (POST, PUT, PATCH, DELETE) made to your route.
 
 Actions are defined in the `+page.server.ts` files created in their respective route folders that will act as your action URLs.
 
 For this project, you’ll implement these actions:
 
-| Action Route | Action URL | Type Of Request  | Description  |
-| --- | --- | --- | --- |
-| route/create | default | POST | Create a new post in your database  |
-| route/p/[id] | ?/publishPost | PUT | Publish a post by its id |
-| route/p/[id] | ?/deletePost | DELETE | Delete a post by its id |
-| route/signup | default | POST | Create a new user |
+| Action Route | Action URL    | Type Of Request | Description                        |
+| ------------ | ------------- | --------------- | ---------------------------------- |
+| route/create | default       | POST            | Create a new post in your database |
+| route/p/[id] | ?/publishPost | PUT             | Publish a post by its id           |
+| route/p/[id] | ?/deletePost  | DELETE          | Delete a post by its id            |
+| route/signup | default       | POST            | Create a new user                  |
 
 ### `/create`: Create a new post in your database
 
-Create a  `+page.server.ts` file inside `src/routes/create` folder and add the code below:
+Create a `+page.server.ts` file inside `src/routes/create` folder and add the code below:
 
 ```tsx
 // src/routes/create/+page.server.ts
 
 import prisma from "$lib/prisma";
-import { fail, redirect } from '@sveltejs/kit';
-import type { Actions } from './$types';
+import { fail, redirect } from "@sveltejs/kit";
+import type { Actions } from "./$types";
 
 export const actions = {
-    // 1.
-    default: async ({ request }) => {
-        const data = await request.formData();
+  // 1.
+  default: async ({ request }) => {
+    const data = await request.formData();
 
-        let title = data.get("title")
-        let content = data.get("content")
-        let authorEmail = data.get("authorEmail")
+    let title = data.get("title");
+    let content = data.get("content");
+    let authorEmail = data.get("authorEmail");
 
-        // 2.
-        if (!title || !content || !authorEmail) {
-            return fail(400, { content, authorEmail, title, missing: true });
-        }
-
-        // 3.
-        if (typeof title != "string" || typeof content != "string" || typeof authorEmail != "string") {
-            return fail(400, { incorrect: true })
-        }
-
-        // 4.
-        await prisma.post.create({
-            data: {
-                title,
-                content,
-                author: { connect: { email: authorEmail } }
-            },
-        });
-
-        //5.
-        throw redirect(303, `/`)
+    // 2.
+    if (!title || !content || !authorEmail) {
+      return fail(400, { content, authorEmail, title, missing: true });
     }
+
+    // 3.
+    if (
+      typeof title != "string" ||
+      typeof content != "string" ||
+      typeof authorEmail != "string"
+    ) {
+      return fail(400, { incorrect: true });
+    }
+
+    // 4.
+    await prisma.post.create({
+      data: {
+        title,
+        content,
+        author: { connect: { email: authorEmail } },
+      },
+    });
+
+    //5.
+    throw redirect(303, `/`);
+  },
 } satisfies Actions;
 ```
+
 The snippet above does the following:
 
-1. Declare a [`default` action](https://kit.svelte.dev/docs/form-actions#default-actions) to create a new post in your database. The action receives a [`RequestEvent` object](https://kit.svelte.dev/docs/types#public-types-requestevent), allowing you to read the data from the form in `/create/+page.svelte` with `request.formData()`. 
+1. Declare a [`default` action](https://kit.svelte.dev/docs/form-actions#default-actions) to create a new post in your database. The action receives a [`RequestEvent` object](https://kit.svelte.dev/docs/types#public-types-requestevent), allowing you to read the data from the form in `/create/+page.svelte` with `request.formData()`.
 2. Add a [validation check](https://kit.svelte.dev/docs/form-actions#anatomy-of-an-action-validation-errors) for any missing required inputs. The `fail` function will return an HTTP status code and the data to the client.
 3. Add a type check for entries that aren’t string values.
 4. Query the database with a request body expecting:
-    - `title: String` (required): The title of the post
-    - `content: String` (required): The content of the post
-    - `authorEmail: String` (required): The email of the user that creates the post (the user should already exist)
+   - `title: String` (required): The title of the post
+   - `content: String` (required): The content of the post
+   - `authorEmail: String` (required): The email of the user that creates the post (the user should already exist)
 5. Throw a redirect to `/drafts` route once the query is executed.
 
 Click the `+Create draft` button and fill in the form to create a new post. Once you’ve submitted it, your post should appear on the `/draft` route.
@@ -572,40 +589,41 @@ To the existing `+page.server.ts` file inside `src/routes/p/[id]` folder, add th
 // src/routes/p/[id]/+page.server.ts
 import prisma from "$lib/prisma";
 // 1.
-import { redirect } from '@sveltejs/kit';
-import type { Actions, PageServerLoad } from './$types';
+import { redirect } from "@sveltejs/kit";
+import type { Actions, PageServerLoad } from "./$types";
 
 export const load = (async ({ params: { id } }) => {
-    const post = await prisma.post.findUnique({
-        where: { id: Number(id) },
-        include: { author: true },
-    });
-    return { post };
+  const post = await prisma.post.findUnique({
+    where: { id: Number(id) },
+    include: { author: true },
+  });
+  return { post };
 }) satisfies PageServerLoad;
 
 export const actions = {
-    // 2.
-    publishPost: async ({ params: { id } }) => {
-        await prisma.post.update({
-            where: { id: Number(id) },
-            data: {
-                published: true,
-            },
-        });
+  // 2.
+  publishPost: async ({ params: { id } }) => {
+    await prisma.post.update({
+      where: { id: Number(id) },
+      data: {
+        published: true,
+      },
+    });
 
-        throw redirect(303, `/p/${id}`);
-    },
+    throw redirect(303, `/p/${id}`);
+  },
 
-    // 3.
-    deletePost: async ({ params: { id } }) => {
-        await prisma.post.delete({
-            where: { id: Number(id) },
-        });
+  // 3.
+  deletePost: async ({ params: { id } }) => {
+    await prisma.post.delete({
+      where: { id: Number(id) },
+    });
 
-        throw redirect(303, '/')
-    }
+    throw redirect(303, "/");
+  },
 } satisfies Actions;
 ```
+
 The snippet does the following:
 
 1. Imports the `redirect` and `Actions` utilities.
@@ -621,48 +639,49 @@ Create a `+page.server.ts` file inside `src/routes/signup` folder and add the co
 ```tsx
 // src/routes/signup/+page.server.ts
 
-import { fail } from '@sveltejs/kit';
+import { fail } from "@sveltejs/kit";
 import prisma from "$lib/prisma";
-import { redirect } from '@sveltejs/kit';
-import type { Actions } from './$types';
+import { redirect } from "@sveltejs/kit";
+import type { Actions } from "./$types";
 
 const validateEmail = (email: string) => {
-    return (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))
-}
+  return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email);
+};
 
 export const actions = {
-    // 1.
-    default: async ({ request }) => {
-        const data = await request.formData();
+  // 1.
+  default: async ({ request }) => {
+    const data = await request.formData();
 
-        let name = data.get("name")
-        let userEmail = data.get("userEmail")
+    let name = data.get("name");
+    let userEmail = data.get("userEmail");
 
-        // 2.
-        if (!name || !userEmail) {
-            return fail(400, { name, userEmail, missing: true });
-        }
-				// 3.
-        if (typeof name != "string" || typeof userEmail != "string") {
-            return fail(400, { incorrect: true })
-        }
-				// 4.
-        if (!validateEmail(userEmail)) {
-            return fail(400, { name, incorrect: true });
-        }
-
-        // 5.
-        await prisma.user.create({
-            data: {
-                name,
-                email: userEmail,
-            },
-        });
-
-        throw redirect(303, `/drafts`)
+    // 2.
+    if (!name || !userEmail) {
+      return fail(400, { name, userEmail, missing: true });
     }
+    // 3.
+    if (typeof name != "string" || typeof userEmail != "string") {
+      return fail(400, { incorrect: true });
+    }
+    // 4.
+    if (!validateEmail(userEmail)) {
+      return fail(400, { name, incorrect: true });
+    }
+
+    // 5.
+    await prisma.user.create({
+      data: {
+        name,
+        email: userEmail,
+      },
+    });
+
+    throw redirect(303, `/drafts`);
+  },
 } satisfies Actions;
 ```
+
 The code does the following:
 
 1. The `default` action receives submitted data from the signup form.
@@ -670,14 +689,15 @@ The code does the following:
 3. Add a type check for entries that aren’t string values.
 4. Add a validation check for user’s email.
 5. Creates a new user with the following request body:
-  - `name: String`(required): the user’s name
-  - `email: String` (required): the user’s email address
+
+- `name: String`(required): the user’s name
+- `email: String` (required): the user’s email address
 
 Select the `Signup` button and fill in the form. You should now be able to add a new user to your database.
 
-Congratulations, you’re done. 🎉  You’ve successfully added Prisma queries to mutate data in your database. You can successfully create, publish or delete a post. You can also add a new user to your database as an author. 
+Congratulations, you’re done. 🎉  You’ve successfully added Prisma queries to mutate data in your database. You can successfully create, publish or delete a post. You can also add a new user to your database as an author.
 
-The complete code for this guide can be found on [GitHub](https://github.com/sonylomo/demo-sveltekit/tree/completed). 
+The complete code for this guide can be found on [GitHub](https://github.com/sonylomo/demo-sveltekit/tree/completed).
 
 ## Conclusion
 

@@ -176,7 +176,9 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
           <Navbar /> {/* [!code ++] */}
           {children}
         </body>
@@ -383,7 +385,9 @@ export async function POST(req: NextRequest) {
     const evt = await verifyWebhook(req); // [!code ++]
     const { id } = evt.data; // [!code ++]
     const eventType = evt.type; // [!code ++]
-    console.log(`Received webhook with ID ${id} and event type of ${eventType}`); // [!code ++]
+    console.log(
+      `Received webhook with ID ${id} and event type of ${eventType}`,
+    ); // [!code ++]
   } catch (err) {
     // [!code ++]
     console.error("Error verifying webhook:", err); // [!code ++]
@@ -406,7 +410,9 @@ export async function POST(req: NextRequest) {
     const evt = await verifyWebhook(req);
     const { id } = evt.data;
     const eventType = evt.type;
-    console.log(`Received webhook with ID ${id} and event type of ${eventType}`);
+    console.log(
+      `Received webhook with ID ${id} and event type of ${eventType}`,
+    );
 
     if (eventType === "user.created") {
       // [!code ++]
@@ -442,7 +448,9 @@ export async function POST(req: NextRequest) {
     const evt = await verifyWebhook(req);
     const { id } = evt.data;
     const eventType = evt.type;
-    console.log(`Received webhook with ID ${id} and event type of ${eventType}`);
+    console.log(
+      `Received webhook with ID ${id} and event type of ${eventType}`,
+    );
 
     if (eventType === "user.created") {
       const { id, email_addresses, first_name, last_name } = evt.data;
@@ -701,7 +709,10 @@ export default function PostInputs() {
         className="w-full p-2 border border-zinc-800 rounded" // [!code ++]
       />{" "}
       // [!code ++]
-      <button className="w-full p-2 border border-zinc-800 rounded">Post</button> // [!code ++]
+      <button className="w-full p-2 border border-zinc-800 rounded">
+        Post
+      </button>{" "}
+      // [!code ++]
     </form> // [!code ++]
   ); // [!code ++]
 }
@@ -800,7 +811,10 @@ export default async function Home() {
           (
             post, // [!code ++]
           ) => (
-            <div key={post.id} className="p-4 border border-zinc-800 rounded mt-4">
+            <div
+              key={post.id}
+              className="p-4 border border-zinc-800 rounded mt-4"
+            >
               {" "}
               // [!code ++]
               <h2 className="font-bold">{post.title}</h2> // [!code ++]

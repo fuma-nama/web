@@ -46,6 +46,7 @@ see Prisma ORM queries in Query Insights. Docs: https://www.prisma.io/docs/query
 ## Debugging performance issues
 
 Common causes of slow queries:
+
 - Over-fetching data
 - Missing indexes
 - Not caching repeated queries
@@ -114,9 +115,7 @@ Prisma's dataloader automatically batches `findUnique()` queries in the same tic
 
 ```ts
 // Instead of findMany per user, use:
-return context.prisma.user
-  .findUnique({ where: { id: parent.id } })
-  .posts();
+return context.prisma.user.findUnique({ where: { id: parent.id } }).posts();
 ```
 
 ### Using JOINs with `relationLoadStrategy`
@@ -348,13 +347,13 @@ const usersWithPosts = await prisma.user.findMany({
 // GOOD: 2 queries with in filter
 const users = await prisma.user.findMany({});
 const posts = await prisma.post.findMany({
-  where: { authorId: { in: users.map(u => u.id) } },
+  where: { authorId: { in: users.map((u) => u.id) } },
 });
 
 // BEST: 1 query with join
 const posts = await prisma.post.findMany({
   relationLoadStrategy: "join",
-  where: { authorId: { in: users.map(u => u.id) } },
+  where: { authorId: { in: users.map((u) => u.id) } },
 });
 ```
 

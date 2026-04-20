@@ -55,18 +55,18 @@ To create a baseline migration:
 - Then create another new directory with your preferred name. What's important is to use a prefix of `0_` so that Prisma migrate applies migrations in a [lexicographic order](https://en.wikipedia.org/wiki/Lexicographic_order). You can use a different value such as the current timestamp.
 - Generate a migration and save it to a file using `prisma migrate diff`:
 
- ```npm
- npx prisma migrate diff \
-   --from-empty \
-   --to-schema prisma/schema.prisma \
-   --script > prisma/migrations/0_init/migration.sql
- ```
+```npm
+npx prisma migrate diff \
+  --from-empty \
+  --to-schema prisma/schema.prisma \
+  --script > prisma/migrations/0_init/migration.sql
+```
 
 - Run the `prisma migrate resolve` command for each migration that should be ignored:
 
- ```npm
- npx prisma migrate resolve --applied 0_init
- ```
+```npm
+npx prisma migrate resolve --applied 0_init
+```
 
 This command adds the target migration to the `_prisma_migrations` table and marks it as applied. When you run `prisma migrate deploy` to apply new migrations, Prisma Migrate:
 

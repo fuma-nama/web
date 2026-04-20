@@ -1,9 +1,9 @@
 ---
 title: Add custom fields and methods to query results
-description: 'Extend the functionality of Prisma Client, result component'
+description: "Extend the functionality of Prisma Client, result component"
 url: /orm/prisma-client/client-extensions/result
-metaTitle: 'Prisma Client extensions: result component'
-metaDescription: 'Extend the functionality of Prisma Client, result component'
+metaTitle: "Prisma Client extensions: result component"
+metaDescription: "Extend the functionality of Prisma Client, result component"
 ---
 
 You can use the `result` [Prisma Client extensions](/orm/prisma-client/client-extensions) component type to add custom fields and methods to query results.
@@ -119,7 +119,8 @@ const prisma = new PrismaClient().$extends({
       save: {
         needs: { id: true },
         compute(user) {
-          return () => prisma.user.update({ where: { id: user.id }, data: user });
+          return () =>
+            prisma.user.update({ where: { id: user.id }, data: user });
         },
       },
     },

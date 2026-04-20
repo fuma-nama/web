@@ -7,13 +7,14 @@ The Vercel build was failing with timeout errors when trying to fetch the OpenAP
 ```
 docs:build: Error occurred prerendering page "/management-api/endpoints/database-usage/get-databases-id-usage". Read more: https://nextjs.org/docs/messages/prerender-error
 docs:build: TypeError: fetch failed
-docs:build:   [cause]: AggregateError: 
+docs:build:   [cause]: AggregateError:
 docs:build:       at ignore-listed frames {
 docs:build:     code: 'ETIMEDOUT'
 docs:build:   }
 ```
 
 The issue occurred because:
+
 1. Next.js with `output: "export"` statically generates all pages at build time
 2. Each API documentation page needs the OpenAPI spec to render
 3. Multiple workers were fetching the spec simultaneously, causing network congestion
@@ -64,6 +65,7 @@ pnpm build
 ### Retry Logic
 
 Both the pre-build script and runtime fetch include:
+
 - 3-5 retry attempts with exponential backoff
 - 30-60 second timeouts per request
 - Graceful error handling with informative messages
@@ -95,5 +97,6 @@ pnpm build
 ```
 
 You should see:
+
 - First build: "Fetching OpenAPI spec from https://api.prisma.io/v1/doc"
 - Subsequent builds: "Using cached OpenAPI spec from file"

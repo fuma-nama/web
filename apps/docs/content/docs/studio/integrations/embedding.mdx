@@ -294,7 +294,9 @@ app.post("/studio", async (c) => {
   const url = process.env.DATABASE_URL;
 
   // 3. Execute the query against Prisma Postgres
-  const [error, results] = await createPrismaPostgresHttpClient({ url }).execute(query);
+  const [error, results] = await createPrismaPostgresHttpClient({
+    url,
+  }).execute(query);
 
   // 6. Return results or errors
   if (error) {
@@ -326,7 +328,10 @@ app.post("/studio", async (c) => {
     const url = process.env.DATABASE_URL;
 
     if (!url) {
-      return c.json([serializeError(new Error("DATABASE_URL is missing"))], 500);
+      return c.json(
+        [serializeError(new Error("DATABASE_URL is missing"))],
+        500,
+      );
     }
 
     // 3. Extract file path from URL and create database connection
@@ -334,7 +339,8 @@ app.post("/studio", async (c) => {
     const database = new DatabaseSync(dbPath);
 
     // 4. Execute the query against SQLite
-    const [error, results] = await createNodeSQLiteExecutor(database).execute(query);
+    const [error, results] =
+      await createNodeSQLiteExecutor(database).execute(query);
 
     // 5. Return results or errors
     if (error) {
@@ -369,7 +375,10 @@ app.post("/studio", async (c) => {
     const url = process.env.DATABASE_URL;
 
     if (!url) {
-      return c.json([serializeError(new Error("DATABASE_URL is missing"))], 500);
+      return c.json(
+        [serializeError(new Error("DATABASE_URL is missing"))],
+        500,
+      );
     }
 
     // 3. Create MySQL connection pool
@@ -418,7 +427,9 @@ app.post("/studio", async (c) => {
 
   // 5. Execute the query using the appropriate database client
   // PostgreSQL:
-  const [error, results] = await createPrismaPostgresHttpClient({ url }).execute(query);
+  const [error, results] = await createPrismaPostgresHttpClient({
+    url,
+  }).execute(query);
   // SQLite: (requires additional setup with better-sqlite3)
   // MySQL: (requires additional setup with mysql2)
 

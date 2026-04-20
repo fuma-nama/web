@@ -30,7 +30,9 @@ export default function Statistic({
         <span className="text-foreground-neutral type-heading-2xl">
           {value}
         </span>
-        <span className="text-foreground-neutral-weak type-text-sm">{measure}</span>
+        <span className="text-foreground-neutral-weak type-text-sm">
+          {measure}
+        </span>
       </div>
     </div>
   );

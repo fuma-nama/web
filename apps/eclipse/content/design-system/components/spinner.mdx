@@ -242,7 +242,7 @@ export function AsyncButton() {
   const handleClick = async () => {
     setLoading(true);
     try {
-      await fetch('/api/data');
+      await fetch("/api/data");
     } finally {
       setLoading(false);
     }
@@ -251,7 +251,7 @@ export function AsyncButton() {
   return (
     <Button onClick={handleClick} disabled={loading}>
       {loading && <Spinner className="mr-2" />}
-      {loading ? 'Submitting...' : 'Submit'}
+      {loading ? "Submitting..." : "Submit"}
     </Button>
   );
 }
@@ -292,19 +292,21 @@ import { Button } from "@prisma/eclipse";
 import { useState } from "react";
 
 export function DataFetcherWithRetry() {
-  const [status, setStatus] = useState<'idle' | 'loading' | 'error' | 'success'>('idle');
+  const [status, setStatus] = useState<
+    "idle" | "loading" | "error" | "success"
+  >("idle");
 
   const handleFetch = async () => {
-    setStatus('loading');
+    setStatus("loading");
     try {
-      await fetch('/api/data');
-      setStatus('success');
+      await fetch("/api/data");
+      setStatus("success");
     } catch (error) {
-      setStatus('error');
+      setStatus("error");
     }
   };
 
-  if (status === 'loading') {
+  if (status === "loading") {
     return (
       <div className="flex items-center gap-2">
         <Spinner />
@@ -313,12 +315,14 @@ export function DataFetcherWithRetry() {
     );
   }
 
-  if (status === 'error') {
+  if (status === "error") {
     return (
       <div className="flex items-center gap-2">
         <Spinner error />
         <span className="text-foreground-error">Failed to load.</span>
-        <Button size="lg" onClick={handleFetch}>Retry</Button>
+        <Button size="lg" onClick={handleFetch}>
+          Retry
+        </Button>
       </div>
     );
   }
@@ -443,7 +447,7 @@ import { useQuery } from "@tanstack/react-query";
 
 export function DataFetcher() {
   const { data, isLoading, error } = useQuery({
-    queryKey: ['data'],
+    queryKey: ["data"],
     queryFn: fetchData,
   });
 
@@ -509,7 +513,7 @@ export function ContactForm() {
             Sending...
           </>
         ) : (
-          'Send Message'
+          "Send Message"
         )}
       </Button>
     </form>

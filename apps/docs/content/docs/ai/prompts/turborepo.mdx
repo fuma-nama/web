@@ -371,7 +371,10 @@ export async function GET() {
     return NextResponse.json(users);
   } catch (e) {
     console.error(e);
-    return NextResponse.json({ error: "Failed to fetch users" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to fetch users" },
+      { status: 500 },
+    );
   }
 }
 ```
@@ -447,10 +450,12 @@ No exceptions. If any check fails, STOP and FIX.
 When asked about implementing Prisma v7 inside a Turborepo monorepo (with any framework such as Next.js, Node, etc.), you MUST:
 
 1. **Assume Prisma lives in a shared package**
+
    - Always place schema, config, and migrations in `packages/db`.
    - Never suggest adding Prisma directly into an app unless the user explicitly says they don’t want a shared package.
 
 2. **Use only Prisma v7 generator patterns**
+
    - The schema MUST include:
      ```prisma
      generator client {
@@ -461,6 +466,7 @@ When asked about implementing Prisma v7 inside a Turborepo monorepo (with any fr
    - Never use `prisma-client-js`.
 
 3. **Use correct import paths for custom output**
+
    - Any PrismaClient import MUST come from the generated output:
      ```ts
      import { PrismaClient } from "./generated/prisma/client";
@@ -472,28 +478,34 @@ When asked about implementing Prisma v7 inside a Turborepo monorepo (with any fr
    - Never import from `@prisma/client` in this setup.
 
 4. **Always include a shared singleton client in `packages/db`**
+
    - Provide a `packages/db/src/client.ts` with global caching for dev hot-reload.
    - If Accelerate is requested or implied, use `$extends(withAccelerate())`.
    - If Accelerate is not requested, omit it.
 
 5. **Always load environment variables properly**
+
    - `packages/db/prisma.config.ts` MUST start with `import "dotenv/config"`.
    - Use `process.env.DATABASE_URL` in runtime code.
    - Remind users that `.env` should exist at root and/or `packages/db`.
 
 6. **Always wire Turbo dependencies**
+
    - Turbo tasks `dev` and `build` MUST depend on `^db:generate`.
    - `DATABASE_URL` MUST be listed in `globalEnv` to ensure correct task hashing.
 
 7. **Provide correct repo-level scripts**
+
    - Root scripts should proxy to Turbo (`turbo run db:*`).
    - The Prisma package `packages/db` should own `db:generate`, `db:migrate`, `db:studio`, and `db:test`.
 
 8. **Include a real verification step**
+
    - Provide (or reference) `packages/db/scripts/test-database.ts`.
    - Ensure it imports dotenv and disconnects Prisma on completion.
 
 9. **Use safe runtime patterns**
+
    - All DB calls in apps MUST be wrapped in try/catch.
    - In Next.js App Router examples, use server-only imports and return `NextResponse`.
 

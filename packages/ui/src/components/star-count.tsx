@@ -25,7 +25,10 @@ export const StarCount = ({ className }: StarCountProps) => {
   const formattedValue = `${String(integer).padStart(2, "0")}.${decimal}K`;
 
   return (
-    <span className={className} style={{ display: isHidden ? "none" : "inline" }}>
+    <span
+      className={className}
+      style={{ display: isHidden ? "none" : "inline" }}
+    >
       <span className="inline-grid tabular-nums" style={{ minWidth: "6ch" }}>
         <span
           aria-hidden={!isLoading}

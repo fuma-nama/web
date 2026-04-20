@@ -109,6 +109,7 @@ To start off a Remix project, run the following command in a location where you 
 ```shell
 npx create-remix@latest kudos
 ```
+
 This will scaffold a starter project for you and ask you a couple of questions. Choose the following options to let Remix know you want a blank project using TypeScript and you intend to deploy it to Vercel.
 
 - What type of app do you want to create? **Just the basics**
@@ -121,6 +122,7 @@ This will scaffold a starter project for you and ask you a couple of questions. 
 Once the project is set up, go ahead and pop it open by either opening the project in your code editor or by running the command `code .` within that folder in your terminal if you are using [VSCode's CLI](https://code.visualstudio.com/docs/editor/command-line).
 
 You will see the generated boilerplate project with a file structure that looks like this:
+
 ```
 │── app
 │   ├── entry.client.tsx
@@ -141,6 +143,7 @@ You will see the generated boilerplate project with a file structure that looks 
 ├── README.md
 └── vercel.json
 ```
+
 For the majority of this series, you will be working within the `app` directory, which will hold all of the custom code for this application.
 
 Any file within `./app/routes` will be turned into a route. For example, assuming your application is running on `localhost:3000`, the `./app/routes/index.tsx` file will result in a generated route at `localhost:3000/`. If you were to create another file at `app/routes/home.tsx`, Remix would generate a `localhost:3000/home` route in your site.
@@ -166,6 +169,7 @@ To start things off, there are a few dependencies you will need in order to use 
 ```shell
 npm install -D tailwindcss postcss autoprefixer concurrently
 ```
+
 This will install the following development dependencies:
 
 - [`tailwindcss`](https://tailwindcss.com/): The command-line interface _(CLI)_ that allows you to initialize a Tailwind configuration.
@@ -178,6 +182,7 @@ Once those are installed, you can initialize Tailwind in the project:
 ```shell
 npx tailwindcss init -p
 ```
+
 This will generate two files:
 
 - `tailwind.config.js`: This is where you can tweak and extend TailwindCSS. See all of the options [here](https://tailwindcss.com/docs/configuration).
@@ -186,18 +191,17 @@ This will generate two files:
 When a build is run, Tailwind will scan through the codebase to determine which of its utility classes it needs to bundle into its generated output. You will need to let Tailwind know which files it should look at to determine this. In `tailwind.config.js`, add the following glob pattern to the `content` key:
 
 ```js
-diff
+diff;
 // tailwind.config.js
 module.exports = {
-    content: [
-+      "./app/**/*.{js,ts,jsx,tsx}",
-    ],
+  content: [+"./app/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {},
   },
   plugins: [],
-}
+};
 ```
+
 This will tell Tailwind that any file inside of the `app` folder with the provided extensions should be scanned through for keywords and class names that Tailwind will pick up on to generate its output file.
 
 Next, in `package.json` update your `scripts` section to include a build process for Tailwind when the application is built and when the development server runs. Add the following scripts:
@@ -213,6 +217,7 @@ Next, in `package.json` update your `scripts` section to include a build process
   }
 }
 ```
+
 You may notice a few of the scripts are pointing to a file at `./styles/app.css` that does not exist yet. This will be Tailwind's source file when it is built and where you will import the various [functions and directives](https://tailwindcss.com/docs/functions-and-directives) Tailwind will use.
 
 Go ahead and create that source file at `./styles/app.css` and add each of Tailwind's [layers](https://tailwindcss.com/docs/adding-custom-styles#using-css-and-layer) using the [`@tailwind`](https://tailwindcss.com/docs/functions-and-directives#tailwind) directive:
@@ -223,6 +228,7 @@ Go ahead and create that source file at `./styles/app.css` and add each of Tailw
 @tailwind components;
 @tailwind utilities;
 ```
+
 Now when the application is run or built, your `scripts` will also kick off the process to run Tailwind's scanning and building process. The result of this will be outputted into `app/styles/app.css`.
 
 That file is what you will import into your Remix application to allow you to use Tailwind in your code!
@@ -235,17 +241,18 @@ In `app/root.tsx`, import the generated stylesheet and export a [`links`](https:
 import type { MetaFunction, LinksFunction } from "@remix-run/node";
 
 // 2
-import styles from './styles/app.css';
+import styles from "./styles/app.css";
 
 // ...
 
 // 3
 export const links: LinksFunction = () => {
-  return [{ rel: 'stylesheet', href: styles }]
-}
+  return [{ rel: "stylesheet", href: styles }];
+};
 
 // ...
 ```
+
 The code above will:
 
 1. Import the type for Remix's `links` function.
@@ -261,11 +268,14 @@ Now go into the `./app/routes/index.tsx` file and replace its contents with the 
 export default function Index() {
   return (
     <div className="h-screen bg-slate-700 flex justify-center items-center">
-      <h2 className="text-blue-600 font-extrabold text-5xl">TailwindCSS Is Working!</h2>
+      <h2 className="text-blue-600 font-extrabold text-5xl">
+        TailwindCSS Is Working!
+      </h2>
     </div>
-  )
+  );
 }
 ```
+
 You should see a screen that looks something like this:
 
 ![](/fullstack-remix-prisma-mongodb-1-7d0bftxbmb6r/imgs/tailwind-css-checkpoint.png)
@@ -288,13 +298,14 @@ Head over to the Atlas home page linked above. If you don't already have an acco
   <Accordion title="Already had an account? Follow these additional steps:">
 If you will be using an existing account, head to the dashboard. From there you will see a dropdown in the top left corner of the screen. If you pop that open you will see the option <b>New Project</b>.
 
-  ![](/fullstack-remix-prisma-mongodb-1-7d0bftxbmb6r/imgs/new-project.png)
+![](/fullstack-remix-prisma-mongodb-1-7d0bftxbmb6r/imgs/new-project.png)
 
-  Once you click on that, hit the **Build a Database** button.
+Once you click on that, hit the **Build a Database** button.
 
-  ![](/fullstack-remix-prisma-mongodb-1-7d0bftxbmb6r/imgs/build-a-database.png)
+![](/fullstack-remix-prisma-mongodb-1-7d0bftxbmb6r/imgs/build-a-database.png)
 
-  From there you should be able to follow along with the rest of the steps below.
+From there you should be able to follow along with the rest of the steps below.
+
   </Accordion>
 </Accordions>
 
@@ -316,7 +327,7 @@ Then, in the **Where would you like to connect from?** section, hit **Add My Cur
 
 ![](/fullstack-remix-prisma-mongodb-1-7d0bftxbmb6r/imgs/mongodb-ip-setup.png)
 
-With those steps completed, your database should finish its provisioning process within a few minutes *(at most)* and be ready for you to play with!
+With those steps completed, your database should finish its provisioning process within a few minutes _(at most)_ and be ready for you to play with!
 
 ## Set up Prisma
 
@@ -329,11 +340,13 @@ The first thing you will want to do is install the [Prisma CLI](https://www.pris
 ```shell
 npm i -D prisma
 ```
+
 To initialize Prisma within the project, simply run:
 
 ```shell
 npx prisma init --datasource-provider mongodb
 ```
+
 This will create a few different files in your project. You will see a `prisma` folder with a `schema.prisma` file inside of it. This is where you will define your schema and model out your data.
 
 It will also generate a `.env` file automatically if one did not previously exist with a sample environment variable that will hold your database's connection string.
@@ -354,6 +367,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 ```
+
 > **Note**: This file is written in PSL (Prisma Schema Language), which allows you to map out your schema. For more information on Prisma schemas and PSL, check out the [Prisma docs](https://www.prisma.io/docs/orm/prisma-schema).
 
 In the `url` of the [`datasource`](https://www.prisma.io/docs/orm/prisma-schema/overview/data-sources) block, you can see it references the `DATABASE_URL` environment variable from the `.env` file using the `env()` function PSL provides. Prisma uses [dotenv](https://www.npmjs.com/package/dotenv) under the hood to expose those variables to Prisma.
@@ -379,11 +393,13 @@ In your `.env` file, replace the default connection string with your MongoDB con
 ```shell
 mongodb+srv://USERNAME:PASSWORD@HOST:PORT/DATABASE
 ```
+
 After pasting in your connection string and modifying it to match the above format, you should be left with a string that looks like this:
 
 ```shell
 mongodb+srv://sadams:<password>@cluster0.vv1we.mongodb.net/kudos?retryWrites=true&w=majority
 ```
+
 > **Note**: Notice the `kudos` database name. You can put any name you want for your `DATABASE` here. MongoDB will automatically create the new database if it does not already exist.
 >
 > For more details on connecting to your MongoDB database, check out the [docs](https://www.prisma.io/docs/getting-started/setup-prisma/add-to-existing-project/mongodb/connect-your-database-typescript-mongodb).
@@ -402,6 +418,7 @@ model User {
 
 }
 ```
+
 > **Note**: MongoDB is a schemaless database built for flexible data so it may seem counterintuitive to define a "schema" for the data you are storing in it. As schemaless databases grow and evolve, however, the problem occurs where it becomes difficult to keep track of what data lives where while accounting for legacy data shapes. Because of this, defining a schema may save some headaches in the long run.
 
 Every Prisma model needs to have a unique `id` field.
@@ -412,6 +429,7 @@ model User {
   id String @id @default(auto()) @map("_id") @db.ObjectId
 }
 ```
+
 The code above will create an `id` field and let Prisma know this is a unique identifier with the [`@id`](https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#id) attribute. Because MongoDB automatically creates an `_id` field for every collection, you will let Prisma know using the [`@map`](https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#map) attribute that while you are calling this field `id` in the schema, it should map to the `_id` field in the database.
 
 The code will also define the data type for your `id` field and set a default value of `auto()`, which will allow you to make use of MongoDB's automatically generated unique IDs.
@@ -430,6 +448,7 @@ model User {
   password  String
 }
 ```
+
 As you can see above, you will be adding two `DateTime` type fields that will keep track of when a user gets created and when it is updated. The [`@updatedAt`](https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#updatedat) attribute will automatically update that field with a current timestamp any time that user is updated.
 
 It will also add an `email` field of type `String` that must be unique, indicated by the [`@unique`](https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#unique) attribute. This means no other user can have the same email.
@@ -445,13 +464,16 @@ After making changes to our schema you can run the command:
 ```shell
 npx prisma db push
 ```
+
 This will push your schema changes to MongoDB, creating any new collections or indexes you have defined. For example, when you push your schema as it is now, you should see the following in the output:
+
 ```
 Applying the following changes:
 
 [+] Collection `User`
 [+] Unique index `User_email_key` on ({"email":1})
 ```
+
 Because MongoDB is _schemaless_, there is no real concept of _migrations_. A schemaless database's data can fluidly change and evolve as the application's scope grows and changes. This command simply creates the defined collections and indexes.
 
 ![](/fullstack-remix-prisma-mongodb-1-7d0bftxbmb6r/imgs/user-collection.png)
@@ -466,4 +488,3 @@ In the next article you will learn about:
 - Storing and modifying user data with Prisma and MongoDB
 - Building a Login form
 - Building a Signup form
-

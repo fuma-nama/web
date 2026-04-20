@@ -18,7 +18,7 @@ tags:
 ---
 
 This article is the third part of the course where you build a fullstack app with Next.js, GraphQL, TypeScript, Prisma
-  and PostgreSQL. In this article, you will learn how to add authentication to your app.
+and PostgreSQL. In this article, you will learn how to add authentication to your app.
 
 ## Table of Contents
 
@@ -63,12 +63,14 @@ To get started, navigate into the directory of your choice and run the following
 ```shell
 git clone -b part-3 https://github.com/prisma/awesome-links.git
 ```
+
 Navigate into the cloned application and install the dependencies:
 
 ```shell
 cd awesome-links
 npm install
 ```
+
 ## Seed the database
 
 After setting up a PostgreSQL database, rename the `env.example` file to `.env` and set the connection string for your database. After that, run the following command to create the tables in your database:
@@ -78,11 +80,13 @@ After setting up a PostgreSQL database, rename the `env.example` file to `.env` 
 ```shell
 npx prisma migrate dev --name init
 ```
+
 If `prisma migrate dev` did not trigger the seed step, run the following command to seed the database:
 
 ```shell
 npx prisma db seed
 ```
+
 This command will run the `seed.ts` file in the `/prisma` directory. `seed.ts` creates four links and one user in your database using Prisma Client.
 
 You can now start the application server by running the following command:
@@ -90,6 +94,7 @@ You can now start the application server by running the following command:
 ```shell
 npm run dev
 ```
+
 ### Project structure and dependencies
 
 The project has the following folder structure:
@@ -131,6 +136,7 @@ awesome-links/
 ┣ tailwind.config.js
 ┗ tsconfig.json
 ```
+
 This is a Next.js application that uses the following libraries and tools:
 
 - [Prisma](https://www.prisma.io) for database access/CRUD operations
@@ -143,7 +149,7 @@ This is a Next.js application that uses the following libraries and tools:
 The `pages` directory contains the following files:
 
 - `index.tsx`: fetches links from the API and displays them on the page. The results are paginated and you can fetch more links.
-- `_app.tsx`: root component that allows you to persist layouts and  state when navigating between pages.
+- `_app.tsx`: root component that allows you to persist layouts and state when navigating between pages.
 - `/api/graphql.ts`: GraphQL endpoint using Next.js's [API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes).
 
 ## Authentication and securing the GraphQL API using Auth0
@@ -176,6 +182,7 @@ AUTH0_ISSUER_BASE_URL='https://YOUR_APP_DOMAIN'
 AUTH0_CLIENT_ID='YOUR_CLIENT_ID'
 AUTH0_CLIENT_SECRET='YOUR_CLIENT_SECRET'
 ```
+
 - `AUTH0_SECRET`: A long secret value used to encrypt the session cookie. You can generate a suitable string by running `openssl rand -hex 32` in your terminal.
 - `AUTH0_BASE_URL`: The base URL of your application.
 - `AUTH0_ISSUER_BASE_URL`: The URL of your Auth0 tenant domain.
@@ -197,14 +204,16 @@ You can add Auth0 to your project by installing the [Auth0 Next.js SDK](https://
 ```shell
 npm install @auth0/nextjs-auth0
 ```
+
 Next, create an `auth/[...auth0].ts` file inside the `pages/api` directory and add the following code to it:
 
 ```ts
 // pages/api/auth/[...auth0].ts
-import { handleAuth } from '@auth0/nextjs-auth0'
+import { handleAuth } from "@auth0/nextjs-auth0";
 
-export default handleAuth()
+export default handleAuth();
 ```
+
 This [Next.js dynamic API route](https://nextjs.org/docs/routing/dynamic-routes#catch-all-routes) will automatically create the following endpoints:
 
 - `/api/auth/login`: Auth0's login route.
@@ -216,12 +225,12 @@ Finally, navigate to the `pages/_app.tsx` file and update it with the following 
 
 ```tsx
 // pages/_app.tsx
-import '../styles/tailwind.css'
-import { UserProvider } from '@auth0/nextjs-auth0/client'
-import Layout from '../components/Layout'
-import { ApolloProvider } from '@apollo/client'
-import type { AppProps } from 'next/app'
-import apolloClient from '../lib/apollo'
+import "../styles/tailwind.css";
+import { UserProvider } from "@auth0/nextjs-auth0/client";
+import Layout from "../components/Layout";
+import { ApolloProvider } from "@apollo/client";
+import type { AppProps } from "next/app";
+import apolloClient from "../lib/apollo";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -232,11 +241,12 @@ function MyApp({ Component, pageProps }: AppProps) {
         </Layout>
       </ApolloProvider>
     </UserProvider>
-  )
+  );
 }
 
-export default MyApp
+export default MyApp;
 ```
+
 Wrapping the `MyApp` component with the `UserProvider` component will allow all pages to access your user's authentication state.
 
 ### Secure the GraphQL API
@@ -247,25 +257,31 @@ Create a `graphql/context.ts` file and add the following snippet:
 
 ```ts
 // graphql/context.ts
-import {  getSession } from '@auth0/nextjs-auth0'
-import type { NextApiRequest, NextApiResponse } from 'next'
+import { getSession } from "@auth0/nextjs-auth0";
+import type { NextApiRequest, NextApiResponse } from "next";
 
-export async function createContext({ req, res }: { req: NextApiRequest, res: NextApiResponse }) {
-  const session = await getSession(req, res)
+export async function createContext({
+  req,
+  res,
+}: {
+  req: NextApiRequest;
+  res: NextApiResponse;
+}) {
+  const session = await getSession(req, res);
 
   // if the user is not logged in, return an empty object
-  if (!session || typeof session === 'undefined') return {}
+  if (!session || typeof session === "undefined") return {};
 
-  const { user, accessToken } = session
+  const { user, accessToken } = session;
 
   return {
     user,
     accessToken,
-  }
+  };
 }
 ```
-The `getSession()` function from Auth0 returns information about the logged-in user and the access token. This data is then included in the GraphQL context. Your queries and mutations can now access the authentication state.
 
+The `getSession()` function from Auth0 returns information about the logged-in user and the access token. This data is then included in the GraphQL context. Your queries and mutations can now access the authentication state.
 
 Update the server instance with the `context` property with the `createContext` function as it's value:
 
@@ -294,6 +310,7 @@ export const config = {
   }
 }
 ```
+
 Next, update the `SchemaBuilder` function in `graphql/builder.ts` by specifying the type for the `Context` object:
 
 ```ts
@@ -325,20 +342,24 @@ builder.queryType({
   }),
 });
 ```
+
 Finally, the app's navbar should display a **Login**/**Logout** button depending on the user's authentication state. Update the `Header` component in `components/Layout/Header.tsx` with the following code:
 
 ```tsx
 // components/Layout/Header.tsx
-import React from 'react'
-import Link from 'next/link'
-import { useUser } from '@auth0/nextjs-auth0/client'
+import React from "react";
+import Link from "next/link";
+import { useUser } from "@auth0/nextjs-auth0/client";
 
 const Header = () => {
-  const { user } = useUser()
+  const { user } = useUser();
   return (
     <header className="text-gray-600 body-font">
       <div className="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
-        <Link href="/" className="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
+        <Link
+          href="/"
+          className="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0"
+        >
           <svg
             className="w-10 h-10 text-white p-2 bg-blue-500 rounded-full"
             fill="none"
@@ -357,24 +378,35 @@ const Header = () => {
         <nav className="md:ml-auto flex flex-wrap items-center text-base justify-center">
           {user ? (
             <div className="flex items-center space-x-5">
-              <Link href="/api/auth/logout" className="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0">
+              <Link
+                href="/api/auth/logout"
+                className="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0"
+              >
                 Logout
               </Link>
-              <img alt="profile" className="rounded-full w-12 h-12" src={user.picture ? user.picture : ''} />
+              <img
+                alt="profile"
+                className="rounded-full w-12 h-12"
+                src={user.picture ? user.picture : ""}
+              />
             </div>
           ) : (
-            <Link href="/api/auth/login" className="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0">
+            <Link
+              href="/api/auth/login"
+              className="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0"
+            >
               Login
             </Link>
           )}
         </nav>
       </div>
     </header>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;
 ```
+
 The `useUser` hook from Auth0 checks whether a user is authenticated or not. This hook runs client-side.
 
 If you have done all the previous steps correctly, you should be able to sign up and login to the app!
@@ -389,10 +421,9 @@ Auth0 only manages users on your behalf and doesn't allow storing any data excep
 
 To achieve that, you will leverage [Auth0 Actions](https://auth0.com/docs/actions). Auth0 Actions are serverless functions that can execute at certain points during the Auth0 runtime.
 
-You will define an API route that will receive the information sent from the Auth0 Action during the login process and save the information to your database. This pattern of creating an API endpoint to listen to events from a third party service is called a [webhook](https://sendgrid.com/blog/whats-webhook/). 
+You will define an API route that will receive the information sent from the Auth0 Action during the login process and save the information to your database. This pattern of creating an API endpoint to listen to events from a third party service is called a [webhook](https://sendgrid.com/blog/whats-webhook/).
 
 To get started with Auth0 Actions, navigate to the **Actions** dropdown located in the left sidebar, select **Flows** and choose **Login**.
-
 
 ![Auth0 Actions choose flow](/fullstack-nextjs-graphql-prisma-3-clxbrcqppv/imgs/auth0-actions-login.png)
 
@@ -416,17 +447,17 @@ Here is a breakdown of the Auth0 Actions UI:
 
 The first step is to include the `node-fetch` module version `2.6.1`. You will use it in your Action to send a request to an API endpoint – you will create this later. This endpoint will handle the logic of creating a user record in the database.
 
-
 ![Include package in Auth0 Action](/fullstack-nextjs-graphql-prisma-3-clxbrcqppv/imgs/auth0-action-add-module.png)
 
-Next, define a secret that will be included in every request sent by the Action to your endpoint. This secret will ensure that the requests are coming from the Auth0 Action instead of another untrusted third party. 
+Next, define a secret that will be included in every request sent by the Action to your endpoint. This secret will ensure that the requests are coming from the Auth0 Action instead of another untrusted third party.
 
 You can generate a random secret using the following command in your terminal:
 
 ```shell
 openssl rand -hex 32
 ```
-First, store this secret in the Auth0 dashboard with the key `AUTH0_HOOK_SECRET`. 
+
+First, store this secret in the Auth0 dashboard with the key `AUTH0_HOOK_SECRET`.
 
 ![Auth0 add environment variables](/fullstack-nextjs-graphql-prisma-3-clxbrcqppv/imgs/auth0-action-add-hook-secret.png)
 
@@ -435,46 +466,49 @@ Now, also store the secret in your `.env` file.
 ```shell
 AUTH0_HOOK_SECRET=''   # same secret goes here
 ```
+
 ![Auth0 add environment variables](/fullstack-nextjs-graphql-prisma-3-clxbrcqppv/imgs/auth0-action-add-hook-secret.png)
 
 Finally, update the Action with the following code:
 
 ```js
-const fetch = require('node-fetch')
+const fetch = require("node-fetch");
 
 exports.onExecutePostLogin = async (event, api) => {
-  // 1.  
-  const SECRET = event.secrets.AUTH0_HOOK_SECRET
-  
+  // 1.
+  const SECRET = event.secrets.AUTH0_HOOK_SECRET;
+
   // 2.
   if (event.user.app_metadata.localUserCreated) {
-    return
+    return;
   }
 
   // 3.
-  const email = event.user.email
+  const email = event.user.email;
 
   // 4.
-  const request = await fetch('http://localhost:3000/api/auth/hook', {   // "localhost:3000" will be replaced before deploying this Action
-    method: 'post',
+  const request = await fetch("http://localhost:3000/api/auth/hook", {
+    // "localhost:3000" will be replaced before deploying this Action
+    method: "post",
     body: JSON.stringify({ email, secret: SECRET }),
-    headers: { 'Content-Type': 'application/json' },
-  })
-  const response = await request.json()
+    headers: { "Content-Type": "application/json" },
+  });
+  const response = await request.json();
 
   // 5.
-  api.user.setAppMetadata('localUserCreated', true)
-}
+  api.user.setAppMetadata("localUserCreated", true);
+};
 ```
+
 1. Retrieves the `AUTH0_HOOK_SECRET` environment variable
 1. Checks if the `localUserCreated` property on the user's `app_metadata`
 1. Retrieves user's email from the login event – provided by Auth0
 1. Sends a `POST` request to an API route – `http://localhost:3000/api/auth/hook`
 1. Adds the `localUserCreated` property to the user's `app_metadata`
 
-The `api.user.setAppMetadata` function allows you to add additional properties to a user's profile. 
+The `api.user.setAppMetadata` function allows you to add additional properties to a user's profile.
 
-Before you deploy this action, there's one more thing left to do. 
+Before you deploy this action, there's one more thing left to do.
 
 ### Expose `localhost:3000` using Ngrok
 
@@ -487,8 +521,9 @@ TODO: sign up for an account, get token from the dashboard
 While your app is running, run the following command to expose `localhost:3000`:
 
 ```shell
-npx ngrok http 3000 --authtoken "TOKEN" 
+npx ngrok http 3000 --authtoken "TOKEN"
 ```
+
 > **Note**: Make sure to replace the `TOKEN` value with the token from Ngrok's dashboard.
 
 The output on your terminal will resemble the following – but with different **Forwarding** URLs:
@@ -497,7 +532,7 @@ The output on your terminal will resemble the following – but with different *
 
 Copy the **Forwarding** URL, replace `localhost:3000` with your **Forwarding** URL in your Action and click **Deploy**.
 
-Now that the action is deployed, go back to the **Login** flow by pressing the **Back to flow** button. 
+Now that the action is deployed, go back to the **Login** flow by pressing the **Back to flow** button.
 
 The final thing you need to do is add your newly created action to the **Login** flow. You will find the action underneath the **Custom** tab. To add the action to your flow, you can drag-and-drop it between **Start** and **Complete**. Then click **Apply** to save the changes.
 
@@ -509,14 +544,14 @@ Create a `hook.ts` file in the `pages/api/auth/` folder and add the following co
 
 ```ts
 // pages/api/auth/hook.ts
-import  prisma from '../../../lib/prisma';
-import type { NextApiRequest, NextApiResponse } from 'next';
+import prisma from "../../../lib/prisma";
+import type { NextApiRequest, NextApiResponse } from "next";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { email, secret } = req.body;
   // 1
-  if (req.method !== 'POST') {
-    return res.status(403).json({ message: 'Method not allowed' });
+  if (req.method !== "POST") {
+    return res.status(403).json({ message: "Method not allowed" });
   }
   // 2
   if (secret !== process.env.AUTH0_HOOK_SECRET) {
@@ -536,6 +571,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
 export default handler;
 ```
+
 This endpoint does the following:
 
 1. Validates the request is a `POST` request
@@ -552,7 +588,7 @@ Once a user signs up to your application, the user's information will be synced 
 Navigate to `graphql/builder.ts` file and update with the following snippet:
 
 ```ts
-diff
+diff;
 // graphql/builder.ts
 // ...code above remains unchanged
 
@@ -564,8 +600,9 @@ builder.queryType({
   }),
 });
 
-+builder.mutationType({})
++builder.mutationType({});
 ```
+
 The above snippet registeres the `Mutation` type in the schema which allows you to define mutations in your GraphQL server.
 
 Next, update `graphql/types/Link.ts` with the following mutation that adds the ability to create links:
@@ -576,7 +613,7 @@ Next, update `graphql/types/Link.ts` with the following mutation that adds the a
 
 builder.mutationField("createLink", (t) =>
   t.prismaField({
-    type: 'Link',
+    type: "Link",
     args: {
       title: t.arg.string({ required: true }),
       description: t.arg.string({ required: true }),
@@ -585,10 +622,10 @@ builder.mutationField("createLink", (t) =>
       category: t.arg.string({ required: true }),
     },
     resolve: async (query, _parent, args, ctx) => {
-      const { title, description, url, imageUrl, category } = args
+      const { title, description, url, imageUrl, category } = args;
 
       if (!(await ctx).user) {
-        throw new Error("You have to be logged in to perform this action")
+        throw new Error("You have to be logged in to perform this action");
       }
 
       return prisma.link.create({
@@ -599,30 +636,32 @@ builder.mutationField("createLink", (t) =>
           url,
           imageUrl,
           category,
-        }
-      })
-    }
-  })
-)
+        },
+      });
+    },
+  }),
+);
 ```
-The  `args` property defines the input required to create a new link. The mutation also checks if a user is logged in so only authenticated users can create links. Finally, the `create()` function from Prisma creates a new database record.
+
+The `args` property defines the input required to create a new link. The mutation also checks if a user is logged in so only authenticated users can create links. Finally, the `create()` function from Prisma creates a new database record.
 
 Install the following dependencies you'll use for form management and notifications:
 
 ```sh
 npm install react-hook-form react-hot-toast
 ```
+
 Next, create `pages/admin.tsx` page and add the following code. The code allows creation of a new link:
 
 ```tsx
 // pages/admin.tsx
-import React from 'react'
-import { type SubmitHandler, useForm } from 'react-hook-form'
-import { gql, useMutation } from '@apollo/client'
-import toast, { Toaster } from 'react-hot-toast'
-import { getSession } from '@auth0/nextjs-auth0'
-import prisma from '../lib/prisma'
-import type { GetServerSideProps } from 'next'
+import React from "react";
+import { type SubmitHandler, useForm } from "react-hook-form";
+import { gql, useMutation } from "@apollo/client";
+import toast, { Toaster } from "react-hot-toast";
+import { getSession } from "@auth0/nextjs-auth0";
+import prisma from "../lib/prisma";
+import type { GetServerSideProps } from "next";
 
 type FormValues = {
   title: string;
@@ -630,11 +669,23 @@ type FormValues = {
   category: string;
   description: string;
   image: FileList;
-}
+};
 
 const CreateLinkMutation = gql`
-  mutation createLink($title: String!, $url: String!, $imageUrl: String!, $category: String!, $description: String!) {
-    createLink(title: $title, url: $url, imageUrl: $imageUrl, category: $category, description: $description) {
+  mutation createLink(
+    $title: String!
+    $url: String!
+    $imageUrl: String!
+    $category: String!
+    $description: String!
+  ) {
+    createLink(
+      title: $title
+      url: $url
+      imageUrl: $imageUrl
+      category: $category
+      description: $description
+    ) {
       title
       url
       imageUrl
@@ -642,7 +693,7 @@ const CreateLinkMutation = gql`
       description
     }
   }
-`
+`;
 
 const Admin = () => {
   const {
@@ -650,38 +701,40 @@ const Admin = () => {
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm<FormValues>()
+  } = useForm<FormValues>();
 
   const [createLink, { loading, error }] = useMutation(CreateLinkMutation, {
-    onCompleted: () => reset()
-  })
+    onCompleted: () => reset(),
+  });
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    const { title, url, category, description } = data
-    const imageUrl = `https://via.placeholder.com/300`
-    const variables = { title, url, category, description, imageUrl }
+    const { title, url, category, description } = data;
+    const imageUrl = `https://via.placeholder.com/300`;
+    const variables = { title, url, category, description, imageUrl };
     try {
       toast.promise(createLink({ variables }), {
-        loading: 'Creating new link..',
-        success: 'Link successfully created!🎉',
+        loading: "Creating new link..",
+        success: "Link successfully created!🎉",
         error: `Something went wrong 😥 Please try again -  ${error}`,
-      })
-
+      });
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
-  }
+  };
 
   return (
     <div className="container mx-auto max-w-md py-12">
       <Toaster />
       <h1 className="text-3xl font-medium my-5">Create a new link</h1>
-      <form className="grid grid-cols-1 gap-y-6 shadow-lg p-8 rounded-lg" onSubmit={handleSubmit(onSubmit)}>
+      <form
+        className="grid grid-cols-1 gap-y-6 shadow-lg p-8 rounded-lg"
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <label className="block">
           <span className="text-gray-700">Title</span>
           <input
             placeholder="Title"
-            {...register('title', { required: true })}
+            {...register("title", { required: true })}
             name="title"
             type="text"
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
@@ -691,7 +744,7 @@ const Admin = () => {
           <span className="text-gray-700">Description</span>
           <input
             placeholder="Description"
-            {...register('description', { required: true })}
+            {...register("description", { required: true })}
             name="description"
             type="text"
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
@@ -701,7 +754,7 @@ const Admin = () => {
           <span className="text-gray-700">Url</span>
           <input
             placeholder="https://example.com"
-            {...register('url', { required: true })}
+            {...register("url", { required: true })}
             name="url"
             type="text"
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
@@ -711,7 +764,7 @@ const Admin = () => {
           <span className="text-gray-700">Category</span>
           <input
             placeholder="Name"
-            {...register('category', { required: true })}
+            {...register("category", { required: true })}
             name="category"
             type="text"
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
@@ -741,10 +794,10 @@ const Admin = () => {
         </button>
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default Admin
+export default Admin;
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   const session = await getSession(req, res);
@@ -753,17 +806,18 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     return {
       redirect: {
         permanent: false,
-        destination: '/api/auth/login',
+        destination: "/api/auth/login",
       },
       props: {},
-    }
+    };
   }
 
   return {
     props: {},
   };
-}
+};
 ```
+
 The `onSubmit` function passes the form values to the `createLink` mutation. A toast will be shown as the mutation is being executed – success, loading, or error.
 
 In `getServerSideProps`, if there is no session, you are redirecting the user to the login page. If a user record that matches the email of the logged-in user is found, the `/admin` page is rendered.
@@ -797,6 +851,7 @@ const Header = () => {
 
 export default Header
 ```
+
 You should now be able to create links! 🚀
 
 ### Bonus: protecting pages based on the user role
@@ -809,7 +864,7 @@ Firstly, update the `createLink` mutation to check a user's role:
 // graphql/types/Link.ts
 builder.mutationField("createLink", (t) =>
   t.prismaField({
-    type: 'Link',
+    type: "Link",
     args: {
       title: t.arg.string({ required: true }),
       description: t.arg.string({ required: true }),
@@ -818,20 +873,20 @@ builder.mutationField("createLink", (t) =>
       category: t.arg.string({ required: true }),
     },
     resolve: async (query, _parent, args, ctx) => {
-      const { title, description, url, imageUrl, category } = args
+      const { title, description, url, imageUrl, category } = args;
 
       if (!(await ctx).user) {
-        throw new Error("You have to be logged in to perform this action")
+        throw new Error("You have to be logged in to perform this action");
       }
 
       const user = await prisma.user.findUnique({
         where: {
           email: (await ctx).user?.email,
-        }
-      })
+        },
+      });
 
       if (!user || user.role !== "ADMIN") {
-        throw new Error("You don have permission ot perform this action")
+        throw new Error("You don have permission ot perform this action");
       }
 
       return prisma.link.create({
@@ -842,12 +897,13 @@ builder.mutationField("createLink", (t) =>
           url,
           imageUrl,
           category,
-        }
-      })
-    }
-  })
-)
+        },
+      });
+    },
+  }),
+);
 ```
+
 Update `admin.tsx` page by adding the role check in your `getServerSideProps` to redirect users that are not admins. Users without the `ADMIN` role will be redirected to the `/404` page.
 
 ```tsx
@@ -859,7 +915,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     return {
       redirect: {
         permanent: false,
-        destination: '/api/auth/login',
+        destination: "/api/auth/login",
       },
       props: {},
     };
@@ -875,11 +931,11 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     },
   });
 
-  if (!user || user.role !== 'ADMIN') {
+  if (!user || user.role !== "ADMIN") {
     return {
       redirect: {
         permanent: false,
-        destination: '/404',
+        destination: "/404",
       },
       props: {},
     };
@@ -890,11 +946,12 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   };
 };
 ```
-The default role assigned to a user when signing up is `USER`. So if you try to go to the `/admin` page, it will no longer work. 
 
-You can change this by modifying the `role` field of the user in the database. This is very easy to do in Prisma Studio. 
+The default role assigned to a user when signing up is `USER`. So if you try to go to the `/admin` page, it will no longer work.
 
-First start Prisma Studio by running `npx prisma studio` in the terminal. Then click the **User** model and find the record matching the current user. Now, go ahead and update your user role from `USER` to `ADMIN`. Save your changes by pressing the **Save 1 change** button. 
+You can change this by modifying the `role` field of the user in the database. This is very easy to do in Prisma Studio.
+
+First start Prisma Studio by running `npx prisma studio` in the terminal. Then click the **User** model and find the record matching the current user. Now, go ahead and update your user role from `USER` to `ADMIN`. Save your changes by pressing the **Save 1 change** button.
 
 ![Prisma Studio – update user role](/fullstack-nextjs-graphql-prisma-3-clxbrcqppv/imgs/prisma-studio-role-update.png)
 
@@ -905,4 +962,3 @@ Navigate to the `/admin` page of your application and voila! You can now create 
 In this part, you learned how to add authentication and authorization to a Next.js app using Auth0 and how you can use Auth0 Actions to add users to your database.
 
 Stay tuned for [the next part](/fullstack-nextjs-graphql-prisma-4-1k1kc83x3v) where you'll learn how to add image upload using AWS S3.
-

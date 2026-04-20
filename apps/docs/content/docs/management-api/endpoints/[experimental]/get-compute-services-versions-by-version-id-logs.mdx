@@ -12,9 +12,9 @@ _openapi:
           ⚠️ Experimental endpoint: this API is in active development and may change at any time without notice. ⚠️
 
           Upgrades to a WebSocket connection that streams log output for the specified compute version. Each message is a JSON object with `type: "log"` (log text + byte metadata) or `type: "terminal"` (end-of-segment signal with reconnect cursor). The stream ends after 10 minutes; reconnect with the `cursor` query parameter to continue.
-  path: '/v1/compute-services/versions/{versionId}/logs'
-url: '/management-api/endpoints/[experimental]/get-compute-services-versions-by-version-id-logs'
-metaTitle: 'GET /v1/compute-services/versions/{versionId}/logs | Stream compute version logs via WebSocket'
+  path: "/v1/compute-services/versions/{versionId}/logs"
+url: "/management-api/endpoints/[experimental]/get-compute-services-versions-by-version-id-logs"
+metaTitle: "GET /v1/compute-services/versions/{versionId}/logs | Stream compute version logs via WebSocket"
 metaDescription: 'Management API: Experimental endpoint: this API is in active development and may change at any time without notice. Upgrades to a WebSocket connection that streams log output for the specified compute version. Each message is a JSON object with `type: "log"` (log text + byte metadata) or `type: "terminal"` (end-of-segment signal with reconnect cursor). The stream ends after 10 minutes; reconnect with the `cursor` query parameter to continue.'
 ---
 
@@ -24,4 +24,9 @@ metaDescription: 'Management API: Experimental endpoint: this API is in active d
 
 Upgrades to a WebSocket connection that streams log output for the specified compute version. Each message is a JSON object with `type: "log"` (log text + byte metadata) or `type: "terminal"` (end-of-segment signal with reconnect cursor). The stream ends after 10 minutes; reconnect with the `cursor` query parameter to continue.
 
-<APIPage document={"management-api"} operations={[{"path":"/v1/compute-services/versions/{versionId}/logs","method":"get"}]} />
+<APIPage
+  document={"management-api"}
+  operations={[
+    { path: "/v1/compute-services/versions/{versionId}/logs", method: "get" },
+  ]}
+/>

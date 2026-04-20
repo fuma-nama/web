@@ -20,24 +20,23 @@ Most development tasks already flow through the CLI. By surfacing the survey the
 
 > How likely would you be to recommend Prisma? (0 = not at all likely, 10 = extremely likely)
 
-
 One input records your rating. If you would rather not take part, press **Enter** without typing a number; the prompt will not re‑appear on that machine for at least three months. We also suppress the survey automatically in CI environments and whenever you pass the `--no-hints` flag.
 
 ## What happens to your answer
 
-Every response is reviewed by engineering and product. The overall NPS trend tells us whether recent releases are moving the project in the right direction, while the optional free‑text comments highlight specific annoyances or ideas. 
+Every response is reviewed by engineering and product. The overall NPS trend tells us whether recent releases are moving the project in the right direction, while the optional free‑text comments highlight specific annoyances or ideas.
 
 For example:
 
 > “Add better SQLite support, like enums or smt”
 
 **Result:** enum support for SQLite shipped in 6.2.0
- 
+
 > “Absolutely insane that you run this type of thing from CLI… I’m stunned”We will need to convert that into a docs page
 
 **Result:** we have been polishing the rough edges of the survey prompt
 
-## What we record—and what we do _not_
+## What we record—and what we do *not*
 
 We store the score, any comment you provide, and a random uuid. We do **not** collect your schema, queries, environment variables, or any other project data. All information is processed under the same security measures that protect our crash telemetry.
 
@@ -51,7 +50,7 @@ Participation is entirely optional. If you’d like to opt out, choose whichever
 
 ## Closing the loop
 
-Our [Manifesto](https://www.prisma.io/blog/prisma-orm-manifesto) concludes: _“If we ever fall short, call us out.”_ 
+Our [Manifesto](https://www.prisma.io/blog/prisma-orm-manifesto) concludes: *“If we ever fall short, call us out.”* 
 
 The CLI survey is the shortest route from your keyboard to our roadmap. Whether you leave a triumphant “10,” a frustrated “2,” or a paragraph of suggestions, it genuinely influences what we build next.
 

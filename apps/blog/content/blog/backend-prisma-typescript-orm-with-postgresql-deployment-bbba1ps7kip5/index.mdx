@@ -27,8 +27,8 @@ The recording of the live stream is available above and covers the same ground a
 
 The series will focus on the role of the database in every aspect of backend development covering:
 
-| Topic                          | Part                                                                                           |
-| ------------------------------ | ---------------------------------------------------------------------------------------------- |
+| Topic                          | Part                                                                                                                |
+| ------------------------------ | ------------------------------------------------------------------------------------------------------------------- |
 | Data Modeling                  | [Part 1](https://www.prisma.io/blog/backend-prisma-typescript-orm-with-postgresql-data-modeling-tsjs1ps7kip1)       |
 | CRUD                           | [Part 1](https://www.prisma.io/blog/backend-prisma-typescript-orm-with-postgresql-data-modeling-tsjs1ps7kip1)       |
 | Aggregations                   | [Part 1](https://www.prisma.io/blog/backend-prisma-typescript-orm-with-postgresql-data-modeling-tsjs1ps7kip1)       |
@@ -38,8 +38,8 @@ The series will focus on the role of the database in every aspect of backend dev
 | Passwordless Authentication    | [Part 3](https://www.prisma.io/blog/backend-prisma-typescript-orm-with-postgresql-auth-mngp1ps7kip4)                |
 | Authorization                  | [Part 3](https://www.prisma.io/blog/backend-prisma-typescript-orm-with-postgresql-auth-mngp1ps7kip4)                |
 | Integration with external APIs | [Part 3](https://www.prisma.io/blog/backend-prisma-typescript-orm-with-postgresql-auth-mngp1ps7kip4)                |
-| Continuous Integration         | Part 4 (current)                                                                               |
-| Deployment                     | Part 4 (current)                                                                               |
+| Continuous Integration         | Part 4 (current)                                                                                                    |
+| Deployment                     | Part 4 (current)                                                                                                    |
 
 In the first article, you designed a [data model](/backend-prisma-typescript-orm-with-postgresql-data-modeling-tsjs1ps7kip1) for the problem domain and wrote a [seed script](https://github.com/2color/real-world-grading-app/blob/e84fc764df5901f3860225e28b844fb6ede6e632/src/seed.ts) that uses [Prisma Client](https://www.prisma.io/docs/concepts/components/prisma-client) to save data to the database.
 
@@ -78,7 +78,6 @@ While CI and CD are concerned with different responsibilities, they are related 
 With continuous integration, the main building block is a pipeline. A pipeline is a set of steps you define to ensure that no bugs or regressions are introduced with your changes. For example, a pipeline might have steps to run tests, code linters, and the TypeScript compiler. If one of the steps fails, the CI server will stop and report the failed step back to GitHub.
 
 When working in a team where code changes are introduced using pull requests, CI servers would usually be configured to automatically run the pipeline for every pull request.
-
 
 The [tests](https://github.com/2color/real-world-grading-app/tree/master/tests) you wrote in the previous steps work by simulating requests to the API's endpoints. Since the handlers for those endpoints interact with the database, you will need a PostgreSQL database with the backend's schema for the duration of the tests. In the next step, you will configure GitHub Actions to run a test database (for the duration of the CI run) and run the migrations so that the test database is in line with your Prisma schema.
 
@@ -129,7 +128,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
         with:
-          node-version: '12.x'
+          node-version: "12.x"
       - run: npm ci
       # run the migration in the test database
       - run: npm run db:push
@@ -151,6 +150,7 @@ jobs:
           heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
           heroku_email: ${{ secrets.HEROKU_EMAIL }}
 ```
+
 The `grading-app` workflow has two jobs: `test` and `deploy`.
 
 The **test** job will do the following:
@@ -191,30 +191,39 @@ Now, when you push a commit to the repository, GitHub will run the workflow.
 ## Heroku CLI login
 
 Make sure you're logged in to Heroku with the CLI:
+
 ```
 heroku login
 ```
+
 ## Creating a Heroku app
 
 To deploy the backend application to Heroku, you need to create a Heroku app. Run the following command from the folder of the cloned repository:
+
 ```
 cd real-world-grading-app
 
 heroku apps:create YOUR_APP_NAME
 ```
+
 > **Note:** Use a unique name of your choice instead of `YOUR_APP_NAME`.
 
 **Checkpoint** The Heroku CLI should log that the app has been successfully created:
+
 ```
 Creating ⬢ YOUR_APP_NAME... done
 ```
+
 ## Provisioning a PostgreSQL database on Heroku
 
 Create the database with the following command:
+
 ```
 heroku addons:create heroku-postgresql:hobby-dev
 ```
+
 **Checkpoint**: To verify the database was created you should see the following:
+
 ```
 Creating heroku-postgresql:hobby-dev on ⬢ YOUR_APP_NAME... free
 Database has been created and is available
@@ -222,6 +231,7 @@ Database has been created and is available
  ! data from another database with pg:copy
 Created postgresql-closed-86440 as DATABASE_URL
 ```
+
 > **Note:** Heroku will automatically set the `DATABASE_URL` environment variable for the application runtime. Prisma Client will use `DATABASE_URL` as it matches the environment variable configured in the [Prisma schema](https://github.com/2color/real-world-grading-app/blob/b6caee64a7adbc51735bf389757e1f414b9b7d11/prisma/schema.prisma#L8).
 
 ## Defining the build-time secrets in GitHub
@@ -240,9 +250,11 @@ For GitHub Actions to run the production database migration and deploy the backe
 ### Getting the production `DATABASE_URL`
 
 To get the `DATABASE_URL`, that has been set by Heroku when the database provisioned, use the following Heroku CLI command:
+
 ```
 heroku config:get DATABASE_URL
 ```
+
 **Checkpoint:** You should see the URL in the output, e.g., `postgres://username:password@ec2-12.eu-west-1.compute.amazonaws.com:5432/dbname`
 
 ### Getting the `HEROKU_API_KEY`
@@ -276,22 +288,28 @@ The backend needs three secrets that will be passed to the application as enviro
 > **Note:** You can generate `JWT_SECRET` by running the following command in the terminal: `node -e "console.log(require('crypto').randomBytes(256).toString('base64'));"`
 
 To set them with the Heroku CLI, use the following command:
+
 ```
 heroku config:set SENDGRID_API_KEY="REPLACE_WITH_API_KEY" JWT_SECRET="REPLACE_WITH_SECRET"
 ```
+
 **Checkpoint:** To verify the environment variables were set, you should see the following:
+
 ```
 Setting SENDGRID_API_KEY, JWT_SECRET and restarting ⬢ YOUR_APP_NAME... done, v7
 ```
+
 ## Triggering a workflow to run the tests and deploy
 
 With the workflow configured, the app created on Heroku, and all the secrets set, you can now trigger the workflow to run the tests and deploy.
 
 To trigger a build, create an empty commit and push it:
+
 ```
 git commit --allow-empty -m "Trigger build"
 git push
 ```
+
 Once you have pushed a commit, go to the Actions tab of your GitHub repository and you should see the following:
 
 ![](/backend-prisma-typescript-orm-with-postgresql-deployment-bbba1ps7kip5/imgs/modern-backend-4-workflow-run.png)
@@ -309,15 +327,19 @@ To view the logs for the `test` job, click on `test` which should allow you to v
 ## Verifying the deployment to Heroku
 
 To verify that `deploy` job successfully deployed to Heroku, click on `deploy` on the left-hand side and unfold the `Deploy to Heroku` step. You should see in the end of the logs the following line:
+
 ```
 remote: https://***.herokuapp.com/ deployed to Heroku
 ```
+
 ![](/backend-prisma-typescript-orm-with-postgresql-deployment-bbba1ps7kip5/imgs/modern-backend-4-workflow-run-deploy-job.png)
 
 To access the API from the browser, use the following Heroku CLI command, from the cloned repository folder:
+
 ```
 heroku open
 ```
+
 This will open up the browser pointing to `https://YOUR_APP_NAME.herokuapp.com/`.
 
 **Checkpoint**: You should see `{"up":true}` in the browser which is served by the [status endpoint](https://github.com/2color/real-world-grading-app/blob/231ab2f32ca7aff6957b58b7395d66de3c51fae0/src/plugins/status.ts).
@@ -325,29 +347,39 @@ This will open up the browser pointing to `https://YOUR_APP_NAME.herokuapp.com/`
 ## Viewing the backend logs
 
 To view the backend's logs, use the following Heroku CLI command from the cloned repository folder:
+
 ```
 heroku logs --tail -a YOUR_APP_NAME
 ```
+
 ## Testing the login flow
 
 To test login flow, you will need to make two calls to the REST API.
 
 Begin by getting the URL of the API:
+
 ```
 heroku apps:info
 ```
+
 Make a POST call to the login endpoint with curl:
+
 ```
 curl --header "Content-Type: application/json" --request POST --data '{"email":"your-email@prisma.io"}' https://YOUR_APP_NAME.herokuapp.com/login
 ```
+
 Check the email for the 8 digit token and then make the second
+
 ```
 curl -v --header "Content-Type: application/json" --request POST --data '{"email":"your-email@prisma.io", "emailToken": "99223388"}' https://YOUR_APP_NAME.herokuapp.com/authenticate
 ```
+
 **Checkpoint:** The response should have the 200 successful status code and contain the `Authorization` header with the JWT token:
+
 ```
 < Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbklkIjo4fQ.ea2lBPMJ6mrPkwEHCgeIFqqQfkQ2uMQ4hL-GCuwtBAE
 ```
+
 ## Summary
 
 Your backend is now deployed and running. Well done!
@@ -365,4 +397,3 @@ You can find the full source code for the backend on [GitHub](https://github.com
 While Prisma aims to make working with relational databases easy, it's useful to understand the underlying database and [Heroku specific details](https://devcenter.heroku.com/articles/deploying-nodejs).
 
 If you have questions, feel free to reach out on [Twitter](https://twitter.com/daniel2color).
-

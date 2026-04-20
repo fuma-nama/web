@@ -28,6 +28,7 @@ We're excited to share that as of [v6.6.0](https://github.com/prisma/prisma/rele
   }
 }
 ```
+
 If you're curious what exactly the integration looks like in any specific tool, [check out our docs](https://www.prisma.io/docs/postgres/mcp-server) with instructions for adding the MCP server to **Cursor**, **Windsurf**, **Claude Code / Desktop** and the **OpenAI Agents SDK**.
 
 ## Prisma Postgres: The database designed for the age of AI
@@ -38,20 +39,17 @@ It offers the reliability developers need without the operational complexity tha
 
 ## "Vibe code" your apps with Prisma Postgres
 
-_Vibe coding_ has been a major trend lately — it describes developers building their applications purely based on prompting and AI-generated code. 
+_Vibe coding_ has been a major trend lately — it describes developers building their applications purely based on prompting and AI-generated code.
 
-While vibe coded apps don't yet cross the threshold of complexity required for serious application development, the wider trend of AI-assisted coding is certainly reshaping the software development industry! Repetitive and monotonous coding tasks, features with very detailed specifications  and prototyping are areas that are seeing major productivity boosts by AI and let developers build applications at new speed levels. 
+While vibe coded apps don't yet cross the threshold of complexity required for serious application development, the wider trend of AI-assisted coding is certainly reshaping the software development industry! Repetitive and monotonous coding tasks, features with very detailed specifications and prototyping are areas that are seeing major productivity boosts by AI and let developers build applications at new speed levels.
 
 **In this new world, the pace of _writing code_ often isn't the bottleneck any more — it's rather the tasks that AI can't help with: Provisioning, configuring and managing infrastructure.**
 
-With Prisma's new MCP server, you can reduce the infrastructure management overhead and align it with the speed at which you're writing code thanks to your powerful AI assistants. 
+With Prisma's new MCP server, you can reduce the infrastructure management overhead and align it with the speed at which you're writing code thanks to your powerful AI assistants.
 
 ### First-class integration with Cursor, Windsurf, Claude Code and any other AI tool
 
 The most popular AI coding tools all offer first-class integrations for MCP servers. Here's how you can add it to your favorite tool:
-
-
-
 
 ```js
 // File: `~/.cursor/mcp.json`
@@ -65,6 +63,7 @@ The most popular AI coding tools all offer first-class integrations for MCP serv
   }
 }
 ```
+
 ```js
 // File: `~/.codeium/windsurf/mcp_config.json`
 {
@@ -77,16 +76,15 @@ The most popular AI coding tools all offer first-class integrations for MCP serv
   }
 }
 ```
+
 ```shell
 # In you terminal
 claude mcp add prisma npx prisma mcp
 ```
 
-    
-
 ### What to do with Prisma's MCP server?
 
-Prisma's MCP server allows you to chat in natural language through database provisioning, data modeling and migration workflows. 
+Prisma's MCP server allows you to chat in natural language through database provisioning, data modeling and migration workflows.
 
 It connects your AI assistant to the [Prisma Console](https://console.prisma.io) and lets it perform these tasks on your behalf. Here are some things the MCP server enables:
 
@@ -97,9 +95,11 @@ It connects your AI assistant to the [Prisma Console](https://console.prisma.io)
 ### Scaffold new projects with: `prisma init --vibe` 😎
 
 As a bonus, we add a `--vibe` (alias for `--prompt`) option to the `prisma init` command which is going to scaffold a Prisma schema and deploy it to a fresh Prisma Postgres instance for you:
+
 ```
 npx prisma init --vibe "Cat meme generator"
 ```
+
 ## Tell us what you're building with Prisma & AI
 
 AI is enabling new levels of developer productivity and we're excited to contribute to this new era with the world's most efficient Postgres database! We'd love to hear from you: What Prisma-backed applications are you building with the powers of AI? Tell us on [X](https://pris.ly/x?utm_source=blog&utm_medium=conclusion) or on our [Discord](https://pris.ly/discord??utm_source=blog&utm_medium=conclusion)!

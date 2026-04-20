@@ -1,10 +1,10 @@
 ---
 title: Datadog
-description: 'Learn how to configure Datadog tracing for a Prisma ORM project. Capture spans for every query using the @prisma/instrumentation package, dd-trace, and view them in Datadog'
+description: "Learn how to configure Datadog tracing for a Prisma ORM project. Capture spans for every query using the @prisma/instrumentation package, dd-trace, and view them in Datadog"
 image: /img/guides/datadog-tracing-prisma.png
 url: /guides/integrations/datadog
 metaTitle: How to set up Datadog tracing with Prisma ORM and Prisma Postgres
-metaDescription: 'Learn how to configure Datadog tracing for a Prisma ORM project. Capture spans for every query using the @prisma/instrumentation package, dd-trace, and view them in Datadog.'
+metaDescription: "Learn how to configure Datadog tracing for a Prisma ORM project. Capture spans for every query using the @prisma/instrumentation package, dd-trace, and view them in Datadog."
 ---
 
 ## Introduction
@@ -278,15 +278,18 @@ const prisma = new PrismaClient({
   .$extends({
     query: {
       async $allOperations({ operation, model, args, query }) {
-        const span = tracer.startSpan(`prisma_query_${model?.toLowerCase()}_${operation}`, {
-          tags: {
-            "prisma.operation": operation,
-            "prisma.model": model,
-            "prisma.args": JSON.stringify(args),
-            "prisma.rawQuery": query,
+        const span = tracer.startSpan(
+          `prisma_query_${model?.toLowerCase()}_${operation}`,
+          {
+            tags: {
+              "prisma.operation": operation,
+              "prisma.model": model,
+              "prisma.args": JSON.stringify(args),
+              "prisma.rawQuery": query,
+            },
+            childOf: tracer.scope().active() || undefined,
           },
-          childOf: tracer.scope().active() || undefined,
-        });
+        );
 
         try {
           const result = await query(args);
@@ -318,7 +321,10 @@ Create a `src/index.ts` file and add code to perform queries to your database an
 
 ```typescript title="src/index.ts"
 import { tracer } from "./tracer";
-import { PrismaInstrumentation, registerInstrumentations } from "@prisma/instrumentation";
+import {
+  PrismaInstrumentation,
+  registerInstrumentations,
+} from "@prisma/instrumentation";
 import { prisma } from "./client";
 
 const provider = new tracer.TracerProvider();
@@ -425,7 +431,10 @@ async function main() {
     const alicePosts = await prisma.post.findMany({
       where: { author: { email: user1Email } },
     });
-    console.log(`✅ Retrieved ${alicePosts.length} post(s) by Alice.`, alicePosts);
+    console.log(
+      `✅ Retrieved ${alicePosts.length} post(s) by Alice.`,
+      alicePosts,
+    );
   } catch (err) {
     console.error("❌ Error fetching Alice's posts:", err);
   }

@@ -31,9 +31,10 @@ We are launching Optimize in Early Access today and will add several exciting ne
 
 To demonstrate the power of Prisma Optimize, I've taken [Dub.co](https://dub.co/)—a prominent open-source project utilizing the Prisma ORM—and created a video walkthrough showcasing how Prisma Optimize helps me get a handle on what is going on under the hood.
 
-<Youtube videoId="gWROOjjEiM0"/>
+<Youtube videoId="gWROOjjEiM0" />
 
-## Why database performance bottlenecks cause apps to slow down 
+## Why database performance bottlenecks cause apps to slow down
+
 Slow applications frustrate users and can hinder business growth. Often, the root cause lies within database interactions, which can be complex and opaque. Inefficient queries, excessive data fetching, and poorly optimized database schemas are common culprits that degrade performance.
 
 Prisma Optimize addresses these issues head-on by providing clear insights into your database operations. It enables developers to pinpoint slow queries, recognize over-fetching of data, and identify inefficient relationships in your database schema. With Prisma Optimize, you can streamline your database interactions to significantly speed up your application, ensuring a smoother and more responsive user experience.
@@ -45,19 +46,22 @@ Prisma Optimize not only helps you diagnose performance problems but also educat
 Optimize is a [Client Extension](https://www.prisma.io/docs/orm/prisma-client/client-extensions) that can be enabled in any app that uses the Prisma ORM. It seamlessly collects performance information from your app by integrating with Prisma ORM’s robust [observability and logging](https://www.prisma.io/docs/orm/prisma-client/observability-and-logging) infrastructure. This data is then transmitted and displayed in an intuitive dashboard providing clear and actionable insights. Moving forward, as we grow the product features for Optimize, we will include features that make recommendations on how to address the issues we uncover. Stay tuned!
 
 Prisma Optimize is a tool you use during development, and the general workflow looks something like this:
-* You identify an aspect of your app that you want to analyze. This could be a UI interaction or a background processing job.
-* You then enable Optimize and activate this part of the app - for example, by clicking around on the website or hitting an API endpoint.
-* Optimize will actively collect all executed Prisma ORM queries along with crucial performance metrics such as query latency, frequency, and any associated errors. It also provides visibility into the exact SQL generated for each query.
+
+- You identify an aspect of your app that you want to analyze. This could be a UI interaction or a background processing job.
+- You then enable Optimize and activate this part of the app - for example, by clicking around on the website or hitting an API endpoint.
+- Optimize will actively collect all executed Prisma ORM queries along with crucial performance metrics such as query latency, frequency, and any associated errors. It also provides visibility into the exact SQL generated for each query.
 
 ### Try Optimize today and enhance your application's performance for free
-### 
+
+###
 
 Getting started with Prisma Optimize is quick and easy. Whether you're looking to enhance an existing application or explore its capabilities through a demo, Optimize is designed for immediate integration and rapid results.
 
 To get started, simply install and integrate Prisma Optimize into your existing application or experiment with a sample app:
 
 1. Install the Optimize extension:
-```
+
+````
     npm install @prisma/extension-optimize --save-dev
     ```
 2. Enable the `tracing` preview feature, and run `npx prisma generate`:
@@ -80,3 +84,4 @@ To get started, simply install and integrate Prisma Optimize into your existing 
 
 <br/>
 [Try Optimize now](https://www.npmjs.com/package/@prisma/extension-optimize)
+````

@@ -51,14 +51,13 @@ We have also invested a lot into the introspection of existing databases, enabli
 
 With the old datamodel syntax, tables and columns are always named _exactly_ after the models and fields in your datamodel. Using the new `@db` directive, you can control what tables and columns should be called in the underlying database:
 
-
-
 ```graphql
 type User @db(name: "user") {
   id: ID! @id
   name: String! @db(name: "full_name")
 }
 ```
+
 ```ts
 CREATE TABLE "default$default"."user" (
     "id" varchar(25) NOT NULL,
@@ -66,7 +65,6 @@ CREATE TABLE "default$default"."user" (
     PRIMARY KEY ("id")
 );
 ```
-
 
 In this case, the underlying table will be called `user` and the column `full_name`.
 
@@ -85,8 +83,6 @@ With the new datamodel, developers can take full control over expressing a relat
 
 Here is an example with two relations (one is _inline_, the other uses a _relation table_):
 
-
-
 ```graphql
 type User {
   id: ID! @id
@@ -104,6 +100,7 @@ type Post {
   author: User!
 }
 ```
+
 ```ts
 CREATE TABLE "default$default"."User" (
     "id" varchar(25) NOT NULL,
@@ -127,7 +124,6 @@ CREATE TABLE "default$default"."_PostToUser" (
 );
 ```
 
-
 In the case of the inline relation, the placement of the `@relation(link: INLINE)` directive determines on which end of the relation the foreign key is being stored, in this example it's stored in the `User` table.
 
 ### Use any field as `id`, `createdAt` or `updatedAt`
@@ -136,8 +132,6 @@ With the old datamodel, developers were required to use reserved fields if they 
 
 With the new `@id`, `@createdAt` and `@updatedAt` directives, it is now possible to add this functionality to any field of a model:
 
-
-
 ```graphql
 type User {
   myID: ID! @id
@@ -145,6 +139,7 @@ type User {
   myUpdatedAt: DateTime! @updatedAt
 }
 ```
+
 ```ts
 CREATE TABLE "test$devasdas"."User" (
     "myID" varchar(25) NOT NULL,
@@ -153,7 +148,6 @@ CREATE TABLE "test$devasdas"."User" (
     PRIMARY KEY ("myID")
 );
 ```
-
 
 ### More flexible IDs
 
@@ -174,12 +168,9 @@ For more extensive tutorials and instructions for getting started with an existi
 
 To install the latest version of the Prisma CLI, run:
 
-
-
 ```shell
 npm install -g prisma
 ```
-
 
 > When running Prisma with Docker, you need to upgrade its Docker image to `1.31`.
 
@@ -207,32 +198,33 @@ type User {
 }
 
 type Profile {
-  id: ID! @unique
-  user: User!
-  bio: String!
+id: ID! @unique
+user: User!
+bio: String!
 }
 
 type Post {
-  id: ID! @unique
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  title: String!
-  published: Boolean! @default(value: "false")
-  author: User!
-  categories: [Category!]!
+id: ID! @unique
+createdAt: DateTime!
+updatedAt: DateTime!
+title: String!
+published: Boolean! @default(value: "false")
+author: User!
+categories: [Category!]!
 }
 
 type Category {
-  id: ID! @unique
-  name: String!
-  posts: [Post!]!
+id: ID! @unique
+name: String!
+posts: [Post!]!
 }
 
 enum Role {
-  USER
-  ADMIN
+USER
+ADMIN
 }
-```
+
+````
 When using the old datamodel, the following tables are created by Prisma in the underlying database:
 
 - `User`
@@ -272,17 +264,13 @@ services:
             user: prisma
             password: prisma
             port: '5432'
-```
-
+````
 
 Now upgrade the running Prisma server:
-
-
 
 ```shell
 docker-compose up -d
 ```
-
 
 #### 3. Generate new datamodel via introspection
 
@@ -290,12 +278,9 @@ If you're now running `prisma deploy`, your Prisma CLI will throw an error becau
 
 The easiest way to fix these errors is by generating a datamodel written in the new syntax via introspection. Run the following command inside the directory where your `prisma.yml` is located:
 
-
-
 ```shell
 prisma introspect
 ```
-
 
 This introspects your database and generates another datamodel with the new syntax, called `datamodel-TIMESTAMP.prisma` (e.g. `datamodel-1554394432089.prisma`). For the example from above, the following datamodel is generated:
 
@@ -342,18 +327,16 @@ enum Role {
   ADMIN
 }
 ```
+
 #### 4. Deploy new datamodel
 
 The final step is to delete the old `datamodel.prisma` file and rename your generated datamodel to `datamodel.prisma` (so that the `datamodel` property in your `prisma.yml` points to the generated file that's using the new syntax).
 
 Once that's done, you can run:
 
-
-
 ```shell
 prisma deploy
 ```
-
 
 #### 5. Optimize your database schema
 
@@ -367,12 +350,9 @@ After having learned how to upgrade existing Prisma projects, we'll now walk you
 
 Let's start by setting up a new Prisma project:
 
-
-
 ```shell
 prisma init hello-datamodel
 ```
-
 
 In the interactive wizard, select the following:
 
@@ -384,23 +364,19 @@ Before launching the Prisma server and the database via Docker, enable port mapp
 
 In the generated `docker-compose.yml`, uncomment the following lines in the Docker image configuration of the database:
 
-
+```yml
+ports:
+  - "5432:5432"
+```
 
 ```yml
 ports:
-  - '5432:5432'
+  - "3306:3306"
 ```
-```yml
-ports:
-  - '3306:3306'
-```
-
 
 #### 2. Define datamodel
 
 Let's define a datamodel that takes advantage of the new Prisma features. Open `datamodel.prisma` and replace the contents with the following:
-
-
 
 ```graphql
 type User @db(name: "user") {
@@ -445,7 +421,6 @@ enum Role {
 }
 ```
 
-
 Here are some important bits about this datamodel definition:
 
 - Each model is mapped a table that's named after the model but lowercased using the `@db` directive.
@@ -464,12 +439,9 @@ Here are some important bits about this datamodel definition:
 
 In the next step, Prisma will map this datamodel to the underlying database:
 
-
-
 ```shell
 prisma deploy
 ```
-
 
 <Accordions type="single">
   <Accordion title="See Prisma's generated SQL schema">
@@ -484,6 +456,7 @@ CREATE TABLE "hello-datamodel$dev"."category" (
     PRIMARY KEY ("id")
 );
 ```
+
 Index:
 
 | index_name      | index_algorithm | is_unique | column_name |
@@ -505,6 +478,7 @@ CREATE TABLE "hello-datamodel$dev"."post" (
     PRIMARY KEY ("id")
 );
 ```
+
 Index:
 
 | index_name  | index_algorithm | is_unique | column_name |
@@ -521,6 +495,7 @@ CREATE TABLE "hello-datamodel$dev"."post_to_category" (
     "post" varchar(25) NOT NULL
 );
 ```
+
 Index:
 
 | index_name                   | index_algorithm | is_unique | column_name       |
@@ -539,6 +514,7 @@ CREATE TABLE "hello-datamodel$dev"."profile" (
     PRIMARY KEY ("id")
 );
 ```
+
 Index:
 
 | index_name     | index_algorithm | is_unique | column_name |
@@ -560,12 +536,14 @@ CREATE TABLE "hello-datamodel$dev"."user" (
     PRIMARY KEY ("id")
 );
 ```
+
 Index:
 
 | index_name                               | index_algorithm | is_unique | column_name |
 | ---------------------------------------- | --------------- | --------- | ----------- |
 | `user_pkey`                              | `BTREE`         | `TRUE`    | `id`        |
 | `hello-datamodel$dev.user.email._UNIQUE` | `BTREE`         | `TRUE`    | `email`     |
+
   </Accordion>
 </Accordions>
 
@@ -588,4 +566,3 @@ While the new datamodel syntax already incorporates many features requested by o
 We are currently working on a new [data modeling language](https://github.com/prisma/specs/tree/master/schema) that will be a variation of the currently used [SDL](https://www.prisma.io/blog/graphql-sdl-schema-definition-language-6755bcb9ce51).
 
 We'd love hear what you think of the new datamodel. Please share your feedback by [opening an issue in the feedback repo](https://github.com/prisma/datamodel-v1.1-feedback/issues/new) or join the conversation on [Spectrum](https://spectrum.chat/prisma/general/releasing-prisma-v1-31~0d4dcb59-a58f-4ecf-84e6-b8509bad4abf).
-

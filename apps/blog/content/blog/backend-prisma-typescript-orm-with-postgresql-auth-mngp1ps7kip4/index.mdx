@@ -27,18 +27,18 @@ The recording of the live stream is available above and covers the same ground a
 
 The series will focus on the role of the database in every aspect of backend development covering:
 
-| Topic                          | Part                                                                |
-| ------------------------------ | ------------------------------------------------------------------- |
-| Data Modeling                  | [Part 1](https://www.prisma.io/blog/backend-prisma-typescript-orm-with-postgresql-data-modeling-tsjs1ps7kip1) |
-| CRUD                           | [Part 1](https://www.prisma.io/blog/backend-prisma-typescript-orm-with-postgresql-data-modeling-tsjs1ps7kip1) |
-| Aggregations                   | [Part 1](https://www.prisma.io/blog/backend-prisma-typescript-orm-with-postgresql-data-modeling-tsjs1ps7kip1) |
+| Topic                          | Part                                                                                                                |
+| ------------------------------ | ------------------------------------------------------------------------------------------------------------------- |
+| Data Modeling                  | [Part 1](https://www.prisma.io/blog/backend-prisma-typescript-orm-with-postgresql-data-modeling-tsjs1ps7kip1)       |
+| CRUD                           | [Part 1](https://www.prisma.io/blog/backend-prisma-typescript-orm-with-postgresql-data-modeling-tsjs1ps7kip1)       |
+| Aggregations                   | [Part 1](https://www.prisma.io/blog/backend-prisma-typescript-orm-with-postgresql-data-modeling-tsjs1ps7kip1)       |
 | REST API layer                 | [Part 2](https://www.prisma.io/blog/backend-prisma-typescript-orm-with-postgresql-rest-api-validation-dcba1ps7kip3) |
 | Validation                     | [Part 2](https://www.prisma.io/blog/backend-prisma-typescript-orm-with-postgresql-rest-api-validation-dcba1ps7kip3) |
 | Testing                        | [Part 2](https://www.prisma.io/blog/backend-prisma-typescript-orm-with-postgresql-rest-api-validation-dcba1ps7kip3) |
-| Passwordless Authentication    | Part 3 (current)                                                    |
-| Authorization                  | Part 3 (current)                                                    |
-| Integration with external APIs | Part 3 (current)                                                    |
-| Deployment                     | Coming up                                                           |
+| Passwordless Authentication    | Part 3 (current)                                                                                                    |
+| Authorization                  | Part 3 (current)                                                                                                    |
+| Integration with external APIs | Part 3 (current)                                                                                                    |
+| Deployment                     | Coming up                                                                                                           |
 
 ### What you will learn today
 
@@ -85,11 +85,13 @@ Once you [sign up](https://signup.sendgrid.com/), go to [API Keys](https://app.s
 The source code for the series can be found on [GitHub](https://github.com/2color/real-world-grading-app).
 
 To get started, clone the repository and install the dependencies:
+
 ```
 git clone -b part-3 git@github.com:2color/real-world-grading-app.git
 cd real-world-grading-app
 npm install
 ```
+
 > **Note:** By checking out the `part-3` branch you'll be able to follow the article from the same starting point.
 
 ## Start PostgreSQL
@@ -99,6 +101,7 @@ To start PostgreSQL, run the following command from the `real-world-grading-app`
 ```sh
 docker-compose up -d
 ```
+
 > **Note:** Docker will use the [`docker-compose.yml`](https://github.com/2color/real-world-grading-app/blob/21de326008776144ced60427a055c9fc54a32840/docker-compose.yml) file to start the PostgreSQL container.
 
 ## Authentication and authorization concepts
@@ -170,11 +173,13 @@ With this authentication strategy, a single endpoint handles both logging in and
 The standard defines a compact and self-contained way for securely transmitting information between parties as a JSON object. This information can be verified and trusted because it is digitally signed.
 
 A JWT token contains three parts which are encoded with Base64: _header_, _payload_, and _signature_ and looks as follows (the parts are separated with a `.`):
+
 ```
 eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.
 eyJ0b2tlbklkIjo5fQ.
 FkKMzLobPl_MaQHB7hRG3nZQZ-ME4lRaanGJVnLMa84
 ```
+
 > Note: Base64 is another way to represent data. It doesn't involve any encryption
 
 If you use Base64 to decode the header and payload from above you will get the following:
@@ -235,6 +240,7 @@ model User {
 + API
 +}
 ```
+
 Let's go over the changes introduced:
 
 - Enable the [`connectOrCreate`](https://www.prisma.io/docs/orm/reference/prisma-client-reference#connectorcreate) and [`transactionApi`](https://www.prisma.io/docs/orm/prisma-client/queries/transactions#the-transaction-api) preview features. These will be used in the next steps.
@@ -247,7 +253,9 @@ To migrate the database schema, create and run the migration as follows:
 ```npm
 npx prisma migrate dev --preview-feature --name "add-token"
 ```
+
 **Checkpoint:** You should see something like the following in the output:
+
 ```
 Prisma Migrate created and applied the following migration(s) from new schema changes:
 
@@ -259,6 +267,7 @@ migrations/
 
 Everything is now in sync.
 ```
+
 > **Note:** Running the `prisma migrate dev` command will also generate Prisma Client by default.
 
 ## Add email sending functionality
@@ -272,6 +281,7 @@ The article will use SendGrid and the `@sendgrid/mail` npm package for easy inte
 ```npm
 npm install --save @sendgrid/mail
 ```
+
 ### Creating the email plugin
 
 Create a new file named `email.ts` in the `src/plugins/` folder:
@@ -279,67 +289,70 @@ Create a new file named `email.ts` in the `src/plugins/` folder:
 ```sh
 touch src/plugins/email.ts
 ```
+
 And add the following to the file:
 
 ```ts
-import Hapi from '@hapi/hapi'
-import Joi from '@hapi/joi'
-import Boom from '@hapi/boom'
-import sendgrid from '@sendgrid/mail'
+import Hapi from "@hapi/hapi";
+import Joi from "@hapi/joi";
+import Boom from "@hapi/boom";
+import sendgrid from "@sendgrid/mail";
 
 // Module augmentation to add shared application state
 // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/33809#issuecomment-472103564
-declare module '@hapi/hapi' {
+declare module "@hapi/hapi" {
   interface ServerApplicationState {
-    sendEmailToken(email: string, token: string): Promise<void>
+    sendEmailToken(email: string, token: string): Promise<void>;
   }
 }
 
 const emailPlugin = {
-  name: 'app/email',
-  register: async function(server: Hapi.Server) {
+  name: "app/email",
+  register: async function (server: Hapi.Server) {
     if (!process.env.SENDGRID_API_KEY) {
       console.log(
         `The SENDGRID_API_KEY env var must be set, otherwise the API won't be able to send emails.`,
         `Using debug mode which logs the email tokens instead.`,
-      )
-      server.app.sendEmailToken = debugSendEmailToken
+      );
+      server.app.sendEmailToken = debugSendEmailToken;
     } else {
-      sendgrid.setApiKey(process.env.SENDGRID_API_KEY)
-      server.app.sendEmailToken = sendEmailToken
+      sendgrid.setApiKey(process.env.SENDGRID_API_KEY);
+      server.app.sendEmailToken = sendEmailToken;
     }
   },
-}
+};
 
-export default emailPlugin
+export default emailPlugin;
 
 async function sendEmailToken(email: string, token: string) {
   const msg = {
     to: email,
-    from: 'EMAIL_ADDRESS_CONFIGURED_IN_SEND_GRID@email.com',
-    subject: 'Login token for the modern backend API',
+    from: "EMAIL_ADDRESS_CONFIGURED_IN_SEND_GRID@email.com",
+    subject: "Login token for the modern backend API",
     text: `The login token for the API is: ${token}`,
-  }
+  };
 
-  await sendgrid.send(msg)
+  await sendgrid.send(msg);
 }
 
 async function debugSendEmailToken(email: string, token: string) {
-  console.log(`email token for ${email}: ${token} `)
+  console.log(`email token for ${email}: ${token} `);
 }
 ```
+
 The plugin will expose the `sendEmailToken` function on the `server.app` object, which is accessible throughout your route handlers. It will use the `SENDGRID_API_KEY` environment variable, which you will set in production using the key from the SendGrid console. During development, you can leave it unset, and the token will be logged instead of being sent via email.
 
 Lastly, register the plugin in `server.ts`:
 
 ```ts
-import emailPlugin from './plugins/email'
+import emailPlugin from "./plugins/email";
 
 await server.register([
   // ... existing plugins
   emailPlugin,
-])
+]);
 ```
+
 ## Adding authentication with Hapi
 
 To implement authentication you will begin by defining the `/login` and `/register` routes, which will handle the creation of a user and token in the database, sending the email token, verifying the email, and generating a JWT authentication token. It's worth noting that the two endpoints will handle the authentication process, but they will not secure the API.
@@ -358,6 +371,7 @@ Begin by adding the following dependencies to your project:
 npm install --save hapi-auth-jwt2@10.1.0 jsonwebtoken@8.5.1
 npm install --save-dev @types/jsonwebtoken@8.5.0
 ```
+
 ### Creating the auth plugin
 
 Next, you will create an auth plugin to encapsulate the authentication logic.
@@ -367,22 +381,24 @@ Create a new file named `auth.ts` in the `src/plugins/` folder:
 ```sh
 touch src/plugins/auth.ts
 ```
+
 And add the following to the file:
 
 ```ts
-import Hapi from '@hapi/hapi'
-import { TokenType, UserRole } from '@prisma/client'
+import Hapi from "@hapi/hapi";
+import { TokenType, UserRole } from "@prisma/client";
 
 const authPlugin: Hapi.Plugin<null> = {
-  name: 'app/auth',
-  dependencies: ['prisma', 'hapi-auth-jwt2', 'app/email'],
-  register: async function(server: Hapi.Server) {
+  name: "app/auth",
+  dependencies: ["prisma", "hapi-auth-jwt2", "app/email"],
+  register: async function (server: Hapi.Server) {
     // TODO: Add the authentication strategy
   },
-}
+};
 
-export default plugin
+export default plugin;
 ```
+
 > **Note:** The auth plugin defines dependencies on the `prisma`, `hapi-auth-jwt2`, and `app/email` plugins. The prisma plugin was defined in part 2 of the series and will be used to access Prisma Client. The `hapi-auth-jwt2` plugin defines the `jwt` authentication scheme, which you will use to define the authentication the strategy. Lastly, the `app/email` will ensure you can access the `sendEmailToken` function.
 
 ### Defining the login endpoint
@@ -393,44 +409,43 @@ In the `register` function of `authPlugin`, define a new login route as follows:
 server.route([
   // Endpoint to login or register and to send the short-lived token
   {
-    method: 'POST',
-    path: '/login',
+    method: "POST",
+    path: "/login",
     handler: loginHandler,
     options: {
       auth: false,
       validate: {
         payload: Joi.object({
-          email: Joi.string()
-            .email()
-            .required(),
+          email: Joi.string().email().required(),
         }),
       },
     },
   },
-])
+]);
 ```
+
 > **Note:** `options.auth` is set to false so that the endpoint will remain open once you set the default authentication strategy which will by default require authentication for all routes that don't disable it explicitly.
 
 Outside the register function of the plugin, add the following:
 
 ```ts
-const EMAIL_TOKEN_EXPIRATION_MINUTES = 10
+const EMAIL_TOKEN_EXPIRATION_MINUTES = 10;
 
 interface LoginInput {
-  email: string
+  email: string;
 }
 
 async function loginHandler(request: Hapi.Request, h: Hapi.ResponseToolkit) {
   // 👇 get prisma and the sendEmailToken from shared application state
-  const { prisma, sendEmailToken } = request.server.app
+  const { prisma, sendEmailToken } = request.server.app;
   // 👇 get the email from the request payload
-  const { email } = request.payload as LoginInput
+  const { email } = request.payload as LoginInput;
   // 👇 generate an alphanumeric token
-  const emailToken = generateEmailToken()
+  const emailToken = generateEmailToken();
   // 👇 create a date object for the email token expiration
   const tokenExpiration = add(new Date(), {
     minutes: EMAIL_TOKEN_EXPIRATION_MINUTES,
-  })
+  });
 
   try {
     // 👇 create a short lived token and update user or create if they don't exist
@@ -450,21 +465,22 @@ async function loginHandler(request: Hapi.Request, h: Hapi.ResponseToolkit) {
           },
         },
       },
-    })
+    });
 
     // 👇 send the email token
-    await sendEmailToken(email, emailToken)
-    return h.response().code(200)
+    await sendEmailToken(email, emailToken);
+    return h.response().code(200);
   } catch (error) {
-    return Boom.badImplementation(error.message)
+    return Boom.badImplementation(error.message);
   }
 }
 
 // Generate a random 8 digit number as the email token
 function generateEmailToken(): string {
-  return Math.floor(10000000 + Math.random() * 90000000).toString()
+  return Math.floor(10000000 + Math.random() * 90000000).toString();
 }
 ```
+
 `loginHandler` does the following:
 
 - The email is taken from the request payload
@@ -475,15 +491,16 @@ function generateEmailToken(): string {
 Finally, register the plugin in `server.ts`:
 
 ```ts
-import hapiAuthJWT from 'hapi-auth-jwt2'
-import authPlugin from './plugins/auth'
+import hapiAuthJWT from "hapi-auth-jwt2";
+import authPlugin from "./plugins/auth";
 
 await server.register([
   // ... existing plugins
   hapiAuthJWT,
   authPlugin,
-])
+]);
 ```
+
 **Checkpoint:**
 
 1. Start the server with `npm run dev`
@@ -497,37 +514,36 @@ Begin by adding the following route declaration to the `authPlugin`:
 
 ```ts
 server.route({
-  method: 'POST',
-  path: '/authenticate',
+  method: "POST",
+  path: "/authenticate",
   handler: authenticateHandler,
   options: {
     auth: false,
     validate: {
       payload: Joi.object({
-        email: Joi.string()
-          .email()
-          .required(),
+        email: Joi.string().email().required(),
         emailToken: Joi.string().required(),
       }),
     },
   },
-})
+});
 ```
+
 The route requires both the `email` and the `emailToken`. Since only the legitimate user attempting to login will know both, guessing both the `email` and `emailToken` becomes more difficult, thereby reducing the risk of brute force attacks which guess the eight-digit number.
 
 Next, add the following to `auth.ts`:
 
 ```ts
 // Load the JWT secret from environment variables or default
-const JWT_SECRET = process.env.JWT_SECRET || 'SUPER_SECRET_JWT_SECRET'
+const JWT_SECRET = process.env.JWT_SECRET || "SUPER_SECRET_JWT_SECRET";
 
-const JWT_ALGORITHM = 'HS256'
+const JWT_ALGORITHM = "HS256";
 
-const AUTHENTICATION_TOKEN_EXPIRATION_HOURS = 12
+const AUTHENTICATION_TOKEN_EXPIRATION_HOURS = 12;
 
 interface AuthenticateInput {
-  email: string
-  emailToken: string
+  email: string;
+  emailToken: string;
 }
 
 async function authenticateHandler(
@@ -535,9 +551,9 @@ async function authenticateHandler(
   h: Hapi.ResponseToolkit,
 ) {
   // 👇 get prisma from shared application state
-  const { prisma } = request.server.app
+  const { prisma } = request.server.app;
   // 👇 get the email and emailToken from the request payload
-  const { email, emailToken } = request.payload as AuthenticateInput
+  const { email, emailToken } = request.payload as AuthenticateInput;
 
   try {
     // Get short lived email token
@@ -548,23 +564,23 @@ async function authenticateHandler(
       include: {
         user: true,
       },
-    })
+    });
 
     if (!fetchedEmailToken?.valid) {
       // If the token doesn't exist or is not valid, return 401 unauthorized
-      return Boom.unauthorized()
+      return Boom.unauthorized();
     }
 
     if (fetchedEmailToken.expiration < new Date()) {
       // If the token has expired, return 401 unauthorized
-      return Boom.unauthorized('Token expired')
+      return Boom.unauthorized("Token expired");
     }
 
     // If token matches the user email passed in the payload, generate long lived API token
     if (fetchedEmailToken?.user?.email === email) {
       const tokenExpiration = add(new Date(), {
         hours: AUTHENTICATION_TOKEN_EXPIRATION_HOURS,
-      })
+      });
       // Persist token in DB so it's stateful
       const createdToken = await prisma.token.create({
         data: {
@@ -576,7 +592,7 @@ async function authenticateHandler(
             },
           },
         },
-      })
+      });
 
       // Invalidate the email token after it's been used
       await prisma.token.update({
@@ -586,28 +602,29 @@ async function authenticateHandler(
         data: {
           valid: false,
         },
-      })
+      });
 
-      const authToken = generateAuthToken(createdToken.id)
-      return h.response().code(200).header('Authorization', authToken)
+      const authToken = generateAuthToken(createdToken.id);
+      return h.response().code(200).header("Authorization", authToken);
     } else {
-      return Boom.unauthorized()
+      return Boom.unauthorized();
     }
   } catch (error) {
-    return Boom.badImplementation(error.message)
+    return Boom.badImplementation(error.message);
   }
 }
 
 // Generate a signed JWT token with the tokenId in the payload
 function generateAuthToken(tokenId: number): string {
-  const jwtPayload = { tokenId }
+  const jwtPayload = { tokenId };
 
   return jwt.sign(jwtPayload, JWT_SECRET, {
     algorithm: JWT_ALGORITHM,
     noTimestamp: true,
-  })
+  });
 }
 ```
+
 > **Note:** The environment variable `JWT_SECRET` can be generated by running the following command: `node -e "console.log(require('crypto').randomBytes(256).toString('base64'));"`. This should always be set in production environments.
 
 The handler fetches the email token from the database, ensures it's valid, creates a new API token in the database, generates a JWT token (with a reference to the token in the database), invalidates the email token, and returns the token in the `Authorization` header.
@@ -627,27 +644,29 @@ To define the authentication strategy, add the following to `auth.ts`:
 
 ```ts
 // This strategy will be used across the application to secure routes
-export const API_AUTH_STATEGY = 'API'
+export const API_AUTH_STATEGY = "API";
 ```
+
 Inside the `authPlugin.register` function add the following:
 
 ```ts
 // Define the authentication strategy which uses the `jwt` authentication scheme
-server.auth.strategy(API_AUTH_STATEGY, 'jwt', {
+server.auth.strategy(API_AUTH_STATEGY, "jwt", {
   key: JWT_SECRET,
   verifyOptions: { algorithms: [JWT_ALGORITHM] },
   validate: validateAPIToken,
-})
+});
 
 // Set the default authentication strategy for API routes, unless explicitly disabled
-server.auth.default(API_AUTH_STATEGY)
+server.auth.default(API_AUTH_STATEGY);
 ```
+
 Lastly, add the `validateAPIToken` function:
 
 ```ts
 const apiTokenSchema = Joi.object({
   tokenId: Joi.number().integer().required(),
-})
+});
 
 // Function will be called on every request using the auth strategy
 const validateAPIToken = async (
@@ -655,14 +674,14 @@ const validateAPIToken = async (
   request: Hapi.Request,
   h: Hapi.ResponseToolkit,
 ) => {
-  const { prisma } = request.server.app
-  const { tokenId } = decoded
+  const { prisma } = request.server.app;
+  const { tokenId } = decoded;
   // Validate the token payload adheres to the schema
-  const { error } = apiTokenSchema.validate(decoded)
+  const { error } = apiTokenSchema.validate(decoded);
 
   if (error) {
-    request.log(['error', 'auth'], `API token error: ${error.message}`)
-    return { isValid: false }
+    request.log(["error", "auth"], `API token error: ${error.message}`);
+    return { isValid: false };
   }
 
   try {
@@ -674,16 +693,16 @@ const validateAPIToken = async (
       include: {
         user: true,
       },
-    })
+    });
 
     // Check if token could be found in database and is valid
     if (!fetchedToken || !fetchedToken?.valid) {
-      return { isValid: false, errorMessage: 'Invalid Token' }
+      return { isValid: false, errorMessage: "Invalid Token" };
     }
 
     // Check token expiration
     if (fetchedToken.expiration < new Date()) {
-      return { isValid: false, errorMessage: 'Token expired' }
+      return { isValid: false, errorMessage: "Token expired" };
     }
 
     // Get all the courses that the user is the teacher of
@@ -695,7 +714,7 @@ const validateAPIToken = async (
       select: {
         courseId: true,
       },
-    })
+    });
 
     // The token is valid. Make the `userId`, `isAdmin`, and `teacherOf` to `credentials` which is available in route handlers via `request.auth.credentials`
     return {
@@ -707,13 +726,14 @@ const validateAPIToken = async (
         // convert teacherOf from an array of objects to an array of numbers
         teacherOf: teacherOf.map(({ courseId }) => courseId),
       },
-    }
+    };
   } catch (error) {
-    request.log(['error', 'auth', 'db'], error)
-    return { isValid: false }
+    request.log(["error", "auth", "db"], error);
+    return { isValid: false };
   }
-}
+};
 ```
+
 The `validateAPIToken` function will get called before every route that uses the `API_AUTH_STATEGY` (which you've set as the default in the previous step).
 
 The purpose of the `validateAPIToken` function is to **determine whether to allow the request to proceed**. This is done with the return object, which contains `isValid` and `credentials`:
@@ -801,26 +821,30 @@ To add a pre-function to verify the authorization rule in the `GET /users/{userI
 
 ```ts
 // Pre-function to check if the authenticated user matches the requested user
-export async function isRequestedUserOrAdmin(request: Hapi.Request, h: Hapi.ResponseToolkit) {
+export async function isRequestedUserOrAdmin(
+  request: Hapi.Request,
+  h: Hapi.ResponseToolkit,
+) {
   // 👇 userId and isAdmin are populated by the `validateAPIToken` function
-  const { userId, isAdmin } = request.auth.credentials
+  const { userId, isAdmin } = request.auth.credentials;
 
   if (isAdmin) {
     // If the user is an admin allow
-    return h.continue
+    return h.continue;
   }
 
-  const requestedUserId = parseInt(request.params.userId, 10)
+  const requestedUserId = parseInt(request.params.userId, 10);
 
   // 👇 Check that the requested userId matches the authenticated userId
   if (requestedUserId === userId) {
-    return h.continue
+    return h.continue;
   }
 
   // The authenticated user is not authorized
-  throw Boom.forbidden()
+  throw Boom.forbidden();
 }
 ```
+
 Then add the pre option to the route definition in `src/plugins/user.ts` as follows:
 
 ```json
@@ -843,6 +867,7 @@ diff
   },
 }
 ```
+
 The pre-function will now be called before `getUserHandler` and only authorize access to admins or to users requesting their own userId.
 
 > **Note:** In the previous part, you've defined the default authentication strategy, so defining `options.auth` is not strictly required. But it's good practice to define the authentication requirements for every route explicitly.
@@ -851,18 +876,24 @@ The pre-function will now be called before `getUserHandler` and only authorize a
 
 1. Start the server with `npm run dev`
 1. Run the `seed-users` script to create a test user and test admin: `npm run seed-users`. You should get a result similar to this:
+
 ```
   Created test user	id: 1 | email: test@prisma.io
   Created test admin	id: 2 | email: test-admin@prisma.io
-  ```
+```
+
 1. Login as `test@prisma.io` by making a call to the `POST /login` endpoint as follows:
+
 ```
   curl --header "Content-Type: application/json" --request POST --data '{"email":"test@prisma.io"}' localhost:3000/login
-  ```
+```
+
 1. Take the logged token and call the `/authenticate` endpoint with curl:
+
 ```
   curl -v --header "Content-Type: application/json" --request POST --data '{"email":"test@prisma.io", "emailToken": "TOKEN_FROM_CONSOLE"}' localhost:3000/authenticate
-  ```
+```
+
 1. The response should have the `200` status and include an `Authorization` header which looks similar to this: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbklkIjoyOH0.gJYk3f1RJVKvPh75FdElCHwMoe_ZCMZftTE1Em5PpMg`
 1. Make a GET call to `/users/1` (where the number is the test user created in the first step of the checkpoint) with the `Authorization` header containing the token from the last checkpoint as follows: `curl -H "Authorization:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbklkIjoyOH0.gJYk3f1RJVKvPh75FdElCHwMoe_ZCMZftTE1Em5PpMg" localhost:3000/users/1` and the request should succeed and you should see the user profile.
 1. Make another GET call to `/users/2` with the same authorization header: `curl -H "Authorization:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbklkIjoyOH0.gJYk3f1RJVKvPh75FdElCHwMoe_ZCMZftTE1Em5PpMg" localhost:3000/users/2`. This one should fail with a 403 forbidden error.
@@ -896,23 +927,24 @@ export async function isTeacherOfCourseOrAdmin(
   h: Hapi.ResponseToolkit,
 ) {
   // 👇 isAdmin and teacherOf are populated by the `validateAPIToken` function
-  const { isAdmin, teacherOf } = request.auth.credentials
+  const { isAdmin, teacherOf } = request.auth.credentials;
 
   if (isAdmin) {
     // If the user is an admin allow
-    return h.continue
+    return h.continue;
   }
 
-  const courseId = parseInt(request.params.courseId, 10)
+  const courseId = parseInt(request.params.courseId, 10);
 
   // Verify that the authenticated user is a teacher of the requested course
   if (teacherOf?.includes(courseId)) {
-    return h.continue
+    return h.continue;
   }
   // If the user is not a teacher of the course, deny access
-  throw Boom.forbidden()
+  throw Boom.forbidden();
 }
 ```
+
 The pre-function uses the `teacherOf` array that is fetched in `validateAPIToken` to check if the user is a teacher of the requested course.
 
 Add the `isTeacherOfCourseOrAdmin` as a pre-function to the following routes:
@@ -931,6 +963,7 @@ options: {
   // ... other route options
 }
 ```
+
 You have now implemented two different authorization rules and added then as a pre-function to ten different routes in the backend.
 
 ## Updating the tests
@@ -940,17 +973,18 @@ After implementing authentication and authorization in the REST API, the tests w
 For example, the `GET /users/{userId}` endpoint has the following test:
 
 ```ts
-test('get user returns user', async () => {
+test("get user returns user", async () => {
   const response = await server.inject({
-    method: 'GET',
+    method: "GET",
     url: `/users/${userId}`,
-  })
-  expect(response.statusCode).toEqual(200)
-  const user = JSON.parse(response.payload)
+  });
+  expect(response.statusCode).toEqual(200);
+  const user = JSON.parse(response.payload);
 
-  expect(user.id).toBe(userId)
-})
+  expect(user.id).toBe(userId);
+});
 ```
+
 If you run this test now with `npm run test -- -t="get user returns user"` the test will fail. This is because the test when the request reaches the endpoint it does not meet its authentication requirements. With Hapi's [`server.inject`](https://hapi.dev/api?v=19.2.0#-await-serverinjectoptions) –that simulates an HTTP request to the server–, you can add an `auth` object with information about the authenticated user. The `auth` object sets the credentials object as they would in the `validateAPIToken` function in `src/plugins/auth.ts`, for example:
 
 ```ts
@@ -974,22 +1008,24 @@ test('get user returns user', async () => {
   expect(user.id).toBe(testUserCredentials.userId)
 })
 ```
+
 The `credentials` object passed matches the `AuthCredentials` interface defined in `src/plugins/auth.ts`:
 
 ```ts
 interface AuthCredentials {
-  userId: number
-  tokenId: number
-  isAdmin: boolean
-  teacherOf: number[]
+  userId: number;
+  tokenId: number;
+  isAdmin: boolean;
+  teacherOf: number[];
 }
 ```
+
 > **Note:** An interface in TypeScript is very similar to a type with some subtle differences. To learn more, checkout the [TypeScript Handbook](https://www.typescriptlang.org/docs/handbook/advanced-types.html#interfaces-vs-type-aliases).
 
 For the test to pass, you will create a user directly with Prisma in the test and construct the `AuthCredentials` object as follows:
 
 ```ts
-test('get user returns user', async () => {
+test("get user returns user", async () => {
   const testUser = await server.app.prisma.user.create({
     data: {
       email: `test-${Date.now()}@test.com`,
@@ -1004,29 +1040,30 @@ test('get user returns user', async () => {
     include: {
       tokens: true,
     },
-  })
+  });
 
   const testUserCredentials = {
     userId: testUser.id,
     tokenId: testUser.tokens[0].id,
     isAdmin: testUser.isAdmin,
     teacherOf: [], // empty array because no courses were created for the user
-  }
+  };
 
   const response = await server.inject({
-    method: 'GET',
+    method: "GET",
     url: `/users/${testUserCredentials.userId}`,
     auth: {
       strategy: API_AUTH_STATEGY,
       credentials: testUserCredentials,
     },
-  })
-  expect(response.statusCode).toEqual(200)
-  const user = JSON.parse(response.payload)
+  });
+  expect(response.statusCode).toEqual(200);
+  const user = JSON.parse(response.payload);
 
-  expect(user.id).toBe(testUserCredentials.userId)
-})
+  expect(user.id).toBe(testUserCredentials.userId);
+});
 ```
+
 **Checkpoint:** Run `npm run test -- -t="get user returns user"` to verify that the test passes.
 
 At this point, you've fixed one test, but what about the others? Since creating the credentials object will be required in most of the tests, you can abstract it into a separate `test-helpers.ts` module:
@@ -1059,16 +1096,17 @@ export const createUserCredentials = async (
         },
       },
     },
-  })
+  });
 
   return {
     userId: testUser.id,
     tokenId: testUser.tokens[0].id,
     isAdmin: testUser.isAdmin,
     teacherOf: testUser.courses?.map(({ courseId }) => courseId),
-  }
-}
+  };
+};
 ```
+
 As a next step, write a test that that verifies the authorization rule allowing admins to fetch different user accounts with the `GET /users/{userId}` endpoint.
 
 ## Summary and next steps
@@ -1096,4 +1134,3 @@ You can find the full source code on [GitHub](https://github.com/2color/real-wor
 While Prisma aims to make working with relational databases easy, it's useful to understand the underlying database and authentication principles.
 
 If you have questions, feel free to reach out on [Twitter](https://twitter.com/daniel2color).
-

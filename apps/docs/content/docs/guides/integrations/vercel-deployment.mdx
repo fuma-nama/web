@@ -207,7 +207,11 @@ async function deployApp() {
   const auth = await createPrismaAuthorization();
 
   // 3. Create database
-  const database = await createPrismaDatabase(project.name, auth.id, auth.configId);
+  const database = await createPrismaDatabase(
+    project.name,
+    auth.id,
+    auth.configId,
+  );
 
   // 4. Connect database to project
   await connectDatabaseToProject(project.id, database.id, auth.configId);
@@ -243,14 +247,17 @@ Every deployment starts with creating a project container.
 async function createProject(): Promise<{ id: string; name: string }> {
   const projectName = `demo-project-${Date.now()}`;
 
-  const response = await fetch(`${CONFIG.VERCEL_API_URL}/v10/projects?teamId=${CONFIG.TEAM_ID}`, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${CONFIG.ACCESS_TOKEN}`,
-      "Content-Type": "application/json",
+  const response = await fetch(
+    `${CONFIG.VERCEL_API_URL}/v10/projects?teamId=${CONFIG.TEAM_ID}`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${CONFIG.ACCESS_TOKEN}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name: projectName }),
     },
-    body: JSON.stringify({ name: projectName }),
-  });
+  );
 
   const project = await response.json();
   console.log(`✅ Project created: ${project.name} (${project.id})`);
@@ -521,7 +528,9 @@ async function handleApiErrors(response: Response, operation: string) {
       case 404:
         throw new Error(`Resource not found: Check IDs and configuration`);
       default:
-        throw new Error(`${operation} failed: ${response.status} - ${errorData}`);
+        throw new Error(
+          `${operation} failed: ${response.status} - ${errorData}`,
+        );
     }
   }
 }
@@ -534,7 +543,11 @@ Proper error handling prevents deployment failures and provides clear debugging 
 Vercel enforces rate limits on API endpoints. You can implement exponential backoff to handle rate limits:
 
 ```typescript
-async function apiCallWithRetry(url: string, options: RequestInit, maxRetries = 3) {
+async function apiCallWithRetry(
+  url: string,
+  options: RequestInit,
+  maxRetries = 3,
+) {
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
       const response = await fetch(url, options);

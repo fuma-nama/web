@@ -17,11 +17,11 @@ tags:
 ---
 
 <center>
-      <i>8 min read</i>
-  </center>
+  <i>8 min read</i>
+</center>
 
-  Welcome to the second tutorial on the series about building a REST API with NestJS, Prisma and PostgreSQL!
-  In this tutorial, you will learn how to perform input validation and transformation in your API.
+Welcome to the second tutorial on the series about building a REST API with NestJS, Prisma and PostgreSQL!
+In this tutorial, you will learn how to perform input validation and transformation in your API.
 
 ## Table Of Contents
 
@@ -35,7 +35,6 @@ tags:
   - [Strip unnecessary properties from client requests](#strip-unnecessary-properties-from-client-requests)
 - [Use `ParseIntPipe` to transform dynamic URL paths](#transform-dynamic-url-paths-with-parseintpipe)
 - [Summary and final remarks](#summary-and-final-remarks)
-
 
 ## Introduction
 
@@ -51,13 +50,12 @@ To follow along with this tutorial, you will be expected to have:
 
 - [Node.js](https://nodejs.org/) installed.
 - [Docker](https://www.docker.com/) or [PostgreSQL](https://www.postgresql.org/) installed.
-- Installed the [Prisma VSCode Extension](https://marketplace.visualstudio.com/items?itemName=Prisma.prisma). *(optional)*
-- Access to a Unix shell (like the terminal/shell in Linux and macOS) to run the commands provided in this series. *(optional)*
+- Installed the [Prisma VSCode Extension](https://marketplace.visualstudio.com/items?itemName=Prisma.prisma). _(optional)_
+- Access to a Unix shell (like the terminal/shell in Linux and macOS) to run the commands provided in this series. _(optional)_
 
 > **Note**:
 >
 > 1. The optional Prisma VS Code extension adds some nice IntelliSense and syntax highlighting for Prisma.
->
 > 2. If you don't have a Unix shell (for example, you are on a Windows machine), you can still follow along, but the shell commands may need to be modified for your machine.
 
 ### Clone the repository
@@ -69,31 +67,47 @@ The starting point for this tutorial is available in the [begin-validation](http
 ```shell
 git clone -b begin-validation git@github.com:prisma/blog-backend-rest-api-nestjs-prisma.git
 ```
+
 Now, perform the following actions to get started:
 
 1. Navigate to the cloned directory:
-  ```shell   cd blog-backend-rest-api-nestjs-prisma
-  ```
-2. Install dependencies:
-  ```shell   npm install
-  ```
-3. Start the PostgreSQL database with docker:
-  ```shell   docker-compose up -d
-  ```
-4. Apply database migrations:
-  ```shell   npx prisma migrate dev
-  ```
-5. Start the project:
-  ```shell   npm run start:dev
-  ```
 
-> *Note*: Step 4 will also generate Prisma Client and seed the database.
+```shell cd blog-backend-rest-api-nestjs-prisma
+
+```
+
+2. Install dependencies:
+
+```shell npm install
+
+```
+
+3. Start the PostgreSQL database with docker:
+
+```shell docker-compose up -d
+
+```
+
+4. Apply database migrations:
+
+```shell npx prisma migrate dev
+
+```
+
+5. Start the project:
+
+```shell npm run start:dev
+
+```
+
+> _Note_: Step 4 will also generate Prisma Client and seed the database.
 
 Now, you should be able to access the API documentation at [`http://localhost:3000/api/`](http://localhost:3000/api/).
 
 ### Project structure and files
 
 The repository you cloned should have the following structure:
+
 ```
 median
   ├── node_modules
@@ -121,6 +135,7 @@ median
   ├── tsconfig.build.json
   └── tsconfig.json
 ```
+
 The notable files and directories in this repository are:
 
 - The `src` directory contains the source code for the application. There are three modules:
@@ -138,24 +153,19 @@ The notable files and directories in this repository are:
 
 ## Perform input validation
 
-To perform input validation, you will be using [NestJS Pipes](https://docs.nestjs.com/pipes). Pipes operate on the arguments being processed by a  route handler. Nest invokes a pipe before the route handler, and the pipe receives the arguments destined for the route handler. Pipes can do a number of things, like validate the input, add fields to the input, etc. Pipes are similar to [middleware](https://docs.nestjs.com/middleware), but the scope of pipes is limited to processing input arguments. NestJS provides a few pipes out-of-the-box, but you can also create your own [custom pipes](https://docs.nestjs.com/pipes#custom-pipes).
-
-
+To perform input validation, you will be using [NestJS Pipes](https://docs.nestjs.com/pipes). Pipes operate on the arguments being processed by a route handler. Nest invokes a pipe before the route handler, and the pipe receives the arguments destined for the route handler. Pipes can do a number of things, like validate the input, add fields to the input, etc. Pipes are similar to [middleware](https://docs.nestjs.com/middleware), but the scope of pipes is limited to processing input arguments. NestJS provides a few pipes out-of-the-box, but you can also create your own [custom pipes](https://docs.nestjs.com/pipes#custom-pipes).
 
 Pipes have two typical use cases:
 
 - **Validation**: Evaluate input data and, if valid, pass it through unchanged; otherwise, throw an exception when the data is incorrect.
 - **Transformation**: Transform input data to the desired form (e.g., from string to integer).
 
-A NestJS validation pipe will check the arguments passed to a route. If the arguments are vaid, the pipe will pass the arguments to the route handler without any modification.  However, if the arguments violate any of the specified validation rules, the pipe will throw an exception.
+A NestJS validation pipe will check the arguments passed to a route. If the arguments are vaid, the pipe will pass the arguments to the route handler without any modification. However, if the arguments violate any of the specified validation rules, the pipe will throw an exception.
 
 The following two diagrams shows how validation pipe works, for an arbitrary `/example` route.
 
 ![](/nestjs-prisma-validation-7D056s1kOla1/imgs/valid-args.png)
 ![](/nestjs-prisma-validation-7D056s1kOla1/imgs/invalid-args.png)
-
-
-
 
 In this section, you will focus on the validation use case.
 
@@ -168,6 +178,7 @@ To use this feature, you will need to add two packages to your project:
 ```shell
 npm install class-validator class-transformer
 ```
+
 The class-validator package provides decorators for validating input data, and the class-transformer package provides decorators to transform input data to the desired form. Both packages are well integrated with NestJS pipes.
 
 Now import the `ValidationPipe` in your `main.ts` file and use the `app.useGlobalPipes` method to make it available globally in your application:
@@ -197,6 +208,7 @@ async function bootstrap() {
 }
 bootstrap();
 ```
+
 ### Add validation rules to `CreateArticleDto`
 
 You will now use the [`class-validator`](https://github.com/typestack/class-validator) package to add validation decorators to `CreateArticleDto`. You will apply the following rules to `CreateArticleDto`:
@@ -207,10 +219,11 @@ You will now use the [`class-validator`](https://github.com/typestack/class-vali
 4. `title`, `description` and `body` must be of type `string` and `published` must be of type `boolean`.
 
 Open the `src/articles/dto/create-article.dto.ts` file and replace its contents with the following:
+
 ```ts
 // src/articles/dto/create-article.dto.ts
 
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty } from "@nestjs/swagger";
 import {
   IsBoolean,
   IsNotEmpty,
@@ -218,7 +231,7 @@ import {
   IsString,
   MaxLength,
   MinLength,
-} from 'class-validator';
+} from "class-validator";
 
 export class CreateArticleDto {
   @IsString()
@@ -245,8 +258,8 @@ export class CreateArticleDto {
   published?: boolean = false;
 }
 ```
-These rules will be picked up by the `ValidationPipe` and applied automatically to your route handlers. One of the advantages of using decorators for validation is that the `CreateArticleDto` remains the single source of truth for all arguments to the `POST /articles` endpoint. So you don't need to define a separate validation class.
 
+These rules will be picked up by the `ValidationPipe` and applied automatically to your route handlers. One of the advantages of using decorators for validation is that the `CreateArticleDto` remains the single source of truth for all arguments to the `POST /articles` endpoint. So you don't need to define a separate validation class.
 
 Test out the validation rules you have in place. Try creating an article using the `POST /articles` endpoint with a very short placeholder `title` like this:
 
@@ -258,6 +271,7 @@ Test out the validation rules you have in place. Try creating an article using t
   "published": false
 }
 ```
+
 You should get an HTTP 400 error response along with details in the response body about what validation rule was broken.
 
 ![HTTP 400 response with descriptive error message](/nestjs-prisma-validation-7D056s1kOla1/imgs/validation-error.png)
@@ -266,11 +280,9 @@ This diagram explains what the `ValidationPipe` is doing under the hood for inva
 
 ![Input validation flow with ValidationPipe](/nestjs-prisma-validation-7D056s1kOla1/imgs/invalid-args-specific.png)
 
-
-
 ### Strip unnecessary properties from client requests
 
-The `CreateArticleDTO` defines the properties that need to be sent to the `POST /articles` endpoint  to create a new article. `UpdateArticleDTO` does the same, but for the `PATCH /articles/{id}` endpoint.
+The `CreateArticleDTO` defines the properties that need to be sent to the `POST /articles` endpoint to create a new article. `UpdateArticleDTO` does the same, but for the `PATCH /articles/{id}` endpoint.
 
 Currently, for both of these endpoints it is possible to send additional properties that are not defined in the DTO. This can lead to unforeseen bugs or security issues. For example, you could manually pass invalid `createdAt` and `updatedAt` values to the `POST /articles` endpoint. Since TypeScript type information is not available at run-time, your application will not be able to identify that these fields are not available in the DTO.
 
@@ -286,6 +298,7 @@ To give an example, try sending the following request to the `POST /articles` en
   "updatedAt": "2021-06-02T18:20:29.310Z"
 }
 ```
+
 ![](/nestjs-prisma-validation-7D056s1kOla1/imgs/inject-dates.png)
 
 In this way, you can inject invalid values. Here you have created an article that has an `updatedAt` value that precedes `createdAt`, which does not make sense.
@@ -293,36 +306,36 @@ In this way, you can inject invalid values. Here you have created an article tha
 To prevent this, you will need to filter any unnecessary fields/properties from client requests. Fortunately, NestJS provides an out-of-the-box for this as well. All you need to do is pass the `whitelist: true` option when initializing the `ValidationPipe` inside your application.
 
 ```ts
-diff // src/main.ts
+diff; // src/main.ts
 
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import { ValidationPipe } from '@nestjs/common';
+import { NestFactory } from "@nestjs/core";
+import { AppModule } from "./app.module";
+import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
+import { ValidationPipe } from "@nestjs/common";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-+  app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
+  +app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
 
   const config = new DocumentBuilder()
-    .setTitle('Median')
-    .setDescription('The Median API description')
-    .setVersion('0.1')
+    .setTitle("Median")
+    .setDescription("The Median API description")
+    .setVersion("0.1")
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup("api", app, document);
 
   await app.listen(3000);
 }
 bootstrap();
 ```
-With this option set to true, `ValidationPipe` will automatically remove all *non-whitelisted* properties, where “*non-whitelisted”* means properties without any validation decorators. It’s important to note that this option will filter *all properties* without validation decorators, *even if they are defined in the DTO.*
+
+With this option set to true, `ValidationPipe` will automatically remove all _non-whitelisted_ properties, where “_non-whitelisted”_ means properties without any validation decorators. It’s important to note that this option will filter _all properties_ without validation decorators, _even if they are defined in the DTO._
 
 Now, any additional fields/properties that are passed to the request will be stripped automatically by NestJS, preventing the previously shown exploit.
 
 > **Note**: The NestJS `ValidationPipe` is highly configurable. All configuration options available are documented in the [NestJS docs](https://docs.nestjs.com/techniques/validation#using-the-built-in-validationpipe). If necessary, you can also build [custom validation pipes](https://docs.nestjs.com/pipes#custom-pipes) for your application.
-
 
 ## Transform dynamic URL paths with `ParseIntPipe`
 
@@ -337,6 +350,7 @@ remove(@Param('id') id: string) {   // id is parsed as a string
   return this.articlesService.remove(+id); // id is converted to number using the expression '+id'
 }
 ```
+
 Since `id` is defined as a string type, the Swagger API also documents this argument as a string in the generated API documentation. This is unintuitive and incorrect.
 
 ![](/nestjs-prisma-validation-7D056s1kOla1/imgs/id-string.png)
@@ -383,6 +397,7 @@ export class ArticlesController {
   }
 }
 ```
+
 The `ParseIntPipe` will intercept the `id` parameter of string type and automatically parse it to a number before passing it to the appropriate route handler. This also has the advantage of documenting the `id` parameter correctly as a number inside Swagger.
 
 ![](/nestjs-prisma-validation-7D056s1kOla1/imgs/id-string.png)
@@ -398,8 +413,3 @@ Congratulations! In this tutorial, you took an existing REST API and:
 You might have noticed that NestJS heavily relies on decorators. This is a very intentional design choice. NestJS aims to improve code readability and modularity by heavily leveraging decorators for various kinds of [cross-cutting concerns](https://en.wikipedia.org/wiki/Cross-cutting_concern). As a result, controllers and service methods do not need to be bloated with boilerplate code for doing things like validation, caching, logging, etc.
 
 You can find the finished code for this tutorial in the [end-validation branch](https://github.com/prisma/blog-backend-rest-api-nestjs-prisma/tree/end-validation) of the [GitHub repository](https://github.com/prisma/blog-backend-rest-api-nestjs-prisma). Please feel free to raise an issue in the repository or submit a PR if you notice a problem. You can also reach out to me directly on [Twitter](https://twitter.com/tasinishmam).
-
-
-
-
-

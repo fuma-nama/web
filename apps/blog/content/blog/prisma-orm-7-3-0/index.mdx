@@ -51,13 +51,11 @@ When using `relationJoins` with `BigInt` fields in Prisma 7, BigInt values could
 
 In 7.3.0, BigInt fields are **cast to text inside JSON aggregation**, ensuring values come back as JSON strings and preserve full precision in JavaScript.
 
-
 ## Upgrade notes
 
 - If you’re using `@prisma/better-sqlite3`, upgrading to **7.3.0** is recommended to avoid SQLite-related issues.
 - If you had to work around Prisma 7.0 mapped enum changes, those workarounds may no longer be necessary in 7.3.0.
 - Consider `compilerBuild = "small"` if bundle size matters more than raw performance (serverless/edge constraints), and stick with the default `fast` build for most production backends.
-
 
 Be sure to follow us on social media to stay up to date with the latest releases of Prisma ORM and Prisma Postgres:
 

@@ -1,8 +1,8 @@
 ---
-title: 'Build a Tweet SaaS with Next.js, Prisma Postgres, and Ollama'
-metaTitle: 'Build a Tweet SaaS with Next.js, Prisma Postgres, and Ollama'
-description: 'A complete vibe coding tutorial: build a tweet polishing app from scratch using Next.js, Prisma ORM, Prisma Postgres, UploadThing, and a local LLM with Ollama.'
-metaDescription: 'A complete vibe coding tutorial: build a tweet polishing app from scratch using Next.js, Prisma ORM, Prisma Postgres, UploadThing, and a local LLM with Ollama.'
+title: "Build a Tweet SaaS with Next.js, Prisma Postgres, and Ollama"
+metaTitle: "Build a Tweet SaaS with Next.js, Prisma Postgres, and Ollama"
+description: "A complete vibe coding tutorial: build a tweet polishing app from scratch using Next.js, Prisma ORM, Prisma Postgres, UploadThing, and a local LLM with Ollama."
+metaDescription: "A complete vibe coding tutorial: build a tweet polishing app from scratch using Next.js, Prisma ORM, Prisma Postgres, UploadThing, and a local LLM with Ollama."
 url: /ai/tutorials/typefully-clone
 ---
 
@@ -92,18 +92,21 @@ You should see JSON output showing `gemma3:4b` is installed:
 
 ```json
 {
-  "models": [{
-    "name": "gemma3:4b",
-    "family": "gemma3",
-    "parameter_size": "4.3B",
-    "quantization_level": "Q4_K_M"
-  }]
+  "models": [
+    {
+      "name": "gemma3:4b",
+      "family": "gemma3",
+      "parameter_size": "4.3B",
+      "quantization_level": "Q4_K_M"
+    }
+  ]
 }
 ```
 
 :::tip[Why Gemma 3 4B?]
 
 This model is the sweet spot for local development:
+
 - **4.3B parameters** — Smart enough for tweet formatting
 - **Q4_K_M quantization** — Memory-efficient (~3.3GB)
 - **Runs great on M-series Macs** with 16GB RAM
@@ -112,7 +115,6 @@ This model is the sweet spot for local development:
 :::
 
 Your local LLM is ready! Ollama runs as a background service, so you don't need to keep a terminal open.
-
 
 ## 2. Create Your Next.js Project
 
@@ -123,13 +125,14 @@ npx create-next-app@latest tweetsmith
 ```
 
 When prompted, select:
+
 - TypeScript: **Yes**
 - ESLint: **Yes**
 - Tailwind CSS: **Yes**
 - `src/` directory: **No**
 - App Router: **Yes**
 - Turbopack: **Yes** (optional)
-- Import alias: **@/*** (default)
+- Import alias: **@/\*** (default)
 
 Navigate into your project:
 
@@ -159,17 +162,17 @@ git commit -m "Initial setup: Next.js app"
 
 :::
 
-
 ## 3. Build the TweetSmith UI
 
 Now let's create a minimalist, dark-themed UI inspired by tools like [Typefully](https://typefully.com/). Copy and paste this prompt to your AI assistant:
 
-````markdown
+```markdown
 I have a fresh Next.js 15 project with Tailwind CSS already set up.
 
-I need you to create a minimalist single-page UI for a TweetSmith app called "TweetSmith". 
+I need you to create a minimalist single-page UI for a TweetSmith app called "TweetSmith".
 
 **Design requirements:**
+
 - Dark theme only (no light/dark toggle)
 - Typefully-inspired aesthetic: sophisticated, clean, minimal
 - Color palette:
@@ -188,6 +191,7 @@ I need you to create a minimalist single-page UI for a TweetSmith app called "Tw
 2. Update `app/layout.tsx` with proper metadata (title: "TweetSmith") and force the dark background
 
 3. Create `app/components/TweetTransformer.tsx` - a client component with:
+
    - A textarea input for draft tweets
    - A character counter (X / 280)
    - A "Transform" button (disabled when empty)
@@ -201,7 +205,7 @@ I need you to create a minimalist single-page UI for a TweetSmith app called "Tw
    - Subtle footer saying "powered by ollama"
 
 Keep it minimal, no extra features, just clean functional UI. Maximum width should be max-w-md for a focused feel.
-````
+```
 
 ### Quick Check
 
@@ -217,7 +221,6 @@ git add .
 git commit -m "Add TweetSmith UI"
 ```
 
-
 ## 4. Connect to Your Local LLM
 
 Now let's wire up the UI to your local Ollama instance. We'll create a helper file and an API route.
@@ -226,10 +229,11 @@ Now let's wire up the UI to your local Ollama instance. We'll create a helper fi
 
 Copy and paste this prompt:
 
-````markdown
+```markdown
 Create `app/lib/ollama.ts` - a helper file to communicate with a local Ollama LLM.
 
 Requirements:
+
 - Ollama runs at http://localhost:11434
 - Model name: "gemma3:4b"
 - Use the /api/generate endpoint
@@ -241,16 +245,17 @@ Requirements:
   - Throws an error if the request fails
 
 Keep it minimal with clear comments explaining what each part does.
-````
+```
 
 ### Create the Transform API Route
 
 Copy and paste this prompt:
 
-````markdown
+```markdown
 Create `app/api/transform/route.ts` - a Next.js API route that transforms tweets.
 
 Requirements:
+
 - POST endpoint that accepts { draft: string } in the body
 - Validate that draft exists and is a string (return 400 if invalid)
 - Use the generateWithOllama function from "@/app/lib/ollama"
@@ -264,13 +269,13 @@ Requirements:
 - Add a helpful error message asking if Ollama is running
 
 Use NextRequest and NextResponse from next/server.
-````
+```
 
 ### Connect the Frontend
 
 Copy and paste this prompt:
 
-````markdown
+```markdown
 Update the TweetTransformer component to call the transform API:
 
 1. Add an "error" state (useState) to handle errors
@@ -284,7 +289,7 @@ Update the TweetTransformer component to call the transform API:
 3. Display error message in red below the button when there's an error
 
 Keep the existing UI structure, just wire up the real API call.
-````
+```
 
 ### Quick Check
 
@@ -294,23 +299,23 @@ Keep the existing UI structure, just wire up the real API call.
 4. You should see a polished version appear after a few seconds
 
 If you get an error, check that:
+
 - Ollama is running (`curl http://localhost:11434/api/tags`)
 - The model name matches (`gemma3:4b`)
-
 
 ## 5. Add Temperature for Variety
 
 You might notice the LLM returns the exact same output every time. That's because LLMs are deterministic by default — given the same input, they produce the same output. By adding a "temperature" parameter, we introduce controlled randomness that makes each response slightly different while keeping it coherent.
 
-````markdown
+```markdown
 Update the ollama.ts file to add temperature for response variety:
 
 1. Add an optional "options" field to OllamaRequest type with temperature?: number
 2. In the request body, add:
    options: {
-     temperature: 0.7
+   temperature: 0.7
    }
-````
+```
 
 :::info[What is Temperature?]
 
@@ -324,7 +329,6 @@ Now each transform will give slightly different results!
 git add .
 git commit -m "Connect to Ollama LLM for tweet transformation"
 ```
-
 
 ## 6. Add Filter Options
 
@@ -340,10 +344,11 @@ npm install lucide-react
 
 Then copy and paste this prompt:
 
-````markdown
+```markdown
 Create `app/components/FilterOptions.tsx` with filters for tweet generation.
 
 Requirements:
+
 - Export a `Filters` type with: maxChars (number) and emojiMode ("none" | "few" | "many")
 - Export two components:
   1. `FilterButton` - a toggle button showing current filter values (e.g., "Filters 280 · few")
@@ -353,29 +358,30 @@ FilterButton props: isOpen, onToggle, filters
 FilterPanel props: filters, onFiltersChange
 
 FilterPanel should include:
+
 - A range slider for maxChars (100-280, step 20)
 - Three icon buttons for emoji mode using Lucide icons:
   - Ban icon for "none"
-  - Smile icon for "few"  
+  - Smile icon for "few"
   - SmilePlus icon for "many"
 - Display inline with dividers between sections
 - Compact design with small buttons (h-7 w-7)
 
 Use SlidersHorizontal and ChevronDown from lucide-react for the button.
 Style: dark theme, rounded-lg, border-border, bg-card.
-````
-
+```
 
 ## 7. Add Context Settings
 
-Filters control the format, but what about the *voice*? A tech founder tweets differently than a lifestyle blogger. By letting users define their personal context — their tone, style, and audience — the AI can generate tweets that actually sound like them.
+Filters control the format, but what about the _voice_? A tech founder tweets differently than a lifestyle blogger. By letting users define their personal context — their tone, style, and audience — the AI can generate tweets that actually sound like them.
 
 We'll add a context panel where users can describe their voice, and this gets saved to localStorage so it persists across sessions.
 
-````markdown
+```markdown
 Create `app/components/ContextSettings.tsx` with context management.
 
 Export two components:
+
 1. `ContextButton` - toggle button with User icon from lucide-react
    - Props: isOpen, onToggle, hasContext (boolean)
    - Show a small dot indicator when context is set
@@ -385,34 +391,37 @@ Export two components:
 
 Use User and ChevronDown icons from lucide-react.
 Keep the textarea at 2 rows, placeholder about style/tone.
-````
+```
 
 ### Integrate the Panels
 
-````markdown
+```markdown
 Update `app/components/TweetTransformer.tsx` to use the new component structure.
 
 Changes:
+
 1. Import ContextButton, ContextPanel from ContextSettings
 2. Import FilterButton, FilterPanel, Filters from FilterOptions
 3. Add state for which panel is open: type OpenPanel = "none" | "context" | "filters"
 4. Track hasContext state (check localStorage on mount)
 
 Layout structure:
+
 - Settings row: flex container with gap-2 containing both buttons INLINE
 - Below the row: conditionally render either ContextPanel or FilterPanel (only one at a time)
 - Clicking one panel closes the other
 
 This keeps both buttons always on the same line, with expanded content appearing below.
 Default filters: maxChars 280, emojiMode "few"
-````
+```
 
 ### Update the API to Use Filters
 
-````markdown
+```markdown
 Update `app/api/transform/route.ts` to use the filter values.
 
 Key changes:
+
 1. Extract filter values directly: maxChars and emojiMode with defaults (280, "few")
 2. Build emoji rule as a simple string based on mode
 3. Put STRICT LIMITS at the TOP of the prompt (most important):
@@ -425,7 +434,7 @@ Key changes:
 
 Remove any complex buildFilterRules function - inline everything for clarity.
 The prompt should be shorter and more direct for better local LLM compliance.
-````
+```
 
 ### Quick Check
 
@@ -439,30 +448,33 @@ git add .
 git commit -m "Add filter options and context settings"
 ```
 
-
 ## 8. Create a Tweet Preview Card
 
-Plain text output works, but it doesn't feel *real*. When users see their transformed tweet styled like an actual Twitter/X post — complete with profile picture, verified badge, and proper formatting — it becomes much easier to visualize and share.
+Plain text output works, but it doesn't feel _real_. When users see their transformed tweet styled like an actual Twitter/X post — complete with profile picture, verified badge, and proper formatting — it becomes much easier to visualize and share.
 
 Let's create a tweet preview card that mimics the real thing, with loading skeletons for a polished feel:
 
-````markdown
+```markdown
 Create `app/components/TweetPreview.tsx` - a tweet-like preview card with 3 states.
 
 Props: content (string | null), isLoading (boolean)
 
 Structure:
+
 1. Header with profile image, name, verified badge, and handle
 2. Content area (changes based on state)
 3. Footer with character count or placeholder
 
 Three states:
+
 1. EMPTY (no content, not loading):
+
    - Show placeholder text styled like a tweet but in text-muted
    - Example: "Follow us on X to stay updated on all the latest features and releases from Prisma! 🚀\n\nYour polished tweet will appear here ✨"
    - Footer shows "prisma.io"
 
 2. LOADING (isLoading true):
+
    - Show 3 animated skeleton bars with animate-pulse
    - Different widths: 90%, 75%, 60%
    - Footer skeleton bar
@@ -474,16 +486,17 @@ Three states:
 
 Use Image from next/image for the profile picture.
 Add verified badge as inline SVG (Twitter blue checkmark).
-````
+```
 
 ### Add a Logo
 
 Add a logo image (like `icon-logo.png`) to your `public/` folder, then:
 
-````markdown
+```markdown
 Update `app/page.tsx` to use a logo image instead of text for the header.
 
 Changes:
+
 1. Import Image from "next/image"
 2. Replace the h1 text with an Image component:
    - src="/icon-logo.png" (or your logo file)
@@ -493,13 +506,12 @@ Changes:
 4. Use flex flex-col items-center on the header
 
 The header should now show: Logo image centered, tagline below.
-````
+```
 
 ```bash
 git add .
 git commit -m "Add tweet preview card and logo"
 ```
-
 
 ## 9. Add Prisma Postgres
 
@@ -570,22 +582,24 @@ model SavedTweet {
 Create `lib/prisma.ts`:
 
 ```typescript
-import { PrismaClient } from "../app/generated/prisma/client"
-import { PrismaPg } from "@prisma/adapter-pg"
+import { PrismaClient } from "../app/generated/prisma/client";
+import { PrismaPg } from "@prisma/adapter-pg";
 
 const adapter = new PrismaPg({
   connectionString: process.env.DATABASE_URL!,
-})
+});
 
-const globalForPrisma = global as unknown as { prisma: PrismaClient }
+const globalForPrisma = global as unknown as { prisma: PrismaClient };
 
-const prisma = globalForPrisma.prisma || new PrismaClient({
-  adapter,
-})
+const prisma =
+  globalForPrisma.prisma ||
+  new PrismaClient({
+    adapter,
+  });
 
-if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma
+if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
 
-export default prisma
+export default prisma;
 ```
 
 ### Add Database Scripts
@@ -610,37 +624,38 @@ Update your `package.json` scripts:
 Create `scripts/test-database.ts`:
 
 ```typescript
-import "dotenv/config"
-import prisma from "../lib/prisma"
+import "dotenv/config";
+import prisma from "../lib/prisma";
 
 async function testDatabase() {
-  console.log("🔍 Testing Prisma Postgres connection...\n")
+  console.log("🔍 Testing Prisma Postgres connection...\n");
 
   try {
-    console.log("✅ Connected to database!")
+    console.log("✅ Connected to database!");
 
-    console.log("\n📝 Creating a test saved tweet...")
+    console.log("\n📝 Creating a test saved tweet...");
     const newTweet = await prisma.savedTweet.create({
       data: {
         original: "just shipped a new feature, its pretty cool i think",
-        transformed: "Just shipped a new feature! 🚀 Pretty excited about this one ✨",
+        transformed:
+          "Just shipped a new feature! 🚀 Pretty excited about this one ✨",
         context: "Tech founder, casual tone",
       },
-    })
-    console.log("✅ Created saved tweet:", newTweet)
+    });
+    console.log("✅ Created saved tweet:", newTweet);
 
-    console.log("\n📋 Fetching all saved tweets...")
-    const allTweets = await prisma.savedTweet.findMany()
-    console.log(`✅ Found ${allTweets.length} saved tweet(s)`)
+    console.log("\n📋 Fetching all saved tweets...");
+    const allTweets = await prisma.savedTweet.findMany();
+    console.log(`✅ Found ${allTweets.length} saved tweet(s)`);
 
-    console.log("\n🎉 All tests passed! Your database is working perfectly.\n")
+    console.log("\n🎉 All tests passed! Your database is working perfectly.\n");
   } catch (error) {
-    console.error("❌ Error:", error)
-    process.exit(1)
+    console.error("❌ Error:", error);
+    process.exit(1);
   }
 }
 
-testDatabase()
+testDatabase();
 ```
 
 ### Push Schema and Test
@@ -661,17 +676,18 @@ npm run db:studio
 
 Copy and paste this prompt:
 
-````markdown
+```markdown
 Create `app/api/tweets/route.ts` with GET, POST, and DELETE handlers.
 
 Requirements:
+
 - GET: Fetch all saved tweets ordered by createdAt desc
 - POST: Save a new tweet with { original, transformed, context?, imageUrl?, imageAlt? }
 - DELETE: Delete a tweet by id (passed as query param ?id=xxx)
 
 Use try-catch blocks and return appropriate error responses.
 Import prisma from "../../../lib/prisma"
-````
+```
 
 ### Quick Check
 
@@ -692,22 +708,23 @@ git add .
 git commit -m "Add Prisma Postgres database"
 ```
 
-
 ## 10. Add Save Functionality
 
 Now that we have a database, let's put it to use! Users often want to save their best transformed tweets for later — maybe they're not ready to post yet, or they want to build a collection of polished content.
 
 We'll add a save button to the tweet preview card with satisfying visual feedback:
 
-````markdown
+```markdown
 Add a Save button to save transformed tweets to the database.
 
 Requirements:
+
 - Add a Save button next to the Copy button in TweetPreview
 - Use POST /api/tweets with { original, transformed, context }
 - Pass original (draft) and context from TweetTransformer to TweetPreview
 
 UX States:
+
 - Default: Bookmark icon with hover scale effect
 - Saving: Spinning Loader2 icon + "Saving" text
 - Saved: Green tinted background (emerald-500/10), checkmark icon with zoom animation
@@ -715,8 +732,7 @@ UX States:
 Important: The "Saved" state must persist until a NEW tweet is generated. Use useRef to track previous content and useEffect to reset saved state only when content changes. Do not use setTimeout to reset the saved state.
 
 Match the minimal dark aesthetic of the app (200ms ease-out transitions, subtle hover states).
-````
-
+```
 
 ## 11. Build the Tweet Library
 
@@ -724,20 +740,23 @@ Saving tweets is great, but users need a way to access them! Let's build a slide
 
 This is where the app starts feeling like a real product — a complete workflow from draft to polish to save to reuse:
 
-````markdown
+```markdown
 Add a Library feature to browse and reuse saved tweets.
 
 Components to create:
+
 - LibraryButton.tsx - Fixed top-right button with count badge
 - LibraryPanel.tsx - Slide-in panel from right (360px, backdrop blur)
 - SavedTweetCard.tsx - Tweet cards that look like published tweets
 
 LibraryButton:
+
 - Fixed position top-right (fixed top-6 right-6)
 - Shows saved tweets count as badge
 - Toggles panel open/close
 
 LibraryPanel:
+
 - Slides in from right with 300ms ease-out animation
 - Backdrop overlay with blur
 - Header with title, count, and close button
@@ -746,6 +765,7 @@ LibraryPanel:
 - Fetches tweets from GET /api/tweets when opened
 
 SavedTweetCard:
+
 - Looks like a real published tweet (profile image, name, verified badge, handle, date)
 - Shows transformed tweet content only (not original)
 - Footer: character count on left, Copy/Delete icons on right (subtle, brighten on hover)
@@ -753,13 +773,14 @@ SavedTweetCard:
 - Delete shows inline confirmation (Cancel/Delete buttons), not a modal
 
 Integration:
+
 - Add library state to TweetTransformer (isOpen, count)
 - Fetch count on mount and after saving
 - Pass onUseAsDraft callback to set draft and clear transformed tweet
 - Refresh count when panel closes (in case tweets were deleted)
 
 Styling: Match minimal dark aesthetic - subtle borders, muted colors, smooth 200ms transitions.
-````
+```
 
 ### Quick Check
 
@@ -774,30 +795,29 @@ git add .
 git commit -m "Add tweet library with save/browse/delete"
 ```
 
-
 ## 12. Add Theme Switcher
 
 Dark mode is standard, but why stop there? Let's add personality with multiple dark themes. Users can pick a vibe that matches their style — from purple twilight to warm desert tones to classic newspaper grey.
 
 This is a small touch that makes the app feel more personal and polished:
 
-````markdown
+```markdown
 Add a theme system to my app with 3 dark themes and a minimal theme switcher.
 
 THEMES:
+
 1. "Disco" - Purple/violet twilight vibes
    - Background: #17171c (deep blue-black)
    - Accent: #a78bfa (soft violet)
-   
 2. "Dust" - Desert warmth, amber tones
    - Background: #1a1816 (warm charcoal)
    - Accent: #d4a574 (warm amber/sand)
-   
 3. "Press" - Old newspaper, pure greys
    - Background: #262626 (true grey)
    - Accent: #a3a3a3 (neutral grey)
 
 IMPLEMENTATION:
+
 - Use CSS custom properties (:root and [data-theme="..."]) for all colors
 - Add a subtle radial gradient glow at the top of the page using the accent color
 - Create a ThemeSwitcher component with small colored dots (one per theme)
@@ -807,12 +827,12 @@ IMPLEMENTATION:
 - Prevent transition flash on page load with a "no-transitions" class
 
 UX REQUIREMENTS:
+
 - Each dot shows the accent color of that theme
 - Selected theme has a subtle ring + slight scale up
 - Unselected themes are dimmed (opacity 40%) and brighten on hover
 - Theme changes should animate smoothly across all UI elements
-````
-
+```
 
 ## 13. Add Smooth Animated Panels
 
@@ -820,7 +840,7 @@ You might have noticed that the filter and context panels appear/disappear abrup
 
 We'll use the CSS Grid height animation trick to create buttery smooth expand/collapse animations without the layout jumps that plague traditional height transitions:
 
-````markdown
+```markdown
 Add smooth animated collapsible panels that expand/collapse without layout jumps.
 
 ANIMATED PANEL COMPONENT:
@@ -835,22 +855,23 @@ Create a reusable AnimatedPanel component using the CSS Grid trick for height an
 
 COLLAPSE GAP TRICK:
 If parent uses gap/space between items, add negative margin when closed to collapse the gap:
+
 - marginTop: isOpen ? undefined : "-12px" (adjust based on your gap size)
 - Animate the margin too for smooth effect
 
 PREVENT SCROLLBAR LAYOUT SHIFT:
 Add to your global CSS on html element:
+
 - scrollbar-gutter: stable (reserves space for scrollbar)
 - overflow-x: hidden (prevents horizontal scroll)
 
 This creates buttery smooth expand/collapse without the jarring height jump or scrollbar layout shift.
-````
+```
 
 ```bash
 git add .
 git commit -m "Add themes and smooth animations"
 ```
-
 
 ## 14. Add Image Uploads
 
@@ -876,10 +897,11 @@ UPLOADTHING_TOKEN=your_token_here
 
 ### Implement Image Upload
 
-````markdown
+```markdown
 Add image upload to tweets using UploadThing.
 
 Requirements:
+
 1. Users should be able to attach ONE image to their tweet
 2. The image should only be uploaded to UploadThing when clicking "Save" (not when selecting the image)
 3. While editing, show a local preview using URL.createObjectURL() - this avoids orphaned uploads if the user changes their mind
@@ -888,6 +910,7 @@ Requirements:
 6. Display saved images in the tweet library/cards
 
 Implementation steps:
+
 1. Create UploadThing FileRouter at app/api/uploadthing/core.ts with a "tweetImage" route (4MB max, 1 file)
 2. Create the route handler at app/api/uploadthing/route.ts
 3. Create typed utilities at app/lib/uploadthing.ts with useUploadThing hook
@@ -900,7 +923,7 @@ Implementation steps:
 
 The schema already has imageUrl and imageAlt fields.
 Key pattern: Store File locally → preview with createObjectURL → upload only on save → save URL to database
-````
+```
 
 ### Quick Check
 
@@ -914,7 +937,6 @@ Key pattern: Store File locally → preview with createObjectURL → upload only
 git add .
 git commit -m "Add image upload with UploadThing"
 ```
-
 
 ## Summary
 
@@ -936,7 +958,6 @@ Here are some ideas to extend your app:
 - Implement tweet scheduling
 - Add analytics to track transformations
 - Create shareable public links
-
 
 ## Resources
 

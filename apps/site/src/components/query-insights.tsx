@@ -52,7 +52,9 @@ const TableCell = ({ children }: { children?: React.ReactNode }) => (
 );
 
 const TableBody = ({ children }: { children?: React.ReactNode }) => (
-  <tbody className="text-foreground-neutral font-mono">{children ?? null}</tbody>
+  <tbody className="text-foreground-neutral font-mono">
+    {children ?? null}
+  </tbody>
 );
 
 export const QueryInsightsTable = () => (

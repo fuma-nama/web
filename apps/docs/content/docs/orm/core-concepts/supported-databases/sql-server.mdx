@@ -77,24 +77,25 @@ sqlserver://host:1433;user={MyServer/User};password={Pass:Word;};database=db
 
 ### Connection string arguments
 
-| Argument | Default | Description |
-|----------|---------|-------------|
-| `database` / `initial catalog` | `master` | Database name |
-| `user` / `username` / `uid` | | SQL Server login or Windows username (if using `integratedSecurity`) |
-| `password` / `pwd` | | Password for user |
-| `encrypt` | `true` | Use TLS: `true` (always), `false` (login only) |
-| `integratedSecurity` | | Windows authentication: `true`, `false`, `yes`, `no` |
-| `schema` | `dbo` | Schema prefix for all queries |
-| `connectTimeout` | `5` | Seconds to wait for connection |
-| `socketTimeout` | | Seconds to wait for each query |
-| `poolTimeout` | `10` | Seconds to wait for connection from pool |
-| `trustServerCertificate` | `false` | Trust server certificate without validation |
-| `trustServerCertificateCA` | | Path to CA certificate file (`.pem`, `.crt`, `.der`) |
-| `ApplicationName` | | Application name for the connection |
+| Argument                       | Default  | Description                                                          |
+| ------------------------------ | -------- | -------------------------------------------------------------------- |
+| `database` / `initial catalog` | `master` | Database name                                                        |
+| `user` / `username` / `uid`    |          | SQL Server login or Windows username (if using `integratedSecurity`) |
+| `password` / `pwd`             |          | Password for user                                                    |
+| `encrypt`                      | `true`   | Use TLS: `true` (always), `false` (login only)                       |
+| `integratedSecurity`           |          | Windows authentication: `true`, `false`, `yes`, `no`                 |
+| `schema`                       | `dbo`    | Schema prefix for all queries                                        |
+| `connectTimeout`               | `5`      | Seconds to wait for connection                                       |
+| `socketTimeout`                |          | Seconds to wait for each query                                       |
+| `poolTimeout`                  | `10`     | Seconds to wait for connection from pool                             |
+| `trustServerCertificate`       | `false`  | Trust server certificate without validation                          |
+| `trustServerCertificateCA`     |          | Path to CA certificate file (`.pem`, `.crt`, `.der`)                 |
+| `ApplicationName`              |          | Application name for the connection                                  |
 
 :::warning[Prisma ORM v7: Connection pool defaults changed]
 
 Driver adapters use `mssql` driver defaults which differ from v6:
+
 - **Connection timeout:** `15s` (vs v6's `5s`)
 - **Idle timeout:** `30s` (vs v6's `300s`)
 
@@ -124,17 +125,17 @@ sqlserver://mycomputer\sql2019;database=sample;integratedSecurity=true;trustServ
 
 ## Type mappings
 
-| Prisma | SQL Server |
-|--------|------------|
-| `String` | `NVARCHAR(1000)` |
-| `Boolean` | `BIT` |
-| `Int` | `INT` |
-| `BigInt` | `BIGINT` |
-| `Float` | `FLOAT(53)` |
-| `Decimal` | `DECIMAL(32,16)` |
-| `DateTime` | `DATETIME2` |
-| `Json` | Not supported |
-| `Bytes` | `VARBINARY(MAX)` |
+| Prisma     | SQL Server       |
+| ---------- | ---------------- |
+| `String`   | `NVARCHAR(1000)` |
+| `Boolean`  | `BIT`            |
+| `Int`      | `INT`            |
+| `BigInt`   | `BIGINT`         |
+| `Float`    | `FLOAT(53)`      |
+| `Decimal`  | `DECIMAL(32,16)` |
+| `DateTime` | `DATETIME2`      |
+| `Json`     | Not supported    |
+| `Bytes`    | `VARBINARY(MAX)` |
 
 See [full type mapping reference](/orm/reference/prisma-schema-reference#model-field-scalar-types) for complete details.
 
@@ -173,6 +174,7 @@ sqlserver://host:1433;database=db;schema=dbo;...
 **Destructive changes:**
 
 Some operations require table recreation:
+
 - Adding/removing `autoincrement()`
 - Dropping all columns from a table
 

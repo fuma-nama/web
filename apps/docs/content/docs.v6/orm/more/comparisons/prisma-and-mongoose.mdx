@@ -59,7 +59,7 @@ const userWithPost = await prisma.user.findUnique({
   include: {
     post: true,
   },
-})
+});
 ```
 
 ```ts tab="Fluent API"
@@ -69,7 +69,7 @@ const userWithPost = await prisma.user
       id: 2,
     },
   })
-  .post()
+  .post();
 ```
 
 **Mongoose**
@@ -186,17 +186,17 @@ const user = await prisma.user.create({
 
 ```ts tab="Using create"
 const user = await User.create({
-  name: 'Alice',
-  email: 'alice@prisma.io',
-})
+  name: "Alice",
+  email: "alice@prisma.io",
+});
 ```
 
 ```ts tab="Using save"
 const user = new User({
-  name: 'Alice',
-  email: 'alice@prisma.io',
-})
-await user.save()
+  name: "Alice",
+  email: "alice@prisma.io",
+});
+await user.save();
 ```
 
 ## Updating objects
@@ -221,15 +221,15 @@ const updatedUser = await User.findOneAndUpdate(
   { _id: 2 },
   {
     $set: {
-      name: 'Alicia',
+      name: "Alicia",
     },
-  }
-)
+  },
+);
 ```
 
 ```ts tab="Using save"
-user.name = 'Alicia'
-await user.save()
+user.name = "Alicia";
+await user.save();
 ```
 
 ## Deleting objects

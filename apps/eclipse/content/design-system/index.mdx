@@ -3,7 +3,7 @@ title: Introduction
 description: Eclipse is Prisma's design system, providing a consistent visual language across all our documentation and products.
 ---
 
-import { EclipseShowcase } from '@/components/eclipse-showcase';
+import { EclipseShowcase } from "@/components/eclipse-showcase";
 
 Built with Tailwind CSS and design tokens imported directly from Figma, it ensures design consistency and makes it easy to build beautiful, accessible interfaces.
 
@@ -36,7 +36,7 @@ Create or update `postcss.config.mjs`:
 ```js
 export default {
   plugins: {
-    '@tailwindcss/postcss': {},
+    "@tailwindcss/postcss": {},
   },
 };
 ```
@@ -66,7 +66,6 @@ export function App() {
 
 - Keep Tailwind initialization at the app level (import `tailwindcss` once in the app entry stylesheet).
 - `@prisma/eclipse/styles/globals.css` includes Eclipse tokens/utilities and `@source` directives for Eclipse components.
-
 
 ## Interactive Showcase
 
@@ -146,6 +145,7 @@ Each color has multiple variants for different use cases:
 - `reverse-weak` - Lighter reverse color
 
 Example:
+
 ```tsx
 <div className="bg-background-ppg">
   <span className="text-foreground-ppg-reverse">Text on PPG background</span>
@@ -256,11 +256,13 @@ import { cn } from "@prisma/eclipse/lib/cn";
 
 function MyComponent({ className, isActive }) {
   return (
-    <div className={cn(
-      "bg-background-default",
-      isActive && "bg-background-ppg",
-      className
-    )}>
+    <div
+      className={cn(
+        "bg-background-default",
+        isActive && "bg-background-ppg",
+        className,
+      )}
+    >
       Content
     </div>
   );

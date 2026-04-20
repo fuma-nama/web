@@ -35,29 +35,35 @@ model Post {
   createdAt DateTime @default(now())
 }
 ```
+
 ## What are TypeScript-based schema definitions?
 
 Some ORMs let you define schemas in TypeScript and leverage the type system of the language. While this approach keeps as much of you application in TypeScript as possible, it often leads to more verbose, boilerplate-heavy definitions that can be harder to maintain, understand, and collaborate on.
 
 ```tsx
-export const Users = defineTable('users', {
-  id: serial('id').primaryKey(),
-  email: varchar('email', { length: 255 }).unique(),
-  name: varchar('name', { length: 255 }).nullable(),
-  createdAt: timestamp('created_at').default('now()'),
+export const Users = defineTable("users", {
+  id: serial("id").primaryKey(),
+  email: varchar("email", { length: 255 }).unique(),
+  name: varchar("name", { length: 255 }).nullable(),
+  createdAt: timestamp("created_at").default("now()"),
 });
 
-export const Posts = defineTable('posts', {
-  id: serial('id').primaryKey(),
-  title: varchar('title', { length: 255 }).notNull(),
-  content: varchar('content', { length: 5000 }).nullable(),
-  published: boolean('published').default(false),
-  authorId: int('author_id').notNull(),
-  createdAt: timestamp('created_at').default('now()'),
-}, (posts) => ({
-  authorRelation: relation(posts.authorId, Users.id),
-}));
+export const Posts = defineTable(
+  "posts",
+  {
+    id: serial("id").primaryKey(),
+    title: varchar("title", { length: 255 }).notNull(),
+    content: varchar("content", { length: 5000 }).nullable(),
+    published: boolean("published").default(false),
+    authorId: int("author_id").notNull(),
+    createdAt: timestamp("created_at").default("now()"),
+  },
+  (posts) => ({
+    authorRelation: relation(posts.authorId, Users.id),
+  }),
+);
 ```
+
 Compared to the Prisma schema that was described in the previous paragraph, defining fields in TypeScript requires knowledge of low-level constructs like `varchar` and `serial`. Also, relationships aren’t defined in both directions, so there’s no sign on `Users` that `Posts` exist.
 
 While TypeScript-based schemas are flexible, they have a steep learning curve because you must learn many different field types and view multiple tables to understand the database structure. This can delay new team members or non-developers from becoming effective quickly.
@@ -78,6 +84,7 @@ model Product {
   isAvailable Boolean  @default(true)
 }
 ```
+
 In this model we see an `id` as a primary key as well as `name`, `price`, and `isAvailable`. All fields that are easily understandable at a glance, both of expert as well as novice (or even non-technical) team members.
 
 **TypeScript-based schema**
@@ -85,13 +92,14 @@ In this model we see an `id` as a primary key as well as `name`, `price`, and `i
 In contrast, defining the same model in TypeScript involves multiple function calls and more detailed configuration, which adds complexity.
 
 ```tsx
-export const Products = defineTable('products', {
-  id: serial('id').primaryKey(),
-  name: varchar('name', { length: 255 }).unique(),
-  price: float('price').default(0.0),
-  isAvailable: boolean('is_available').default(true),
+export const Products = defineTable("products", {
+  id: serial("id").primaryKey(),
+  name: varchar("name", { length: 255 }).unique(),
+  price: float("price").default(0.0),
+  isAvailable: boolean("is_available").default(true),
 });
 ```
+
 **Takeaway:** PSL offers a cleaner and more accessible approach, reducing the need for repetitive boilerplate. PSL works better for teams with mixed skill levels, including both technical and non-technical members.
 
 ### Modeling relationships with ease
@@ -116,6 +124,7 @@ model Post {
   author    User   @relation(fields: [authorId], references: [id])
 }
 ```
+
 Here, the relationship is clear: a user can have multiple posts, and each post refers back to its author through a defined relation.
 
 **Many-to-many relationships in PSL**
@@ -135,6 +144,7 @@ model Course {
   students Student[]
 }
 ```
+
 In this example, PSL automatically handles the many-to-many relationship without additional boilerplate, making it easy to define complex associations.
 
 **TypeScript-based schema comparison**
@@ -143,39 +153,48 @@ While similar relationships can be modeled in TypeScript-based schemas, the appr
 
 ```tsx
 // One-to-many in TypeScript
-export const Users = defineTable('users', {
-  id: serial('id').primaryKey(),
-  name: varchar('name', { length: 255 }),
+export const Users = defineTable("users", {
+  id: serial("id").primaryKey(),
+  name: varchar("name", { length: 255 }),
 });
 
-export const Posts = defineTable('posts', {
-  id: serial('id').primaryKey(),
-  title: varchar('title', { length: 255 }),
-  authorId: int('author_id').notNull(),
-}, (posts) => ({
-  userRelation: relation(posts.authorId, Users.id),
-}));
+export const Posts = defineTable(
+  "posts",
+  {
+    id: serial("id").primaryKey(),
+    title: varchar("title", { length: 255 }),
+    authorId: int("author_id").notNull(),
+  },
+  (posts) => ({
+    userRelation: relation(posts.authorId, Users.id),
+  }),
+);
 
 // Many-to-many in TypeScript
-export const Students = defineTable('students', {
-  id: serial('id').primaryKey(),
-  name: varchar('name', { length: 255 }),
+export const Students = defineTable("students", {
+  id: serial("id").primaryKey(),
+  name: varchar("name", { length: 255 }),
 });
 
-export const Courses = defineTable('courses', {
-  id: serial('id').primaryKey(),
-  title: varchar('title', { length: 255 }),
+export const Courses = defineTable("courses", {
+  id: serial("id").primaryKey(),
+  title: varchar("title", { length: 255 }),
 });
 
 // Join table for many-to-many relationship
-export const StudentCourses = defineTable('student_courses', {
-  studentId: int('student_id').notNull(),
-  courseId: int('course_id').notNull(),
-}, (sc) => ({
-  studentRelation: relation(sc.studentId, Students.id),
-  courseRelation: relation(sc.courseId, Courses.id),
-}));
+export const StudentCourses = defineTable(
+  "student_courses",
+  {
+    studentId: int("student_id").notNull(),
+    courseId: int("course_id").notNull(),
+  },
+  (sc) => ({
+    studentRelation: relation(sc.studentId, Students.id),
+    courseRelation: relation(sc.courseId, Courses.id),
+  }),
+);
 ```
+
 The output of this code is equivalent to the previous two PSL snippets: you have a one-to-many relationship between users and posts (one user can have many posts, but each post only has one user) and a many-to-many relationship between students and courses (each student can have many courses and vice versa).
 
 However, these relationships aren’t defined bi-directionally, and many-to-many relationships require an explicit join table, adding extra complexity to the schema.
@@ -196,18 +215,20 @@ model Task {
   completed   Boolean  @default(false)
 }
 ```
+
 **TypeScript-based schema**
 
 TypeScript definitions, being inherently tied to code, can be intimidating for those without a development background.
 
 ```tsx
-export const Tasks = defineTable('tasks', {
-  id: serial('id').primaryKey(),
-  description: varchar('description', { length: 1000 }),
-  dueDate: timestamp('due_date').nullable(),
-  completed: boolean('completed').default(false),
+export const Tasks = defineTable("tasks", {
+  id: serial("id").primaryKey(),
+  description: varchar("description", { length: 1000 }),
+  dueDate: timestamp("due_date").nullable(),
+  completed: boolean("completed").default(false),
 });
 ```
+
 **Takeaway:** PSL’s readability makes it a better fit for teams that require input from both technical and non-technical members.
 
 ### Developer experience and productivity
@@ -223,17 +244,19 @@ const users = await prisma.user.findMany({
   where: { email: "example@example.com" },
 });
 ```
+
 **TypeScript-based schema**
 
 In contrast, many TypeScript-based ORMs need extra configuration. Developers often need to write migration scripts by hand, and their query APIs are more verbose. For example, a similar query might require multiple method calls that are less intuitive:
 
 ```tsx
 const users = await db
-  .selectFrom('users')
+  .selectFrom("users")
   .selectAll()
-  .where('email', '=', 'example@example.com')
+  .where("email", "=", "example@example.com")
   .execute();
 ```
+
 While functional, this lacks the generated type-safety and may require more boilerplate code to achieve the same result.
 
 **Takeaway:** By automating tasks like client generation, PSL helps developers focus on building features rather than managing configuration overhead—leading to a more productive and error-resistant development workflow.
@@ -257,27 +280,29 @@ model Order {
   customer   Customer @relation(fields: [customerId], references: [id])
 }
 ```
+
 **TypeScript-based schema**
 
 TypeScript definitions, on the other hand, can lead to inconsistent implementations across a team as not all engineering team members are at the same skill level.
 
 ```tsx
 // Developer A's style
-export const Customers = defineTable('customers', {
-  id: serial('id').primaryKey(),
-  name: varchar('name', { length: 255 }),
-  email: varchar('email', { length: 255 }).unique(),
+export const Customers = defineTable("customers", {
+  id: serial("id").primaryKey(),
+  name: varchar("name", { length: 255 }),
+  email: varchar("email", { length: 255 }).unique(),
 });
 
 // Developer B's style
 export const Orders = {
-  tableName: 'orders',
+  tableName: "orders",
   columns: {
-    id: { type: 'serial', primaryKey: true },
-    customerId: { type: 'int', notNull: true },
+    id: { type: "serial", primaryKey: true },
+    customerId: { type: "int", notNull: true },
   },
 };
 ```
+
 **Takeaway:** PSL’s enforced structure leads to a unified, maintainable schema design across your entire project.
 
 ### Leveraging AI and AI-augmented IDEs

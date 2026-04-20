@@ -48,12 +48,9 @@ In this tutorial, you will learn how to integrate tracing into an existing web a
 
 Initially you will create manual traces for an HTTP endpoint and print them to the console. Then you will learn how to visualize your traces using [Jaeger](https://www.jaegertracing.io/). You will also learn how to automatically generate traces for your database queries using [Prisma's tracing feature](https://www.prisma.io/docs/concepts/components/prisma-client/opentelemetry-tracing). Finally, you will learn about automatic instrumentation and performance considerations when using tracing.
 
-
-
 ### What is tracing?
 
 Tracing is an _observability tool_ that records the path taken by a request as it propagates through your application(s). Traces help you link the activities that your system is performing in response to any particular request. Traces also provide timing information (e.g., start time, duration, etc.) about these activities.
-
 
 A single _trace_ gives you information about what happens when a request is made by a user or an application. Each trace is made up of one or more _spans_, which contain information about a single step or task happening during a request.
 
@@ -61,7 +58,7 @@ Using a tracing tool such as [Jaeger](https://www.jaegertracing.io/), traces can
 
 ![Visualization of a single trace](/tracing-tutorial-prisma-pmkddgq1lm2/imgs/trace-diagram-example.png)
 
- A single span can have multiple child spans, which represent sub-tasks happening during the parent span. For example, in the diagram above, the **PRISMA QUERY** span has a child span called **PRISMA ENGINE**. The top-most span is called the _root span_, representing the entire trace from start to finish. In the diagram above, **GET /ENDPOINT** is the root span.
+A single span can have multiple child spans, which represent sub-tasks happening during the parent span. For example, in the diagram above, the **PRISMA QUERY** span has a child span called **PRISMA ENGINE**. The top-most span is called the _root span_, representing the entire trace from start to finish. In the diagram above, **GET /ENDPOINT** is the root span.
 
 Tracing is a fantastic way to gain a deeper understanding and visibility into your system. It lets you precisely identify errors and performance bottlenecks that are impacting your application. Tracing is especially useful for debugging distributed systems, where each request can involve multiple services, and specific issues can be difficult to reproduce locally.
 
@@ -77,7 +74,6 @@ You will be using the following tools in this tutorial:
 - [Jaeger](https://www.jaegertracing.io/) as the tracing visualization tool
 - [Express](https://expressjs.com/) as the web framework
 - [TypeScript](https://www.typescriptlang.org/) as the programming language
-
 
 ## Prerequisites
 
@@ -101,8 +97,6 @@ To follow along with this tutorial, you will be expected to:
 
 If you don't have a Unix shell (for example, you are on a Windows machine), you can still follow along, but the shell commands may need to be modified for your machine.
 
-
-
 ## Clone the repository
 
 You will need a web application to use when demonstrating tracing. You can use an existing [Express](https://expressjs.com/) web application we built for this tutorial.
@@ -110,33 +104,47 @@ You will need a web application to use when demonstrating tracing. You can use a
 To get started, perform the following actions:
 
 1. Clone the [repository](https://github.com/prisma/tracing-tutorial-prisma/tree/tracing-begin):
-  ```shell   git clone -b tracing-begin git@github.com:prisma/tracing-tutorial-prisma.git
-  ```
+
+```shell git clone -b tracing-begin git@github.com:prisma/tracing-tutorial-prisma.git
+
+```
+
 2. Navigate to the cloned directory:
-  ```shell   cd tracing-tutorial-prisma
-  ```
+
+```shell cd tracing-tutorial-prisma
+
+```
+
 3. Install dependencies:
-  ```shell   npm install
-  ```
+
+```shell npm install
+
+```
+
 4. Apply database migrations from the `prisma/migrations` directory:
-  ```shell   npx prisma migrate dev
-  ```
-  > **Note**: This command will also generate Prisma Client and seed the database.
-5. Start the project:
-  ```shell   npm run dev
-  ```
 
-  >  **Note**: You should keep the server running as you develop the application. The `dev` script should restart the server any time there is a change in the code.
+```shell npx prisma migrate dev
 
+```
+
+> **Note**: This command will also generate Prisma Client and seed the database. 5. Start the project:
+
+```shell npm run dev
+
+```
+
+> **Note**: You should keep the server running as you develop the application. The `dev` script should restart the server any time there is a change in the code.
 
 The application has only one endpoint: [http://localhost:4000/users/random](http://localhost:4000/users/random). This endpoint will return a random sample of 10 users from the database. Test out the endpoint by going to the URL above or by running the following command:
 
 ```shell
 curl http://localhost:4000/users/random
 ```
+
 ### Project structure and files
 
 The repository you cloned has the following structure:
+
 ```
 tracing-tutorial-prisma
   ├── README.md
@@ -154,6 +162,7 @@ tracing-tutorial-prisma
   ├── server.ts
   └── tsconfig.json
 ```
+
 The notable files and directories in this repository are:
 
 - `prisma`
@@ -163,7 +172,6 @@ The notable files and directories in this repository are:
   - `dev.db`: Stores the state of the SQLite database.
 - `server.ts`: The Express server with the `GET /users/random` endpoint.
 - `tsconfig.json` & `package.json`: Configuration files.
-
 
 ## Integrate tracing into your application
 
@@ -181,6 +189,7 @@ Get started with tracing by installing the following OpenTelemetry packages:
 npm install --save @opentelemetry/api
 npm install --save @opentelemetry/sdk-trace-node
 ```
+
 These packages contain the Node.js implementation of OpenTelemetry tracing.
 
 Now, create a new `tracing.ts` file to initialize tracing:
@@ -188,6 +197,7 @@ Now, create a new `tracing.ts` file to initialize tracing:
 ```shell
 touch tracing.ts
 ```
+
 Inside `tracing.ts`, initialize tracing as follows:
 
 ```ts
@@ -195,29 +205,33 @@ Inside `tracing.ts`, initialize tracing as follows:
 
 import { Resource } from "@opentelemetry/resources";
 import { SemanticResourceAttributes } from "@opentelemetry/semantic-conventions";
-import { SimpleSpanProcessor, ConsoleSpanExporter } from "@opentelemetry/sdk-trace-base";
+import {
+  SimpleSpanProcessor,
+  ConsoleSpanExporter,
+} from "@opentelemetry/sdk-trace-base";
 import { NodeTracerProvider } from "@opentelemetry/sdk-trace-node";
 import { trace, Tracer } from "@opentelemetry/api";
 
 export default function initializeTracing(serviceName: string): Tracer {
-    const provider = new NodeTracerProvider({
-        resource: new Resource({
-            [SemanticResourceAttributes.SERVICE_NAME]: serviceName,
-        }),
-    });
+  const provider = new NodeTracerProvider({
+    resource: new Resource({
+      [SemanticResourceAttributes.SERVICE_NAME]: serviceName,
+    }),
+  });
 
-    const consoleExporter = new ConsoleSpanExporter()
-    provider.addSpanProcessor(new SimpleSpanProcessor(consoleExporter));
+  const consoleExporter = new ConsoleSpanExporter();
+  provider.addSpanProcessor(new SimpleSpanProcessor(consoleExporter));
 
-    provider.register();
+  provider.register();
 
-    return trace.getTracer(serviceName);
-};
+  return trace.getTracer(serviceName);
+}
 ```
+
 The `initializeTracing` function does a few things:
 
 1. It initializes a [tracer provider](https://opentelemetry.io/docs/concepts/signals/traces/#tracer-provider), which is used to create [tracers](https://opentelemetry.io/docs/concepts/signals/traces/#tracer). A tracer creates traces/spans inside your application.
-2. It defines a [trace exporter](https://opentelemetry.io/docs/concepts/signals/traces/#trace-exporters)  and adds it to your provider. Trace exporters send traces to a variety of destinations. In this case, the `ConsoleSpanExporter` prints traces to the console.
+2. It defines a [trace exporter](https://opentelemetry.io/docs/concepts/signals/traces/#trace-exporters) and adds it to your provider. Trace exporters send traces to a variety of destinations. In this case, the `ConsoleSpanExporter` prints traces to the console.
 3. It registers the provider for use with the OpenTelemetry API by calling the `.register()` function.
 4. Finally, it creates and returns a tracer with a given name passed as an argument to the function.
 
@@ -247,8 +261,8 @@ app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);
 });
 ```
-Now you are ready to create your first trace!
 
+Now you are ready to create your first trace!
 
 ### Create your first trace
 
@@ -281,6 +295,7 @@ app.get("/users/random", async (_req: Request, res: Response) => {
     });
 });
 ```
+
 Here you are creating a new span using `startActiveSpan()` and enclosing all of the request handler logic inside the callback function it provides. The callback function comes with a reference to the `span` object, which you have named `requestSpan`. You can use it to modify or add attributes to the span. In this code, you set an attribute called `http.status` to the span based on the outcome of the request. Finally, once the request has been served, you end the span.
 
 To see your newly created span, go to [http://localhost:4000/users/random](http://localhost:4000/users/random). Alternatively, you can run the following inside the terminal:
@@ -288,6 +303,7 @@ To see your newly created span, go to [http://localhost:4000/users/random](http:
 ```shell
 curl http://localhost:4000/users/random
 ```
+
 Go to the terminal window that is running the Express server. You should see an object _similar_ to the following printed to the console:
 
 ```ts
@@ -305,6 +321,7 @@ Go to the terminal window that is running the Express server. You should see an 
   links: []
 }
 ```
+
 This object represents the span you have just created. Some of the notable properties here are:
 
 - `id` represents a unique identifier for this particular span.
@@ -313,7 +330,6 @@ This object represents the span you have just created. Some of the notable prope
 - `name` represents the name of the span. You specified this when you created the span.
 - `timestamp` is a UNIX timestamp representing the span creation time.
 - `duration` is the duration of the span in microseconds.
-
 
 ## Visualize traces with Jaeger
 
@@ -331,6 +347,7 @@ In this tutorial, you will use [Docker Compose](https://docs.docker.com/compose/
 ```shell
 touch docker-compose.yml
 ```
+
 Define the following service inside the file:
 
 ```yml
@@ -355,11 +372,13 @@ services:
       - 14269:14269
       - 9411:9411
 ```
+
 Running this image will set up and initialize all necessary components of Jaeger inside a Docker container. To run Jaeger, open a _new_ terminal window and run the following command in the main folder of your project:
 
 ```shell
 docker-compose up
 ```
+
 > **Note**: If you close the terminal window running the docker container, it will also stop the container. You can avoid this if you add a `-d` option to the end of the command, like this: `docker-compose up -d`.
 
 If everything goes smoothly, you should be able to access Jaeger at [http://localhost:16686](http://localhost:16686).
@@ -367,12 +386,6 @@ If everything goes smoothly, you should be able to access Jaeger at [http://loca
 ![Jaeger user interface](/tracing-tutorial-prisma-pmkddgq1lm2/imgs/jaeger-query-empty.png)
 
 Since your application is not yet sending traces to Jaeger, the Jaeger UI will be empty.
-
-
-
-
-
-
 
 ### Add the Jaeger trace exporter
 
@@ -383,6 +396,7 @@ First, install the exporter package in your project:
 ```shell
 npm install @opentelemetry/exporter-jaeger
 ```
+
 Now add the exporter to `tracing.ts`:
 
 ```ts
@@ -415,13 +429,14 @@ export default function initializeTracing(serviceName: string): Tracer {
     return trace.getTracer(serviceName);
 };
 ```
+
 Here you initialized a new `JaegerExporter` and added it to your tracer provider. The `endpoint` property in the `JaegerExporter` constructor points to the location where Jaeger is listening for trace data. You also removed the console exporter as it was no longer needed.
 
 You should now be able to see your traces in Jaeger. To see your first trace:
 
 1. Query the `GET /users/random` endpoint again (`curl http://localhost:4000/users/random`).
 2. Go to [http://localhost:16686](http://localhost:16686).
-3. In the left-hand **Search** tab, in the  **Service** drop-down, select **express-server**.
+3. In the left-hand **Search** tab, in the **Service** drop-down, select **express-server**.
 4. Near the bottom of the **Search** tab, click **Find Traces**.
 5. You should now see a list of traces. Click on the first trace in the list.
 6. You will see a detailed view of the trace. There should be a single span called **GET /users/random**. Click on the span to get more information.
@@ -429,13 +444,11 @@ You should now be able to see your traces in Jaeger. To see your first trace:
 
 ![Viewing traces inside Jaeger](/tracing-tutorial-prisma-pmkddgq1lm2/imgs/jaeger-trace-details.gif)
 
-
 ## Add traces for your Prisma queries
 
 In this section, you will learn how to trace your database queries. Initially, you will do this manually by creating the spans yourself. Even though manual tracing is no longer necessary with Prisma, implementing manual tracing will give you a better understanding of how tracing works.
 
 Then you will use the new [tracing feature](https://www.prisma.io/docs/concepts/components/prisma-client/opentelemetry-tracing) in Prisma to do the same automatically.
-
 
 ### Manually trace your Prisma queries
 
@@ -492,10 +505,10 @@ app.get("/users/random", async (_req: Request, res: Response) => {
 
 // ...
 ```
+
 You have created a new span called `prisma.user.findmany` for the Prisma query. You have also made some changes to how the `users` variable is declared so that it remains consistent with the rest of your code.
 
 Test out the new span by querying the `GET /users/random` endpoint again (`curl http://localhost:4000/users/random`) and viewing the newly generated trace in Jaeger.
-
 
 ![Child span visualized in Jaeger](/tracing-tutorial-prisma-pmkddgq1lm2/imgs/child-span-manual.png)
 
@@ -512,9 +525,6 @@ So far, you have learned how to set up tracing and manually generate traces and 
 Fortunately, many frameworks and libraries provide _automatic instrumentation_, allowing you to generate traces for those components automatically. Automatic instrumentation requires little to no code changes, is very quick to set up and can provide you with basic telemetry out of the box.
 
 It's important to note that automatic and manual instrumentation are not mutually exclusive. It can be beneficial to use both techniques at the same time. Automatic instrumentation can provide good baseline telemetry with high coverage across all your endpoints. Manual instrumentation can then be added for specific fine-grained traces and custom metrics/metadata.
-
-
-
 
 ### Set up automatic instrumentation for Prisma
 
@@ -545,6 +555,7 @@ model User {
   posts Post[]
 }
 ```
+
 > **Note**: Tracing is currently a [Preview feature](https://www.prisma.io/docs/about/prisma/releases#preview). This is why you have to add the `tracing` feature flag before you can use tracing.
 
 Now, regenerate Prisma Client:
@@ -552,18 +563,19 @@ Now, regenerate Prisma Client:
 ```shell
 npx prisma generate client
 ```
+
 To perform automatic instrumentation, you also need to install two new packages with `npm`:
 
 ```shell
 npm install @opentelemetry/instrumentation @prisma/instrumentation
 ```
+
 These packages are needed because:
+
 - `@opentelemetry/instrumentation` is required to set up automatic instrumentation.
 - `@prisma/instrumentation` provides automatic instrumentation for Prisma Client.
 
-
-
-According to OpenTelemetry terminology, an [_instrumented library_](https://opentelemetry.io/docs/reference/specification/glossary/#instrumented-library) is the library or package for which one gather traces.  On the other hand, the [_instrumentation library_](https://opentelemetry.io/docs/reference/specification/glossary/#instrumentation-library) is the library that generates the traces for a certain instrumented library. In this case, Prisma Client is the instrumented library and `@prisma/instrumentation` is the instrumentation library.
+According to OpenTelemetry terminology, an [_instrumented library_](https://opentelemetry.io/docs/reference/specification/glossary/#instrumented-library) is the library or package for which one gather traces. On the other hand, the [_instrumentation library_](https://opentelemetry.io/docs/reference/specification/glossary/#instrumentation-library) is the library that generates the traces for a certain instrumented library. In this case, Prisma Client is the instrumented library and `@prisma/instrumentation` is the instrumentation library.
 
 Now you need to register Prisma Instrumentation with OpenTelemetry. To do this, add the following code to your `tracing.ts` file:
 
@@ -604,8 +616,10 @@ export default function initializeTracing(serviceName: string): Tracer {
     return trace.getTracer(serviceName);
 };
 ```
+
 The `registerInstrumentations` call takes two arguments:
-- `instrumentations`  accepts an array of all the instrumentation libraries you want to register.
+
+- `instrumentations` accepts an array of all the instrumentation libraries you want to register.
 - `tracerProvider` accepts the tracer provider for your tracer(s).
 
 Since you are setting up automatic instrumentation, you no longer need to create spans for Prisma queries manually. Update `server.ts` by getting rid of the manual span for your Prisma query:
@@ -614,7 +628,7 @@ Since you are setting up automatic instrumentation, you no longer need to create
 // server.ts
 
 import initializeTracing from "./tracing";
-const tracer = initializeTracing("express-server")
+const tracer = initializeTracing("express-server");
 
 import { PrismaClient } from "@prisma/client";
 import express, { Request, Response } from "express";
@@ -623,31 +637,32 @@ const app = express();
 const port = 4000;
 
 app.get("/users/random", async (_req: Request, res: Response) => {
-    await tracer.startActiveSpan("GET /users/random", async (requestSpan) => {
-        try {
-            let users = await prisma.user.findMany({
-                include: {
-                    posts: true
-                }
-            });
+  await tracer.startActiveSpan("GET /users/random", async (requestSpan) => {
+    try {
+      let users = await prisma.user.findMany({
+        include: {
+          posts: true,
+        },
+      });
 
-            // select 10 users randomly
-            const shuffledUsers = users.sort(() => 0.5 - Math.random());
-            const selectedUsers = shuffledUsers.slice(0, 10);
+      // select 10 users randomly
+      const shuffledUsers = users.sort(() => 0.5 - Math.random());
+      const selectedUsers = shuffledUsers.slice(0, 10);
 
-            res.status(200).json(selectedUsers);
-            requestSpan.setAttribute("http.status", 200);
-        } catch (e) {
-            requestSpan.setAttribute("http.status", 500);
-            res.status(500).json({ error: 500, details: e });
-        } finally {
-            requestSpan.end();
-        }
-    });
+      res.status(200).json(selectedUsers);
+      requestSpan.setAttribute("http.status", 200);
+    } catch (e) {
+      requestSpan.setAttribute("http.status", 500);
+      res.status(500).json({ error: 500, details: e });
+    } finally {
+      requestSpan.end();
+    }
+  });
 });
 
 // ...
 ```
+
 When using automatic instrumentation, the order in which you initialize tracing matters. You need to set up tracing and register instrumentation before importing instrumented libraries. In this case, the `initializeTracing` call has to come before the `import` statement for `PrismaClient`.
 
 Once again, make a request to the `GET /users/random` endpoint and see the generated trace in Jaeger.
@@ -656,11 +671,8 @@ Once again, make a request to the `GET /users/random` endpoint and see the gener
 
 This time, the same Prisma query generates multiple spans, providing much more granular information about the query. With automatic instrumentation enabled, any other query you add to your application will also automatically generate traces.
 
-
 > **Note:** To learn more about the spans generated by Prisma, see the [trace output
- section of the tracing docs](https://www.prisma.io/docs/concepts/components/prisma-client/opentelemetry-tracing#trace-output).
-
-
+> section of the tracing docs](https://www.prisma.io/docs/concepts/components/prisma-client/opentelemetry-tracing#trace-output).
 
 ## Set up automatic instrumentation for Express
 
@@ -671,6 +683,7 @@ Get started by installing the following instrumentation libraries:
 ```shell
 npm install @opentelemetry/instrumentation-express @opentelemetry/instrumentation-http
 ```
+
 Inside `tracing.ts` register these two new instrumentation libraries:
 
 ```ts
@@ -707,32 +720,34 @@ export default function initializeTracing(serviceName: string): Tracer {
     return trace.getTracer(serviceName);
 };
 ```
+
 Finally, remove the manual span for the `GET /users/random` endpoint in `server.ts`:
 
 ```ts
 // ...
 
 app.get("/users/random", async (_req: Request, res: Response) => {
-    try {
-        let users = await prisma.user.findMany({
-            include: {
-                posts: true
-            }
-        });
+  try {
+    let users = await prisma.user.findMany({
+      include: {
+        posts: true,
+      },
+    });
 
-        // select 10 users randomly
-        const shuffledUsers = users.sort(() => 0.5 - Math.random());
-        const selectedUsers = shuffledUsers.slice(0, 10);
+    // select 10 users randomly
+    const shuffledUsers = users.sort(() => 0.5 - Math.random());
+    const selectedUsers = shuffledUsers.slice(0, 10);
 
-        res.status(200).json(selectedUsers);
-    } catch (e) {
-        res.status(500).json({ error: 500, details: e });
-    } finally {
-    }
+    res.status(200).json(selectedUsers);
+  } catch (e) {
+    res.status(500).json({ error: 500, details: e });
+  } finally {
+  }
 });
 
 // ...
 ```
+
 Make a request to the `GET /users/random` endpoint and see the generated trace in Jaeger.
 
 ![Visualization of automatic instrumentation with Express and Prisma](/tracing-tutorial-prisma-pmkddgq1lm2/imgs/express-automatic-jaeger.png)
@@ -740,7 +755,6 @@ Make a request to the `GET /users/random` endpoint and see the generated trace i
 You should see much more granular spans showing the different steps as the request passes through your code. In particular, you should see new spans generated by the `ExpressInstrumentation` library that show the request passing through various Express middleware and the `GET /users/random` request handler.
 
 > **Note**: For a list of available instrumentation libraries, check out the [OpenTelemetry Registry](https://opentelemetry.io/registry/?component=instrumentation).
-
 
 ## Reduce the performance impact of tracing
 
@@ -798,6 +812,7 @@ export default function initializeTracing(serviceName: string): Tracer {
     return trace.getTracer(serviceName);
 };
 ```
+
 Note that you are still using `SimpleSpanProcessor` in a development environment, where optimizing performance is not a big concern. This ensures traces show up as soon as they are generated in development.
 
 ### Send fewer spans via sampling
@@ -846,6 +861,7 @@ export default function initializeTracing(serviceName: string): Tracer {
     return trace.getTracer(serviceName);
 };
 ```
+
 Just like for batching, you are incorporating probability sampling only in production.
 
 ## Summary and final remarks
@@ -862,4 +878,3 @@ In this tutorial, you learned:
 - How to reduce the performance impact of tracing in production.
 
 You can find the source code for this project on [GitHub](https://github.com/prisma/tracing-tutorial-prisma). Please feel free to raise an issue in the repository or submit a PR if you notice a problem. You can also reach out to me directly on [Twitter](https://twitter.com/tasinishmam).
-

@@ -131,7 +131,9 @@ export default function RootLayout({
       {" "}
       // [!code ++]
       <html lang="en">
-        <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
           {children}
         </body>
       </html>
@@ -178,7 +180,9 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
           <Navbar /> // [!code ++]
           {children}
         </body>
@@ -419,7 +423,9 @@ export async function POST(req: NextRequest) {
     const evt = await verifyWebhook(req);
     const { id } = evt.data;
     const eventType = evt.type;
-    console.log(`Received webhook with ID ${id} and event type of ${eventType}`);
+    console.log(
+      `Received webhook with ID ${id} and event type of ${eventType}`,
+    );
 
     if (eventType === "user.created") {
       // [!code ++]
@@ -455,7 +461,9 @@ export async function POST(req: NextRequest) {
     const evt = await verifyWebhook(req);
     const { id } = evt.data;
     const eventType = evt.type;
-    console.log(`Received webhook with ID ${id} and event type of ${eventType}`);
+    console.log(
+      `Received webhook with ID ${id} and event type of ${eventType}`,
+    );
 
     if (eventType === "user.created") {
       const { id, email_addresses, first_name, last_name } = evt.data;

@@ -495,8 +495,12 @@ export default function StudioWrapper({ children }: StudioWrapperProps) {
       <header className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
-            <h1 className="text-2xl font-bold text-gray-900">Database Studio</h1>
-            <div className="text-sm text-gray-500">Powered by Prisma Studio</div>
+            <h1 className="text-2xl font-bold text-gray-900">
+              Database Studio
+            </h1>
+            <div className="text-sm text-gray-500">
+              Powered by Prisma Studio
+            </div>
           </div>
         </div>
       </header>
@@ -520,7 +524,6 @@ If you are using SQLite or MySQL, you can still embed Studio, but your `/api/stu
 
 To do this, create a new folder called `api` inside the `app` directory. Inside it, add a `studio` folder with a `route.ts` file. This file will handle all requests sent to `/api/studio` and act as the bridge between the Studio component in your frontend and the database in your backend:
 
-
 ```typescript title="app/api/studio/route.ts" tab="PostgreSQL"
 import "dotenv/config";
 import { createPrismaPostgresHttpClient } from "@prisma/studio-core/data/ppg";
@@ -536,7 +539,10 @@ const CORS_HEADERS = {
 export const dynamic = "force-dynamic";
 
 export async function GET() {
-  return Response.json({ message: "Studio API endpoint is running" }, { headers: CORS_HEADERS });
+  return Response.json(
+    { message: "Studio API endpoint is running" },
+    { headers: CORS_HEADERS },
+  );
 }
 
 export async function POST(request: Request) {
@@ -601,7 +607,10 @@ const CORS_HEADERS = {
 export const dynamic = "force-dynamic";
 
 export async function GET() {
-  return Response.json({ message: "Studio API endpoint is running" }, { headers: CORS_HEADERS });
+  return Response.json(
+    { message: "Studio API endpoint is running" },
+    { headers: CORS_HEADERS },
+  );
 }
 
 export async function POST(request: Request) {
@@ -627,7 +636,8 @@ export async function POST(request: Request) {
 
     const dbPath = url.replace("file:", "");
     const database = new DatabaseSync(dbPath);
-    const [error, results] = await createNodeSQLiteExecutor(database).execute(query);
+    const [error, results] =
+      await createNodeSQLiteExecutor(database).execute(query);
 
     if (error) {
       return Response.json([serializeError(error)], {
@@ -666,7 +676,10 @@ const CORS_HEADERS = {
 export const dynamic = "force-dynamic";
 
 export async function GET() {
-  return Response.json({ message: "Studio API endpoint is running" }, { headers: CORS_HEADERS });
+  return Response.json(
+    { message: "Studio API endpoint is running" },
+    { headers: CORS_HEADERS },
+  );
 }
 
 export async function POST(request: Request) {
@@ -728,9 +741,12 @@ import { useMemo, Suspense } from "react";
 import StudioWrapper from "@/components/StudioWrapper";
 
 // Dynamically import Studio with no SSR to avoid hydration issues
-const Studio = dynamic(() => import("@prisma/studio-core/ui").then((mod) => mod.Studio), {
-  ssr: false,
-});
+const Studio = dynamic(
+  () => import("@prisma/studio-core/ui").then((mod) => mod.Studio),
+  {
+    ssr: false,
+  },
+);
 
 // Loading component
 const StudioLoading = () => (
@@ -778,9 +794,12 @@ import { useMemo, Suspense } from "react";
 import StudioWrapper from "@/components/StudioWrapper";
 
 // Dynamically import Studio with no SSR to avoid hydration issues
-const Studio = dynamic(() => import("@prisma/studio-core/ui").then((mod) => mod.Studio), {
-  ssr: false,
-});
+const Studio = dynamic(
+  () => import("@prisma/studio-core/ui").then((mod) => mod.Studio),
+  {
+    ssr: false,
+  },
+);
 
 // Loading component
 const StudioLoading = () => (
@@ -828,9 +847,12 @@ import { useMemo, Suspense } from "react";
 import StudioWrapper from "@/components/StudioWrapper";
 
 // Dynamically import Studio with no SSR to avoid hydration issues
-const Studio = dynamic(() => import("@prisma/studio-core/ui").then((mod) => mod.Studio), {
-  ssr: false,
-});
+const Studio = dynamic(
+  () => import("@prisma/studio-core/ui").then((mod) => mod.Studio),
+  {
+    ssr: false,
+  },
+);
 
 // Loading component
 const StudioLoading = () => (

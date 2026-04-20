@@ -9,7 +9,11 @@ import {
   TableHeader,
   TableRow,
 } from "@prisma/eclipse";
-import { type ComparisonCell, type Symbol, comparisonSections } from "./pricing-data";
+import {
+  type ComparisonCell,
+  type Symbol,
+  comparisonSections,
+} from "./pricing-data";
 
 function renderCell(cell: ComparisonCell, currency: Symbol): string {
   if (typeof cell === "string") return cell;

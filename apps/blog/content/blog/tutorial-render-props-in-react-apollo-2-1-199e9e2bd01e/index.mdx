@@ -37,14 +37,28 @@ Render props are a pattern to share code between React components using _a prop 
 From the [official documentation](https://reactjs.org/docs/render-props.html): “A component with a render prop takes a function that returns a React element and calls it instead of implementing its own render logic.” Here is a simple example of what the usage of a render prop function might look like:
 
 ```jsx
-<DataProvider render={data => <h1>Hello {data.target}</h1>} />
+<DataProvider render={(data) => <h1>Hello {data.target}</h1>} />
 ```
+
 ### Render props vs Higher-order components
 
 In general, render props enable code reuse and therefore are often used as an alternative to React’s [higher-order components](https://reactjs.org/docs/higher-order-components.html) (HOCs). It should also be noted that while React Apollo 2.1. introduces this new render props API, you don’t _have_ to use it. You might very well keep on using the good ol’ [graphql](https://www.apollographql.com/docs/react/api/react/hoc/) HOC the same way you did before. So, when to use which?
 
-<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="en" dir="ltr">I can do anything you&#39;re doing with your HOC using a regular component with a render prop. Come fight me.</p>&mdash; MICHAEL JACKSON (@mjackson) <a href="https://twitter.com/mjackson/status/885910701520207872?ref_src=twsrc%5Etfw">July 14, 2017</a></blockquote>
-<script async src="/blog/tutorial-render-props-in-react-apollo-2-1-199e9e2bd01e/imgs/widgets.js" charset="utf-8"></script>
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en">
+  <p lang="en" dir="ltr">
+    I can do anything you&#39;re doing with your HOC using a regular component
+    with a render prop. Come fight me.
+  </p>
+  &mdash; MICHAEL JACKSON (@mjackson){" "}
+  <a href="https://twitter.com/mjackson/status/885910701520207872?ref_src=twsrc%5Etfw">
+    July 14, 2017
+  </a>
+</blockquote>
+<script
+  async
+  src="/blog/tutorial-render-props-in-react-apollo-2-1-199e9e2bd01e/imgs/widgets.js"
+  charset="utf-8"
+></script>
 
 Generally, the new render prop components Query, Mutation and Subscription tend to be simpler and more straightforward to use than the HOC counterpart. This is mostly because they are being used like any other React component and can just be included in your JSX code with corresponding tags (e.g. `Query`). Higher-order components always require another level of indirection in that your React components need to be wrapped with the HOC function. This can be less intuitive, especially for newcomers.
 
@@ -69,6 +83,7 @@ To kick this tutorial off, you first need to download the starter code for it. O
 ```sh
 curl https://codeload.github.com/nikolasburk/react-apollo-tutorial/tar.gz/starter | tar -xz react-apollo-tutorial-starter
 ```
+
 This downloads the code from the starter branch of [this](http://github.com/nikolasburk/react-apollo-tutorial) GitHub repository and puts it into a new directory called react-apollo-tutorial-starter.
 
 ### 1.2. Exploring the frontend app
@@ -85,7 +100,6 @@ Speaking of the backend, the code for the GraphQL server is located inside the s
 
 You can start the server by running yarn start inside the server directory (again, don’t forget running yarn install before). Once the server is running, you can open a [GraphQL Playground](https://github.com/prismagraphql/graphql-playground) under the URL `http://localhost:4000` (this also is the endpoint your frontend will connect to) and use it send to queries and mutations to your server.
 
-
 If you’ve opened a Playground right now, you’ll see an error though:
 
 ![](/tutorial-render-props-in-react-apollo-2-1-199e9e2bd01e/imgs/1*wBWEMQXeDUu6JZBN44ZGUg.png)
@@ -100,6 +114,7 @@ To deploy the Prisma service, all you need to is navigate into the server direct
 cd react-apollo-tutorial-starter/server
 yarn prisma deploy
 ```
+
 If you have the Prisma CLI installed globally on your machine (which you can do with npm install -g prisma), you can omit the yarn prefix which invokes a script from package.json and simply run prisma deploy instead.
 
 After you ran this command, the CLI prompts you to select a _cluster_ to which the Prisma service can be deployed. For the purpose of this tutorial, the easiest is to select a _development cluster_ that is free and doesn’t require to create a Prisma cloud account. When prompted by the CLI, simply select prisma-eu1 or prisma-us1 as the target cluster. (If you have Docker installed, you can also deploy to a local cluster.)
@@ -125,6 +140,7 @@ const server = new GraphQLServer({
   }),
 })
 ```
+
 That’s it! Your GraphQL server is now backed by a database and fully functional, so you can start sending queries and mutations in the Playground.
 
 Here is a quick overview of the architecture that’s used for this app:
@@ -139,6 +155,7 @@ With the starter project and Prisma service in place, the next step is to instal
 cd ..
 yarn add apollo-boost react-apollo graphql-tag graphql
 ```
+
 From the Apollo documentation, here is what each of the dependencies are being used for:
 
 - apollo-boost: Contains everything you need to set up Apollo Client
@@ -157,6 +174,7 @@ Open src/index.js and type the following line right after the import statements:
 ```sh
 const client = new ApolloClient({ uri: 'http://localhost:4000' })
 ```
+
 As mentioned before, ApolloClient will connect to the GraphQL server that’s running locally on port 4000.
 
 Next, wrap the entire JSX code inside ReactDOM.render with an ApolloProvider component which receives the client instance you just created as a prop:
@@ -167,10 +185,20 @@ ReactDOM.render(
     <Router>
       <Fragment>
         <nav className="pa3 pa4-ns">
-          <Link className="link dim black b f6 f5-ns dib mr3" to="/" title="Feed">
+          <Link
+            className="link dim black b f6 f5-ns dib mr3"
+            to="/"
+            title="Feed"
+          >
             Blog
           </Link>
-          <NavLink className="link dim f6 f5-ns dib mr3 black" activeClassName="gray" exact={true} to="/" title="Feed">
+          <NavLink
+            className="link dim f6 f5-ns dib mr3 black"
+            activeClassName="gray"
+            exact={true}
+            to="/"
+            title="Feed"
+          >
             Feed
           </NavLink>
           <NavLink
@@ -182,7 +210,10 @@ ReactDOM.render(
           >
             Drafts
           </NavLink>
-          <Link to="/create" className="f6 link dim br1 ba ph3 pv2 fr mb2 dib black">
+          <Link
+            to="/create"
+            className="f6 link dim br1 ba ph3 pv2 fr mb2 dib black"
+          >
             + Create Draft
           </Link>
         </nav>
@@ -197,17 +228,19 @@ ReactDOM.render(
       </Fragment>
     </Router>
   </ApolloProvider>,
-  document.getElementById('root'),
-)
+  document.getElementById("root"),
+);
 ```
+
 Thanks to the ApolloProvider, you’ll now be able to use Apollo Client’s functionality inside your app.
 
 The last thing to do here is import the ApolloClient and ApolloProvider classes from their respective packages. Add the following two lines to the other import statements to the top of the file:
 
 ```js
-import { ApolloProvider } from 'react-apollo'
-import ApolloClient from 'apollo-boost'
+import { ApolloProvider } from "react-apollo";
+import ApolloClient from "apollo-boost";
 ```
+
 ## 2. Loading and displaying drafts with render props and the new `Query` component
 
 You’ll start by implementing the functionality for the /drafts route that can be found in the DraftsPage component.
@@ -229,6 +262,7 @@ export const DRAFTS_QUERY = gql`
     }
   }
 ```
+
 Note that you’re only exporting the query because you’ll need it later in a different file when you’re updating the cache after a mutation.
 
 ### 2.2. Loading data with `Query`
@@ -247,7 +281,7 @@ export default class DraftsPage extends Component {
                 <h1>Drafts</h1>
               </div>
               {data.drafts &&
-                data.drafts.map(draft => (
+                data.drafts.map((draft) => (
                   <Post
                     key={draft.id}
                     post={draft}
@@ -257,20 +291,23 @@ export default class DraftsPage extends Component {
                 ))}
               {this.props.children}
             </Fragment>
-          )
+          );
         }}
       </Query>
-    )
+    );
   }
 }
 ```
+
 Let’s quickly understand what’s going on here. By wrapping the component with Query and passing the DRAFTS_QUERY as a prop, it gets access to the result of the network call that’s initiated and managed by Apollo Client. This result contains the data object which again carries the result data for the query. The next thing you need to do is actually use the received data and display it. The code for that is already in place 🙌
 
 Finally, you need to import the Query component, add the following import statement to the top of the file:
+
 ```
 import { Query } from 'react-apollo'
 import gql from 'graphql-tag'
 ```
+
 If you run the app now, the DraftsPage will already load the data from the server. Don’t forget to have the server running (by calling yarn start inside src/server) whenever you want to test the app — otherwise the app misses its backend and won’t work!
 
 Right now, the drafts page only displays the draft that was seeded initially:
@@ -284,6 +321,7 @@ All right, so the now the app load and displays the data. But what happens if th
 Thanks to Apollo, this functionality is super straightforward. The render prop function not only receives the response data as input arguments, but at the same time also an error object as well as a boolean value loading that is true as long as the server’s response hasn’t been received.
 
 Simply update the code inside of the Query component to account for these two additional component states:
+
 ```
 <Query query={DRAFTS_QUERY}>
   {({ data, loading, error }) => {
@@ -321,6 +359,7 @@ Simply update the code inside of the Query component to account for these two ad
   }}
 </Query>
 ```
+
 If you’ve worked with earlier versions of Apollo, this API will feel familiar to you. It basically is the same as the one that’s used for the [graphql](https://www.apollographql.com/docs/react/api/react/hoc/) HOC (where Apollo injects data, loading and error into the props of the component that’s wrapped with graphql). That’s it already for the drafts page!
 
 ## 3. Loading the feed
@@ -328,10 +367,10 @@ If you’ve worked with earlier versions of Apollo, this API will feel familiar 
 The implementation of the _feed_ is analogous to the one for the _drafts_, except that it uses the [feed](https://github.com/nikolasburk/react-apollo-tutorial/blob/master/server/src/schema.graphql#L4) instead of the drafts query. Here is what the implementation looks like (this code needs to be put into FeedPage.js, replacing the entire content in there):
 
 ```jsx
-import React, { Component, Fragment } from 'react'
-import Post from '../src/components/Post'
-import { Query } from 'react-apollo'
-import gql from 'graphql-tag'
+import React, { Component, Fragment } from "react";
+import Post from "../src/components/Post";
+import { Query } from "react-apollo";
+import gql from "graphql-tag";
 
 export default class FeedPage extends Component {
   render() {
@@ -343,7 +382,7 @@ export default class FeedPage extends Component {
               <div className="flex w-100 h-100 items-center justify-center pt7">
                 <div>Loading ...</div>
               </div>
-            )
+            );
           }
 
           if (error) {
@@ -351,22 +390,27 @@ export default class FeedPage extends Component {
               <div className="flex w-100 h-100 items-center justify-center pt7">
                 <div>An unexpected error occured.</div>
               </div>
-            )
+            );
           }
 
           return (
             <Fragment>
               <h1>Feed</h1>
               {data.feed &&
-                data.feed.map(post => (
-                  <Post key={post.id} post={post} refresh={() => refetch()} isDraft={!post.isPublished} />
+                data.feed.map((post) => (
+                  <Post
+                    key={post.id}
+                    post={post}
+                    refresh={() => refetch()}
+                    isDraft={!post.isPublished}
+                  />
                 ))}
               {this.props.children}
             </Fragment>
-          )
+          );
         }}
       </Query>
-    )
+    );
   }
 }
 
@@ -379,8 +423,9 @@ export const FEED_QUERY = gql`
       isPublished
     }
   }
-`
+`;
 ```
+
 ## 4. Creating new drafts with render props and the new `Mutation` component
 
 New drafts are created under the /create route which renders the CreatePage component. It shows a simple form with two inputs where the user can provide the title and the text for their new drafts.
@@ -399,8 +444,9 @@ const CREATE_DRAFT_MUTATION = gql`
       isPublished
     }
   }
-`
+`;
 ```
+
 This mutation takes two variables which you’ll pass to it from the component’s state before it is sent to the server.
 
 ### 4.2. Writing data with `Mutation`
@@ -464,13 +510,16 @@ render() {
   )
 }
 ```
+
 The data, loading and error arguments that are being passed into the render prop function have the same semantics as the ones you just saw with the Query component. The very first argument of the function, createDraft, is used to send the CREATE_DRAFT_MUTATION to the server. It is being called in the onSubmit callback of the form element.
 
 To make this work, import Mutation and gql at the top of the file:
+
 ```
 import { Mutation } from 'react-apollo'
 import gql from 'graphql-tag'
 ```
+
 Now, when running the app and navigating to the /create route, you can submit new drafts that are stored in the database on the server-side:
 
 ![](/tutorial-render-props-in-react-apollo-2-1-199e9e2bd01e/imgs/1*iNK392MZ7rLIemoigPtvGA.png)
@@ -491,16 +540,17 @@ Here is how you’ll implement it:
 <Mutation
   mutation={CREATE_DRAFT_MUTATION}
   update={(cache, { data }) => {
-    const { drafts } = cache.readQuery({ query: DRAFTS_QUERY })
+    const { drafts } = cache.readQuery({ query: DRAFTS_QUERY });
     cache.writeQuery({
       query: DRAFTS_QUERY,
       data: { drafts: drafts.concat([data.createDraft]) },
-    })
+    });
   }}
 >
   ... like before ...
 </Mutation>
 ```
+
 Inside update, you first extract the previous results of the DRAFTS_QUERY from the cache (here’s also the reason why you previously needed to export it from DraftsPage). Then, you’re using writeQuery to update the the contents of the cache by manually adding the new draft object that was returned by the server (which is stored in data.createDraft).
 
 Great, when you’re testing the app again, you’ll see that the /drafts page is now updated directly after the mutation was performed.
@@ -529,8 +579,9 @@ const POST_QUERY = gql`
       isPublished
     }
   }
-`
+`;
 ```
+
 The id variable is passed to the Query component as a prop. It is read from the current URL which contain’s the id of the selected post.
 
 Here is what the updated render function looks like:
@@ -570,12 +621,14 @@ render() {
   )
 }
 ```
+
 To finish this up, you need to import Query and gql again:
 
 ```js
-import { Query } from 'react-apollo'
-import gql from 'graphql-tag'
+import { Query } from "react-apollo";
+import gql from "graphql-tag";
 ```
+
 Now, you can select a draft from the /drafts route and the app will display the corresponding DetailPage for it, including the **Publish**- and **Delete**-buttons:
 
 ![](/tutorial-render-props-in-react-apollo-2-1-199e9e2bd01e/imgs/1*ifNy0EWA5EdrqkU0X9LT3Q.png)
@@ -594,8 +647,9 @@ const PUBLISH_MUTATION = gql`
       isPublished
     }
   }
-`
+`;
 ```
+
 The buttons are created inside \_renderAction, so that’s where you need to add the Mutation component this time. Go ahead and replace the definition of the publishButton variable with the following:
 
 ```jsx
@@ -603,18 +657,18 @@ const publishMutation = (
   <Mutation
     mutation={PUBLISH_MUTATION}
     update={(cache, { data }) => {
-      const { drafts } = cache.readQuery({ query: DRAFTS_QUERY })
-      const { feed } = cache.readQuery({ query: FEED_QUERY })
+      const { drafts } = cache.readQuery({ query: DRAFTS_QUERY });
+      const { feed } = cache.readQuery({ query: FEED_QUERY });
       cache.writeQuery({
         query: FEED_QUERY,
         data: { feed: feed.concat([data.publish]) },
-      })
+      });
       cache.writeQuery({
         query: DRAFTS_QUERY,
         data: {
-          drafts: drafts.filter(draft => draft.id !== data.publish.id),
+          drafts: drafts.filter((draft) => draft.id !== data.publish.id),
         },
-      })
+      });
     }}
   >
     {(publish, { data, loading, error }) => {
@@ -624,17 +678,18 @@ const publishMutation = (
           onClick={async () => {
             await publish({
               variables: { id },
-            })
-            this.props.history.replace('/')
+            });
+            this.props.history.replace("/");
           }}
         >
           Publish
         </a>
-      )
+      );
     }}
   </Mutation>
-)
+);
 ```
+
 This code isn’t using any new concepts. The actual button is wrapped inside a Mutation component which receives the PUBLISH_MUTATION as well as an update function as its props.
 
 Inside update, the published post first is manually removed from the previously cached results of the DRAFTS_QUERY and then added to the FEED_QUERY.
@@ -651,15 +706,17 @@ return isPublished ? (
     {publishMutation}
     {deleteButton}
   </Fragment>
-)
+);
 ```
+
 Finally, you need to ensure the Mutation component and the referenced queries are imported:
 
 ```js
-import { Query, Mutation } from 'react-apollo'
-import { DRAFTS_QUERY } from './DraftsPage'
-import { FEED_QUERY } from './FeedPage'
+import { Query, Mutation } from "react-apollo";
+import { DRAFTS_QUERY } from "./DraftsPage";
+import { FEED_QUERY } from "./FeedPage";
 ```
+
 Go ahead and test the new functionality! You’ll see that a draft that is published through the UI will now indeed appear in the _feed_:
 
 ![](/tutorial-render-props-in-react-apollo-2-1-199e9e2bd01e/imgs/1*3fi7Zud_T3VeocM7CN_FIQ.png)
@@ -677,4 +734,3 @@ In this tutorial, you learned how to use the new API of React Apollo 2.1. This A
 For the purpose of this tutorial, you rebuilt the basic boilerplate from the [React & GraphQL fullstack boilerplate](https://github.com/graphql-boilerplates/react-fullstack-graphql/) repository.
 
 In a future tutorial, you’ll learn how to implement realtime updates inside your app using the new Subscription component of React Apollo 2.1 ⚡️
-

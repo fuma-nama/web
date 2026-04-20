@@ -3,20 +3,29 @@ title: Table
 description: A responsive table component for displaying structured data with headers, rows, and optional footer and caption.
 ---
 
-import { Table, TableHeader, TableBody, TableFooter, TableHead, TableRow, TableCell, TableCaption } from "@prisma/eclipse";
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableFooter,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableCaption,
+} from "@prisma/eclipse";
 
 ### Usage
 
 **Basic Table**
 
 ```tsx
-import { 
-  Table, 
-  TableHeader, 
-  TableBody, 
-  TableHead, 
-  TableRow, 
-  TableCell 
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableHead,
+  TableRow,
+  TableCell,
 } from "@prisma/eclipse";
 
 export function BasicTable() {
@@ -86,7 +95,7 @@ Tables written in markdown are automatically converted to use the Table componen
 
 ```md
 | Name  | Type   | Description          |
-|-------|--------|----------------------|
+| ----- | ------ | -------------------- |
 | id    | String | Unique identifier    |
 | name  | String | User's full name     |
 | email | String | User's email address |
@@ -95,7 +104,7 @@ Tables written in markdown are automatically converted to use the Table componen
 **Live Example:**
 
 | Field | Type   | Description          |
-|-------|--------|----------------------|
+| ----- | ------ | -------------------- |
 | id    | String | Unique identifier    |
 | name  | String | User's full name     |
 | email | String | User's email address |
@@ -103,14 +112,14 @@ Tables written in markdown are automatically converted to use the Table componen
 **Table with Caption**
 
 ```tsx
-import { 
-  Table, 
-  TableHeader, 
-  TableBody, 
-  TableHead, 
-  TableRow, 
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableHead,
+  TableRow,
   TableCell,
-  TableCaption 
+  TableCaption,
 } from "@prisma/eclipse";
 
 export function TableWithCaption() {
@@ -189,14 +198,14 @@ export function TableWithCaption() {
 **Table with Footer**
 
 ```tsx
-import { 
-  Table, 
-  TableHeader, 
+import {
+  Table,
+  TableHeader,
   TableBody,
-  TableFooter, 
-  TableHead, 
-  TableRow, 
-  TableCell 
+  TableFooter,
+  TableHead,
+  TableRow,
+  TableCell,
 } from "@prisma/eclipse";
 
 export function TableWithFooter() {
@@ -275,13 +284,13 @@ export function TableWithFooter() {
 **Alignment Options**
 
 ```tsx
-import { 
-  Table, 
-  TableHeader, 
-  TableBody, 
-  TableHead, 
-  TableRow, 
-  TableCell 
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableHead,
+  TableRow,
+  TableCell,
 } from "@prisma/eclipse";
 
 export function AlignedTable() {
@@ -427,17 +436,23 @@ export function AlignedTable() {
   </TableHeader>
   <TableBody>
     <TableRow>
-      <TableCell><code>findMany()</code></TableCell>
+      <TableCell>
+        <code>findMany()</code>
+      </TableCell>
       <TableCell>Fetch multiple records</TableCell>
       <TableCell>Array</TableCell>
     </TableRow>
     <TableRow>
-      <TableCell><code>findUnique()</code></TableCell>
+      <TableCell>
+        <code>findUnique()</code>
+      </TableCell>
       <TableCell>Fetch a single record</TableCell>
       <TableCell>Object or null</TableCell>
     </TableRow>
     <TableRow>
-      <TableCell><code>create()</code></TableCell>
+      <TableCell>
+        <code>create()</code>
+      </TableCell>
       <TableCell>Create a new record</TableCell>
       <TableCell>Object</TableCell>
     </TableRow>
@@ -565,6 +580,7 @@ The Table component automatically handles overflow:
 - Mobile-friendly touch scrolling
 
 For better mobile experience, consider:
+
 - Reducing the number of columns on small screens
 - Using a card layout instead of a table for very small screens
 - Making column widths responsive
@@ -618,7 +634,7 @@ const users = [
       </TableRow>
     ))}
   </TableBody>
-</Table>
+</Table>;
 ```
 
 **With Dynamic Data**
@@ -628,7 +644,7 @@ import { useQuery } from "@tanstack/react-query";
 
 export function UserTable() {
   const { data, isLoading } = useQuery({
-    queryKey: ['users'],
+    queryKey: ["users"],
     queryFn: fetchUsers,
   });
 

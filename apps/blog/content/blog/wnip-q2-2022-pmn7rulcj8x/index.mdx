@@ -16,6 +16,7 @@ tags:
 Learn about everything in the Prisma ecosystem and community from April to July 2022.
 
 ## Overview
+
 - [Releases & new features](#releases--new-features)
   - [Features promoted to General Availability](#features-promoted-to-general-availability)
     - [Improved support for indexes](#improved-support-for-indexes)
@@ -26,7 +27,7 @@ Learn about everything in the Prisma ecosystem and community from April to July 
   - [New Preview features](#new-preview-features)
     - [Prisma Client Metrics](#prisma-client-metrics)
     - [Ordering by first and last nulls](#ordering-by-first-and-last-nulls)
-  - [New Prisma Client APIs:  `findUniqueOrThrow` and `findFirstOrThrow`](#new-prisma-client-apis--finduniqueorthrow-and-findfirstorthrow)
+  - [New Prisma Client APIs: `findUniqueOrThrow` and `findFirstOrThrow`](#new-prisma-client-apis--finduniqueorthrow-and-findfirstorthrow)
   - [General improvements](#general-improvements)
     - [Prisma Client for Data Proxy improvements](#prisma-client-for-data-proxy-improvements)
     - [Defaults values for scalar lists (arrays)](#defaults-values-for-scalar-lists-arrays)
@@ -59,6 +60,7 @@ Learn about everything in the Prisma ecosystem and community from April to July 
 - [What's Next](#whats-next)
 
 ## Releases & new features
+
 Our engineers have been working hard, issuing new [releases](https://github.com/prisma/prisma/releases/) with many improvements and new features. You can stay up-to-date about all upcoming features on our [roadmap](https://pris.ly/roadmap).
 
 We once shipped a regression (and fixed it quickly, of course!), a new major version, [Prisma 4](https://github.com/prisma/prisma/releases/tag/4.0.0) coupled with breaking changes, promoted a ton of features to [General Availability](https://www.prisma.io/docs/about/prisma/releases#generally-available-ga), released a couple of new [Preview features](https://www.prisma.io/docs/about/prisma/releases#preview), and improvements in the last three months.
@@ -98,6 +100,7 @@ model Post {
   @@index([author, created_at(sort: Desc)])
 }
 ```
+
   </Accordion>
 </Accordions>
 
@@ -118,6 +121,7 @@ model A {
   @@index([value], type: Hash)
 }
 ```
+
 `GIN` indexes for PostgreSQL:
 
 ```prisma
@@ -135,6 +139,7 @@ model Post {
   @@index([tags], type: Gin) // alternatives: GiST, BRIN, and SP-GiST
 }
 ```
+
   </Accordion>
 </Accordions>
 <Accordions type="single">
@@ -146,11 +151,12 @@ datasource db {
 }
 
 model Post {
-  id      Int     @default(autoincrement()) @id(clustered: false)
-  title   String
-  content String?
+id Int @default(autoincrement()) @id(clustered: false)
+title String
+content String?
 }
-```
+
+````
   </Accordion>
 </Accordions>
 
@@ -174,7 +180,8 @@ const getUsers = await prisma.user.findMany({
     },
   },
 })
-```
+````
+
 Learn more in [our documentation](https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filter-on-a-json-field).
 
 #### Improved raw query support
@@ -190,10 +197,12 @@ Raw queries now deserialize scalar values to their corresponding JavaScript type
 Here's an example query and response:
 
 ```ts
-const res = await prisma.$queryRaw`SELECT bigint, bytes, decimal, date FROM "Table";`
-console.log(res)
+const res =
+  await prisma.$queryRaw`SELECT bigint, bytes, decimal, date FROM "Table";`;
+console.log(res);
 // [{ bigint: BigInt("123"), bytes: Buffer.from([1, 2]), decimal: new Prisma.Decimal("12.34"), date: Date("<some_date>") }]
 ```
+
 Below is a table that recaps the serialization type-mapping for raw results:
 
 | Database Type | JavaScript Type |
@@ -211,6 +220,7 @@ Below is a table that recaps the serialization type-mapping for raw results:
 | Time          | Date            |
 | Uuid          | String          |
 | Xml           | String          |
+
   </Accordion>
 </Accordions>
 
@@ -223,23 +233,27 @@ await prisma.$queryRaw`SELECT ${1.5}::int as int`;
 // Before: db error: ERROR: incorrect binary data format in bind parameter 1
 // After: [{ int: 2 }]
 ```
+
 You can now perform some type-casts in your queries as follows:
 
 ```ts
-await prisma.$queryRaw`SELECT ${2020}::float4, (NOW() - ${"1 day"}::interval), ${"2022-01-01 00:00:00"}::timestamptz;`
+await prisma.$queryRaw`SELECT ${2020}::float4, (NOW() - ${"1 day"}::interval), ${"2022-01-01 00:00:00"}::timestamptz;`;
 ```
+
 A consequence of this fix is that some subtle implicit casts are now handled more strictly and would fail. Here's an example that used to work but won't work anymore:
 
 ```ts
-await prisma.$queryRaw`SELECT LENGTH(${42});`
+await prisma.$queryRaw`SELECT LENGTH(${42});`;
 // ERROR: function length(integer) does not exist
 // HINT: No function matches the given name and argument types. You might need to add explicit type casts.
 ```
+
 The `LENGTH` PostgreSQL function only accept `text` as input. Prisma used to silently coerce `42` to `text` but won’t anymore. As suggested by the hint, cast `42` to `text` as follows:
 
 ```ts
-await prisma.$queryRaw`SELECT LENGTH(${42}::text);`
+await prisma.$queryRaw`SELECT LENGTH(${42}::text);`;
 ```
+
   </Accordion>
 </Accordions>
 
@@ -272,7 +286,6 @@ Both commands are non-interactive, so it's possible to build many new workflows 
 
 Let us know what tools, automation, and scripts you build using these commands.
 
-
 ### New Preview features
 
 #### Prisma Client Metrics
@@ -289,17 +302,20 @@ generator client {
   previewFeatures = ["metrics"]
 }
 ```
+
 You can then get started using metrics in your project after regenerating Prisma Client:
 
 ```ts
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from "@prisma/client";
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 
-const metrics = await prisma.$metrics.json()
-console.log(metrics)
+const metrics = await prisma.$metrics.json();
+console.log(metrics);
 ```
+
 To learn more, check out the metrics [documentation](https://www.prisma.io/docs/guides/performance-and-optimization/metrics). Give it a try and [let us know what you think](https://github.com/prisma/prisma/issues/13579).
+
 #### Ordering by first and last nulls
 
 We also added support for choosing how to sort null values in a query in `4.1.0`.
@@ -312,22 +328,23 @@ generator client {
  previewFeatures = ["orderByNulls"]
 }
 ```
+
 Next, regenerate Prisma Client to get access to the new fields you can use to order null values:
 
 ```ts
 await prisma.post.findMany({
   orderBy: {
     updatedAt: {
-      sort: 'asc',
-      nulls: 'last'
+      sort: "asc",
+      nulls: "last",
     },
   },
-})
+});
 ```
+
 Learn more in [our documentation](https://www.prisma.io/docs/concepts/components/prisma-client/filtering-and-sorting#sort-with-null-records-first-or-last) and don't hesitate to share your feedback in [this issue](https://github.com/prisma/prisma/issues/14377).
 
-
-### New Prisma Client APIs:  `findUniqueOrThrow` and `findFirstOrThrow`
+### New Prisma Client APIs: `findUniqueOrThrow` and `findFirstOrThrow`
 
 We introduced two new APIs to Prisma Client in Prisma 4:
 
@@ -341,10 +358,11 @@ const user = await prisma.user.findUniqueOrThrow({
   where: {
     email: "alice@prisma.io",
   },
-})
+});
 
-user.email //  You don't need to check if the user is null
+user.email; //  You don't need to check if the user is null
 ```
+
 The APIs will be convenient for scripts API routes where you're already handling exceptions and want to fail fast.
 
 Refer to the API reference in our docs to learn how [`findUniqueOrThrow`](https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#finduniqueorthrow) and [`findFirstOrThrow`](https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#findfirstorthrow) differ from `findUnique` and `findFirst` respectively.
@@ -376,18 +394,21 @@ generator client {
 - previewFeatures = ["dataProxy"]
 }
 ```
+
 You can now generate Prisma Client for the Data Proxy using the `--data-proxy` flag:
 
 ```shell
 npx prisma generate --data-proxy
 ```
+
 2. Running Prisma Client using the Data Proxy in [Cloudflare Workers and Edge environments](https://www.prisma.io/docs/guides/deployment/deployment-guides/deploying-to-cloudflare-workers).
 
 You can now use the `@prisma/client/edge` instead of `@prisma/client` in your application.
 
 ```ts
-import { PrismaClient } from '@prisma/client/edge'
+import { PrismaClient } from "@prisma/client/edge";
 ```
+
 To learn more, check out our [documentation](https://www.prisma.io/docs/data-platform/data-proxy).
 
 #### Defaults values for scalar lists (arrays)
@@ -403,16 +424,17 @@ model User {
   favoriteColors String[] @default(["red", "blue", "green"])
 }
 ```
+
 To learn more about default values for scalar lists, refer to [our docs](https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#define-a-scalar-list-with-a-default-value).
 
 **⚠️ Breaking change:** Refer to the [upgrade guide](https://www.prisma.io/docs/guides/upgrade-guides/upgrading-versions/upgrading-to-prisma-4#scalar-list-defaults) for a detailed explanation and steps to follow.
 
-
 #### Improved default support for embedded documents in MongoDB
 
-From  `4.0.0`, you can now set default values on embedded documents using the `@default` attribute. Prisma will provide the specified default value on reads if a field is not defined in the database.
+From `4.0.0`, you can now set default values on embedded documents using the `@default` attribute. Prisma will provide the specified default value on reads if a field is not defined in the database.
 
 You can define default values for embedded documents in your Prisma schema as follows:
+
 ```prisma
 model Product {
   id     String  @id @default(auto()) @map("_id") @db.ObjectId
@@ -426,6 +448,7 @@ type Photo {
   url    String
 }
 ```
+
 Refer to our docs to learn more on [default values for required fields on composite types](https://www.prisma.io/docs/concepts/components/prisma-client/composite-types#default-values-for-required-fields-on-composite-types).
 
 **⚠️ Breaking change:** Refer to our [upgrade guide](https://www.prisma.io/docs/concepts/components/prisma-client/composite-types#default-values-for-required-fields-on-composite-types) for detailed explanation and steps when working with default fields on composite types in MongoDB from version `4.0.0`.
@@ -448,6 +471,7 @@ model Profile {
   user User?
 }
 ```
+
 **⚠️ Breaking change:** Refer to our [upgrade path](https://www.prisma.io/docs/guides/upgrade-guides/upgrading-versions/upgrading-to-prisma-4#explicit-unique-constraints-on-one-to-one-relations) for a detailed explanation and steps to follow.
 
 #### Removed support for usage of `references` on implicit m:n relations
@@ -468,6 +492,7 @@ model Category {
 +  posts Post[] @relation("my-relation")
 }
 ```
+
 This is because the only valid value for `references` was `id`, so removing this argument clarifies what can and cannot be changed.
 
 Refer to our docs to learn more about [implicit m:n relations](https://www.prisma.io/docs/concepts/components/prisma-schema/relations/many-to-many-relations#implicit-many-to-many-relations).
@@ -497,6 +522,7 @@ We dropped support of the `sqlite://` URL prefix for SQLite from Prisma 4. We en
 From Prisma 4, string literals in the Prisma schema need to follow the same rules as strings in JSON. That changes mostly the escaping of some special characters.
 
 You can find more details on the specification here:
+
 - https://www.json.org/json-en.html
 - https://datatracker.ietf.org/doc/html/rfc8259
 
@@ -517,11 +543,13 @@ Refer to the [`findUniqueOrThrow`](https://www.prisma.io/docs/reference/api-refe
 SQLite is a loosely-typed database. While Prisma will prevent you from inserting values larger than integers, nothing prevents SQLite from accepting big numbers. These manually inserted big numbers cause rounding errors when queried.
 
 Prisma will now check numbers in the query's response to verify they fit within the boundaries of an integer. If a number does not fit, Prisma will throw a [`P2023`](https://www.prisma.io/docs/reference/api-reference/error-reference#p2023) error:
+
 ```
 Inconsistent column data: Conversion failed:
 Value 9223372036854775807 does not fit in an INT column,
 try migrating the 'int' column type to BIGINT
 ```
+
 To learn more on rounding errors with big numbers on SQLite, refer to our [docs](https://www.prisma.io/docs/concepts/database-connectors/sqlite#rounding-errors-on-big-numbers).
 
 #### `DbNull`, `JsonNull`, and `AnyNull` are now objects
@@ -533,17 +561,18 @@ We've now made them _special_ objects instead that don't overlap with string typ
 Before we resolved this in Prisma 4, `DbNull` was checked as a string so you could accidentally check for a null as follows:
 
 ```ts
-import { PrismaClient, Prisma } from '@prisma/client'
-const prisma = new PrismaClient()
+import { PrismaClient, Prisma } from "@prisma/client";
+const prisma = new PrismaClient();
 
-const dbNull = "DbNull" // this string could come from anywhere!
+const dbNull = "DbNull"; // this string could come from anywhere!
 
 await prisma.log.findMany({
   data: {
     meta: dbNull,
   },
-})
+});
 ```
+
 <Accordions type="single">
   <Accordion title="Expand to view the underlying Prisma schema">
 ```prisma
@@ -560,16 +589,16 @@ Prisma 4 resolves this using constants guaranteed to be unique to prevent this k
 You can now read, write, and filter JSON fields as follows:
 
 ```ts
-import { PrismaClient, Prisma } from '@prisma/client'
-const prisma = new PrismaClient()
-
+import { PrismaClient, Prisma } from "@prisma/client";
+const prisma = new PrismaClient();
 
 await prisma.log.create({
   data: {
     meta: Prisma.DbNull,
   },
-})
+});
 ```
+
 We recommend you double-check queries that use `Json` after upgrading to Prisma 4. Ensure that you use the `Prisma.DbNull`, `Prisma.JsonNull`, and `Prisma.AnyNull` constants from Prisma Client, not string literals.
 
 Refer to the [Prisma 4 upgrade guide](https://www.prisma.io/docs/guides/upgrade-guides/upgrading-versions/upgrading-to-prisma-4#dbnull-jsonnull-and-anynull-are-now-objects) in case you run into any type errors.
@@ -577,6 +606,7 @@ Refer to the [Prisma 4 upgrade guide](https://www.prisma.io/docs/guides/upgrade-
 #### Prisma Studio updates
 
 We've refined the experience when working with Prisma Studio with the following changes:
+
 - An always visible panel and functionality to clear all **all** filters at once
 - Improved relationship model view with more visible buttons
 - Including a confirmation dialog before deleting records
@@ -610,7 +640,6 @@ We've removed the internal `Prisma.dmmf.schema` to reduce the size of Prisma Cli
 
 To access the `schema` property, you can use the `getDmmf()` method from `@prisma/internals`.
 
-
 #### Fixed memory leaks and CPU usage in Prisma Client
 
 We fixed the following issues in `4.1.0` experienced when setting up and tearing down Prisma Client while running tests:
@@ -639,60 +668,61 @@ In case you missed the event, you can watch all the talks and workshops on our [
 
 <MeetupList>
 
-  <Meetup
-    title="Prisma Meetup: MongoDB Edition"
-    meetupLink="https://www.meetup.com/berlin-prisma-meetup/events/286756444/"
-    youtubeLink="https://www.youtube.com/watch?v=JbGfNaTTMHE"
-    talks={[
-      {
-        title: 'ORMs and MongoDB - should you even schema?',
-        author: 'Jessee Hall',
-      },
-      {
-        title: 'Giving MongoDB guard rails',
-        author: 'Sabin Adams',
-      }
-    ]}
-    imagePath="/blog/posts/meetup-prisma.png"
-  />
+<Meetup
+  title="Prisma Meetup: MongoDB Edition"
+  meetupLink="https://www.meetup.com/berlin-prisma-meetup/events/286756444/"
+  youtubeLink="https://www.youtube.com/watch?v=JbGfNaTTMHE"
+  talks={[
+    {
+      title: "ORMs and MongoDB - should you even schema?",
+      author: "Jessee Hall",
+    },
+    {
+      title: "Giving MongoDB guard rails",
+      author: "Sabin Adams",
+    },
+  ]}
+  imagePath="/blog/posts/meetup-prisma.png"
+/>
 
- <Meetup
-    title="Rust and Tell Berlin Meetup"
-    meetupLink="https://www.meetup.com/Rust-Berlin/events/284512764/https://www.meetup.com/Rust-Berlin/events/284512764/"
-    youtubeLink="https://youtube.com/playlist?list=PLn2e1F9Rfr6kJETgzyXGUvZDCWifC5gXS"
-    talks={[
-      {
-        title: ' Full-stack WASM development with fp-bindgen',
-        author: 'Arend van Beelen',
-      },
-      {
-        title: 'Graphical User Interfaces with Rust and Slint on a Pico Microcontroller',
-        author: 'Simon Hausmann',
-      },
-     {
-        title: 'Rich collaborative data structures for everyone',
-        author: 'Bartosz Sypytkowski',
-      }
-    ]}
-    imagePath="/blog/posts/meetup-rust.png"
-  />
+<Meetup
+  title="Rust and Tell Berlin Meetup"
+  meetupLink="https://www.meetup.com/Rust-Berlin/events/284512764/https://www.meetup.com/Rust-Berlin/events/284512764/"
+  youtubeLink="https://youtube.com/playlist?list=PLn2e1F9Rfr6kJETgzyXGUvZDCWifC5gXS"
+  talks={[
+    {
+      title: " Full-stack WASM development with fp-bindgen",
+      author: "Arend van Beelen",
+    },
+    {
+      title:
+        "Graphical User Interfaces with Rust and Slint on a Pico Microcontroller",
+      author: "Simon Hausmann",
+    },
+    {
+      title: "Rich collaborative data structures for everyone",
+      author: "Bartosz Sypytkowski",
+    },
+  ]}
+  imagePath="/blog/posts/meetup-rust.png"
+/>
 
-  <Meetup
-    title="Prisma Meetup: CockroachDB Edition"
-    meetupLink="https://www.meetup.com/berlin-prisma-meetup/events/286756444/"
-    youtubeLink="https://www.youtube.com/watch?v=vNqtdU9KFZ0"
-    talks={[
-      {
-        title: 'CockroachDB with Prisma at Vista',
-        author: 'Sid Dange',
-      },
-      {
-        title: 'Distributed data and powerful tooling with Prisma & CockroachDB',
-        author: 'Sabin & Aydrian',
-      }
-    ]}
-    imagePath="/blog/posts/meetup-prisma.png"
-  />
+<Meetup
+  title="Prisma Meetup: CockroachDB Edition"
+  meetupLink="https://www.meetup.com/berlin-prisma-meetup/events/286756444/"
+  youtubeLink="https://www.youtube.com/watch?v=vNqtdU9KFZ0"
+  talks={[
+    {
+      title: "CockroachDB with Prisma at Vista",
+      author: "Sid Dange",
+    },
+    {
+      title: "Distributed data and powerful tooling with Prisma & CockroachDB",
+      author: "Sabin & Aydrian",
+    },
+  ]}
+  imagePath="/blog/posts/meetup-prisma.png"
+/>
 
 </MeetupList>
 
@@ -701,6 +731,7 @@ In case you missed the event, you can watch all the talks and workshops on our [
 We raised our $40M series B funding round to build the Application Data Platform for development teams and organizations. This funding will also allow us to continue to significantly invest in the development of the open-source ORM to add new features and make the developer experience even better.
 
 You can learn more about it in [this blog post](https://www.prisma.io/blog/series-b-announcement-v8t12ksi6x).
+
 ### Prisma FOSS Fund
 
 We started a fund to support independent free and open source software teams. Each month, we will donate $5,000 to a selected project to maintain its work and continue its development.
@@ -731,6 +762,7 @@ We published several videos this quarter on our [YouTube channel](https://pris.l
 - [Amplication — an interview with Yuval Hazaz](https://www.youtube.com/watch?v=pLwBXNkHwWc)
 
 ### Written content
+
 In this quarter, we published several articles on our blog:
 
 - [Database access on the Edge with Next.js, Vercel & Prisma Data Proxy](https://www.prisma.io/blog/database-access-on-the-edge-8F0t1s1BqOJE)

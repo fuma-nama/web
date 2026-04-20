@@ -9,7 +9,7 @@ export function getBaseUrl(): string {
     try {
       const normalized = new URL(
         configuredBaseUrl.startsWith("http://") ||
-          configuredBaseUrl.startsWith("https://")
+        configuredBaseUrl.startsWith("https://")
           ? configuredBaseUrl
           : `https://${configuredBaseUrl}`,
       );

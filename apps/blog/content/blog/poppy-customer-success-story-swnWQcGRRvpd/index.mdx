@@ -38,10 +38,12 @@ Even with all these complexities, Poppy moves quickly on development and ships n
 >
   <div>
     <em>
-      Two of us in the team were early graph.cool fans and were super impressed by the quality and developer experience.
-      I remember checking Prisma 1 at the time but was a bit reluctant to add an additional server to set it up. Then
-      when came the time to start on a greenfield project we gave Prisma 2’s early release a shot and were immediately
-      convinced we had to use it as it integrated Typescript so well.
+      Two of us in the team were early graph.cool fans and were super impressed
+      by the quality and developer experience. I remember checking Prisma 1 at
+      the time but was a bit reluctant to add an additional server to set it up.
+      Then when came the time to start on a greenfield project we gave Prisma
+      2’s early release a shot and were immediately convinced we had to use it
+      as it integrated Typescript so well.
     </em>
   </div>
 </Quotes>
@@ -79,8 +81,9 @@ Type-safe database access through Prisma Client has been essential to help reduc
 >
   <div>
     <em>
-      The combination of Prisma, TypeScript and our pretty thorough coverage with integration tests gives us the
-      confidence to refactor critical parts of our code.
+      The combination of Prisma, TypeScript and our pretty thorough coverage
+      with integration tests gives us the confidence to refactor critical parts
+      of our code.
     </em>
   </div>
 </Quotes>
@@ -123,24 +126,27 @@ model Post {
   authorId  Int?
 }
 ```
+
 With a single command, the Prisma model provides a type-safe database access client.
 
 ```shell
 npx prisma generate
 ```
-```ts
-import { PrismaClient } from '@prisma/client'
 
-const prisma = new PrismaClient()
+```ts
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
 
 async function getPosts() {
   return await prisma.post.findMany({
     include: {
       author: true,
     },
-  })
+  });
 }
 ```
+
 ## Conclusion
 
 Prisma has been crucial for Poppy's success to date and the team anticipates it will continue to play a large role as the company grows. Type safety translates to confidence. Confidence at the database is especially important and, with Prisma Client, Poppy is able to achieve this.

@@ -38,9 +38,6 @@ Database schema migrations play a crucial role in software development workflows
 
 Prisma Migrate generates migrations as plain SQL files based on changes you make to your Prisma schema – a declarative definition of your desired database schema. The generated SQL migrations are fully customizable and allow you to use any underlying database feature, such as manipulating data supporting a migration, setting up triggers, stored procedures, and views.
 
-
-
-
 ```prisma
 model User {
   id        Int      @id @default(autoincrement())
@@ -50,6 +47,7 @@ model User {
   activated Boolean  @default(false)
 }
 ```
+
 ```sql
 -- The SQL can be edited prior to execution
  -- CreateTable
@@ -66,7 +64,6 @@ CREATE TABLE "User" (
 -- CreateIndex
 CREATE UNIQUE INDEX "User.email_unique" ON "User"("email");
 ```
-
 
 In contrast to other migration tools that offer full control at the expense of manually crafting SQL migrations line by line, with Migrate, most migrations can be done on "auto-pilot" with optional full control via SQL when you need it.
 
@@ -106,7 +103,6 @@ Since the Preview release of Prisma Migrate last year, we have polished and impr
 - **Stability:** Migrate's commands have been stabilized to support workflows from prototyping to production.
 - **Production readiness:** Prisma Migrate has passed rigorous testing internally and by many community members, making it ready for production use.
 
-
 You can use Migrate with [PostgreSQL](https://www.prisma.io/docs/concepts/database-connectors/postgresql), [MySQL](https://www.prisma.io/docs/concepts/database-connectors/mysql), [SQLite](https://www.prisma.io/docs/concepts/database-connectors/sqlite). [SQL Server](https://www.prisma.io/docs/concepts/database-connectors/sql-server) support is available in [Preview](https://www.prisma.io/docs/about/prisma/releases#preview).
 
 There are various ways for getting started with Prisma Migrate:
@@ -117,8 +113,8 @@ There are various ways for getting started with Prisma Migrate:
 
 [Add Migrate to an existing project](https://www.prisma.io/docs/guides/migrate/developing-with-prisma-migrate/add-prisma-migrate-to-a-project)
 
-
 [Start from scratch](https://www.prisma.io/docs/getting-started/prisma-orm/quickstart/postgresql)
+
 </center>
 
 ---
@@ -170,28 +166,17 @@ model Post {
   author    User    @relation(fields: [authorId], references: [id])
 }
 ```
+
 **2. Run `prisma migrate dev` to create and execute the migration.**
 
 <Accordions type="single">
   <Accordion title="Expand to view the SQL contents of the generated migration">
-```sql
--- CreateTable
-CREATE TABLE "User" (
-    "id" SERIAL NOT NULL,
-    "name" TEXT NOT NULL,
-    PRIMARY KEY ("id")
-);
--- CreateTable
-CREATE TABLE "Post" (
-    "id" SERIAL NOT NULL,
-    "title" VARCHAR(100) NOT NULL,
-    "published" BOOLEAN NOT NULL DEFAULT true,
-    "authorId" INTEGER NOT NULL,
-    PRIMARY KEY ("id")
-);
--- AddForeignKey
-ALTER TABLE "Post" ADD FOREIGN KEY ("authorId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-```
+    ```sql -- CreateTable CREATE TABLE "User" ( "id" SERIAL NOT NULL, "name"
+    TEXT NOT NULL, PRIMARY KEY ("id") ); -- CreateTable CREATE TABLE "Post" (
+    "id" SERIAL NOT NULL, "title" VARCHAR(100) NOT NULL, "published" BOOLEAN NOT
+    NULL DEFAULT true, "authorId" INTEGER NOT NULL, PRIMARY KEY ("id") ); --
+    AddForeignKey ALTER TABLE "Post" ADD FOREIGN KEY ("authorId") REFERENCES
+    "User"("id") ON DELETE CASCADE ON UPDATE CASCADE; ```
   </Accordion>
 </Accordions>
 
@@ -214,6 +199,7 @@ To apply migrations to other environments such as production, you pull changes t
 ```shell
 prisma migrate deploy
 ```
+
 ![Production workflow](/prisma-migrate-ga-b5eno5g08d0b/imgs/2020-12-migrate-production-workflow.png)
 
 ### Running migrations in CI/CD
@@ -248,6 +234,7 @@ model User {
   name  String // maps to the `text` type in PostgreSQL
 }
 ```
+
 With this release, we have broadened the set of supported database types you can define by allowing you to add native type annotations.
 
 ```prisma
@@ -256,6 +243,7 @@ model User {
   name  String  @db.VarChar(100) // Maps to the `varchar` type in PostgreSQL
 }
 ```
+
 In the example, the `@db.VarChar(100)` attribute denotes that Migrate should use the `VARCHAR` type of PostgreSQL. This is also visible in the SQL that Migrate generates for the model:
 
 ```sql
@@ -267,6 +255,7 @@ CREATE TABLE "User" (
     PRIMARY KEY ("id")
 );
 ```
+
   </Accordion>
 </Accordions>
 
@@ -294,6 +283,7 @@ With Migrate reaching General Availability, it is ready for adoption in producti
 For example, we'll be [improving the handling of column renames in Prisma Migrate.](https://www.notion.so/prismaio/Improvement-to-Prisma-Migrate-for-better-handling-of-field-renames-9e46e2553419437684fbe41fe33369bc)
 
 Beyond that, the following roadmap items will introduce further improvements to the general management of database schemas:
+
 - Stabilize and promote [`prisma db push`](https://www.notion.so/prismaio/Simplify-database-migrations-during-prototyping-2f24abdd283c46f79c688a7cd99fc0b6) and [`prisma db seed`](https://www.notion.so/prismaio/Database-Seeding-ea7a86c183c949b7b3fea1658ed8c179) to General Availability.
 - [Improve environment management configuration.](https://www.notion.so/prismaio/Improve-environment-management-and-Prisma-level-configuration-7dc7c0063fee49c4857ed9b2276c096a)
 - [Add support for configuring cascading deletes in the Prisma schema.](https://github.com/prisma/prisma/issues/2810)
@@ -304,9 +294,23 @@ Beyond that, the following roadmap items will introduce further improvements to 
 
 We've been overwhelmed by the positive response to the Preview release in December, and we'd like to thank everyone who tested and provided insightful feedback – Prisma Migrate is the product of those efforts 🙌
 
-<TweetEmbedComp tweets={['1369304411177123843','1337106283971964928', '1244877311196856320', '1369644213067935745', '1369705799786913805', '1351872714714308608', '1349804182472192009', '1351502213097676802' ]} hiddenState={true} convState={false}/>
+<TweetEmbedComp
+  tweets={[
+    "1369304411177123843",
+    "1337106283971964928",
+    "1244877311196856320",
+    "1369644213067935745",
+    "1369705799786913805",
+    "1351872714714308608",
+    "1349804182472192009",
+    "1351502213097676802",
+  ]}
+  hiddenState={true}
+  convState={false}
+/>
 
 To get started with Prisma Migrate, checkout the following resources:
+
 - [**Start from scratch guide**](https://www.prisma.io/docs/getting-started/setup-prisma/start-from-scratch/relational-databases-typescript-postgresql) covers both Prisma Migrate and Client.
 - [**Prisma Migrate docs**](https://www.prisma.io/docs/concepts/components/prisma-migrate) delves deeper into the different Migrate workflows.
 - [**Developing with Migrate**](https://www.prisma.io/docs/guides/migrate/developing-with-prisma-migrate) guides you through a typical development workflow.

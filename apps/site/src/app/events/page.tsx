@@ -197,9 +197,7 @@ export default function EventsPage() {
                     <h3 className="text-base font-semibold text-foreground-neutral mt-0 mb-0">
                       {event.name}
                     </h3>
-                    {event.virtual && (
-                      <Badge color="neutral" label="Virtual" />
-                    )}
+                    {event.virtual && <Badge color="neutral" label="Virtual" />}
                   </div>
                   <div className="flex items-center gap-1.5 text-xs text-foreground-neutral-weaker">
                     <i className="fa-regular fa-calendar" aria-hidden />

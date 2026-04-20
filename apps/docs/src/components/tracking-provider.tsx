@@ -2,7 +2,11 @@
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 import posthog from "posthog-js";
-import { getContentArea, getContentSubtype, isPpgOrCompute } from "@/lib/tracking";
+import {
+  getContentArea,
+  getContentSubtype,
+  isPpgOrCompute,
+} from "@/lib/tracking";
 
 export function TrackingProvider() {
   const pathname = usePathname();

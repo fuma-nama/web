@@ -14,17 +14,17 @@ tags:
   - "education"
 ---
 
-Adapting data-driven applications to Serverless and Edge deployments can be trickier than it seems. In this article, we'll take an in-depth look at common challenges and potential solutions for developers who deploy their applications to ephemeral  environments.
+Adapting data-driven applications to Serverless and Edge deployments can be trickier than it seems. In this article, we'll take an in-depth look at common challenges and potential solutions for developers who deploy their applications to ephemeral environments.
 
 ## Table of contents
 
 - [A note on terminology](#a-note-on-terminology)
 - [Serverless deployments and you](#serverless-deployments-and-you)
-    - [Common serverless drawbacks](#common-serverless-drawbacks)
-    - [Avoiding serverless headaches](#avoiding-serverless-headaches)
+  - [Common serverless drawbacks](#common-serverless-drawbacks)
+  - [Avoiding serverless headaches](#avoiding-serverless-headaches)
 - [Bring your compute to the edge](#bring-your-compute-to-the-edge)
-    - [Edge computing considerations](#edge-computing-considerations)
-    - [Edge computing solutions](#edge-computing-solutions)
+  - [Edge computing considerations](#edge-computing-considerations)
+  - [Edge computing solutions](#edge-computing-solutions)
 - [Wrapping up](#wrapping-up)
 
 ## A note on terminology
@@ -58,13 +58,13 @@ When developing an application for a serverless environments it's always importa
 To show how issues may come up, let's see a simple example. The following AWS Lambda is a simple Node.js handler that accepts an ID, queries a database for an item with that ID, and then returns the resulting object.
 
 ```ts
-import { Handler } from 'aws-lambda';
-import { PrismaClient } from '@prisma/client';
+import { Handler } from "aws-lambda";
+import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
 export const handler: Handler = async (event) => {
-  const itemId: string = event.itemId ?? '0';
+  const itemId: string = event.itemId ?? "0";
 
   return await prisma.item.findUnique({
     where: {
@@ -73,6 +73,7 @@ export const handler: Handler = async (event) => {
   });
 };
 ```
+
 In a non-serverless environment this function wouldn't have any performance implications, but in a serverless environment this function could cause serious harm to your application (and your wallet!) without some protections.
 
 For example, if this app saw a massive increase in usage you could see your database quickly run out of connections. This could lead to slower response times and timeouts which could slow your effective processing rate to a crawl.
@@ -96,7 +97,6 @@ Most cloud providers recommend starting with a low concurrency (say five to ten)
 
 However, as your application grows in popularity you may find that your bottleneck is still connections to your database, especially if other parts of your environment also rely on it. In these cases, it may become necessary to pool connections to the database through a _proxy_.
 
-
 #### Pool database connections
 
 Thankfully, connection pooling works with serverless functions in the same way it works for other applications! [PgBouncer](https://www.pgbouncer.org/) is a simple option for PostgreSQL databases. You can configure PgBouncer to connect to your database, change applications to connect to your PgBouncer instance instead of your database, and connections will be pooled!
@@ -106,7 +106,8 @@ Further configuration can then be done between PgBouncer and your database which
 <Image
   alt="An image showing many database connections being 'pooled' by being proxied via a separate service before connecting to a database."
   src="/blog/overcoming-challenges-in-serverless-and-edge-environments-TQtONA0RVxuW/imgs/connection_pooling.png"
-  className="mx-auto w-[80%] rounded-lg"/>
+  className="mx-auto w-[80%] rounded-lg"
+/>
 
 Options also exist for other database engines, like [ProxySQL](https://proxysql.com/) for MySQL. Additionally, managed solutions like [Prisma Data Plaform](https://console.prisma.io) give you the ability to bring your own database and add additional features on top of it.
 
@@ -137,12 +138,14 @@ In worst-case scenarios, you could have business logic in a different region att
 <Image
   src="/blog/overcoming-challenges-in-serverless-and-edge-environments-TQtONA0RVxuW/imgs/without_cdn.png"
   alt="image showing a server taking a long time to communicate with a far away database."
-  className="mx-auto w-[60%] rounded-lg"/>
+  className="mx-auto w-[60%] rounded-lg"
+/>
 <Image
   src="/blog/overcoming-challenges-in-serverless-and-edge-environments-TQtONA0RVxuW/imgs/with_cdn.png"
   caption="Locating databases closer to your servers can drastically improve load times!"
   alt="image showing a server communicating quickly with a nearby database."
-  className="mx-auto w-[60%] rounded-lg"/>
+  className="mx-auto w-[60%] rounded-lg"
+/>
 
 This is compounded by limitations that exist within edge functions themselves. Since the goal of edge computing is distributing a large amount of compute globally, some trade-offs are necessary to guarantee performance. In most cases the considerations boil down to:
 
@@ -170,7 +173,8 @@ In cases where data is being accessed world-wide, at least one global datastore 
 <Image
   src="/blog/overcoming-challenges-in-serverless-and-edge-environments-TQtONA0RVxuW/imgs/distributed_db.png"
   alt="A large database being broken up into several smaller databases that communicate with one another."
-  className="mx-auto w-[60%] rounded-lg"/>
+  className="mx-auto w-[60%] rounded-lg"
+/>
 
 Companies like [Cockroach Labs](https://www.cockroachlabs.com/docs/v22.2/multiregion-overview) and [Fauna](https://fauna.com/solutions#edge-computing) are great options for taking your data and replicating it through multiple regions to increase your performance. However, you should still be aware of tradeoffs, as data will need to eventually become _consistent_ or replicated across all regions. This could be handled asynchronously, which could lead to stale data in some regions, or synchronously, where read operations will be lightning fast, but writes may still experience increased latency. After exhausting all previous options, your team will need to dive deeper into your needs and understand _where_ data is needed.
 
@@ -184,12 +188,10 @@ Co-located configuration, when combined with a globally accessible database (and
 
 ## Wrapping up
 
-When it comes to serverless and edge, there are many clear benefits. Reduced infrastructure costs, increased scalability, increased availability... these environments are worth exploring. However, if it was just *that easy* then all applications would already be both serverless and ran on the edge.
+When it comes to serverless and edge, there are many clear benefits. Reduced infrastructure costs, increased scalability, increased availability... these environments are worth exploring. However, if it was just _that easy_ then all applications would already be both serverless and ran on the edge.
 
 While applications without a backing data store can be transitioned without too much effort, applications that require a database connection will require a bit more attention to be deployed effectively.
 
 At the end of the day, edge and serverless computing are more tools in a software engineer's tool belt. As an engineering organization you must first understand the work necessary to move your stateful application to a stateless environment. In some cases, it might not be the right move! In other cases, these deployment strategies are an excellent choice and you can get great benefits while expending a little extra time to make sure that your application is serverless-ready.
 
 > **Note**: At Prisma, we're excited about the new paradigms of serverless and edge deployments! To learn what we're building to make it easier for developers to build data-driven applications in these new environments, check out [Accelerate](https://www.prisma.io/data-platform/accelerate) and [Prisma Postgres](https://www.prisma.io/postgres) and follow us on [X/Twitter](https://pris.ly/x).
-
-

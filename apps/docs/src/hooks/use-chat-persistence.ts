@@ -15,17 +15,17 @@ export type { StoredSource };
 
 export const useChatPersistence = () => {
   const saveTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(
-    undefined
+    undefined,
   );
 
   // Load messages from Dexie with live query
   const storedMessages = useLiveQuery(() =>
-    db.messages.orderBy("sequence").toArray()
+    db.messages.orderBy("sequence").toArray(),
   );
 
   const initialMessages: ChatMessage[] =
     storedMessages?.map(
-      ({ timestamp: _timestamp, sequence: _sequence, ...message }) => message
+      ({ timestamp: _timestamp, sequence: _sequence, ...message }) => message,
     ) ?? [];
 
   const isLoading = storedMessages === undefined;
@@ -44,7 +44,7 @@ export const useChatPersistence = () => {
             ...message,
             timestamp: baseTimestamp + index * 1000,
             sequence: index,
-          })
+          }),
         );
 
         await db.transaction("rw", db.messages, async () => {
@@ -73,7 +73,7 @@ export const useChatPersistence = () => {
         clearTimeout(saveTimeoutRef.current);
       }
     },
-    []
+    [],
   );
 
   return {

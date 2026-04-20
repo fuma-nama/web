@@ -167,7 +167,9 @@ const prisma = new PrismaClient()
         async $allOperations({ model, operation, args, query }) {
           const start = Date.now();
           const result = await query(args);
-          console.log(`[LOGGING] ${model}.${operation}: ${Date.now() - start}ms`);
+          console.log(
+            `[LOGGING] ${model}.${operation}: ${Date.now() - start}ms`,
+          );
           return result;
         },
       },
@@ -179,7 +181,10 @@ const prisma = new PrismaClient()
       $allModels: {
         async $allOperations({ model, operation, args, query }) {
           if (["create", "update", "delete"].includes(operation)) {
-            console.log(`[AUDIT] ${operation} on ${model}:`, JSON.stringify(args));
+            console.log(
+              `[AUDIT] ${operation} on ${model}:`,
+              JSON.stringify(args),
+            );
           }
           return query(args);
         },
@@ -236,7 +241,11 @@ const prisma = new PrismaClient().$extends({
   },
 });
 
-type ExtendedUser = Prisma.Result<typeof prisma.user, { select: { id: true } }, "findFirstOrThrow">;
+type ExtendedUser = Prisma.Result<
+  typeof prisma.user,
+  { select: { id: true } },
+  "findFirstOrThrow"
+>;
 
 async function main() {
   const user: ExtendedUser = await prisma.user.findFirstOrThrow({

@@ -45,9 +45,9 @@ export function StatusIndicator() {
         fetch("https://www.prisma-status.com/api/v2/status.json").then(
           (res) => res.json() as Promise<StatusResponse>,
         ),
-        fetch("https://www.prisma-status.com/api/v2/incidents/unresolved.json").then(
-          (res) => res.json() as Promise<IncidentsResponse>,
-        ),
+        fetch(
+          "https://www.prisma-status.com/api/v2/incidents/unresolved.json",
+        ).then((res) => res.json() as Promise<IncidentsResponse>),
       ]).then(([statusResult, incidentsResult]) => {
         if (statusResult.status === "rejected") {
           setStatus(null);
@@ -61,14 +61,20 @@ export function StatusIndicator() {
             : [];
         const worstIncidentIndicator = incidents.reduce<StatusIndicator>(
           (worst, incident) =>
-            SEVERITY[incident.impact] > SEVERITY[worst] ? incident.impact : worst,
+            SEVERITY[incident.impact] > SEVERITY[worst]
+              ? incident.impact
+              : worst,
           "none",
         );
 
-        if (SEVERITY[worstIncidentIndicator] > SEVERITY[statusData.status.indicator]) {
+        if (
+          SEVERITY[worstIncidentIndicator] >
+          SEVERITY[statusData.status.indicator]
+        ) {
           setStatus({
             indicator: worstIncidentIndicator,
-            description: incidents.length === 1 ? "Active Incident" : "Active Incidents",
+            description:
+              incidents.length === 1 ? "Active Incident" : "Active Incidents",
           });
         } else {
           setStatus(statusData.status);
@@ -102,7 +108,10 @@ export function StatusIndicator() {
           />
         )}
         <span
-          className={cn("relative inline-flex h-2 w-2 rounded-full", dotColors[status.indicator])}
+          className={cn(
+            "relative inline-flex h-2 w-2 rounded-full",
+            dotColors[status.indicator],
+          )}
         />
       </span>
       {status.description}

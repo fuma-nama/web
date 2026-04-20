@@ -1,9 +1,9 @@
 ---
 title: Writing guides
-description: 'Learn how to write clear, consistent, and helpful guides for Prisma documentation'
+description: "Learn how to write clear, consistent, and helpful guides for Prisma documentation"
 url: /guides/making-guides
 metaTitle: How to write guides for Prisma ORM
-metaDescription: 'Learn how to write clear, consistent, and helpful guides for Prisma ORM documentation'
+metaDescription: "Learn how to write clear, consistent, and helpful guides for Prisma ORM documentation"
 ---
 
 ## Introduction
@@ -27,8 +27,8 @@ Every guide must include the following frontmatter at the top of the file:
 
 ```mdx
 ---
-title: '[Descriptive title]'
-description: '[One-sentence summary of what the guide covers]'
+title: "[Descriptive title]"
+description: "[One-sentence summary of what the guide covers]"
 ---
 ```
 
@@ -41,16 +41,19 @@ All frontmatter fields should use sentence case.
 ### Required sections
 
 1. **Introduction** (H2: `##`)
+
    - Brief overview of what the guide covers
    - What the reader will learn/accomplish
    - Link to any example repositories or related resources on GitHub
 
 2. **Prerequisites** (H2: `##`)
+
    - Required software/tools with version numbers (e.g., "Node.js 20+")
    - Required accounts (e.g., "A Prisma Data Platform account")
    - Keep it concise - only list what's truly necessary
 
 3. **Main content sections** (H2: `##`)
+
    - Use numbered steps (e.g., "## 1. Set up your project", "## 2. Install and Configure Prisma")
    - Use numbered subsections (e.g., "### 2.1. Install dependencies", "### 2.2. Define your Prisma Schema")
    - Each step should build on previous steps
@@ -127,6 +130,7 @@ export default defineConfig({
   - Code elements: `` `PrismaClient` ``
   - Package manager commands: Use ` ```npm ` blocks (see [Package manager commands](#package-manager-commands))
 - Use admonitions for important information:
+
   ```markdown
   :::info
   Context or background information
@@ -144,21 +148,22 @@ export default defineConfig({
   Helpful suggestions or best practices
   :::
   ```
+
 - Use proper heading hierarchy (never skip levels)
 - Use numbered sections (e.g., "## 1. Setup", "### 1.1. Install")
 - Link to other documentation pages using relative paths (e.g., `[Database drivers](/orm/core-concepts/supported-databases/database-drivers)`)
 
 ## Guide categories
 
-| Category | Directory | Description | Examples |
-|----------|-----------|-------------|----------|
-| **Framework** | `guides/frameworks/` | Integrate Prisma with frameworks | [Next.js](/guides/frameworks/nextjs), [NestJS](/guides/frameworks/nestjs), [SvelteKit](/guides/frameworks/sveltekit) |
-| **Deployment** | `guides/deployment/` | Deploy apps and set up monorepos | [Turborepo](/guides/deployment/turborepo), [Cloudflare Workers](/guides/deployment/cloudflare-workers) |
-| **Integration** | `guides/integrations/` | Use Prisma with platforms and tools | [GitHub Actions](/guides/integrations/github-actions), [Supabase](/guides/integrations/supabase-accelerate) |
-| **Database** | `guides/database/` | Database patterns and migrations | [Multiple databases](/guides/database/multiple-databases), [Data migration](/guides/database/data-migration) |
-| **Authentication** | `guides/authentication/` | Authentication patterns with Prisma | [Auth.js + Next.js](/guides/authentication/authjs/nextjs), [Better Auth + Next.js](/guides/authentication/better-auth/nextjs), [Clerk + Next.js](/guides/authentication/clerk/nextjs) |
-| **Prisma Postgres** | `guides/postgres/` | Prisma Postgres features | [Vercel](/guides/postgres/vercel), [Netlify](/guides/postgres/netlify), [Viewing data](/guides/postgres/viewing-data) |
-| **Migration** | `guides/switch-to-prisma-orm/` | Switch from other ORMs | [From Mongoose](/guides/switch-to-prisma-orm/from-mongoose), [From Drizzle](/guides/switch-to-prisma-orm/from-drizzle) |
+| Category            | Directory                      | Description                         | Examples                                                                                                                                                                              |
+| ------------------- | ------------------------------ | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Framework**       | `guides/frameworks/`           | Integrate Prisma with frameworks    | [Next.js](/guides/frameworks/nextjs), [NestJS](/guides/frameworks/nestjs), [SvelteKit](/guides/frameworks/sveltekit)                                                                  |
+| **Deployment**      | `guides/deployment/`           | Deploy apps and set up monorepos    | [Turborepo](/guides/deployment/turborepo), [Cloudflare Workers](/guides/deployment/cloudflare-workers)                                                                                |
+| **Integration**     | `guides/integrations/`         | Use Prisma with platforms and tools | [GitHub Actions](/guides/integrations/github-actions), [Supabase](/guides/integrations/supabase-accelerate)                                                                           |
+| **Database**        | `guides/database/`             | Database patterns and migrations    | [Multiple databases](/guides/database/multiple-databases), [Data migration](/guides/database/data-migration)                                                                          |
+| **Authentication**  | `guides/authentication/`       | Authentication patterns with Prisma | [Auth.js + Next.js](/guides/authentication/authjs/nextjs), [Better Auth + Next.js](/guides/authentication/better-auth/nextjs), [Clerk + Next.js](/guides/authentication/clerk/nextjs) |
+| **Prisma Postgres** | `guides/postgres/`             | Prisma Postgres features            | [Vercel](/guides/postgres/vercel), [Netlify](/guides/postgres/netlify), [Viewing data](/guides/postgres/viewing-data)                                                                 |
+| **Migration**       | `guides/switch-to-prisma-orm/` | Switch from other ORMs              | [From Mongoose](/guides/switch-to-prisma-orm/from-mongoose), [From Drizzle](/guides/switch-to-prisma-orm/from-drizzle)                                                                |
 
 ## Common patterns
 
@@ -228,21 +233,25 @@ We recommend using a connection pooler (like [Prisma Accelerate](https://www.pri
 ## Best practices
 
 1. **Keep it focused**
+
    - Each guide should cover one main topic
    - Break complex topics into multiple guides
    - Link to related guides instead of duplicating content
 
 2. **Show don't tell**
+
    - Include practical, real-world examples
    - Provide complete, working code samples
    - Explain why certain approaches are recommended
 
 3. **Consider the context**
+
    - Explain prerequisites clearly
    - Don't assume prior knowledge
    - Link to foundational concepts within or outside of our docs when needed
 
 4. **Maintain consistency**
+
    - Follow the established guide structure
    - Use consistent terminology
    - Match the style of existing guides

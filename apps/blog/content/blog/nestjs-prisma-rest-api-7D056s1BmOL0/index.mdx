@@ -16,10 +16,10 @@ tags:
 ---
 
 <center>
-      <i>20 min read</i>
-  </center>
+  <i>20 min read</i>
+</center>
 
-  NestJS is one of the prominent Node.js frameworks, and it has recently gained a lot of developer love and traction. This article will teach you how to build a backend REST API with NestJS, Prisma, PostgreSQL and Swagger.
+NestJS is one of the prominent Node.js frameworks, and it has recently gained a lot of developer love and traction. This article will teach you how to build a backend REST API with NestJS, Prisma, PostgreSQL and Swagger.
 
 ## Table Of Contents
 
@@ -52,15 +52,11 @@ tags:
 - [Update Swagger response types](#update-swagger-response-types)
 - [Summary and final remarks](#summary-and-final-remarks)
 
-
 ## Introduction
-
 
 In this tutorial, you will learn how to build the backend REST API for a blog application called "Median" (a simple [Medium](https://medium.com/) clone). You will get started by creating a new NestJS project. Then you will start your own PostgreSQL server and connect to it using Prisma. Finally, you will build the REST API and document it with Swagger.
 
-
 ![The final application](/nestjs-prisma-rest-api-7D056s1BmOL0/imgs/final-app.png)
-
 
 ### Technologies you will use
 
@@ -71,8 +67,6 @@ You will be using the following tools to build this application:
 - [PostgreSQL](https://www.postgresql.org/) as the database
 - [Swagger](https://swagger.io/) as the API documentation tool
 - [TypeScript](https://www.typescriptlang.org/) as the programming language
-
-
 
 ## Prerequisites
 
@@ -98,7 +92,6 @@ To follow along with this tutorial, you will be expected to:
 
 > **Note 2**: If you don't have a Unix shell (for example, you are on a Windows machine), you can still follow along, but the shell commands may need to be modified for your machine.
 
-
 ## Generate the NestJS Project
 
 The first thing you will need is to install the NestJS CLI. The NestJS CLI comes in very handy when working with a NestJS project. It comes with built-in utilities that help you initialize, develop and maintain your NestJS application.
@@ -108,9 +101,11 @@ You can use the NestJS CLI to create an empty project. To start, run the followi
 ```shell
 npx @nestjs/cli new median
 ```
+
 The CLI will prompt you to choose a _package manager_ for your project — choose **npm**. Afterward, you should have a new NestJS project in the current directory.
 
 Open the project in your preferred code editor (we recommend VSCode). You should see the following files:
+
 ```
 median
   ├── node_modules
@@ -130,18 +125,19 @@ median
   ├── tsconfig.build.json
   └── tsconfig.json
 ```
+
 Most of the code you work on will reside in the `src` directory. The NestJS CLI has already created a few files for you. Some of the notable ones are:
 
 - `src/app.module.ts`: The root module of the application.
 - `src/app.controller.ts`: A basic controller with a single route: `/`. This route will return a simple `'Hello World!'` message.
 - `src/main.ts`: The entry point of the application. It will start the NestJS application.
 
-
 You can start your project by using the following command:
 
 ```shell
 npm run start:dev
 ```
+
 This command will watch your files, automatically recompiling and reloading the server whenever you make a change. To verify the server is running, go to the URL [`http://localhost:3000/`](http://localhost:3000/). You should see an empty page with the message `'Hello World!'`.
 
 > **Note**: You should keep the server running in the background as you go through this tutorial.
@@ -150,7 +146,6 @@ This command will watch your files, automatically recompiling and reloading the 
 
 You will be using PostgreSQL as the database for your NestJS application. This tutorial will show you how to install and run PostgreSQL on your machine through a Docker container.
 
-
 > **Note**: If you don't want to use Docker, you can [set up a PostgreSQL instance natively](https://www.prisma.io/dataguide/postgresql/setting-up-a-local-postgresql-database) or get a [hosted PostgreSQL database on Heroku](https://dev.to/prisma/how-to-setup-a-free-postgresql-database-on-heroku-1dc1).
 
 First, create a `docker-compose.yml` file in the main folder of your project:
@@ -158,14 +153,14 @@ First, create a `docker-compose.yml` file in the main folder of your project:
 ```shell
 touch docker-compose.yml
 ```
+
 This `docker-compose.yml` file is a configuration file that will contain the specifications for running a docker container with PostgreSQL setup inside. Create the following configuration inside the file:
 
 ```yml
 # docker-compose.yml
 
-version: '3.8'
+version: "3.8"
 services:
-
   postgres:
     image: postgres:13.5
     restart: always
@@ -175,12 +170,12 @@ services:
     volumes:
       - postgres:/var/lib/postgresql/data
     ports:
-      - '5432:5432'
+      - "5432:5432"
 
 volumes:
   postgres:
-
 ```
+
 A few things to understand about this configuration:
 
 - The `image` option defines what Docker image to use. Here, you are using the [`postgres` image](https://hub.docker.com/_/postgres) version 13.5.
@@ -188,13 +183,14 @@ A few things to understand about this configuration:
 - The `volumes` option is used for persisting data in the host file system.
 - The `ports` option maps ports from the host machine to the container. The format follows a `'host_port:container_port'` convention. In this case, you are mapping the port `5432` of the host machine to port `5432` of the `postgres` container. `5432` is conventionally the port used by PostgreSQL.
 
-
 Make sure that nothing is running on port `5432` of your machine. To start the `postgres` container, open a new terminal window and run the following command in the main folder of your project:
 
 ```shell
 docker-compose up
 ```
+
 If everything worked correctly, the new terminal window should show logs that the database system is ready to accept connections. You should see logs similar to the following inside the terminal window:
+
 ```
 ...
 postgres_1  | 2022-03-05 12:47:02.410 UTC [1] LOG:  listening on IPv4 address "0.0.0.0", port 5432
@@ -202,12 +198,10 @@ postgres_1  | 2022-03-05 12:47:02.410 UTC [1] LOG:  listening on IPv6 address ":
 postgres_1  | 2022-03-05 12:47:02.411 UTC [1] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
 postgres_1  | 2022-03-05 12:47:02.419 UTC [1] LOG:  database system is ready to accept connections
 ```
+
 Congratulations 🎉. You now have your own PostgreSQL database to play around with!
 
 > **Note**: If you close the terminal window, it will also stop the container. You can avoid this if you add a `-d` option to the end of the command, like this: `docker-compose up -d`. This will indefinitely run the container in the background.
-
-
-
 
 ## Set up Prisma
 
@@ -220,13 +214,14 @@ To get started, first install the Prisma CLI as a development dependency. The Pr
 ```shell
 npm install -D prisma
 ```
+
 You can initialize Prisma inside your project by running:
 
 ```shell
 npx prisma init
 ```
-This will create a new `prisma` directory with a `schema.prisma` file. This is the main configuration file that contains your database schema. This command also creates a `.env` file inside your project.
 
+This will create a new `prisma` directory with a `schema.prisma` file. This is the main configuration file that contains your database schema. This command also creates a `.env` file inside your project.
 
 ### Set your environment variable
 
@@ -236,8 +231,8 @@ Inside the `.env` file, you should see a `DATABASE_URL` environment variable wit
 // .env
 DATABASE_URL="postgres://myuser:mypassword@localhost:5432/median-db"
 ```
-> **Note**: If you didn't use docker (as shown in the previous section) to create your PostgreSQL database, your connection string will be different from the one shown above. The connection string format for PostgreSQL is available in the [Prisma Docs](https://www.prisma.io/docs/orm/overview/databases/postgresql#connection-url).
 
+> **Note**: If you didn't use docker (as shown in the previous section) to create your PostgreSQL database, your connection string will be different from the one shown above. The connection string format for PostgreSQL is available in the [Prisma Docs](https://www.prisma.io/docs/orm/overview/databases/postgresql#connection-url).
 
 ### Understand the Prisma schema
 
@@ -255,14 +250,14 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 ```
+
 This file is written in the _Prisma Schema Language_, which is a language that Prisma uses to define your database schema. The `schema.prisma` file has three main components:
 
 - **Data source**: Specifies your database connection. The above configuration means that your database _provider_ is PostgreSQL and the database connection string is available in the `DATABASE_URL` environment variable.
 - **Generator**: Indicates that you want to generate Prisma Client, a type-safe query builder for your database. It is used to send queries to your database.
 - **Data model**: Defines your database _models_. Each model will be mapped to a table in the underlying database. Right now there are no models in your schema, you will explore this part in the next section.
 
-> **Note**:  For more information on Prisma schema, check out the [Prisma docs](https://www.prisma.io/docs/orm/prisma-schema).
-
+> **Note**: For more information on Prisma schema, check out the [Prisma docs](https://www.prisma.io/docs/orm/prisma-schema).
 
 ### Model the data
 
@@ -283,6 +278,7 @@ model Article {
   updatedAt   DateTime @updatedAt
 }
 ```
+
 Here, you have created an `Article` model with several fields. Each field has a name (`id`, `title`, etc.), a type (`Int`, `String`, etc.), and other optional attributes (`@id`, `@unique`, etc.). Fields can be made optional by adding a `?` after the field type.
 
 The `id` field has a special attribute called `@id`. This attribute indicates that this field is the primary key of the model. The `@default(autoincrement())` attribute indicates that this field should be automatically incremented and assigned to any newly created record.
@@ -298,6 +294,7 @@ With the Prisma schema defined, you will run migrations to create the actual tab
 ```shell
 npx prisma migrate dev --name "init"
 ```
+
 This command will do three things:
 
 1. **Save the migration**: Prisma Migrate will take a snapshot of your schema and figure out the SQL commands necessary to carry out the migration. Prisma will save the migration file containing the SQL commands to the newly created `prisma/migrations` folder.
@@ -307,6 +304,7 @@ This command will do three things:
 > **Note**: You can learn more about Prisma Migrate in the [Prisma docs](https://www.prisma.io/docs/orm/prisma-migrate).
 
 If completed successfully, you should see a message like this :
+
 ```
 The following migration(s) have been created and applied from new schema changes:
 
@@ -318,6 +316,7 @@ Your database is now in sync with your schema.
 ...
 ✔ Generated Prisma Client (3.14.0 | library) to ./node_modules/@prisma/client in 31ms
 ```
+
 Check the generated migration file to get an idea about what Prisma Migrate is doing behind the scenes:
 
 ```sql
@@ -339,6 +338,7 @@ CREATE TABLE "Article" (
 -- CreateIndex
 CREATE UNIQUE INDEX "Article_title_key" ON "Article"("title");
 ```
+
 > **Note**: The name of your migration file will be slightly different.
 
 This is the SQL needed to create the `Article` table inside your PostgreSQL database. It was automatically generated and executed by Prisma based on your Prisma schema.
@@ -352,12 +352,13 @@ Firstly, create a seed file called `prisma/seed.ts`. This file will contain the 
 ```shell
 touch prisma/seed.ts
 ```
+
 Then, inside the seed file, add the following code:
 
 ```ts
 // prisma/seed.ts
 
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from "@prisma/client";
 
 // initialize Prisma Client
 const prisma = new PrismaClient();
@@ -365,11 +366,11 @@ const prisma = new PrismaClient();
 async function main() {
   // create two dummy articles
   const post1 = await prisma.article.upsert({
-    where: { title: 'Prisma Adds Support for MongoDB' },
+    where: { title: "Prisma Adds Support for MongoDB" },
     update: {},
     create: {
-      title: 'Prisma Adds Support for MongoDB',
-      body: 'Support for MongoDB has been one of the most requested features since the initial release of...',
+      title: "Prisma Adds Support for MongoDB",
+      body: "Support for MongoDB has been one of the most requested features since the initial release of...",
       description:
         "We are excited to share that today's Prisma ORM release adds stable support for MongoDB!",
       published: false,
@@ -381,9 +382,9 @@ async function main() {
     update: {},
     create: {
       title: "What's new in Prisma? (Q1/22)",
-      body: 'Our engineers have been working hard, issuing new releases with many improvements...',
+      body: "Our engineers have been working hard, issuing new releases with many improvements...",
       description:
-        'Learn about everything in the Prisma ecosystem and community from January to March 2022.',
+        "Learn about everything in the Prisma ecosystem and community from January to March 2022.",
       published: true,
     },
   });
@@ -401,8 +402,8 @@ main()
     // close Prisma Client at the end
     await prisma.$disconnect();
   });
-
 ```
+
 Inside this script, you first initialize Prisma Client. Then you create two articles using the `prisma.upsert()` function. The `upsert` function will only create a new article if no article matches the `where` condition. You are using an `upsert` query instead of a `create` query because `upsert` removes errors related to accidentally trying to insert the same record twice.
 
 You need to tell Prisma what script to execute when running the seeding command. You can do this by adding the `prisma.seed` key to the end of your `package.json` file:
@@ -427,6 +428,7 @@ diff // package.json
 +    "seed": "ts-node prisma/seed.ts"
 +  }
 ```
+
 The `seed` command will execute the `prisma/seed.ts` script that you previously defined. This command should work automatically because `ts-node` is already installed as a dev dependency in your `package.json`.
 
 Execute seeding with the following command:
@@ -434,7 +436,9 @@ Execute seeding with the following command:
 ```shell
 npx prisma db seed
 ```
+
 You should see the following output:
+
 ```
 Running seed command `ts-node prisma/seed.ts` ...
 {
@@ -460,9 +464,8 @@ Running seed command `ts-node prisma/seed.ts` ...
 
 🌱  The seed command has been executed.
 ```
+
 > **Note**: You can learn more about seeding in the [Prisma Docs](https://www.prisma.io/docs/orm/prisma-migrate/workflows/seeding).
-
-
 
 ### Create a Prisma service
 
@@ -474,6 +477,7 @@ The Nest CLI gives you an easy way to generate modules and services directly fro
 npx nest generate module prisma
 npx nest generate service prisma
 ```
+
 > **Note 1**: If necessary, refer to the NestJS docs for an introduction to [services](https://docs.nestjs.com/providers) and [modules](https://docs.nestjs.com/modules).
 
 > **Note 2**: In some cases running the `nest generate` command with the server already running may result in NestJS throwing an exception that says: `Error: Cannot find module './app.controller'`. If you run into this error, run the following command from the terminal: `rm -rf dist` and restart the server.
@@ -483,19 +487,20 @@ This should generate a new subdirectory `./src/prisma` with a `prisma.module.ts`
 ```ts
 // src/prisma/prisma.service.ts
 
-import { INestApplication, Injectable } from '@nestjs/common';
-import { PrismaClient } from '@prisma/client';
+import { INestApplication, Injectable } from "@nestjs/common";
+import { PrismaClient } from "@prisma/client";
 
 @Injectable()
 export class PrismaService extends PrismaClient {}
 ```
+
 The Prisma module will be responsible for creating a [singleton](https://docs.nestjs.com/modules#shared-modules) instance of the `PrismaService` and allow sharing of the service throughout your application. To do this, you will add the `PrismaService` to the `exports` array in the `prisma.module.ts` file:
 
 ```ts
 // src/prisma/prisma.module.ts
 
-import { Module } from '@nestjs/common';
-import { PrismaService } from './prisma.service';
+import { Module } from "@nestjs/common";
+import { PrismaService } from "./prisma.service";
 
 @Module({
   providers: [PrismaService],
@@ -503,6 +508,7 @@ import { PrismaService } from './prisma.service';
 })
 export class PrismaModule {}
 ```
+
 Now, any module that _imports_ the `PrismaModule` will have access to `PrismaService` and can inject it into its own components/services. This is a common pattern for NestJS applications.
 
 With that out of the way, you are done setting up Prisma! You can now get to work on building the REST API.
@@ -516,31 +522,33 @@ Get started by installing the required dependencies:
 ```shell
 npm install --save @nestjs/swagger swagger-ui-express
 ```
+
 Now open `main.ts` and initialize Swagger using the `SwaggerModule` class:
 
 ```ts
 // src/main.ts
 
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { NestFactory } from "@nestjs/core";
+import { AppModule } from "./app.module";
+import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   const config = new DocumentBuilder()
-    .setTitle('Median')
-    .setDescription('The Median API description')
-    .setVersion('0.1')
+    .setTitle("Median")
+    .setDescription("The Median API description")
+    .setVersion("0.1")
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup("api", app, document);
 
   await app.listen(3000);
 }
 bootstrap();
 ```
+
 While the application is running, open your browser and navigate to [`http://localhost:3000/api`](http://localhost:3000/api). You should see the Swagger UI.
 
 ![Swagger User Interface](/nestjs-prisma-rest-api-7D056s1BmOL0/imgs/swagger-ui.png)
@@ -556,6 +564,7 @@ Before you can implement the REST API, you will need to generate the REST resour
 ```shell
 npx nest generate resource
 ```
+
 You will be given a few CLI prompts. Answer the questions accordingly:
 
 1. `What name would you like to use for this resource (plural, e.g., "users")?` **articles**
@@ -563,7 +572,6 @@ You will be given a few CLI prompts. Answer the questions accordingly:
 3. `Would you like to generate CRUD entry points?` **Yes**
 
 You should now find a new `src/articles` directory with all the boilerplate for your REST endpoints. Inside the `src/articles/articles.controller.ts` file, you will see the definition of different routes (also called route handlers). The business logic for handling each request is encapsulated in the `src/articles/articles.service.ts` file. Currently, this file contains dummy implementations.
-
 
 If you open the Swagger [API page](http://localhost:3000/api) again, you should see something like this:
 
@@ -578,10 +586,10 @@ To access `PrismaClient` inside the `Articles` module, you must add the `PrismaM
 ```ts
 // src/articles/articles.module.ts
 
-import { Module } from '@nestjs/common';
-import { ArticlesService } from './articles.service';
-import { ArticlesController } from './articles.controller';
-import { PrismaModule } from 'src/prisma/prisma.module';
+import { Module } from "@nestjs/common";
+import { ArticlesService } from "./articles.service";
+import { ArticlesController } from "./articles.controller";
+import { PrismaModule } from "src/prisma/prisma.module";
 
 @Module({
   controllers: [ArticlesController],
@@ -590,15 +598,16 @@ import { PrismaModule } from 'src/prisma/prisma.module';
 })
 export class ArticlesModule {}
 ```
+
 You can now inject the `PrismaService` inside the `ArticlesService` and use it to access the database. To do this, add a constructor to `articles.service.ts` like this:
 
 ```ts
 // src/articles/articles.service.ts
 
-import { Injectable } from '@nestjs/common';
-import { CreateArticleDto } from './dto/create-article.dto';
-import { UpdateArticleDto } from './dto/update-article.dto';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { Injectable } from "@nestjs/common";
+import { CreateArticleDto } from "./dto/create-article.dto";
+import { UpdateArticleDto } from "./dto/update-article.dto";
+import { PrismaService } from "src/prisma/prisma.service";
 
 @Injectable()
 export class ArticlesService {
@@ -607,6 +616,7 @@ export class ArticlesService {
   // CRUD operations
 }
 ```
+
 ### Define `GET /articles` endpoint
 
 The controller for this endpoint is called `findAll`. This endpoint will return all published articles in the database. The `findAll` controller looks like this:
@@ -619,6 +629,7 @@ findAll() {
   return this.articlesService.findAll();
 }
 ```
+
 You need to update `ArticlesService.findAll()` to return an array of all published articles in the database:
 
 ```ts
@@ -637,19 +648,19 @@ export class ArticlesService {
 +    return this.prisma.article.findMany({ where: { published: true } });
   }
 ```
+
 The `findMany` query will return all `article` records that match the `where` condition.
 
-You can test out the endpoint by going to[` http://localhost:3000/api`]( http://localhost:3000/api) and
+You can test out the endpoint by going to[` http://localhost:3000/api`](http://localhost:3000/api) and
 clicking on the **GET/articles** dropdown menu. Press **Try it out** and then **Execute** to see the result.
 
 ![](/nestjs-prisma-rest-api-7D056s1BmOL0/imgs/swagger-findall.png)
 
 > **Note**: You can also run all requests in the browser directly or through a REST client (like [Postman](https://www.postman.com/)). Swagger also generates the curl commands for each request in case you want to run the HTTP requests in the terminal.
 
-
 ### Define `GET /articles/drafts` endpoint
 
-You will define a new route to fetch all  _unpublished_ articles. NestJS did not automatically generate the controller route handler for this endpoint, so you have to write it yourself.
+You will define a new route to fetch all _unpublished_ articles. NestJS did not automatically generate the controller route handler for this endpoint, so you have to write it yourself.
 
 ```ts
 // src/articles/articles.controller.ts
@@ -672,6 +683,7 @@ export class ArticlesController {
 
 }
 ```
+
 Your editor should show an error that no function called `articlesService.findDrafts()` exists. To fix this, implement the `findDrafts` method in `ArticlesService`:
 
 ```ts
@@ -693,6 +705,7 @@ export class ArticlesService {
 
 }
 ```
+
 The `GET /articles/drafts` endpoint will now be available in the Swagger [API page](http://localhost:3000/api).
 
 > **Note**: I recommend testing out each endpoint through the Swagger [API page](http://localhost:3000/api) once you finish implementing it.
@@ -709,6 +722,7 @@ findOne(@Param('id') id: string) {
   return this.articlesService.findOne(+id);
 }
 ```
+
 The route accepts a dynamic `id` parameter, which is passed to the `findOne` controller route handler. Since the `Article` model has an integer `id` field, the `id` parameter needs to be casted to a number using the `+` operator.
 
 Now, update the `findOne` method in the `ArticlesService` to return the article with the given id:
@@ -733,6 +747,7 @@ export class ArticlesService {
   }
 }
 ```
+
 Once again, test out the endpoint by going to [`http://localhost:3000/api`](http://localhost:3000/api). Click on the **`GET /articles/{id}`** dropdown menu. Press **Try it out**, add a valid value to the **id** parameter, and press **Execute** to see the result.
 
 ![](/nestjs-prisma-rest-api-7D056s1BmOL0/imgs/swagger-findone.png)
@@ -749,12 +764,13 @@ create(@Body() createArticleDto: CreateArticleDto) {
   return this.articlesService.create(createArticleDto);
 }
 ```
+
 Notice that it expects arguments of type `CreateArticleDto` in the request body. A DTO (Data Transfer Object) is an object that defines how the data will be sent over the network. Currently, the `CreateArticleDto` is an empty class. You will add properties to it to define the shape of the request body.
 
 ```ts
 // src/articles/dto/create-article.dto.ts
 
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty } from "@nestjs/swagger";
 
 export class CreateArticleDto {
   @ApiProperty()
@@ -770,13 +786,12 @@ export class CreateArticleDto {
   published?: boolean = false;
 }
 ```
-The `@ApiProperty` decorators are required to make the class properties visible to the `SwaggerModule`. More information about this is available in the [NestJS docs](https://docs.nestjs.com/openapi/types-and-parameters).
 
+The `@ApiProperty` decorators are required to make the class properties visible to the `SwaggerModule`. More information about this is available in the [NestJS docs](https://docs.nestjs.com/openapi/types-and-parameters).
 
 The `CreateArticleDto` should now be defined in the Swagger API page under **Schemas**. The shape of `UpdateArticleDto` is automatically inferred from the `CreateArticleDto` definition. So `UpdateArticleDto` is also defined inside Swagger.
 
 ![](/nestjs-prisma-rest-api-7D056s1BmOL0/imgs/create-article-dto.png)
-
 
 Now update the `create` method in the `ArticlesService` to create a new article in the database:
 
@@ -796,6 +811,7 @@ export class ArticlesService {
   // ...
 }
 ```
+
 ### Define `PATCH /articles/:id` endpoint
 
 This endpoint is for updating existing articles. The route handler for this endpoint is called `update`. It looks like this:
@@ -808,17 +824,18 @@ update(@Param('id') id: string, @Body() updateArticleDto: UpdateArticleDto) {
   return this.articlesService.update(+id, updateArticleDto);
 }
 ```
-The `updateArticleDto` definition is defined as a [`PartialType`](https://docs.nestjs.com/openapi/mapped-types#partial) of `CreateArticleDto`. So it can have all the properties of `CreateArticleDto`.
 
+The `updateArticleDto` definition is defined as a [`PartialType`](https://docs.nestjs.com/openapi/mapped-types#partial) of `CreateArticleDto`. So it can have all the properties of `CreateArticleDto`.
 
 ```ts
 // src/articles/dto/update-article.dto.ts
 
-import { PartialType } from '@nestjs/swagger';
-import { CreateArticleDto } from './create-article.dto';
+import { PartialType } from "@nestjs/swagger";
+import { CreateArticleDto } from "./create-article.dto";
 
 export class UpdateArticleDto extends PartialType(CreateArticleDto) {}
 ```
+
 Just like before, you must update the corresponding service method for this operation:
 
 ```ts
@@ -841,6 +858,7 @@ export class ArticlesService {
   // ...
 }
 ```
+
 The `article.update` operation will try to find an `Article` record with the given `id` and update it with the data of `updateArticleDto`.
 
 If no such `Article` record is found in the database, Prisma will return an error. In such cases, the API does not return a user-friendly error message. You will learn about error handling with NestJS in a future tutorial.
@@ -857,8 +875,8 @@ remove(@Param('id') id: string) {
   return this.articlesService.remove(+id);
 }
 ```
-Just like before, go to `ArticlesService` and update the corresponding method:
 
+Just like before, go to `ArticlesService` and update the corresponding method:
 
 ```ts
 diff // src/articles/articles.service.ts
@@ -875,8 +893,8 @@ export class ArticlesService {
   }
 }
 ```
-That was the last operation for the `articles` endpoint. Congratulations your API is almost ready! 🎉
 
+That was the last operation for the `articles` endpoint. Congratulations your API is almost ready! 🎉
 
 ### Group endpoints together in Swagger
 
@@ -885,14 +903,15 @@ Add an `@ApiTags` decorator to the `ArticlesController` class, to group all the 
 ```ts
 // src/articles/articles.controller.ts
 
-import { ApiTags } from '@nestjs/swagger';
+import { ApiTags } from "@nestjs/swagger";
 
-@Controller('articles')
-@ApiTags('articles')
+@Controller("articles")
+@ApiTags("articles")
 export class ArticlesController {
   // ...
 }
 ```
+
 The [API page](http://localhost:3000/api/) now has the `articles` endpoints grouped together.
 
 ![](/nestjs-prisma-rest-api-7D056s1BmOL0/imgs/articles-endpoints-grouped.png)
@@ -906,8 +925,8 @@ First, you need to define an entity that Swagger can use to identify the shape o
 ```ts
 // src/articles/entities/article.entity.ts
 
-import { Article } from '@prisma/client';
-import { ApiProperty } from '@nestjs/swagger';
+import { Article } from "@prisma/client";
+import { ApiProperty } from "@nestjs/swagger";
 
 export class ArticleEntity implements Article {
   @ApiProperty()
@@ -932,6 +951,7 @@ export class ArticleEntity implements Article {
   updatedAt: Date;
 }
 ```
+
 This is an implementation of the `Article` type generated by Prisma Client, with `@ApiProperty` decorators added to each property.
 
 Now, it's time to annotate the controller route handlers with the correct response types. NestJS has a set of decorators for this purpose.
@@ -984,12 +1004,12 @@ export class ArticlesController {
   }
 }
 ```
+
 You added the `@ApiOkResponse` for `GET`, `PATCH` and `DELETE` endpoints and `@ApiCreatedResponse` for `POST` endpoints. The `type` property is used to specify the return type. You can find all the response decorators that NestJS provides in the [NestJS docs](https://docs.nestjs.com/openapi/operations#responses).
 
 Now, Swagger should properly define the response type for all endpoints on the API page.
 
 ![](/nestjs-prisma-rest-api-7D056s1BmOL0/imgs/response-types.png)
-
 
 ## Summary and final remarks
 
@@ -1001,7 +1021,4 @@ Congratulations! You've built a rudimentary REST API using NestJS. Throughout th
 
 One of the main takeaways from this tutorial is how easy it is to build a REST API with NestJS and Prisma. This is an incredibly productive stack for rapidly building well structured, type-safe and maintainable backend applications.
 
-
 You can find the source code for this project on [GitHub](https://github.com/prisma/blog-backend-rest-api-nestjs-prisma). Please feel free to raise an issue in the repository or submit a PR if you notice a problem. You can also reach out to me directly on [Twitter](https://twitter.com/tasinishmam).
-
-

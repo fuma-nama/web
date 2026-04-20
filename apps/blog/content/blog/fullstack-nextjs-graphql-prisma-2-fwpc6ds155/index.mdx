@@ -83,6 +83,7 @@ To get started, navigate into the directory of your choice and run the following
 ```shell
 git clone -b part-2 https://github.com/m-abdelwahab/awesome-links.git
 ```
+
 You can now navigate into the cloned directory, install the dependencies and start the development server:
 
 ```shell
@@ -90,6 +91,7 @@ cd awesome-links
 npm install
 npm run dev
 ```
+
 The app will be running at [`http://localhost:3000/`](http://localhost:3000/) and you will see four items. The data is hardcoded and comes from the `/data/links.ts` file.
 
 ![What the starter project looks like](/fullstack-nextjs-graphql-prisma-2-fwpc6ds155/imgs/awesome-links-starter-project.png)
@@ -101,16 +103,19 @@ After setting up a PostgreSQL database, rename the `env.example` file to `.env` 
 ```shell
 npx prisma migrate dev --name init
 ```
+
 If `prisma migrate dev` did not trigger the seed step, run the following command to seed the database:
 
 ```shell
 npx prisma db seed
 ```
+
 This command will run the `seed.ts` script, located in the `/prisma` directory. This script adds four links and one user to your database using Prisma Client.
 
 ### A look at the project structure and dependencies
 
 You will see the following folder structure
+
 ```
 awesome-links/
 ┣ components/
@@ -139,6 +144,7 @@ awesome-links/
 ┣ tailwind.config.js
 ┗ tsconfig.json
 ```
+
 This is a Next.js application with TailwindCSS set up along with Prisma.
 
 In the `pages` directory, you will find three files:
@@ -171,11 +177,11 @@ While REST APIs offer advantages, they also have some drawbacks. We will use `aw
 Here is one possible way of structuring the REST API of `awesome-links`:
 
 | Resource | HTTP Method            | Route        | Description                                                            |
-| -------- | ---------------------- | ------------ | ---------------------------------------------------------------------- |
+| -------- | ---------------------- | ------------ | ---------------------------------------------------------------------- | --- |
 | `User`   | `GET`                  | `/users`     | returns all users and their information                                |
 | `User`   | `GET`                  | `/users/:id` | returns a single user                                                  |
 | `Link`   | `GET`                  | `/links`     | returns all links                                                      |
-| `Link`   | `GET`, `PUT`, `DELETE` | `/links/:id` | returns a single link, updates it or deletes it. `id` is the link's id |  |
+| `Link`   | `GET`, `PUT`, `DELETE` | `/links/:id` | returns a single link, updates it or deletes it. `id` is the link's id |     |
 | `User`   | `GET`                  | `/favorites` | returns a user's bookmarked links                                      |
 | `User`   | `POST`                 | `/link/save` | adds a link to the user's favorites                                    |
 | `Link`   | `POST`                 | `/link/new`  | creates a new link (done by admin)                                     |
@@ -231,6 +237,7 @@ query {
   }
 }
 ```
+
 ![Example of GraphQL query](/fullstack-nextjs-graphql-prisma-2-fwpc6ds155/imgs/graphiql-example-query.png)
 
 The API only returns the `id` and `title`, even though a link has more fields.
@@ -267,6 +274,7 @@ enum Role {
   USER
 }
 ```
+
 The `User` type has the following fields:
 
 - `id`, which is of type `ID`.
@@ -288,6 +296,7 @@ type Link {
   users: [User]
 }
 ```
+
 This is a many-to-many relation between the `Link` and `User` object types since a `Link` can have many users, and a `User` can have many links. This is modeled in the database using Prisma.
 
 ### Defining Queries
@@ -302,6 +311,7 @@ type Query {
   links: [Link]!
 }
 ```
+
 The `links` query returns an array of type `Link`. The `!` is used to indicate that this field is non-nullable, meaning that the API will always return a value when this field is queried.
 
 You can add more queries depending on the type of API you want to build. For the "awesome-links" app, you can add a query to return a single link, another one to return a single user, and another to return all users.
@@ -314,6 +324,7 @@ type Query {
   users: [User]!
 }
 ```
+
 - The `link` query takes an argument `id` of type `ID` and returns a `Link`. The `id` argument is required, and the response is non-nullable.
 - The `user` query takes an argument `id` of type `ID` and returns a `User`. The `id` argument is required, and the response is non-nullable.
 - The `users` query returns an array of type `User`. The `id` argument is required. The response is non-nullable.
@@ -326,11 +337,25 @@ For the "awesome-links" app, you will need different mutations for creating, upd
 
 ```graphql
 type Mutation {
-  createLink(category: String!, description: String!, imageUrl: String!, title: String!, url: String!): Link!
+  createLink(
+    category: String!
+    description: String!
+    imageUrl: String!
+    title: String!
+    url: String!
+  ): Link!
   deleteLink(id: ID!): Link!
-  updateLink(category: String, description: String, id: String, imageUrl: String, title: String, url: String): Link!
+  updateLink(
+    category: String
+    description: String
+    id: String
+    imageUrl: String
+    title: String
+    url: String
+  ): Link!
 }
 ```
+
 - The `createLink` mutation takes as an argument a `category`, a `description`, a `title`, a `url` and an `imageUrl`. All of these fields are of type `String` and are required. This mutation returns a `Link` object type.
 - The `deleteLink` mutation takes as an `id` of type `ID` as a required argument. It returns a required `Link`.
 - The `updateLink` mutation takes the same arguments as the `createLink` mutation. However, arguments are optional. This way, when updating a `Link` you will only pass the fields you want to be updated. This mutation returns a required `Link`.
@@ -352,6 +377,7 @@ To get started, in the starter repo you cloned in the beginning, run the followi
 ```shell
 npm install graphql graphql-yoga
 ```
+
 The `graphql` package is the JavaScript reference implementation for GraphQL. It is a peer-dependency for `graphql-yoga`.
 
 ### Defining the schema of the app
@@ -375,8 +401,9 @@ export const typeDefs = `
   type Query {
     links: [Link]!
   }
-`
+`;
 ```
+
 ### Defining resolvers
 
 The next thing you need to do is create the resolver function for the `links` query. To do so, create a `/graphql/resolvers.ts` file and add the following code:
@@ -388,34 +415,35 @@ export const resolvers = {
     links: () => {
       return [
         {
-          category: 'Open Source',
-          description: 'Fullstack React framework',
+          category: "Open Source",
+          description: "Fullstack React framework",
           id: 1,
-          imageUrl: 'https://nextjs.org/static/twitter-cards/home.png',
-          title: 'Next.js',
-          url: 'https://nextjs.org',
+          imageUrl: "https://nextjs.org/static/twitter-cards/home.png",
+          title: "Next.js",
+          url: "https://nextjs.org",
         },
         {
-          category: 'Open Source',
-          description: 'Next Generation ORM for TypeScript and JavaScript',
+          category: "Open Source",
+          description: "Next Generation ORM for TypeScript and JavaScript",
           id: 2,
-          imageUrl: 'https://www.prisma.io/images/og-image.png',
-          title: 'Prisma',
-          url: 'https://www.prisma.io',
+          imageUrl: "https://www.prisma.io/images/og-image.png",
+          title: "Prisma",
+          url: "https://www.prisma.io",
         },
         {
-          category: 'Open Source',
-          description: 'GraphQL implementation',
+          category: "Open Source",
+          description: "GraphQL implementation",
           id: 3,
-          imageUrl: 'https://www.apollographql.com/apollo-home.png',
-          title: 'Apollo GraphQL',
-          url: 'https://apollographql.com',
+          imageUrl: "https://www.apollographql.com/apollo-home.png",
+          title: "Apollo GraphQL",
+          url: "https://apollographql.com",
         },
-      ]
+      ];
     },
   },
-}
+};
 ```
+
 `resolvers` is an object where you will define the implementation for each query and mutation. The functions inside the `Query` object must match the names of the queries defined in the schema. Same thing goes for mutations.
 Here the `links` resolver function returns an array of objects, where each object is of type `Link`.
 
@@ -428,29 +456,29 @@ Go ahead and create a `/pages/api/graphql.ts` file and add the following code:
 ```ts
 // pages/api/graphql.ts
 
-import { createSchema, createYoga } from 'graphql-yoga'
-import type { NextApiRequest, NextApiResponse } from 'next'
-import { resolvers } from '../../graphql/resolvers'
-import { typeDefs } from '../../graphql/schema'
-
+import { createSchema, createYoga } from "graphql-yoga";
+import type { NextApiRequest, NextApiResponse } from "next";
+import { resolvers } from "../../graphql/resolvers";
+import { typeDefs } from "../../graphql/schema";
 
 export default createYoga<{
-  req: NextApiRequest
-  res: NextApiResponse
+  req: NextApiRequest;
+  res: NextApiResponse;
 }>({
   schema: createSchema({
     typeDefs,
-    resolvers
+    resolvers,
   }),
-  graphqlEndpoint: '/api/graphql'
-})
+  graphqlEndpoint: "/api/graphql",
+});
 
 export const config = {
   api: {
-    bodyParser: false
-  }
-}
+    bodyParser: false,
+  },
+};
 ```
+
 You created a new GraphQL Yoga server instance that is the default export. You also created a schema using the `createSchema` function that takes the type-definitions and resolvers as a parameter.
 
 You then specified the path for the GraphQL API with the `graphqlEndpoint` property to `/api/graphql`.
@@ -464,6 +492,7 @@ After completing the previous steps, start the server by running the following c
 ```shell
 npm run dev
 ```
+
 When you navigate to [`http://localhost:3000/api/graphql/`](http://localhost:3000/api/graphql/), you should see the following page:
 
 ![GraphiQL Playground for running queries](/fullstack-nextjs-graphql-prisma-2-fwpc6ds155/imgs/graphiql-playground.png)
@@ -481,6 +510,7 @@ query {
   }
 }
 ```
+
 ![GraphiQL Playground with an example query](/fullstack-nextjs-graphql-prisma-2-fwpc6ds155/imgs/graphiql-documentation-explorer.png)
 
 The responses should be visible on the left panel, similar to the screenshot above.
@@ -497,24 +527,25 @@ Prisma Client is an auto-generated, type-safe, query builder. To be able to use 
 
 ```ts
 // /lib/prisma.ts
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from "@prisma/client";
 
-let prisma: PrismaClient
+let prisma: PrismaClient;
 
 declare global {
   var prisma: PrismaClient;
 }
 
-if (process.env.NODE_ENV === 'production') {
-  prisma = new PrismaClient()
+if (process.env.NODE_ENV === "production") {
+  prisma = new PrismaClient();
 } else {
   if (!global.prisma) {
-    global.prisma = new PrismaClient()
+    global.prisma = new PrismaClient();
   }
-  prisma = global.prisma
+  prisma = global.prisma;
 }
-export default prisma
+export default prisma;
 ```
+
 First, you are creating a new Prisma Client instance. Then if you are not in a production environment, Prisma will be attached to the global object so that you do not exhaust the database connection limit. For more details, check out the documentation for [Next.js and Prisma Client best practices](https://www.prisma.io/docs/guides/other/troubleshooting-orm/help-articles/nextjs-prisma-client-dev-practices).
 
 ### Query the database using Prisma
@@ -523,15 +554,16 @@ Now you can update the resolver to return data from the database. Inside the `/g
 
 ```ts
 // /graphql/resolvers.ts
-import prisma from '../lib/prisma'
+import prisma from "../lib/prisma";
 export const resolvers = {
   Query: {
     links: () => {
-      return prisma.link.findMany()
+      return prisma.link.findMany();
     },
   },
-}
+};
 ```
+
 If everything is set up correctly, when you go to GraphiQL,at [`http://localhost:3000/api/graphql`](http://localhost:3000/api/graphql) and re-run the links query, the data should be retrieved from your database.
 
 ## The flaws with our current GraphQL setup
@@ -562,6 +594,7 @@ To get started, run the following command to install Pothos and the Prisma plugi
 ```shell
 npm install @pothos/plugin-prisma @pothos/core
 ```
+
 Next, add the `pothos` generator block to your Prisma schema right below the `client` generator:
 
 ```prisma
@@ -575,11 +608,13 @@ generator client {
 +  provider = "prisma-pothos-types"
 +}
 ```
+
 Run the following command to re-generate Prisma Client and Pothos types:
 
 ```sh
 npx prisma generate
 ```
+
 Next, create an instance of the Pothos schema builder as a shareable module. Inside the `graphql` folder, create a new file called `builder.ts` and add the following snippet:
 
 ```ts
@@ -587,23 +622,23 @@ Next, create an instance of the Pothos schema builder as a shareable module. Ins
 
 // 1.
 import SchemaBuilder from "@pothos/core";
-import PrismaPlugin from '@pothos/plugin-prisma';
-import type PrismaTypes from '@pothos/plugin-prisma/generated';
+import PrismaPlugin from "@pothos/plugin-prisma";
+import type PrismaTypes from "@pothos/plugin-prisma/generated";
 import prisma from "../lib/prisma";
 
-// 2. 
+// 2.
 export const builder = new SchemaBuilder<{
-  // 3. 
-  PrismaTypes: PrismaTypes
+  // 3.
+  PrismaTypes: PrismaTypes;
 }>({
   // 4.
   plugins: [PrismaPlugin],
   prisma: {
     client: prisma,
-  }
-})
+  },
+});
 
-// 5. 
+// 5.
 builder.queryType({
   fields: (t) => ({
     ok: t.boolean({
@@ -612,6 +647,7 @@ builder.queryType({
   }),
 });
 ```
+
 1. Defines all the libraries and utilities that will be needed
 1. Creates a new `SchemaBuilder` instance
 1. Defines the static types that will be used in creating the GraphQL schema
@@ -625,8 +661,9 @@ Next, in the `/graphql/schema.ts` file replace the `typeDefs` with the following
 
 import { builder } from "./builder";
 
-export const schema = builder.toSchema()
+export const schema = builder.toSchema();
 ```
+
 Finally, update the import in the `/pages/api/graphql.ts` file:
 
 ```ts
@@ -657,6 +694,7 @@ export const config = {
   }
 }
 ```
+
 <Accordions type="single">
   <Accordion title="Expand to view the updated content of the `graphql.ts` file">
 ```ts
@@ -694,24 +732,25 @@ The first step is defining a `Link` object type using Pothos. Go ahead and creat
 // /graphql/types/Link.ts
 import { builder } from "../builder";
 
-builder.prismaObject('Link', {
+builder.prismaObject("Link", {
   fields: (t) => ({
-    id: t.exposeID('id'),
-    title: t.exposeString('title'),
-    url: t.exposeString('url'),
-    description: t.exposeString('description'),
-    imageUrl: t.exposeString('imageUrl'),
-    category: t.exposeString('category'),
-    users: t.relation('users')
-  })
-})
+    id: t.exposeID("id"),
+    title: t.exposeString("title"),
+    url: t.exposeString("url"),
+    description: t.exposeString("description"),
+    imageUrl: t.exposeString("imageUrl"),
+    category: t.exposeString("category"),
+    users: t.relation("users"),
+  }),
+});
 ```
+
 Since you're using the Pothos' Prisma plugin, the `builder` instance provides utility methods for defining your GraphQL schema such as [`prismaObject`](https://pothos-graphql.dev/docs/plugins/prisma#creating-types-with-builderprismaobject).
 
-`prismaObject` accepts two arguments: 
+`prismaObject` accepts two arguments:
 
 - `name`: The name of the model in the Prisma schema you would like to _expose_.
-- `options`: The options for defining the type you're exposing such as the description, fields, etc. 
+- `options`: The options for defining the type you're exposing such as the description, fields, etc.
 
 > **Note**: You can use <kbd>CTRL</kbd> + <kbd>Space</kbd> to invoke your editor's intellisense and view the available arguments.
 
@@ -725,20 +764,21 @@ Now create a new `/graphql/types/User.ts` file and add the following to code to 
 // /graphql/types/User.ts
 import { builder } from "../builder";
 
-builder.prismaObject('User', {
+builder.prismaObject("User", {
   fields: (t) => ({
-    id: t.exposeID('id'),
-    email: t.exposeString('email', { nullable: true, }),
-    image: t.exposeString('image', { nullable: true, }),
-    role: t.expose('role', { type: Role, }),
-    bookmarks: t.relation('bookmarks'),
-  })
-})
+    id: t.exposeID("id"),
+    email: t.exposeString("email", { nullable: true }),
+    image: t.exposeString("image", { nullable: true }),
+    role: t.expose("role", { type: Role }),
+    bookmarks: t.relation("bookmarks"),
+  }),
+});
 
-const Role = builder.enumType('Role', {
-  values: ['USER', 'ADMIN'] as const,
-})
+const Role = builder.enumType("Role", {
+  values: ["USER", "ADMIN"] as const,
+});
 ```
+
 Since the `email` and `image` fields in the Prisma schema are nullable, pass the `nullable: true` as a second argument to the expose method.
 
 The default type for the `role` field when "exposing" it's type from the generated schema. In the above example, you've defined an explicit enum type called `Role` which is then used to resolve the `role`'s field type.
@@ -754,6 +794,7 @@ import { builder } from "./builder";
 
 export const schema = builder.toSchema()
 ```
+
 ### Defining queries using Pothos
 
 In the `graphql/types/Link.ts` file, add the following code below the `Link` object type definition:
@@ -762,23 +803,25 @@ In the `graphql/types/Link.ts` file, add the following code below the `Link` obj
 // graphql/types/Link.ts
 // code above unchanged
 
-// 1. 
+// 1.
 builder.queryField("links", (t) =>
-// 2. 
+  // 2.
   t.prismaField({
-    // 3. 
-    type: ['Link'],
-    // 4. 
+    // 3.
+    type: ["Link"],
+    // 4.
     resolve: (query, _parent, _args, _ctx, _info) =>
-      prisma.link.findMany({ ...query })
-  })
-)
+      prisma.link.findMany({ ...query }),
+  }),
+);
 ```
+
 In the above snippet:
+
 1. Defines a query type called `links`.
 1. Defines the field that will resolve to the generated Prisma Client types.
 1. Specifies the field that Pothos will use to resolve the field. In this case, it resolves to an array of the `Link` type
-1. Defines the logic for the query. 
+1. Defines the logic for the query.
 
 The `query` argument in the resolver function adds a `select` or `include` to your query to resolve as many relation fields as possible in a single request.
 
@@ -801,19 +844,21 @@ To get started with Apollo Client, add to your project by running the following 
 ```shell
 npm install @apollo/client
 ```
+
 Next, in the `/lib` directory create a new file called `apollo.ts` and add the following code to it:
 
 ```ts
 // /lib/apollo.ts
-import { ApolloClient, InMemoryCache } from '@apollo/client'
+import { ApolloClient, InMemoryCache } from "@apollo/client";
 
 const apolloClient = new ApolloClient({
-  uri: '/api/graphql',
+  uri: "/api/graphql",
   cache: new InMemoryCache(),
-})
+});
 
-export default apolloClient
+export default apolloClient;
 ```
+
 You are creating a new `ApolloClient` instance to which you are passing a configuration object with `uri` and `cache` fields.
 
 - The `uri` field specifies the GraphQL endpoint you will interact with. This will be changed to the production URL when the app is deployed.
@@ -841,6 +886,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
 export default MyApp
 ```
+
 You are wrapping the global `App` component with the Apollo Provider so all of the project's components can send GraphQL queries.
 
 > **Note**: Next.js supports different data fetching strategies. You can fetch data server-side, client-side, or at build-time. To support pagination, you need to fetch data client-side.
@@ -851,9 +897,9 @@ To load data on your frontend using Apollo client, update the `/pages/index.tsx`
 
 ```tsx
 // /pages/index.tsx
-import Head from 'next/head'
-import { gql, useQuery } from '@apollo/client'
-import type { Link } from '@prisma/client'
+import Head from "next/head";
+import { gql, useQuery } from "@apollo/client";
+import type { Link } from "@prisma/client";
 
 const AllLinksQuery = gql`
   query {
@@ -866,13 +912,13 @@ const AllLinksQuery = gql`
       category
     }
   }
-`
+`;
 
 export default function Home() {
-  const { data, loading, error } = useQuery(AllLinksQuery)
+  const { data, loading, error } = useQuery(AllLinksQuery);
 
-  if (loading) return <p>Loading...</p>
-  if (error) return <p>Oh no... {error.message}</p>
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Oh no... {error.message}</p>;
 
   return (
     <div>
@@ -891,7 +937,7 @@ export default function Home() {
                 <p className="text-lg font-medium">{link.title}</p>
                 <p className="text-gray-600">{link.description}</p>
                 <a href={link.url} className="flex hover:text-blue-500">
-                  {link.url.replace(/(^\w+:|^)\/\//, '')}
+                  {link.url.replace(/(^\w+:|^)\/\//, "")}
                   <svg
                     className="w-4 h-4 my-1"
                     fill="currentColor"
@@ -908,9 +954,10 @@ export default function Home() {
         </ul>
       </div>
     </div>
-  )
+  );
 }
 ```
+
 You are using the `useQuery` hook to send queries to the GraphQL endpoint. This hook has a required parameter of a GraphQL query string. When the component renders, `useQuery` returns an object which contains three values:
 
 - `loading`: a boolean that determines whether or not the data has been returned.
@@ -973,6 +1020,7 @@ query allLinksQuery($first: Int, $after: ID) {
   }
 }
 ```
+
 The query takes two arguments, `first` and `after`:
 
 - `first`: an `Int` that specifies how many items you want the API to return.
@@ -1006,6 +1054,7 @@ Install the plugin with the following command:
 ```sh
 npm install @pothos/plugin-relay
 ```
+
 Update the `graphql/builder.ts` to include the relay plugin.
 
 ```ts
@@ -1037,6 +1086,7 @@ builder.queryType({
   }),
 });
 ```
+
 ### Updating the resolver to return paginated data from the database
 
 To use cursor-based pagination make the following update to the `links` query:
@@ -1057,7 +1107,8 @@ builder.queryField('links', (t) =>
   })
 )
 ```
-The `prismaConnection` method is used to create a `connection` field that also pre-loads the data inside that connection. 
+
+The `prismaConnection` method is used to create a `connection` field that also pre-loads the data inside that connection.
 
 <Accordions type="single">
   <Accordion title="Expand to view the updated content of the `Link.ts` file">
@@ -1066,27 +1117,27 @@ The `prismaConnection` method is used to create a `connection` field that also p
 import { builder } from "../builder";
 
 builder.prismaObject('Link', {
-  fields: (t) => ({
-    id: t.exposeID('id'),
-    title: t.exposeString('title'),
-    url: t.exposeString('url'),
-    description: t.exposeString('description'),
-    imageUrl: t.exposeString('imageUrl'),
-    category: t.exposeString('category'),
-    users: t.relation('users')
-  }),
+fields: (t) => ({
+id: t.exposeID('id'),
+title: t.exposeString('title'),
+url: t.exposeString('url'),
+description: t.exposeString('description'),
+imageUrl: t.exposeString('imageUrl'),
+category: t.exposeString('category'),
+users: t.relation('users')
+}),
 })
 
-
 builder.queryField('links', (t) =>
-  t.prismaConnection({
-    type: 'Link',
-    cursor: 'id',
-    resolve: (query, _parent, _args, _ctx, _info) =>
-      prisma.link.findMany({ ...query })
-  })
+t.prismaConnection({
+type: 'Link',
+cursor: 'id',
+resolve: (query, \_parent, \_args, \_ctx, \_info) =>
+prisma.link.findMany({ ...query })
+})
 )
-```
+
+````
   </Accordion>
 </Accordions>
 
@@ -1098,7 +1149,7 @@ Here is a diagram that summarizes how pagination works on the server:
 
 Now that the API supports pagination, you can fetch paginated data on the client using Apollo Client.
 
-The `useQuery` hook returns an object containing `data`, `loading` and `errors`. However, `useQuery` also returns a `fetchMore()` function, which is used to handle pagination and updating the UI when a result is returned. 
+The `useQuery` hook returns an object containing `data`, `loading` and `errors`. However, `useQuery` also returns a `fetchMore()` function, which is used to handle pagination and updating the UI when a result is returned.
 Navigate to the `/pages/index.tsx` file and update it to use the following code to add support for pagination:
 
 ```tsx
@@ -1189,7 +1240,8 @@ function Home() {
 }
 
 export default Home;
-```
+````
+
 You are first passing a `variables` object to the `useQuery` hook, which contains a key called `first` with a value of `2`. This means you will be fetching two links. You can set this value to any number you want.
 
 The `data` variable will contain the data returned from the initial request to the API.
@@ -1223,4 +1275,3 @@ In [the next part](/fullstack-nextjs-graphql-prisma-3-clxbrcqppv) of the course,
 - Create an admin-only route for creating links
 - Set up AWS S3 to handle file uploads
 - Add a mutation to create links as an admin
-

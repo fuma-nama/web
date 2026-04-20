@@ -1,10 +1,20 @@
 "use client";
 import { useMemo, useState } from "react";
-import { Check, ChevronDown, Copy, ExternalLinkIcon, MessageCircleIcon } from "lucide-react";
+import {
+  Check,
+  ChevronDown,
+  Copy,
+  ExternalLinkIcon,
+  MessageCircleIcon,
+} from "lucide-react";
 import { useCopyButton } from "fumadocs-ui/utils/use-copy-button";
 import { buttonVariants } from "@prisma-docs/ui/components/button";
 import { cn } from "@prisma-docs/ui/lib/cn";
-import { Popover, PopoverContent, PopoverTrigger } from "fumadocs-ui/components/ui/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "fumadocs-ui/components/ui/popover";
 import { cva } from "class-variance-authority";
 
 const cache = new Map<string, string>();
@@ -78,7 +88,9 @@ export function ViewOptions({
 }) {
   const items = useMemo(() => {
     const fullMarkdownUrl =
-      typeof window !== "undefined" ? new URL(markdownUrl, window.location.origin) : "loading";
+      typeof window !== "undefined"
+        ? new URL(markdownUrl, window.location.origin)
+        : "loading";
     const q = `Read ${fullMarkdownUrl}, I want to ask questions about it.`;
 
     return [

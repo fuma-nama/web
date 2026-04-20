@@ -2,7 +2,7 @@
 title: migrate
 description: Update your database schema with migrations
 metaTitle: prisma migrate | Database Migration Commands
-metaDescription: 'Create and apply database migrations with Prisma. migrate dev for development, migrate deploy for production, status, resolve, diff, and reset.'
+metaDescription: "Create and apply database migrations with Prisma. migrate dev for development, migrate deploy for production, status, resolve, diff, and reset."
 url: /cli/migrate
 ---
 
@@ -30,23 +30,23 @@ prisma migrate [command] [options]
 
 ## Development commands
 
-| Command                                           | Description                                                              |
-| ------------------------------------------------- | ------------------------------------------------------------------------ |
+| Command                                      | Description                                                              |
+| -------------------------------------------- | ------------------------------------------------------------------------ |
 | [`prisma migrate dev`](/cli/migrate/dev)     | Create a migration from schema changes, apply it, and trigger generators |
 | [`prisma migrate reset`](/cli/migrate/reset) | Reset your database and apply all migrations (all data will be lost)     |
 
 ## Production/staging commands
 
-| Command                                               | Description                                                                  |
-| ----------------------------------------------------- | ---------------------------------------------------------------------------- |
+| Command                                          | Description                                                                  |
+| ------------------------------------------------ | ---------------------------------------------------------------------------- |
 | [`prisma migrate deploy`](/cli/migrate/deploy)   | Apply pending migrations to the database                                     |
 | [`prisma migrate status`](/cli/migrate/status)   | Check the status of your database migrations                                 |
 | [`prisma migrate resolve`](/cli/migrate/resolve) | Resolve issues with database migrations (baseline, failed migration, hotfix) |
 
 ## Commands for any stage
 
-| Command                                         | Description                                            |
-| ----------------------------------------------- | ------------------------------------------------------ |
+| Command                                    | Description                                            |
+| ------------------------------------------ | ------------------------------------------------------ |
 | [`prisma migrate diff`](/cli/migrate/diff) | Compare the database schema from two arbitrary sources |
 
 ## Examples

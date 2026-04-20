@@ -28,7 +28,7 @@ To implement these benefits now, see the [official usage guide for the new Rust-
 
 ## Breaking performance barriers
 
-To quickly recap, the Query Compiler project is our push to replace the Prisma query engine, written in Rust, with a lean WASM module and supplemental TypeScript code. With this move we expected faster queries and a smaller footprint and now we’ve run benchmarks to prove it. 
+To quickly recap, the Query Compiler project is our push to replace the Prisma query engine, written in Rust, with a lean WASM module and supplemental TypeScript code. With this move we expected faster queries and a smaller footprint and now we’ve run benchmarks to prove it.
 
 Since [our last update](https://www.prisma.io/blog/from-rust-to-typescript-a-new-chapter-for-prisma-orm), our team has been heads down on this project. With Prisma ORM 6.4 we have reached an important milestone: a working proof-of-concept of the Query Compiler. This alpha version contains the needed APIs to run comprehensive benchmarks against our existing Prisma Client implementations. You can check out the code and full benchmark results in our [ORM benchmarks repo](https://pris.ly/qc-benchmark-repo).
 
@@ -58,25 +58,25 @@ On top of that, the removal of the binary means that if your environment can run
 
 ### Significantly reduced bundle size
 
-Our initial testing shows that while the Rust-based Prisma query engine clocks in roughly 14 MB (7 MB gzipped), the new Query Compiler is just about 1.6 MB (600 KB gzipped) representing an 85-90% reduction in size on average. Less disk space means your deployments are quicker and your apps can be deployed to more platforms easily. 
+Our initial testing shows that while the Rust-based Prisma query engine clocks in roughly 14 MB (7 MB gzipped), the new Query Compiler is just about 1.6 MB (600 KB gzipped) representing an 85-90% reduction in size on average. Less disk space means your deployments are quicker and your apps can be deployed to more platforms easily.
 
 ## Benchmark Results
 
 The numbers speak for themselves. When compared to the existing Rust query engine, the new Query Compiler (QC) architecture results in performance gains that get progressively better as the amount of data retrieved increases. It’s faster exactly when it matters most:
 
-| **Benchmark** | **QC** | **Rust** | **Conclusion** |
-| --- | --- | --- | --- |
-| findMany (25,000 records) | 55.0 ms | 185.0 ms | QC 3.4x faster |
-| findMany, take 2000 | 3.1 ms | 6.6 ms | QC 2.1x faster |
-| findMany with where and take 2000 | 10.8 ms | 13.3 ms | QC 1.2x faster |
-| findMany with orderBy and take 50 | 5.8 ms | 7.2 ms | QC 1.2x faster |
-| findMany with where, to-many join, and take 2000 | 72.3 ms | 92.3 ms | QC 1.3x faster |
-| findMany with where, to-many → to-one join, and take 2000 | 130.0 ms | 207.0 ms | QC 1.6x faster |
-| findMany with to-many relational filter, take 100 | 333.0 ms | 330.0 ms | Rust 1.01x faster |
-| findMany with deep relational filter, take 100 | 1.5 ms | 2.4 ms | QC 1.6x faster |
-| findMany with to-one filter, take 100 | 1.3 ms | 1.4 ms | QC 1.1x faster |
-| findMany with to-many → to-many → to-one relational filter, take 100 | 300.0 ms | 323.0 ms | QC 1.1x faster |
-| findUnique with take three of to-many join | 23.2 ms | 23.5 ms | QC 1.01x faster |
+| **Benchmark**                                                        | **QC**   | **Rust** | **Conclusion**    |
+| -------------------------------------------------------------------- | -------- | -------- | ----------------- |
+| findMany (25,000 records)                                            | 55.0 ms  | 185.0 ms | QC 3.4x faster    |
+| findMany, take 2000                                                  | 3.1 ms   | 6.6 ms   | QC 2.1x faster    |
+| findMany with where and take 2000                                    | 10.8 ms  | 13.3 ms  | QC 1.2x faster    |
+| findMany with orderBy and take 50                                    | 5.8 ms   | 7.2 ms   | QC 1.2x faster    |
+| findMany with where, to-many join, and take 2000                     | 72.3 ms  | 92.3 ms  | QC 1.3x faster    |
+| findMany with where, to-many → to-one join, and take 2000            | 130.0 ms | 207.0 ms | QC 1.6x faster    |
+| findMany with to-many relational filter, take 100                    | 333.0 ms | 330.0 ms | Rust 1.01x faster |
+| findMany with deep relational filter, take 100                       | 1.5 ms   | 2.4 ms   | QC 1.6x faster    |
+| findMany with to-one filter, take 100                                | 1.3 ms   | 1.4 ms   | QC 1.1x faster    |
+| findMany with to-many → to-many → to-one relational filter, take 100 | 300.0 ms | 323.0 ms | QC 1.1x faster    |
+| findUnique with take three of to-many join                           | 23.2 ms  | 23.5 ms  | QC 1.01x faster   |
 
 From our tests we’ve found that with large sets of data the Query Compiler was consistently faster than the Rust-based engine, up to three to four times faster in some cases. When only small sets of data are returned both implementations perform effectively the same. The Query Compiler gives a large benefit with no downside to existing Prisma ORM users.
 

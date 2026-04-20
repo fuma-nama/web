@@ -38,19 +38,19 @@ We started by getting the AI into the right mindset. To ensure it followed our p
 **Our Prompt:**
 
 > You are a software architect. Your task is to provide clear, precise specifications for engineers to implement.
-> 
-> 
+>
 > You will receive feature descriptions and tech stack. Only respond with structured technical specifications per feature, no code yet. Break things down logically, and limit each spec to ~200 words. Avoid future or theoretical ideas — only describe what's needed now.
-> 
+>
 > Wait for features and tech stack to begin.
-> *
+>
+> -
 
 🧠 **Tip:** Define the AI’s role (e.g. “software architect”) at the start. This primes the model to output structured, implementation-focused responses instead of jumping straight to messy or generic code.
 
 **Follow-up Prompt:**
 
 > Tech stack:
-> 
+>
 > - Framework: Next.js 15 with App Router and TypeScript
 > - Styling: TailwindCSS
 > - Database ORM: Prisma ORM using Prisma MCP server to define schema and generate database
@@ -62,13 +62,13 @@ We started by getting the AI into the right mindset. To ensure it followed our p
 **AI’s Response:**
 
 > I understand that you want to set up technical specifications for a project using the following modern stack:
-> 
+>
 > 1. Next.js 15 with App Router (TypeScript)
 > 2. TailwindCSS for styling
 > 3. Prisma ORM with MCP server for database management
 > 4. Proper client/server component distinctions
 > 5. Next.js optimized image handling
-> 
+>
 > Before I provide specifications for features, I'd like to first ensure we have the proper project structure set up...
 
 From there, the AI responded with structured implementation plans that aligned well with our stack and development flow.
@@ -80,10 +80,9 @@ With the stack and context in place, we were ready to move on to building the ho
 **Our Prompt:**
 
 > Feature: Homepage
-> 
-> 
+>
 > A simple ecommerce homepage with the following:
-> 
+>
 > - Full-width hero section with a background image and a CTA button
 > - A grid of featured products (limit 6), pulled from the database via a server component
 > - Each product should show an image, name, and price
@@ -96,7 +95,6 @@ With the stack and context in place, we were ready to move on to building the ho
 **AI’s Response:**
 
 > I'll create a technical specification for the homepage feature. First, let me set up our Next.js project with the required configuration:
-> 
 
 From there, the AI proceeded to scaffold the workspace, by running two commands:
 
@@ -106,6 +104,7 @@ From there, the AI proceeded to scaffold the workspace, by running two commands:
 ```shell
 npx create-next-app@latest . --typescript --tailwind --eslint --app --src-dir
 ```
+
 It then added Prisma:
 
 ```shell
@@ -113,6 +112,7 @@ npm install prisma --save-dev
 npm install @prisma/client
 npx prisma init --output ../src/generated/prisma
 ```
+
 After intializing Prisma, it prompted the [Prisma MCP Server](https://pris.ly/docs/mcp-server) to create a database. Once created, it connected to the database and that was it!
 
 At this point, the foundation of our project was ready. We had a Next.js project, Prisma set up, and a working [Prisma Postgres](https://pris.ly/ppg) database. All in a matter of seconds.
@@ -162,6 +162,7 @@ model Product {
   @@index([categoryId])
 }
 ```
+
 This gave us a simple, relational structure that was easy to query and ideal for the kind of categorization we wanted.
 
 ### Having AI seed our database
@@ -171,14 +172,12 @@ With the schema in place, our database was still empty. We needed test data to w
 **Our Prompt:**
 
 > Can you generate seed data for a few categories and products so we can start testing the UI?
-> 
 
 🧠 **Tip:** Use real-world data when seeding. It helps you catch layout or edge-case bugs early and makes the UI behave more like it would in production.
 
 **AI’s Response:**
 
 > Sure. I’ll write a seed.ts script that first creates categories, then products with proper category relationships. I’ll also add a seed command to your package.json so you can run it easily.
-> 
 
 The script it produced was clean and well-structured. It starts by deleting the current records in the Product and Category tables, then defining them, and creating new records:
 
@@ -201,15 +200,15 @@ async function main() {
       slug: "accessories",
       description: "Stylish accessories to complement your look",
     },
-		// More Categories...
+    // More Categories...
   ];
 
   const createdCategories = await Promise.all(
     categories.map((category) =>
       prisma.category.create({
         data: category,
-      })
-    )
+      }),
+    ),
   );
 
   // Create products for each category
@@ -219,10 +218,11 @@ async function main() {
       name: "Classic Aviator Sunglasses",
       description: "Timeless aviator sunglasses with UV protection",
       price: 89.99,
-      imageUrl: "<https://images.unsplash.com/photo-1511499767150-a48a237f0083>",
+      imageUrl:
+        "<https://images.unsplash.com/photo-1511499767150-a48a237f0083>",
       categoryId: createdCategories[0].id,
     },
-		// More Products...
+    // More Products...
   ];
 
   for (const product of products) {
@@ -243,6 +243,7 @@ main()
     await prisma.$disconnect();
   });
 ```
+
 It then added the following to our `package.json`:
 
 ```json
@@ -250,15 +251,16 @@ It then added the following to our `package.json`:
   "seed": "tsx prisma/seed.ts"
 }
 ```
+
 And ran the command for us:
 
 ```shell
 npx prisma db seed
 ```
+
 **AI’s Confirmation:**
 
 > Seeding complete. You can open Prisma Studio to view your data.
-> 
 
 Sure enough, we opened up Prisma Studio by running `npx prisma studio`, and everything was ready to go.
 
@@ -271,7 +273,7 @@ Once we had seeded data in place, we moved on to building out the `/shop` page. 
 **Our Prompt:**
 
 > We want to create a /shop page that lists all products by default, but also supports filtering by category via a search param.
-> 
+>
 > - Use Prisma to fetch categories and products
 > - Use a server component
 > - Include a category filter component and product grid
@@ -280,7 +282,6 @@ Once we had seeded data in place, we moved on to building out the `/shop` page. 
 **AI’s Response:**
 
 > Understood. I'll fetch the list of categories and use searchParams to optionally filter the products. Then I'll pass the results to a CategoryFilter and ProductGrid component via props. Since searchParams is dynamic, make sure this function is async.
-> 
 
 Here’s the key part of the code the AI generated—it powers the core functionality of the shop page:
 
@@ -293,12 +294,11 @@ Here’s the key part of the code the AI generated—it powers the core function
 
 const categories = await prisma.category.findMany();
 const products = await prisma.product.findMany({
-  where: categorySlug
-    ? { category: { slug: categorySlug } }
-    : undefined,
+  where: categorySlug ? { category: { slug: categorySlug } } : undefined,
   include: { category: true },
 });
 ```
+
 After fetching, we serialized the products for client use and rendered everything with suspense boundaries for a smoother UX, showing loading placeholders while the components load to avoid layout shifts and give immediate visual feedback.
 
 The final UI includes a filter bar up top and a product grid below:
@@ -314,7 +314,7 @@ We weren’t using auth or backend sessions, so `localStorage` gave us an easy w
 **Our Prompt:**
 
 > Can you set up a full cart using React Context?
-> 
+>
 > - Support add, remove, update quantity
 > - Persist to `localStorage`
 > - Display the item count in the header
@@ -322,7 +322,6 @@ We weren’t using auth or backend sessions, so `localStorage` gave us an easy w
 **AI’s Response:**
 
 > I’ll create a CartContext with helpers to manage state, sync to localStorage, and compute the total item count. This will live entirely on the client using "use client".
-> 
 
 Here’s a condensed look at the final setup:
 
@@ -351,7 +350,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         ? prev.map((i) =>
             i.product.id === product.id
               ? { ...i, quantity: i.quantity + 1 }
-              : i
+              : i,
           )
         : [...prev, { product, quantity: 1 }];
     });
@@ -363,9 +362,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const updateQuantity = (id: number, qty: number) => {
     if (qty < 1) return removeItem(id);
     setItems((prev) =>
-      prev.map((i) =>
-        i.product.id === id ? { ...i, quantity: qty } : i
-      )
+      prev.map((i) => (i.product.id === id ? { ...i, quantity: qty } : i)),
     );
   };
 
@@ -373,12 +370,14 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <CartContext.Provider
-      value={{ items, addItem, removeItem, updateQuantity, cartCount }}>
+      value={{ items, addItem, removeItem, updateQuantity, cartCount }}
+    >
       {children}
     </CartContext.Provider>
   );
 }
 ```
+
 This gave us everything we needed: shared state, persistent cart data, and easy access via a `useCart()` hook anywhere in the app for the AI to use.
 
 ![](/vibe-coding-with-prisma-mcp-and-nextjs/imgs/d4d8e00ccf27e3eed197fc24c2cd03e22ee90cd7-1437x1075.png)
@@ -398,33 +397,36 @@ After the initial seed, we noticed a few product images were falling back to the
 **Our Prompt:**
 
 > Looks like we're hitting an error. Here's the error message:
-> 
-> 
+>
 > ```shell
 > Error: Invalid image URL for product "Canvas Backpack"
-> 
-> 
-```
-> 
+>
+>
+> ```
+
+````
+>
 
 **AI's Response:**
 
 > It appears the image URL provided doesn't exist. Here's a corrected URL:
-> 
-> 
+>
+>
 > ```tsx
 > // Corrected image URL
 > imageUrl: "<https://images.unsplash.com/photo-1622560480654-d96214fdc887>",
-> 
-```
-> 
+>
+````
+
 > Update the `seed.ts` file with this URL and re-run:
-> 
+>
 > ```shell
 > npx prisma db seed
-> 
-```
-> 
+>
+> ```
+
+````
+>
 
 This fixed the issue immediately, restoring all images correctly.
 
@@ -435,28 +437,29 @@ When building the cart functionality, we stumbled upon a client/server component
 **Our Prompt:**
 
 > Looks like we're hitting an error. Here's the error message:
-> 
-> 
+>
+>
 > ```shell
 > TypeError: (0, __TURBOPACK__imported__module__...).useCart is not a function
-> 
-```
-> 
+>
+````
+
+>
 
 🧠 **Tip:** Be clear about runtime boundaries in your prompt. Missing details like `"use client"` can cause errors like `useCart is not a function` when the AI places logic in the wrong context.
 
 **AI's Response:**
 
 > This error occurs because useCart is being called from a server component. To fix it, mark your component explicitly as a client component by adding:
-> 
-> 
+>
 > ```tsx
 > "use client";
-> 
-```
-> 
+> ```
+
+````
+>
 > at the very top of your component file.
-> 
+>
 
 Applying this simple fix solved the issue instantly, making the cart fully functional.
 
@@ -467,27 +470,32 @@ While implementing dynamic routes on our `/shop` page, we encountered an issue w
 **Our Prompt:**
 
 > Looks like we're hitting an error. Here's the error message:
-> 
-> 
+>
+>
 > ```shell
 > Route "/shop" used `searchParams.category`. `searchParams` should be awaited before using its properties.
-> 
-```
-> 
+>
+````
+
+>
 
 **AI's Response:**
 
 > The issue is that Next.js expects searchParams to be handled asynchronously. Ensure your route is an asynchronous function, and explicitly await the parameters before accessing them. For example:
-> 
-> 
+>
 > ```tsx
-> export default async function ShopPage({ searchParams }: { searchParams: { category?: string } }) {
+> export default async function ShopPage({
+>   searchParams,
+> }: {
+>   searchParams: { category?: string };
+> }) {
 >   const category = searchParams?.category;
 >   // Your logic here...
 > }
-> 
+> ```
+
 ```
-> 
+>
 
 This quick adjustment solved the problem, restoring our dynamic route functionality.
 
@@ -500,3 +508,4 @@ The Prisma MCP server allowed us to define a full database in seconds. That was 
 Vibe coding with AI wasn’t flawless. It *quickly* got us most of the way there, but it often overlooked small but important details. Once we hit an error and pointed it out, though, fixes came quickly.
 
 Overall, this workflow made building the core of an e-commerce app efficient. Prisma MCP handled the database management effortlessly, and the AI let us move faster without giving up architectural control.
+```

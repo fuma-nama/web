@@ -1,5 +1,5 @@
 import type { ComponentProps } from "react";
-import { source } from "@/lib/source";
+import { getSource } from "@/lib/source";
 import { baseOptions, links } from "@/lib/layout.shared";
 import { VersionSwitcher } from "@/components/version-switcher";
 import type { LinkItemType } from "fumadocs-ui/layouts/shared";
@@ -10,13 +10,18 @@ import { SidebarBannerCarousel } from "@/components/sidebar-banner";
 import { fetchOgImage } from "@/lib/og-image";
 import { cn } from "@prisma-docs/ui/lib/cn";
 import { getPageBadges } from "@/lib/page-badges";
-import { BadgeProvider, SidebarBadgeItem } from "@/components/sidebar-badge-provider";
+import {
+  BadgeProvider,
+  SidebarBadgeItem,
+} from "@/components/sidebar-badge-provider";
+import { NavOptions } from "@/components/layout/shared";
 
 // Sidebar announcement slides — set to [] to hide the banner
 const SIDEBAR_SLIDES = [
   {
     title: "The Next Evolution of Prisma ORM",
-    description: "Prisma Next: a full TypeScript rewrite with a new query API, SQL builder, and extensible architecture.",
+    description:
+      "Prisma Next: a full TypeScript rewrite with a new query API, SQL builder, and extensible architecture.",
     href: "https://pris.ly/pn-anouncement",
     gradient: "orm" as const,
     badge: "New",
@@ -24,7 +29,12 @@ const SIDEBAR_SLIDES = [
   },
 ];
 
-export default async function Layout({ children }: { children: React.ReactNode }) {
+export default async function Layout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const source = await getSource();
   const { nav, ...base } = baseOptions();
 
   const navbarLinks: LinkItemType[] = [
@@ -46,19 +56,22 @@ export default async function Layout({ children }: { children: React.ReactNode }
     }),
   );
 
-  const badges = Object.fromEntries(getPageBadges());
+  const badges = Object.fromEntries(await getPageBadges());
 
   return (
     <BadgeProvider badges={badges}>
       <DocsLayout
         {...base}
         links={navbarLinks}
-        nav={{ ...nav }}
+        nav={{ ...nav } as NavOptions}
         sidebar={{
           collapsible: false,
           components: { Item: SidebarBadgeItem },
           footer: ({ className, ...props }: ComponentProps<"div">) => (
-            <div className={cn("flex flex-col p-4 pt-2 gap-3", className)} {...props}>
+            <div
+              className={cn("flex flex-col p-4 pt-2 gap-3", className)}
+              {...props}
+            >
               <SidebarBannerCarousel slides={slides} />
               <StatusIndicator />
             </div>

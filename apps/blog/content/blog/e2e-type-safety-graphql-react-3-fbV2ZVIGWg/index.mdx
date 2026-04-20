@@ -17,10 +17,10 @@ tags:
 ---
 
 <center>
-      <i>14 min read</i>
-  </center>
+  <i>14 min read</i>
+</center>
 
-  In this series you are learning how to implement end-to-end type safety using React, GraphQL, Prisma, and some other helpful tools that tie those three together.
+In this series you are learning how to implement end-to-end type safety using React, GraphQL, Prisma, and some other helpful tools that tie those three together.
 
 ## Table Of Contents
 
@@ -37,10 +37,9 @@ tags:
 
 <Youtube videoId="g6JPWcU9tjQ" />
 
-
 ## Introduction
 
-In this section, you will build upon the project you set up in the previous article of this series by fleshing out a GraphQL API. 
+In this section, you will build upon the project you set up in the previous article of this series by fleshing out a GraphQL API.
 
 While building this API, you will focus on ensuring your interactions with the database, data handling within your resolvers, and data responses are all type-safe and that those types are in sync.
 
@@ -66,7 +65,7 @@ These are the main tools you will be using throughout this series:
 
 ### Assumed knowledge
 
-While this series will attempt to cover everything in detail from a beginner's standpoint, the following would be helpful: 
+While this series will attempt to cover everything in detail from a beginner's standpoint, the following would be helpful:
 
 - Basic knowledge of JavaScript or TypeScript
 - Basic knowledge of GraphQL
@@ -78,19 +77,20 @@ To follow along with the examples provided, you will be expected to have:
 
 - [Node.js](https://nodejs.org) installed.
 - The [Prisma VSCode Extension](https://marketplace.visualstudio.com/items?itemName=Prisma.prisma) installed. _(optional)_
-</Accordion>
+  </Accordion>
 </Accordions>
 
 ## Start up a GraphQL Server
 
-The very first thing you will need to build a GraphQL API is a running GraphQL server. In this application, you will use [GraphQL Yoga](https://www.graphql-yoga.com/) as your GraphQL server. 
+The very first thing you will need to build a GraphQL API is a running GraphQL server. In this application, you will use [GraphQL Yoga](https://www.graphql-yoga.com/) as your GraphQL server.
 
 Install the `@graphql-yoga/node` and `graphql` packages to get started:
 
 ```shell
 npm install @graphql-yoga/node graphql
 ```
-With those packages installed, you can now start up your own GraphQL server. Head over to `src/index.ts`. Replace the existing contents with the this snippet: 
+
+With those packages installed, you can now start up your own GraphQL server. Head over to `src/index.ts`. Replace the existing contents with the this snippet:
 
 ```ts
 // src/index.ts
@@ -98,28 +98,30 @@ With those packages installed, you can now start up your own GraphQL server. Hea
 // 1
 import { createServer } from "@graphql-yoga/node";
 // 2
-const port = Number(process.env.API_PORT) || 4000
+const port = Number(process.env.API_PORT) || 4000;
 // 3
 const server = createServer({
-  port
+  port,
 });
 // 4
 server.start().then(() => {
   console.log(`🚀 GraphQL Server ready at http://localhost:${port}/graphql`);
 });
 ```
+
 The code above does the following:
 
 1. Imports the `createServer` function from GraphQL Yoga
 2. Creates a variable to hold the API's port, defaulting to `4000` if one is not present in the environment
 3. Creates an instance of the GraphQL server
-3. Starts the server up on port `4000` and lets the console know it's up and running
+4. Starts the server up on port `4000` and lets the console know it's up and running
 
 If you start up your server, you will have access to a running _(empty)_ GraphQL API:
 
 ```shell
 npm run dev
 ```
+
 ![](/e2e-type-safety-graphql-react-3-fbV2ZVIGWg/imgs/yoga-start.png)
 
 > **Note**: The GraphQL server is up and running, however it is not usable because you have not yet defined any queries or mutations.
@@ -131,19 +133,21 @@ GraphQL uses a strongly typed schema to define how a user can interact with the 
 - Code-first: Your application code defines and generates a GraphQL schema
 - SDL-first: You manually write the GraphQL schema
 
-In this application, you will take the code-first approach using a popular schema builder named [Pothos](https://pothos-graphql.dev). 
+In this application, you will take the code-first approach using a popular schema builder named [Pothos](https://pothos-graphql.dev).
 
 To get started with Pothos, you first need to install the core package:
 
 ```shell
 npm i @pothos/core
 ```
+
 Next, create an instance of the Pothos schema builder as a sharable module. Within the `src` folder, create a new file named `builder.ts` that will hold this module:
 
 ```shell
 cd src
 touch builder.ts
 ```
+
 For now, import the default export from the `@pothos/core` package and export an instance of it named `builder`:
 
 ```ts
@@ -152,6 +156,7 @@ For now, import the default export from the `@pothos/core` package and export an
 import SchemaBuilder from "@pothos/core";
 export const builder = new SchemaBuilder({});
 ```
+
 ## Define a `Date` scalar type
 
 By default, GraphQL only supports a limited set of scalar data types:
@@ -162,13 +167,14 @@ By default, GraphQL only supports a limited set of scalar data types:
 - Boolean
 - ID
 
-If you think back to your Prisma schema, however, you will remember there are a few fields defined that use the `DateTime` data type. To handle those within your GraphQL API, you will need to define a custom `Date` scalar type. 
+If you think back to your Prisma schema, however, you will remember there are a few fields defined that use the `DateTime` data type. To handle those within your GraphQL API, you will need to define a custom `Date` scalar type.
 
 Fortunately, pre-made custom scalar type definitions are available thanks to the open-source community. The one you will use is called [`graphql-scalars`](https://www.graphql-scalars.dev/):
 
 ```shell
 npm i graphql-scalars
 ```
+
 You will need to register a `Date` scalar with your schema builder to let it know how to handle dates. The schema builder takes in a [generic](https://www.typescriptlang.org/docs/handbook/2/generics.html) where you can specify various [configurations](https://pothos-graphql.dev/docs/api/schema-builder#schematypes).
 
 Make the following changes to register the `Data` scalar type:
@@ -190,13 +196,14 @@ export const builder = new SchemaBuilder<{
 // 3
 builder.addScalarType("Date", DateResolver, {});
 ```
+
 Here's what changed in the snippet above. You:
 
 1. Imported the `Date` scalar type's resolver which handles converting values to the proper date type within your API
 2. Registered a new scalar type called `"Date"` using the `SchemaBuilder`'s `Scalars` configuration and configured the JavaScript types to use when accessing and validating fields of this type
 3. Let the builder know how to handle the defined `Date` scalar type by providing the imported `DateResolver`
 
-Within your GraphQL object types and resolvers, can now use the `Date` scalar type. 
+Within your GraphQL object types and resolvers, can now use the `Date` scalar type.
 
 ## Add the Pothos Prisma plugin
 
@@ -211,10 +218,11 @@ First, install the plugin:
 ```shell
 npm i @pothos/plugin-prisma
 ```
+
 This plugin provides a Prisma generator that generates the types Pothos requires. Add the generator to your Prisma schema in `prisma/schema.prisma`:
 
 ```prisma
-diff 
+diff
 // prisma/schema.prisma
 
 generator client {
@@ -245,6 +253,7 @@ model Message {
   user      User     @relation(fields: [userId], references: [id])
 }
 ```
+
 Once that is added, you will need a way to generate Pothos' artifacts. You will need to install this API's node modules and regenerate Prisma Client this each time this application is deployed later in the series, so go ahead and create a new `script` in `package.json` to handle this:
 
 ```json
@@ -258,11 +267,13 @@ Once that is added, you will need a way to generate Pothos' artifacts. You will 
   }
 }
 ```
+
 Now you can run that command to install your node modules and regenerate Prisma Client and the Pothos outputs:
 
 ```shell
 npm run build
 ```
+
 When you run the command above, you should see that Prisma Client and the Pothos integration were both generated.
 
 ![](/e2e-type-safety-graphql-react-3-fbV2ZVIGWg/imgs/generate.png)
@@ -270,7 +281,7 @@ When you run the command above, you should see that Prisma Client and the Pothos
 Now that those types are generated, head over to `src/builder.ts`. Here you will import the `PrismaPlugin` and the generated Pothos types and apply them to your builder:
 
 ```ts
-diff 
+diff
 // src/builder.ts
 
 import SchemaBuilder from "@pothos/core";
@@ -286,7 +297,8 @@ export const builder = new SchemaBuilder<{
 
 builder.addScalarType("Date", DateResolver, {});
 ```
-As soon as you add the generated types, you will notice a TypeScript error occur within the instantiation of the `SchemaBuilder`. 
+
+As soon as you add the generated types, you will notice a TypeScript error occur within the instantiation of the `SchemaBuilder`.
 
 ![](/e2e-type-safety-graphql-react-3-fbV2ZVIGWg/imgs/prisma-type-required.png)
 
@@ -295,7 +307,7 @@ Pothos is smart enough to know that, because you are using the Prisma plugin, yo
 For now, register the Prisma plugin and the generated types in the builder instance to let Pothos know about them:
 
 ```ts
-diff 
+diff
 // src/builder.ts
 // ...
 
@@ -310,12 +322,12 @@ export const builder = new SchemaBuilder<{
 
 // ...
 ```
+
 You will, again, see a TypeScript error at this point. This is because the `builder` now expects an instance of Prisma Client to be provided to the function.
 
 ![](/e2e-type-safety-graphql-react-3-fbV2ZVIGWg/imgs/prisma-client-required.png)
 
 In the next step, you will instantiate Prisma Client and provide it here in the `builder`.
-
 
 ## Create a reusable instance of Prisma Client
 
@@ -326,6 +338,7 @@ Create a new file in the `src` folder named `db.ts`:
 ```shell
 touch src/db.ts
 ```
+
 Within that file, import Prisma Client and create an instance of the client named `prisma`. Export that instantiated client:
 
 ```ts
@@ -334,10 +347,11 @@ Within that file, import Prisma Client and create an instance of the client name
 import { PrismaClient } from "@prisma/client";
 export const prisma = new PrismaClient();
 ```
+
 Import the `prisma` variable into `src/builder.ts` and provide it to `builder` to get rid of the TypeScript error:
 
 ```ts
-diff 
+diff
 // src/builder.ts
 
 // ...
@@ -358,7 +372,8 @@ export const builder = new SchemaBuilder<{
 
 // ...
 ```
-The Pothos Prisma plugin is now completely configured and ready to go. This takes the types generated by Prisma and allows you easy access to those within your GraphQL object types and queries. 
+
+The Pothos Prisma plugin is now completely configured and ready to go. This takes the types generated by Prisma and allows you easy access to those within your GraphQL object types and queries.
 
 The cool thing about this is you now have a single source of truth (the Prisma schema) handling the types in your database, the API used to query the database, and the GraphQL schema.
 
@@ -376,6 +391,7 @@ Create a new folder within `src` named `models`. Then create a `User.ts` file wi
 mkdir src/models
 touch src/models/User.ts
 ```
+
 This is where you will define the `User` object type and its related queries that you will expose through your GraphQL API. Import the `builder` instance:
 
 ```ts
@@ -383,7 +399,8 @@ This is where you will define the `User` object type and its related queries tha
 
 import { builder } from "../builder";
 ```
-Because you are using Pothos's Prisma plugin, the `builder` instance now has a method named [`prismaObject`](https://pothos-graphql.dev/docs/plugins/prisma#creating-types-with-builderprismaobject) you will use to define your object types. 
+
+Because you are using Pothos's Prisma plugin, the `builder` instance now has a method named [`prismaObject`](https://pothos-graphql.dev/docs/plugins/prisma#creating-types-with-builderprismaobject) you will use to define your object types.
 
 That method takes in two parameters:
 
@@ -393,13 +410,14 @@ That method takes in two parameters:
 Use that method to create a `"User"` type:
 
 ```ts
-diff 
+diff;
 // src/models/User.ts
 
 import { builder } from "../builder";
 
-+builder.prismaObject("User", {})
++builder.prismaObject("User", {});
 ```
+
 > **Note**: If you press <kbd>Ctrl</kbd> + <kbd>Space</kbd> within an empty set of quotes before typing in the `name` field, you should get some nice auto-completion with a list of available models from your Prisma schema thanks to the Prisma plugin.
 > ![](/e2e-type-safety-graphql-react-3-fbV2ZVIGWg/imgs/model-auto.png)
 
@@ -411,13 +429,14 @@ Within the `options` object, add a `fields` key that defines the `id`, `name` an
 import { builder } from "../builder";
 
 builder.prismaObject("User", {
-    fields: t => ({
-        id: t.exposeID("id"),
-        name: t.exposeString("name"),
-        messages: t.relation("messages")
-    })
-})
+  fields: (t) => ({
+    id: t.exposeID("id"),
+    name: t.exposeString("name"),
+    messages: t.relation("messages"),
+  }),
+});
 ```
+
 > **Note**: Hitting <kbd>Ctrl</kbd> + <kbd>Space</kbd> when you begin to type in a field name will give you a list of fields in the target model that match the data type of the "expose" function you are using.
 
 The function above defines a GraphQL type definition and registers it in the `builder` instance. Generating a schema from the `builder` does not actually store a GraphQL schema in your file system that you can check out, however the resulting type definition for your `User` will look like this:
@@ -429,12 +448,14 @@ type User {
   name: String!
 }
 ```
+
 Next, add another file in the same folder named `Message.ts`:
 
 ```shell
 touch Message.ts
 ```
-This file will be similar to the `User.ts` file, except it will define the `Message` model. 
+
+This file will be similar to the `User.ts` file, except it will define the `Message` model.
 
 Define the `id`, `body` and `createdAt` fields. Note the `createdAt` field has the `DateTime` type in your Prisma schema and will need a custom configuration to define the custom `date` scalar type you defined:
 
@@ -453,6 +474,7 @@ builder.prismaObject("Message", {
   }),
 });
 ```
+
 This function will result in the following GraphQL object type:
 
 ```graphql
@@ -462,6 +484,7 @@ type Message {
   id: ID!
 }
 ```
+
 ## Implement your queries
 
 Currently, you have object types defined for your GraphQL schema, however you have not yet defined a way to actually access that data. To do this, you first need to initialize a [`Query` type](https://graphql.org/learn/schema/#the-query-and-mutation-types).
@@ -475,6 +498,7 @@ At the bottom of your `src/builder.ts` file, intialize the `Query` type using `b
 
 builder.queryType({});
 ```
+
 This registers a special GraphQL type that holds the definitions for each of your queries and acts as the entry point to your GraphQL API. You define this type in the `builder.ts` file to ensure the query builder has a `Query` type defined, that way you can add query fields to it later on.
 
 Within this `queryType` function, you have the ability to add query definitions directly, however, you will define these separately within your codebase to better organize your code.
@@ -482,7 +506,7 @@ Within this `queryType` function, you have the ability to add query definitions 
 Import the `prisma` instance into `src/models/User.ts`:
 
 ```ts
-diff 
+diff
 // src/models/User.ts
 
 import { builder } from "../builder";
@@ -490,6 +514,7 @@ import { builder } from "../builder";
 
 // ...
 ```
+
 Then, using the `builder`'s [`queryField`](https://pothos-graphql.dev/docs/api/schema-builder#queryfieldname-field) function, define a `"users"` query that exposes the `User` object type you defined:
 
 ```ts
@@ -506,25 +531,27 @@ builder.queryField("users", (t) =>
     resolve: async (query, root, args, ctx, info) => {
       return prisma.user.findMany({ ...query });
     },
-  })
+  }),
 );
 ```
+
 The snippet above:
 
 1. Adds a field to the GraphQL schema's `Query` type named `"users"`
 2. Defines a field that resolves to some type in your Prisma schema
 3. Lets Pothos know this field will resolve to an array of your Prisma Client's `User` type
-4. Sets up a resolver function for this field. 
+4. Sets up a resolver function for this field.
 
 > **Note**: The `resolve` function's `query` argument at the beginning of the argument list. This is a specific field Pothos populates when using `prismaField` function that is used to load data and relations in a performant way. This may be confusing if you come from a GraphQL background as it changes the expected order of arguments.
 
-In order to better visualize what took place, here is the `Query` type and the `users` query that will be generated by the code in this section: 
+In order to better visualize what took place, here is the `Query` type and the `users` query that will be generated by the code in this section:
 
 ```graphql
 type Query {
   users: [User!]!
 }
 ```
+
 ## Apply the GraphQL schema
 
 You now have all of your GraphQL object types and queries defined and implemented. The last piece needed is a way to register all of these types and queries in a single place and generate the GraphQL schema based on your configurations.
@@ -534,6 +561,7 @@ Create a new file in `src` named `schema.ts`:
 ```shell
 touch schema.ts
 ```
+
 This file will simply import the models, causing the code within the files to be run, and run the `builder` instance's `toSchema` function to generate the GraphQL schema:
 
 ```ts
@@ -546,9 +574,8 @@ import "./models/User";
 
 export const schema = builder.toSchema({});
 ```
+
 The `toSchema` function generates an abstract syntax tree (AST) representation of your GraphQL schema. Below, you can see what the AST and GraphQL representations would look like:
-
-
 
 ```graphql
 scalar Date
@@ -569,6 +596,7 @@ type User {
   name: String!
 }
 ```
+
 ```json
 {
   __validationErrors: undefined,
@@ -816,11 +844,10 @@ type User {
 }
 ```
 
-
 Over in your `src/index.ts` file, import the `schema` variable you just created. The `createServer` function's configuration object takes a key named `schema` that will accept the generated GraphQL schema:
 
 ```ts
-diff 
+diff
 // src/index.ts
 
 import { createServer } from "@graphql-yoga/node";
@@ -837,6 +864,7 @@ server.start().then(() => {
   console.log(`🚀 GraphQL Server ready at http://localhost:${port}/graphql`);
 });
 ```
+
 Fantastic! Your GraphQL schema has been defined using a code-first methodology, your GraphQL object and query types are in sync with your Prisma schema models, and your GraphQL server is being provided the generated GraphQL schema.
 
 At this point, run the server so you can play with the API:
@@ -844,6 +872,7 @@ At this point, run the server so you can play with the API:
 ```sh
 npm run dev
 ```
+
 After running the above command, open up [http://localhost:4000/graphql](http://localhost:4000/graphql) in your browser to access the GraphQL playground. You should be presented with a page that looks like this:
 
 ![](/e2e-type-safety-graphql-react-3-fbV2ZVIGWg/imgs/playground.png)
@@ -852,7 +881,7 @@ In the top-left corner of the screen, hit the **Explorer** button to see your AP
 
 ![](/e2e-type-safety-graphql-react-3-fbV2ZVIGWg/imgs/explorer.png)
 
-If you click on the **users** query type, the right side of the screen will be automatically populated with a query for your user data. 
+If you click on the **users** query type, the right side of the screen will be automatically populated with a query for your user data.
 
 Run that query by hitting the "execute query" button to see the API in action:
 
@@ -862,7 +891,7 @@ Feel free to play around with the different options to choose which fields you w
 
 ## Summary & What's next
 
-In this article, you built out your entire GraphQL API. The API was built in a type-safe way by taking advantage of Prisma's generated types. These, along with the Pothos Prisma plugin, allowed you to ensure the types across your ORM, GraphQL object types, GraphQL query types, and resolvers were all in sync with the database schema.  
+In this article, you built out your entire GraphQL API. The API was built in a type-safe way by taking advantage of Prisma's generated types. These, along with the Pothos Prisma plugin, allowed you to ensure the types across your ORM, GraphQL object types, GraphQL query types, and resolvers were all in sync with the database schema.
 
 Along the way, you:
 

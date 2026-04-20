@@ -112,6 +112,7 @@ To get started, navigate into the directory of your choice and run the following
 ```shell
 git clone -b part-1 https://github.com/m-abdelwahab/awesome-links.git
 ```
+
 You can now navigate into the cloned directory, install the dependencies and start the development server:
 
 ```shell
@@ -119,6 +120,7 @@ cd awesome-links
 npm install
 npm run dev
 ```
+
 Here's what the starter project looks like:
 
 ![Current state of the application](/fullstack-nextjs-graphql-prisma-oklidw1rhw/imgs/awesome-links-starter-project.png)
@@ -150,6 +152,7 @@ awesome-links/
 ┣ tailwind.config.js
 ┗ tsconfig.json
 ```
+
 <Youtube videoId="4cpqSOQKSo8" />
 
 This starter project is a Next.js app with TypeScript and TailwindCSS installed.
@@ -163,17 +166,18 @@ The `_app.tsx` file is used to override the default `App` behavior. This file al
 ```tsx
 // pages/_app.tsx
 
-import '../styles/tailwind.css' // import Tailwind globally
-import Layout from '../components/Layout' // header layout persists between page changes
+import "../styles/tailwind.css"; // import Tailwind globally
+import Layout from "../components/Layout"; // header layout persists between page changes
 function MyApp({ Component, pageProps }) {
   return (
     <Layout>
       <Component {...pageProps} />
     </Layout>
-  )
+  );
 }
-export default MyApp
+export default MyApp;
 ```
+
 The data we see when navigating to `http://localhost:3000` is hardcoded in the [`/data/links.ts`](https://github.com/m-abdelwahab/awesome-links/blob/part-1/data/links.ts) file. In the upcoming parts, the data will be fetched dynamically from the database using a GraphQL API.
 
 ## Creating the data model for the app
@@ -196,21 +200,25 @@ To get started, first install Prisma's CLI as a development dependency:
 ```shell
 npm install --save-dev prisma
 ```
+
 You can now use the Prisma CLI to create a basic Prisma setup by running:
 
 ```shell
 npx prisma init
 ```
+
 A new `/prisma` directory is created and inside it you will find a `schema.prisma` file. This is your main Prisma configuration file which will contain your database schema.
 A `.env` ([dotenv](https://github.com/motdotla/dotenv)) file is also added to the root of the project. This is where you define environment variables such as the database connection URL or access tokens.
 
-Open the `.env` file and replace the dummy connection URL with the connection URL of your PostgreSQL database. 
+Open the `.env` file and replace the dummy connection URL with the connection URL of your PostgreSQL database.
+
 ```
 // .env
 
 # Example: postgresql://giwuzwpdnrgtzv:d003c6a604bb400ea955c3abd8c16cc98f2d909283c322ebd8e9164b33ccdb75@ec2-54-170-123-247.eu-west-1.compute.amazonaws.com:5432/d6ajekcigbuca9
 DATABASE_URL="<your-database-connection-string>"
 ```
+
 The database URL you just added has the following structure:
 
 ![Database URL breakdown](/fullstack-nextjs-graphql-prisma-oklidw1rhw/imgs/database-url-breakdown.png)
@@ -239,6 +247,7 @@ generator client {
   provider = "prisma-client-js"
 }
 ```
+
 > **Note**: This file uses PSL (Prisma Schema Language). To get the best possible development experience, make sure you install our [VSCode extension](https://marketplace.visualstudio.com/items?itemName=Prisma.prisma), which adds syntax highlighting, formatting, auto-completion, jump-to-definition, and linting for `.prisma` files.
 
 In the `datasource` field, we specified that we're using PostgreSQL and that we're loading the database URL from the `.env` file.
@@ -268,6 +277,7 @@ enum Role {
   ADMIN
 }
 ```
+
 > **Note**: models are typically spelled in [PascalCase](https://wiki.c2.com/?pascalcase) and should use the singular form. (for example, `User` instead of `user`, `users` or `Users`)
 
 Here we defined a `User` model with several fields. Each field has a name followed by a type and [optional field attributes](https://www.prisma.io/docs/orm/prisma-schema/data-model/models#defining-fields).
@@ -292,6 +302,7 @@ model Link {
   category    String
 }
 ```
+
 <Accordions type="single">
   <Accordion title="Expand to view the final version of the Prisma schema">
 ```prisma
@@ -299,30 +310,31 @@ model Link {
 // code above unchanged
 
 model User {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  email     String?  @unique
-  image     String?
-  role      Role     @default(USER)
+id Int @id @default(autoincrement())
+createdAt DateTime @default(now())
+updatedAt DateTime @updatedAt
+email String? @unique
+image String?
+role Role @default(USER)
 }
 
 enum Role {
-  USER
-  ADMIN
+USER
+ADMIN
 }
 
 model Link {
-  id          Int      @id @default(autoincrement())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  title       String
-  description String
-  url         String
-  imageUrl    String
-  category    String
+id Int @id @default(autoincrement())
+createdAt DateTime @default(now())
+updatedAt DateTime @updatedAt
+title String
+description String
+url String
+imageUrl String
+category String
 }
-```
+
+````
   </Accordion>
 </Accordions>
 
@@ -362,13 +374,14 @@ model Link {
   category    String
 +  users      User[]
 }
-```
+````
+
 This is an [_implicit_ many-to-many](https://www.prisma.io/docs/orm/prisma-schema/data-model/relations#implicit-many-to-many-relations) relation, where we have a relation table in the underlying database. This [relation table](https://www.prisma.io/docs/orm/prisma-schema/data-model/relations#relation-tables) is managed by Prisma.
 
 Here's what the final schema looks like:
 
 ```prisma
-copy 
+copy
 // prisma/schema.prisma
 
 datasource db {
@@ -407,6 +420,7 @@ model Link {
   users       User[]
 }
 ```
+
 ## Migrating and pushing changes to the database
 
 To create these tables in the database, you will use the `prisma migrate dev` command:
@@ -414,7 +428,9 @@ To create these tables in the database, you will use the `prisma migrate dev` co
 ```shell
 npx prisma migrate dev --name init
 ```
+
 The command does the following things:
+
 - Generate a new SQL migration called `init`
 - Apply the migration to the database
 - Install Prisma Client if it's not yet installed
@@ -425,6 +441,7 @@ If Prisma Client is not automatically installed, you can install it with the fol
 ```shell
 npm install @prisma/client
 ```
+
 Inside the `prisma` directory, you will notice a new folder called `migrations`. It should also contain another folder that ends with `init` and contains a file called `migration.sql`. The `migration.sql` file contains the generated SQL.
 
 <Accordions type="single">
@@ -435,51 +452,54 @@ CREATE TYPE "Role" AS ENUM ('USER', 'ADMIN');
 
 -- CreateTable
 CREATE TABLE "User" (
-    "id" SERIAL NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
-    "email" TEXT,
-    "image" TEXT,
-    "role" "Role" NOT NULL DEFAULT 'USER',
+"id" SERIAL NOT NULL,
+"createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+"updatedAt" TIMESTAMP(3) NOT NULL,
+"email" TEXT,
+"image" TEXT,
+"role" "Role" NOT NULL DEFAULT 'USER',
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
+
 );
 
 -- CreateTable
 CREATE TABLE "Link" (
-    "id" SERIAL NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
-    "title" TEXT NOT NULL,
-    "description" TEXT NOT NULL,
-    "url" TEXT NOT NULL,
-    "imageUrl" TEXT NOT NULL,
-    "category" TEXT NOT NULL,
+"id" SERIAL NOT NULL,
+"createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+"updatedAt" TIMESTAMP(3) NOT NULL,
+"title" TEXT NOT NULL,
+"description" TEXT NOT NULL,
+"url" TEXT NOT NULL,
+"imageUrl" TEXT NOT NULL,
+"category" TEXT NOT NULL,
 
     CONSTRAINT "Link_pkey" PRIMARY KEY ("id")
+
 );
 
 -- CreateTable
-CREATE TABLE "_LinkToUser" (
-    "A" INTEGER NOT NULL,
-    "B" INTEGER NOT NULL
+CREATE TABLE "\_LinkToUser" (
+"A" INTEGER NOT NULL,
+"B" INTEGER NOT NULL
 );
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "_LinkToUser_AB_unique" ON "_LinkToUser"("A", "B");
+CREATE UNIQUE INDEX "\_LinkToUser_AB_unique" ON "\_LinkToUser"("A", "B");
 
 -- CreateIndex
-CREATE INDEX "_LinkToUser_B_index" ON "_LinkToUser"("B");
+CREATE INDEX "\_LinkToUser_B_index" ON "\_LinkToUser"("B");
 
 -- AddForeignKey
-ALTER TABLE "_LinkToUser" ADD CONSTRAINT "_LinkToUser_A_fkey" FOREIGN KEY ("A") REFERENCES "Link"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "\_LinkToUser" ADD CONSTRAINT "\_LinkToUser_A_fkey" FOREIGN KEY ("A") REFERENCES "Link"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_LinkToUser" ADD CONSTRAINT "_LinkToUser_B_fkey" FOREIGN KEY ("B") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-```
+ALTER TABLE "\_LinkToUser" ADD CONSTRAINT "\_LinkToUser_B_fkey" FOREIGN KEY ("B") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+````
   </Accordion>
 </Accordions>
 
@@ -517,7 +537,8 @@ main()
   .finally(async () => {
     await prisma.$disconnect()
   })
-```
+````
+
 We are first creating a user using the [`create()`](https://www.prisma.io/docs/orm/reference/prisma-client-reference#create) function, which creates a new database record.
 
 Next, we are using the [`createMany()`](https://www.prisma.io/docs/orm/reference/prisma-client-reference#createmany) function to create multiple records. We are passing the hard-coded data we have as a parameter.
@@ -527,6 +548,7 @@ By default, Next.js [forces the use of `ESNext` modules](https://github.com/verc
 ```shell
 npm install --save-dev ts-node
 ```
+
 Then in the `tsconfig.json` file, specify that `ts-node` will use `CommonJS` modules:
 
 ```json
@@ -549,9 +571,10 @@ diff
 +  }
 }
 ```
+
 Update your `package.json` file by adding a `prisma` key with a `seed` property defining the script for seeding the database:
 
-```json
+````json
 diff {
   // ...
   "devDependencies": {
@@ -575,7 +598,8 @@ You can now seed your database by running the following command:
 
 ```shell
 npx prisma db seed
-```
+````
+
 If everything worked correctly you should see the following output:
 
 ```shell
@@ -585,6 +609,7 @@ Running seed: ts-node --compiler-options '{"module":"CommonJS"}' "prisma/seed.ts
 
 🌱  Your database has been seeded.
 ```
+
 ## Use Prisma Studio to explore your database
 
 <Youtube videoId="KbZKAP7nweM" />
@@ -596,6 +621,7 @@ To start Prisma Studio, run the following command
 ```shell
 npx prisma studio
 ```
+
 If you've done all the steps correctly you should you have the `Link` and `User` models inside your database. Inside the `Link` model you'll find 4 records and for the `User` model you'll find 1 record.
 
 ![Prisma Studio](/fullstack-nextjs-graphql-prisma-oklidw1rhw/imgs/awesome-links-prisma-studio.png)
@@ -610,4 +636,3 @@ In [the next part](/fullstack-nextjs-graphql-prisma-2-fwpc6ds155) of the course,
 - Building a GraphQL API for our app using GraphQL Yoga and Pothos
 - Consuming the API on the client using Apollo Client.
 - GraphQL pagination so that we don't load all links at once and have better performance.
-

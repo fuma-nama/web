@@ -16,6 +16,7 @@ tags:
 Here’s all you need to know about the Prisma ecosystem and community from August to December 2022.
 
 ## Overview
+
 - [Releases & new features](#releases--new-features)
   - [Features now in General Availability](#features-now-in-general-availability)
     - [Interactive transactions](#interactive-transactions)
@@ -52,8 +53,8 @@ Here’s all you need to know about the Prisma ecosystem and community from Augu
 - [We’re hiring](#were-hiring)
 - [What’s next?](#whats-next)
 
-
 ## Releases & new features
+
 Our engineers have been working hard, issuing new [releases](https://github.com/prisma/prisma/releases/) with many improvements and new features. Here is an overview of what we've launched lately.
 
 You can stay up-to-date about all upcoming features on our [roadmap](https://pris.ly/roadmap).
@@ -80,9 +81,10 @@ await prisma.$transaction(
     isolationLevel: Prisma.TransactionIsolationLevel.Serializable,
     maxWait: 5000,
     timeout: 10000,
-  }
-)
+  },
+);
 ```
+
 You can now remove the `interactiveTransactions` Preview feature in your schema.
 
 #### Relation mode
@@ -119,15 +121,16 @@ generator client {
 -  previewFeatures = ["referentialIntegrity"]
 }
 ```
+
 For more information, check out our [updated relation mode documentation](https://www.prisma.io/docs/concepts/components/prisma-schema/relations/relation-mode).
 
 ### New Preview features
 
 #### Prisma Client improvements
 
-- **`extendedWhereUnique` improvements**  ––– in [`4.5.0`](https://github.com/prisma/prisma/releases/tag/4.5.0), we introduced this Preview feature to allow filtering for non-unique properties in unique where queries. We added new rules to decide when concurrent `findUnique` queries get batched into a `findMany` query. Let us know your thoughts and share your feedback on [the Preview feature](https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#filter-on-non-unique-fields-with-userwhereuniqueinput) in this [GitHub issue](https://github.com/prisma/prisma/issues/15837).
+- **`extendedWhereUnique` improvements** ––– in [`4.5.0`](https://github.com/prisma/prisma/releases/tag/4.5.0), we introduced this Preview feature to allow filtering for non-unique properties in unique where queries. We added new rules to decide when concurrent `findUnique` queries get batched into a `findMany` query. Let us know your thoughts and share your feedback on [the Preview feature](https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#filter-on-non-unique-fields-with-userwhereuniqueinput) in this [GitHub issue](https://github.com/prisma/prisma/issues/15837).
 - **`fieldReference`** ––– [field references](https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#compare-columns-in-the-same-table) support on query filters will allow you to compare columns against other columns. To enable column comparisons in the same table, add the `fieldReference` feature flag to the `generator` block of your Prisma Schema. Try it out and let us know what you think in this [GitHub issue](https://github.com/prisma/prisma/issues/15068).
-- **`filteredRelationCount`**  ––– we've added support for the ability to count by a filtered relation. You can enable this feature by adding the `filteredRelationCount` Preview feature flag. Learn more in [our documentation](https://www.prisma.io/docs/concepts/components/prisma-client/aggregation-grouping-summarizing#filter-the-relation-count) and let us know what you think in [this issue](https://github.com/prisma/prisma/issues/15069).
+- **`filteredRelationCount`** ––– we've added support for the ability to count by a filtered relation. You can enable this feature by adding the `filteredRelationCount` Preview feature flag. Learn more in [our documentation](https://www.prisma.io/docs/concepts/components/prisma-client/aggregation-grouping-summarizing#filter-the-relation-count) and let us know what you think in [this issue](https://github.com/prisma/prisma/issues/15069).
 - **[Deno](https://deno.land/) for Prisma Client for Data Proxy** ––– we have released initial support for this feature in collaboration with the amazing team at Deno 🦕. To use Prisma Client in a Deno project, add the `deno` Preview feature flag to your Prisma schema and define a folder as `output` (this is required for Deno). Read [this guide in our documentation for a full example and individual steps](https://www.prisma.io/docs/guides/deployment/deployment-guides/deploying-to-deno-deploy). For feedback, please comment on this [GitHub issue](https://github.com/prisma/prisma/issues/15844).
 
 #### Prisma Client extensions
@@ -146,20 +149,23 @@ Read about how [Prisma Client just became a lot more flexible](https://www.prism
 We're excited to see what you build with them! For more information, check out our [docs](https://www.prisma.io/docs/concepts/components/prisma-client/client-extensions) and let us know what you think in this [GitHub issue](https://github.com/prisma/prisma/issues/16500).
 
 #### Multi-schema support for CockroachDB and PostgreSQL
+
 The ability to query and manage multiple database schemas has been a long-standing feature request from our community. We've now added [Preview support](https://www.prisma.io/docs/about/prisma/releases#preview) for multi-schema for CockroachDB and PostgreSQL. 🎉
 We’ve added support for:
+
 - Introspecting databases that organize objects in multiple database schemas
 - Managing multi-schema database setups directly from Prisma schema
 - Generating migrations that are database schema-aware with Prisma Migrate
 - Querying across multiple database schemas with Prisma Client
-If you already have a CockroachDB or a PostgreSQL database using multiple schemas, you can quickly get up and running set up multiple schemas by:
+  If you already have a CockroachDB or a PostgreSQL database using multiple schemas, you can quickly get up and running set up multiple schemas by:
 - Enabling the Preview feature in the Prisma schema
 - Defining the schemas in the `schemas` property in the `datasource` block
 - Introspecting your database using `prisma db pull`
-    
+
 You can further evolve your database schema using the multi-schema Preview feature by using `prisma migrate dev`. For further details, refer to our [documentation](https://www.prisma.io/docs/guides/other/multi-schema) and let us know what you think in this [GitHub issue](https://github.com/prisma/prisma/issues/15077).
 
 #### PostgreSQL extension management
+
 We’ve added support for declaring PostgreSQL extensions in the Prisma schema. The feature comes with support for introspection and migrations. You can now adopt, evolve and manage which PostgreSQL database extensions are installed directly from within your Prisma schema.
 
 > 💡 This feature adds support to manage PostgreSQL extensions in Prisma schema. It does not provide additional query capabilities and datatypes in Prisma Client.
@@ -177,6 +183,7 @@ datasource db {
   extensions = [hstore(schema: "myHstoreSchema"), pg_tgrm, postgis(version: "2.1")]
 }
 ```
+
 > ⚠️ To avoid noise from introspection, we currently only introspect the following allow-list: citext, pgcrypto, uuid-ossp, and postgis. But you can add and configure any extension to your Prisma schema manually.
 
 Please visit our [documentation](https://www.prisma.io/docs/concepts/components/prisma-schema/postgresql-extensions) to learn more about this feature or leave a comment with feedback on the GitHub [issue](https://github.com/prisma/prisma/issues/15835).
@@ -197,7 +204,7 @@ Try it out and [let us know what you think](https://github.com/prisma/prisma/is
 
 #### Improved serverless experience with smaller engines size
 
-We have decreased the size of our engine files by an average of 50%. The size of the Query Engine used on Debian, with OpenSSL 3.0.x, for example, went from 39MB to 14MB. 
+We have decreased the size of our engine files by an average of 50%. The size of the Query Engine used on Debian, with OpenSSL 3.0.x, for example, went from 39MB to 14MB.
 
 Additionally, we have started optimizing how the Prisma schema is loaded in Prisma Client. You should notice a considerable improvement when executing the first query if you're working with a bigger schema with many models and relations. Read more about it in the [`4.8.0` release notes](https://github.com/prisma/prisma/releases/tag/4.8.0).
 
@@ -219,10 +226,10 @@ We've made several improvements to the Prisma CLI:
 
 - `prisma migrate dev` previously returned a successful exit code (0) when `prisma db seed` was triggered but failed due to an error. We've fixed this and `prisma migrate dev` will now exit with an unsuccessful exit code (1) when seeding fails.
 - `prisma migrate status` previously returned a successful exit code (0) in unexpected cases. The command will now exit with an unsuccessful exit code (1) if:
-    - An error occurs
-    - There's a failed or unapplied migration
-    - The migration history diverges from the local migration history (`/prisma/migrations` folder)
-    - Prisma Migrate does not manage the database' migration history
+  - An error occurs
+  - There's a failed or unapplied migration
+  - The migration history diverges from the local migration history (`/prisma/migrations` folder)
+  - Prisma Migrate does not manage the database' migration history
 - The previous behavior when canceling a prompt by pressing Ctrl + C was returning a successful exit code (0). It now returns a non-successful, `SIGINT`, exit code (130).
 - In the *rare* event of a Rust panic from the Prisma engine, the CLI now asks you to submit an error report and exit the process with a non-successful exit code (1). Prisma previously ended the process with a successful exit code (0).
 
@@ -258,6 +265,7 @@ await prisma.log.findMany({
   }
 })
 ```
+
 If you used `NOT` with any of the following queries on a `Json` field, double-check your queries to ensure they're returning the correct data:
 
 - `string_contains`
@@ -273,11 +281,11 @@ If you used `NOT` with any of the following queries on a `Json` field, doubl
 The Prisma language server now provides [Symbols](https://code.visualstudio.com/docs/editor/editingevolved#_go-to-symbol) in VS Code. This means you can now:
 
 - See the different blocks (`datasource`, `generator`, `model`, `enum`, and `type`) of your Prisma schema in the [Outline view](https://code.visualstudio.com/docs/getstarted/userinterface#_outline-view). This makes it easier to navigate to a block in 1 clickA few things to note about the improvement are that:
-    - <kbd>CMD</kbd> + hover on a field whose type is an enum will show the block in a popup
-    - <kbd>CMD</kbd> + left click on a field whose type is a model or enum will take you to its definition.
-    
-    ![](/wnip-q4-2022-f66prwkjx72s/imgs/187421410-cd1f30cf-d0b4-4147-9467-70ca4da12321.png)
-    
+  - <kbd>CMD</kbd> + hover on a field whose type is an enum will show the block
+    in a popup
+  - <kbd>CMD</kbd> + left click on a field whose type is a model or enum will
+    take you to its definition.
+  ![](/wnip-q4-2022-f66prwkjx72s/imgs/187421410-cd1f30cf-d0b4-4147-9467-70ca4da12321.png)
 - Enable [Editor sticky scroll](https://code.visualstudio.com/updates/v1_70#_editor-sticky-scroll) from version `1.70` of VS Code. This means you can have sticky blocks in your Prisma schema, improving your experience when working with big schema files
 
 Make sure to update your VS Code application to 1.70, and the [Prisma extension](https://marketplace.visualstudio.com/items?itemName=Prisma.prisma) to `4.3.0`.
@@ -286,16 +294,16 @@ Make sure to update your VS Code application to 1.70, and the [Prisma extension
 
 We've renamed the metrics — counters, gauges, and histograms — returned from `prisma.$metrics()` to make it a little easier to understand at a glance.
 
-| Previous | Updated |
-| --- | --- |
-| `query_total_operations` | `prisma_client_queries_total` |
-| `query_total_queries` | `prisma_datasource_queries_total` |
-| `query_active_transactions` | `prisma_client_queries_active` |
+| Previous                      | Updated                                       |
+| ----------------------------- | --------------------------------------------- |
+| `query_total_operations`      | `prisma_client_queries_total`                 |
+| `query_total_queries`         | `prisma_datasource_queries_total`             |
+| `query_active_transactions`   | `prisma_client_queries_active`                |
 | `query_total_elapsed_time_ms` | `prisma_client_queries_duration_histogram_ms` |
-| `pool_wait_duration_ms` | `prisma_client_queries_wait_histogram_ms` |
-| `pool_active_connections` | `prisma_pool_connections_open` |
-| `pool_idle_connections` | `prisma_pool_connections_idle` |
-| `pool_wait_count` | `prisma_client_queries_wait` |
+| `pool_wait_duration_ms`       | `prisma_client_queries_wait_histogram_ms`     |
+| `pool_active_connections`     | `prisma_pool_connections_open`                |
+| `pool_idle_connections`       | `prisma_pool_connections_idle`                |
+| `pool_wait_count`             | `prisma_client_queries_wait`                  |
 
 Give Prisma Client `metrics` a shot and let us know what you think in this [GitHub issue](https://github.com/prisma/prisma/issues/13579)
 
@@ -328,6 +336,7 @@ When using certain isolation levels, it is expected that a transaction can fail 
 To make this easier, we're introducing a new [`PrismaClientKnownRequestError`](https://www.prisma.io/docs/reference/api-reference/error-reference#prismaclientknownrequesterror) with the [error code `P2034`](https://www.prisma.io/docs/reference/api-reference/error-reference#p2034): "Transaction failed due to a write conflict or a deadlock. Please retry your transaction". You can programmatically catch the error and retry the transaction. Check out the [`4.4.0` release notes](https://github.com/prisma/prisma/releases/tag/4.4.0) for further details here and examples.
 
 ## Community
+
 We wouldn't be where we are today without our amazing [community](https://www.prisma.io/community) of developers. Our [Slack](https://slack.prisma.io) has almost 50k members and is a great place to ask questions, share feedback and initiate discussions around Prisma.
 
 <br />
@@ -337,106 +346,108 @@ We wouldn't be where we are today without our amazing [community](https://www.pr
 
 <MeetupList>
 
-  <Meetup
-    title="TypeScript Berlin #10"
-    meetupLink="https://www.meetup.com/typescript-berlin/events/289599295/"
-    youtubeLink="https://youtube.com/playlist?list=PLn2e1F9Rfr6kDEtn-zIyaqPw2qJsbO6VR"
-    talks={[
-      {
-        title: 'Time for the framework-agnostic app has come?',
-        author: 'Ema Suriano',
-      },
-      {
-        title: 'Fullstack Type Safety (Remix Edition)',
-        author: 'Alex Ruheni',
-      },
-      {
-      title: 'Module-Federation: A game-changer in JavaScript architecture',
-      author: 'Vitor Alencar',
-      }
-    ]}
-    imagePath="/blog/posts/meetup-typescript.png"
-  />
+<Meetup
+  title="TypeScript Berlin #10"
+  meetupLink="https://www.meetup.com/typescript-berlin/events/289599295/"
+  youtubeLink="https://youtube.com/playlist?list=PLn2e1F9Rfr6kDEtn-zIyaqPw2qJsbO6VR"
+  talks={[
+    {
+      title: "Time for the framework-agnostic app has come?",
+      author: "Ema Suriano",
+    },
+    {
+      title: "Fullstack Type Safety (Remix Edition)",
+      author: "Alex Ruheni",
+    },
+    {
+      title: "Module-Federation: A game-changer in JavaScript architecture",
+      author: "Vitor Alencar",
+    },
+  ]}
+  imagePath="/blog/posts/meetup-typescript.png"
+/>
 
-  <Meetup
-    title="Rust and Tell - EuroRust B-Sides"
-    meetupLink="https://www.meetup.com/rust-berlin/events/288175448/"
-    youtubeLink="https://www.youtube.com/playlist?list=PL85XCvVPmGQhAqjkGfixrAJaiPtStajXt"
-    talks={[
-      {
-        title: 'Case study: Rust in axle OS',
-        author: 'Philip Tennen',
-      },
-      {
-        title: 'Let our rusty crab 🦀 explore the depths of the C 🌊',
-        author: 'Yvan Sraka',
-      },
-     {
-        title: 'Do not break GraphQL, extend it!',
-        author: 'Michal Rosteck',
-      }
-    ]}
-    imagePath="/blog/posts/meetup-rust.png"
-  />
+<Meetup
+  title="Rust and Tell - EuroRust B-Sides"
+  meetupLink="https://www.meetup.com/rust-berlin/events/288175448/"
+  youtubeLink="https://www.youtube.com/playlist?list=PL85XCvVPmGQhAqjkGfixrAJaiPtStajXt"
+  talks={[
+    {
+      title: "Case study: Rust in axle OS",
+      author: "Philip Tennen",
+    },
+    {
+      title: "Let our rusty crab 🦀 explore the depths of the C 🌊",
+      author: "Yvan Sraka",
+    },
+    {
+      title: "Do not break GraphQL, extend it!",
+      author: "Michal Rosteck",
+    },
+  ]}
+  imagePath="/blog/posts/meetup-rust.png"
+/>
 
-  <Meetup
-    title="GraphQL Berlin #26"
-    meetupLink="https://www.meetup.com/graphql-berlin/events/287036184/"
-    youtubeLink="https://www.youtube.com/playlist?list=PLn2e1F9Rfr6ld32vrXcdVS6JGzndBcsqk"
-    talks={[
-      {
-        title: 'Are you using GraphQL the intended way? ',
-        author: 'Laurin Quast (The Guild)',
-      },
-      {
-        title: 'The future of GraphQL IDEs',
-        author: 'Rikki Schult (GraphQL Foundation) and Thomas Heyenbrock (Stellate)',
-      },
-      {
-      title: 'Do not break GraphQL, extend it!',
-      author: 'Paolo Insogna (NearForm)',
-      }
-    ]}
-    imagePath="/blog/posts/meetup-graphql.png"
-  />
+<Meetup
+  title="GraphQL Berlin #26"
+  meetupLink="https://www.meetup.com/graphql-berlin/events/287036184/"
+  youtubeLink="https://www.youtube.com/playlist?list=PLn2e1F9Rfr6ld32vrXcdVS6JGzndBcsqk"
+  talks={[
+    {
+      title: "Are you using GraphQL the intended way? ",
+      author: "Laurin Quast (The Guild)",
+    },
+    {
+      title: "The future of GraphQL IDEs",
+      author:
+        "Rikki Schult (GraphQL Foundation) and Thomas Heyenbrock (Stellate)",
+    },
+    {
+      title: "Do not break GraphQL, extend it!",
+      author: "Paolo Insogna (NearForm)",
+    },
+  ]}
+  imagePath="/blog/posts/meetup-graphql.png"
+/>
 
-  <Meetup
-    title="Rust and Tell — BBQ Edition"
-    meetupLink="https://www.meetup.com/rust-berlin/events/287813728/"
-    youtubeLink="https://www.youtube.com/playlist?list=PL85XCvVPmGQhAqjkGfixrAJaiPtStajXt"
-    talks={[
-      {
-        title: 'Hot code reload in Rust',
-        author: 'Robert K',
-      },
-      {
-        title: 'Using Rust inside Scala with "robusta_jni"',
-        author: 'Bogdan K',
-      }
-    ]}
-    imagePath="/blog/posts/meetup-rust.png"
-  />
+<Meetup
+  title="Rust and Tell — BBQ Edition"
+  meetupLink="https://www.meetup.com/rust-berlin/events/287813728/"
+  youtubeLink="https://www.youtube.com/playlist?list=PL85XCvVPmGQhAqjkGfixrAJaiPtStajXt"
+  talks={[
+    {
+      title: "Hot code reload in Rust",
+      author: "Robert K",
+    },
+    {
+      title: 'Using Rust inside Scala with "robusta_jni"',
+      author: "Bogdan K",
+    },
+  ]}
+  imagePath="/blog/posts/meetup-rust.png"
+/>
 
-  <Meetup
-    title="TypeScript Berlin #9"
-    meetupLink="https://www.meetup.com/typescript-berlin/events/287592005/"
-    youtubeLink="https://youtube.com/playlist?list=PLn2e1F9Rfr6kDEtn-zIyaqPw2qJsbO6VR"
-    talks={[
-      {
-        title: 'Type Guards and how they can improve your code quality',
-        author: 'Benny Neugebauer (South Pole)',
-      },
-      {
-        title: 'How to make sure types are not lying to you?',
-        author: 'Fabien Bernard (Xata)',
-      },
-      {
-      title: 'Introduction to Data Modeling with Algebraic Data Types in TypeScript with Alge',
-      author: 'Jason Kuhrt (Prisma)',
-      }
-    ]}
-    imagePath="/blog/posts/meetup-typescript.png"
-  />
+<Meetup
+  title="TypeScript Berlin #9"
+  meetupLink="https://www.meetup.com/typescript-berlin/events/287592005/"
+  youtubeLink="https://youtube.com/playlist?list=PLn2e1F9Rfr6kDEtn-zIyaqPw2qJsbO6VR"
+  talks={[
+    {
+      title: "Type Guards and how they can improve your code quality",
+      author: "Benny Neugebauer (South Pole)",
+    },
+    {
+      title: "How to make sure types are not lying to you?",
+      author: "Fabien Bernard (Xata)",
+    },
+    {
+      title:
+        "Introduction to Data Modeling with Algebraic Data Types in TypeScript with Alge",
+      author: "Jason Kuhrt (Prisma)",
+    },
+  ]}
+  imagePath="/blog/posts/meetup-typescript.png"
+/>
 
   </MeetupList>
 
@@ -449,6 +460,7 @@ The easiest way to set up a project using `try-prisma` is to run the following
 ```shell
 npx try-prisma
 ```
+
 <Youtube videoId="2sCWMNGGGUE" />
 
 Read more on [Try Prisma: The Fastest Way to Explore Prisma Examples](https://www.prisma.io/blog/try-prisma-announcment-Kv6bwRcdjd).
@@ -464,7 +476,7 @@ The Design Partner Program aims to help development teams solve operational, dat
 - **Optimizing the data access layer for scaling performance** often involves projecting data into denormalized views, or caching. These methods come with complex logic to figure out strategies for cache invalidation or preventing to use stale data.
 - **Building web applications on modern Serverless platforms such as Vercel or Netlify often breaks down** as soon as you need to execute on any of the topics listed above. This pushes to re-platform on a traditional infrastructure, delaying projects, and losing productivity benefits offered by Vercel or Netlify.
 
-**[Submit an application](https://docs.google.com/forms/d/e/1FAIpQLSdfadMO7qVOMlOgmeYevpM-olpjku2-3sVzMvVQiHITmZf4dA/viewform)** through our application form. 
+**[Submit an application](https://docs.google.com/forms/d/e/1FAIpQLSdfadMO7qVOMlOgmeYevpM-olpjku2-3sVzMvVQiHITmZf4dA/viewform)** through our application form.
 
 ## Videos, livestreams & more
 
@@ -523,6 +535,7 @@ Also, **we're hiring** for various roles! If you're interested in joining us, 
 [Explore Jobs](https://www.prisma.io/careers)
 
 ---
+
 ## What’s next?
 
 The best places to stay up-to-date about what we are currently working on are our [GitHub issues](https://github.com/prisma/prisma/issues) and our public [roadmap](https://pris.ly/roadmap).

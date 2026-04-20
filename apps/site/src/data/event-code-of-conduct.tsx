@@ -19,10 +19,11 @@ export const cocSections: CocSection[] = [
           Prisma is dedicated to providing a harassment-free experience for
           everyone, regardless of gender, gender identity and expression, age,
           sexual orientation, disability, physical appearance, body size, race,
-          ethnicity, religion (or lack thereof), or technology choices. We do not
-          tolerate harassment of event participants in any form. Sexual language
-          and imagery are not appropriate for any event venue, including talks,
-          workshops, parties, Twitter, Slack, and other online media.
+          ethnicity, religion (or lack thereof), or technology choices. We do
+          not tolerate harassment of event participants in any form. Sexual
+          language and imagery are not appropriate for any event venue,
+          including talks, workshops, parties, Twitter, Slack, and other online
+          media.
         </p>
         <p>
           Event participants violating these rules may be sanctioned or expelled
@@ -37,12 +38,13 @@ export const cocSections: CocSection[] = [
     content: (
       <>
         <p>
-          Harassment includes offensive verbal comments related to gender, gender
-          identity and expression, age, sexual orientation, disability, physical
-          appearance, body size, race, ethnicity, religion, technology choices,
-          deliberate intimidation, stalking, following, harassing photography or
-          recording, sustained disruption of talks or other events,
-          inappropriate physical contact, and unwelcome sexual attention.
+          Harassment includes offensive verbal comments related to gender,
+          gender identity and expression, age, sexual orientation, disability,
+          physical appearance, body size, race, ethnicity, religion, technology
+          choices, deliberate intimidation, stalking, following, harassing
+          photography or recording, sustained disruption of talks or other
+          events, inappropriate physical contact, and unwelcome sexual
+          attention.
         </p>
         <p>
           Participants asked to stop any harassing behavior are expected to
@@ -56,9 +58,9 @@ export const cocSections: CocSection[] = [
           sexualized environment.
         </p>
         <p>
-          If a participant engages in harassing behavior, the organizers may take
-          any action they deem appropriate, including warning the offender or
-          expulsion from the event with no refund.
+          If a participant engages in harassing behavior, the organizers may
+          take any action they deem appropriate, including warning the offender
+          or expulsion from the event with no refund.
         </p>
         <p>
           If you are being harassed, notice that someone else is being harassed,

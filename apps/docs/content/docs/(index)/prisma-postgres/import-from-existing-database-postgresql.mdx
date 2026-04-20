@@ -62,26 +62,27 @@ postgresql://USER:PASSWORD@HOST:PORT/DATABASE
 
 Expand below for provider-specific instructions that help you determine the right connection string:
 
-
 <Accordions>
 
 <Accordion title="Neon">
 
-  - Make sure to select non-pooled connection string by switching off the **Connection pooling** toggle.
-  - The `sslmode` has to be set to `require` and appended to your Neon database URL for the command to work.
-  - The connection URL should look similar to this:
+- Make sure to select non-pooled connection string by switching off the **Connection pooling** toggle.
+- The `sslmode` has to be set to `require` and appended to your Neon database URL for the command to work.
+- The connection URL should look similar to this:
 
-  ```text
-  postgresql://USER:PASSWORD@YOUR-NEON-HOST/DATABASE?sslmode=require
-  ```
+```text
+postgresql://USER:PASSWORD@YOUR-NEON-HOST/DATABASE?sslmode=require
+```
+
 </Accordion>
 <Accordion title="Supabase">
 
-  - Use a database connection URL that uses [Supavisor session mode](https://supabase.com/docs/guides/database/connecting-to-postgres#supavisor-session-mode).
-  - The connection URL should look similar to this:
-  ```text
-  postgres://postgres.apbkobhfnmcqqzqeeqss:[YOUR-PASSWORD]@aws-0-ca-central-1.pooler.supabase.com:5432/postgres
-  ```
+- Use a database connection URL that uses [Supavisor session mode](https://supabase.com/docs/guides/database/connecting-to-postgres#supavisor-session-mode).
+- The connection URL should look similar to this:
+
+```text
+postgres://postgres.apbkobhfnmcqqzqeeqss:[YOUR-PASSWORD]@aws-0-ca-central-1.pooler.supabase.com:5432/postgres
+```
 
 </Accordion>
 

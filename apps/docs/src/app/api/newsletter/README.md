@@ -66,6 +66,7 @@ export default function Page() {
 ### Response Examples
 
 **Success (200)**
+
 ```json
 {
   "message": "Please check your email to confirm subscription"
@@ -73,6 +74,7 @@ export default function Page() {
 ```
 
 **Already Subscribed (200)**
+
 ```json
 {
   "message": "Already subscribed",
@@ -81,6 +83,7 @@ export default function Page() {
 ```
 
 **Error (400)**
+
 ```json
 {
   "error": "Invalid email address"
@@ -88,6 +91,7 @@ export default function Page() {
 ```
 
 **Error (500)**
+
 ```json
 {
   "error": "Newsletter service is not configured"
@@ -114,6 +118,7 @@ Check that the `BREVO_API_KEY` environment variable is set correctly.
 ### "Failed to subscribe"
 
 Check the server logs for detailed error messages from Brevo. Common issues:
+
 - Invalid API key
 - Incorrect list ID (update line 60 in route.ts if different from `15`)
 - Incorrect template ID (update line 61 in route.ts if different from `36`)
@@ -161,6 +166,7 @@ templateId: 36,        // Change to your template ID
 ## CORS Configuration
 
 The API is configured to allow requests from:
+
 - https://prisma.io
 - https://www.prisma.io
 - https://prisma.io/docs

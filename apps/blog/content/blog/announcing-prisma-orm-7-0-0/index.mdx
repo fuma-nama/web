@@ -24,28 +24,31 @@ With the ORM roadmap and Prisma Postgres launched, we had a solid foundation for
 
 ### Moving away from Rust
 
-When we [launched 6.0.0](https://www.prisma.io/blog/prisma-6-better-performance-more-flexibility-and-type-safe-sql?utm_content=launch-blog&via=prisma7), we promised better performance, more flexibility, and better type-safety. We knew there was work to be done, and to get there, we needed to make some drastic changes. 
+When we [launched 6.0.0](https://www.prisma.io/blog/prisma-6-better-performance-more-flexibility-and-type-safe-sql?utm_content=launch-blog&via=prisma7), we promised better performance, more flexibility, and better type-safety. We knew there was work to be done, and to get there, we needed to make some drastic changes.
 
-We announced we were [migrating the Prisma Client away from Rust](https://www.prisma.io/blog/series/prisma-orm-the-complete-rust-to-typescript-migration-journey?utm_source=blog&utm_content=launch-blog&via=prisma7) and rebuilding it in TypeScript. This might have seemed like a strange move to some, as Rust’s main premise is that it is fast and performant. But that is only half the story in our case. 
+We announced we were [migrating the Prisma Client away from Rust](https://www.prisma.io/blog/series/prisma-orm-the-complete-rust-to-typescript-migration-journey?utm_source=blog&utm_content=launch-blog&via=prisma7) and rebuilding it in TypeScript. This might have seemed like a strange move to some, as Rust’s main premise is that it is fast and performant. But that is only half the story in our case.
 
 A side effect of the client being built in Rust is that we were limiting who can contribute to the ORM. If you didn’t have strong Rust experience, it was far more difficult to make any meaningful contributions. On the technical side, the communication layer between Rust and the JavaScript runtime is much slower than doing things in plain JavaScript, plus it creates additional dependencies on the runtime. Our friends at Deno shared this sentiment:
 
-<Quotes 
-speakerImgLink="/blog/announcing-prisma-orm-7-0-0/imgs/0a893742a7f9fca80962be7d17ee7582d53cb322-400x400.jpg"
-speakerName="Luca Casonato"
-companyLink="https://deno.com/"
-companyName="Deno">
-“We remember hearing about Prisma’s move away from Rust and thinking about how not dealing with the native addon API would make supporting Prisma in Deno so much simpler. We were all really excited to see it!" 
+<Quotes
+  speakerImgLink="/blog/announcing-prisma-orm-7-0-0/imgs/0a893742a7f9fca80962be7d17ee7582d53cb322-400x400.jpg"
+  speakerName="Luca Casonato"
+  companyLink="https://deno.com/"
+  companyName="Deno"
+>
+  “We remember hearing about Prisma’s move away from Rust and thinking about how
+  not dealing with the native addon API would make supporting Prisma in Deno so
+  much simpler. We were all really excited to see it!"
 </Quotes>
 
-Moving to a Rust-free client really set the stage for a faster client runtime, a smaller footprint, and simpler deployment story. You no longer needed to worry about runtime-specific quirks or infrastructure providers, like Cloudflare Workers, limiting the size of the deployed application. We continued on the path and kept iterating on what would become the Rust-free Prisma Client. The results? 
+Moving to a Rust-free client really set the stage for a faster client runtime, a smaller footprint, and simpler deployment story. You no longer needed to worry about runtime-specific quirks or infrastructure providers, like Cloudflare Workers, limiting the size of the deployed application. We continued on the path and kept iterating on what would become the Rust-free Prisma Client. The results?
 
 - 90% smaller bundle output
 - 3x faster query execution
 - Significantly lower CPU and memory utilization
 - Simpler deployments for Vercel Edge and Cloudflare Workers
 
-And we have [the benchmarks to prove it](https://www.prisma.io/blog/prisma-orm-without-rust-latest-performance-benchmarks?utm_source=blog&utm_content=launch-blog&via=prisma7). The best part? You don’t need to rework your entire application to benefit from it. The changes required to switch are super simple. 
+And we have [the benchmarks to prove it](https://www.prisma.io/blog/prisma-orm-without-rust-latest-performance-benchmarks?utm_source=blog&utm_content=launch-blog&via=prisma7). The best part? You don’t need to rework your entire application to benefit from it. The changes required to switch are super simple.
 
 ```prisma
 // schema.prisma
@@ -54,14 +57,16 @@ generator client {
 +  provider = "prisma-client" // rust-free and ESM
 }
 ```
+
 We’ve been talking to dozens of users from the community, as well as close friends like Kent C. Dodds, and the feedback has been very positive:
 
-<Quotes 
-speakerImgLink="/blog/announcing-prisma-orm-7-0-0/imgs/bae4c44f9bed7c0c255b338cf93b4e498ef540a8-400x400.jpg"
-speakerName="Kent C. Dodds">
-“I upgraded a few weeks ago and it was great to see how well everything went and how easy it was to switch to the new Rust-Free Client." 
+<Quotes
+  speakerImgLink="/blog/announcing-prisma-orm-7-0-0/imgs/bae4c44f9bed7c0c255b338cf93b4e498ef540a8-400x400.jpg"
+  speakerName="Kent C. Dodds"
+>
+  “I upgraded a few weeks ago and it was great to see how well everything went
+  and how easy it was to switch to the new Rust-Free Client."
 </Quotes>
-
 
 ### Generated code out of `node_modules` and a new config file
 
@@ -71,32 +76,36 @@ We also added support for dynamic project configuration with the new Prisma conf
 
 ### Faster and fewer types
 
-But this wasn’t all we focused on. One of Prisma ORM’s main benefits is type-safety. This means making sure we not only provide the correct types, but do so in a way that is fast and efficient.  To improve this, we collaborated with David Blass, the creator of ArkType, to [evaluate how well](https://www.prisma.io/blog/why-prisma-orm-checks-types-faster-than-drizzle?utm_source=blog&utm_content=launch-blog&via=prisma7) we were generating our types. The results are well worth a read, but the highlights include:
+But this wasn’t all we focused on. One of Prisma ORM’s main benefits is type-safety. This means making sure we not only provide the correct types, but do so in a way that is fast and efficient. To improve this, we collaborated with David Blass, the creator of ArkType, to [evaluate how well](https://www.prisma.io/blog/why-prisma-orm-checks-types-faster-than-drizzle?utm_source=blog&utm_content=launch-blog&via=prisma7) we were generating our types. The results are well worth a read, but the highlights include:
 
 - Prisma requires ~98% fewer types to evaluate a schema
 - Prisma requires ~45% fewer types for query evaluation
 - Prisma is 70% faster when performing a full type check
 
-Compared to other ORMs in the ecosystem, our generated types were not only faster to evaluate, but required fewer types in order for TypeScript to provide useful information to the user. Why does this matter? Because developers can build their applications with confidence knowing that the type-safety we offer is not only fast, but has less overhead. 
+Compared to other ORMs in the ecosystem, our generated types were not only faster to evaluate, but required fewer types in order for TypeScript to provide useful information to the user. Why does this matter? Because developers can build their applications with confidence knowing that the type-safety we offer is not only fast, but has less overhead.
 
 ### Prisma Postgres for all
 
 But Prisma is more than just an ORM. Our managed Postgres database was built to give developers the thing they need when they get started with Prisma ORM… a database. We built Prisma Postgres with bare-metal infrastructure powered by unikernel microVMs. All that means is that things are fast, and stay fast. But we kept the developer experience in mind, handling the complex parts so you don’t have to manage them yourself. Instead of having to worry about provisioning or resource configuration, we manage all that for you, and integrate natively with Prisma ORM. The same great DX you're used to from the ORM, also for your database.
 
-Getting started with Prisma Postgres is as simple as running a single command from your terminal: 
+Getting started with Prisma Postgres is as simple as running a single command from your terminal:
 
 ```shell
 npm create db
 ```
+
 You’ll get a database provisioned for you, and a link to claim it once you’re ready. For those using AI agents in their developer workflows, we provide a dedicated API and MCP server that can be used to create and manage databases as they are needed.
 
-<Quotes 
-speakerImgLink="/blog/announcing-prisma-orm-7-0-0/imgs/131c271750cb6bc7116f609982eef70a7efdca21-400x400.png"
-speakerName="Jason Lengstorf">
-“Whenever I work with Prisma, I get to the getting started guide, install things and then realize I needed to go get a database. I’d always get lost in that process so being able to create a database this easily is amazing!” 
+<Quotes
+  speakerImgLink="/blog/announcing-prisma-orm-7-0-0/imgs/131c271750cb6bc7116f609982eef70a7efdca21-400x400.png"
+  speakerName="Jason Lengstorf"
+>
+  “Whenever I work with Prisma, I get to the getting started guide, install
+  things and then realize I needed to go get a database. I’d always get lost in
+  that process so being able to create a database this easily is amazing!”
 </Quotes>
 
-Prisma Postgres hasn’t stopped there though. We have now adopted the standard Postgres connection protocol so that any tool in the wider ecosystem can talk to your database. This means tools like Cloudflare Hyperdrive, TablePlus, Retool, or even other ORMs can all be used with Prisma Postgres. 
+Prisma Postgres hasn’t stopped there though. We have now adopted the standard Postgres connection protocol so that any tool in the wider ecosystem can talk to your database. This means tools like Cloudflare Hyperdrive, TablePlus, Retool, or even other ORMs can all be used with Prisma Postgres.
 
 All of this is possible because Prisma Postgres is just standard Postgres, but built to provide the best Postgres experience.
 

@@ -25,6 +25,7 @@ When you’re building and testing, you want instant feedback. With **Prisma 6.8
 ```shell
 npx prisma dev
 ```
+
 This launches a **local Prisma Postgres instance**, fully isolated from your cloud environment. That means:
 
 - **Zero latency** – Queries are local and instant.
@@ -33,7 +34,7 @@ This launches a **local Prisma Postgres instance**, fully isolated from your clo
 - **No account needed** – No need for an account to test and build during development.
 - **No Docker under the hood** – Local Prisma Postgres is based on [PGLite](https://pglite.dev/), no Docker required.
 
-Zero cloud dependencies! Just local, blazing-fast database development. 
+Zero cloud dependencies! Just local, blazing-fast database development.
 
 [Visit our docs](https://www.prisma.io/docs/postgres/database/local-development?utm_source=website&utm_content=release_blog) to learn how to start using Prisma Postgres locally.
 
@@ -41,11 +42,11 @@ Zero cloud dependencies! Just local, blazing-fast database development.
 
 Have you ever set up a database from scratch and spent more time configuring it than building the feature you actually wanted to code?
 
-***That should never be the case.*** 
+**_That should never be the case._**
 
-With Prisma 6.8.0, you can use VS Code agent mode and simply ask Copilot to perform Prisma CLI commands for you. That simplifies database management, making it feel as natural as sending a quick message. 
+With Prisma 6.8.0, you can use VS Code agent mode and simply ask Copilot to perform Prisma CLI commands for you. That simplifies database management, making it feel as natural as sending a quick message.
 
-Just type: *“Create a database for me and store the connection string in an* `.env` *file” …and it’s done.* No terminal hopping, no context switching.
+Just type: _“Create a database for me and store the connection string in an_ `.env` _file” …and it’s done._ No terminal hopping, no context switching.
 
 Here’s what you can do right inside VS Code now:
 
@@ -67,13 +68,13 @@ You can [learn more about the VS Code agent in our docs](https://www.prisma.io/d
 
 ## Query Prisma docs instantly with GitHub Copilot
 
-You’re deep in code, writing a query, building a new model, testing out migrations. But then you pause...*What’s the syntax for that one-to-many relationship again?*
+You’re deep in code, writing a query, building a new model, testing out migrations. But then you pause..._What’s the syntax for that one-to-many relationship again?_
 
 **Context switching kills momentum.**
 
-With the **Prisma for GitHub Copilot** extension, you don’t have to leave your editor to find out. Just ask: “*@prisma-for-github-copilot How can I cache my prisma queries?”*
+With the **Prisma for GitHub Copilot** extension, you don’t have to leave your editor to find out. Just ask: “_@prisma-for-github-copilot How can I cache my prisma queries?”_
 
-The answer appears right inside **GitHub Copilot Chat**. 
+The answer appears right inside **GitHub Copilot Chat**.
 
 ![A dark-themed GitHub Copilot Chat pane titled “Ask Copilot,” showing usage tips (“or type # to attach context,” “@ to chat with extensions,” “Type / to use commands”). In the bottom input box, the user types “@prisma How can I cache my prisma queries?” The Copilot Chat pane then displays a detailed reply explaining strategies for caching Prisma query results directly in code.](/prisma-6-8-0-release/imgs/a7feebd273dadac60fbfc8dfd95fddd83fd28411-800x785.gif)
 
@@ -83,7 +84,7 @@ It’s not just documentation, it’s real-time guidance. No browser tabs. No lo
 - **Stay in your flow:** No more jumping between documentation and the editor.
 - **Boost productivity:** Spend more time coding, less time searching.
 
-<br/>
+<br />
 
 [Install the Prisma for GitHub Copilot extension](https://github.com/apps/prisma-for-github-copilot)
 
@@ -99,13 +100,14 @@ generator client {
 +  runtime  = "deno"
 }
 ```
+
 No adapters, no custom builds—just Prisma ORM, running natively in Deno. Try it out by following the [step-by-step guide here](https://www.prisma.io/docs/orm/prisma-client/deployment/edge/deploy-to-deno-deploy).
 
 ## New Prisma Postgres region: Singapore
 
 Expanding your database to the right region makes all the difference in latency and user experience. That’s why **Prisma Postgres** now supports deployments in the `ap-southeast-1` region—bringing faster data access across Southeast Asia.
 
-And it wasn’t just our decision, *it was yours*. You voted and now Singapore is live.
+And it wasn’t just our decision, _it was yours_. You voted and now Singapore is live.
 
 <TweetEmbedComp tweets={["1920100310489747952"]} />
 
@@ -113,13 +115,13 @@ You can now deploy your Prisma Postgres instance in Singapore and bring your app
 
 **Where should we go next?** Stay tuned for the next poll and cast your vote on [X](https://pris.ly/x) and help shape the future of Prisma Postgres.
 
-<br/>
+<br />
 
 [Follow us on X and vote on the next poll](https://pris.ly/x?utm_source=blog&utm_content=cta_button)
 
 ## **Stay in the loop**
 
-We’re working to build a more powerful developer experience with Prisma 6.8.0 and beyond. From local-first database development and real-time documentation lookups to edge-ready Deno deployments, it's all designed to keep you coding, *not configuring*.
+We’re working to build a more powerful developer experience with Prisma 6.8.0 and beyond. From local-first database development and real-time documentation lookups to edge-ready Deno deployments, it's all designed to keep you coding, _not configuring_.
 
 But we’re not stopping here and working to build more integrations and better tooling. Want to stay ahead of the curve? [Follow us on X](https://pris.ly/x?utm_source=website) for updates, tips, and previews of what's next.
 

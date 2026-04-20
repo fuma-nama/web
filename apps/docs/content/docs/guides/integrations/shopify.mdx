@@ -162,23 +162,23 @@ npx create-db
 
 Copy the connection string from the CLI output. It should look similar to this:
 
-   ```text
-   DATABASE_URL="postgresql://user:password@host:5432/database?sslmode=require"
-   ```
+```text
+DATABASE_URL="postgresql://user:password@host:5432/database?sslmode=require"
+```
 
 Replace the generated `DATABASE_URL` in your `.env` file with the value from `npx create-db`.
 
 Apply your database schema:
 
-   ```npm
-   npx prisma migrate dev --name init
-   ```
+```npm
+npx prisma migrate dev --name init
+```
 
 Then generate Prisma Client:
 
-   ```npm
-   npx prisma generate
-   ```
+```npm
+npx prisma generate
+```
 
 Now, before moving on, let's update your `db.server.ts` file to use the newly generated Prisma client with the driver adapter:
 
@@ -386,7 +386,9 @@ export default function App() {
 
   return (
     <AppProvider isEmbeddedApp apiKey={apiKey}>
-      <NavMenu>[ Home ](/app) [Product Notes](/app/product-notes) // [!code ++]</NavMenu>
+      <NavMenu>
+        [ Home ](/app) [Product Notes](/app/product-notes) // [!code ++]
+      </NavMenu>
       <Outlet />
     </AppProvider>
   );
@@ -496,7 +498,8 @@ export default function ProductNotes() {
                     // [!code ++]
                     <Text as="p" variant="bodySm" color="subdued">
                       {" "}
-                      // [!code ++] Added: {new Date(note.createdAt).toLocaleString()} // [!code ++]
+                      // [!code ++] Added:{" "}
+                      {new Date(note.createdAt).toLocaleString()} // [!code ++]
                     </Text>{" "}
                     // [!code ++]
                   </BlockStack>{" "}
@@ -661,7 +664,8 @@ export default function ProductNotes() {
               <BlockStack gap="200">
                 {" "}
                 // [!code ++]
-                <input type="hidden" name="productGid" value={productGid} /> // [!code ++]
+                <input type="hidden" name="productGid" value={productGid} /> //
+                [!code ++]
                 <TextField // [!code ++]
                   label="Note" // [!code ++]
                   value={body} // [!code ++]

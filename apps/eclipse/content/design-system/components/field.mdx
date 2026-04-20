@@ -52,7 +52,9 @@ export function FieldWithDescription() {
   return (
     <Field>
       <FieldLabel htmlFor="username">Username</FieldLabel>
-      <FieldDescription>Choose a unique username for your account.</FieldDescription>
+      <FieldDescription>
+        Choose a unique username for your account.
+      </FieldDescription>
       <Input id="username" placeholder="Enter username" />
     </Field>
   );
@@ -65,7 +67,9 @@ export function FieldWithDescription() {
   <Field>
     <FieldLabel htmlFor="username-desc">Username</FieldLabel>
     <Input id="username-desc" placeholder="Enter username" />
-    <FieldDescription>Choose a unique username for your account.</FieldDescription>
+    <FieldDescription>
+      Choose a unique username for your account.
+    </FieldDescription>
   </Field>
 </div>
 
@@ -74,13 +78,24 @@ export function FieldWithDescription() {
 Display validation errors with FieldError:
 
 ```tsx
-import { Field, FieldLabel, FieldDescription, FieldError, Input } from "@prisma/eclipse";
+import {
+  Field,
+  FieldLabel,
+  FieldDescription,
+  FieldError,
+  Input,
+} from "@prisma/eclipse";
 
 export function FieldWithError() {
   return (
     <Field>
       <FieldLabel htmlFor="email-error">Email</FieldLabel>
-      <Input id="email-error" type="email" defaultValue="invalid-email" aria-invalid="true" />
+      <Input
+        id="email-error"
+        type="email"
+        defaultValue="invalid-email"
+        aria-invalid="true"
+      />
       <FieldDescription>We'll send updates to this address.</FieldDescription>
       <FieldError>Please enter a valid email address</FieldError>
     </Field>
@@ -93,7 +108,12 @@ export function FieldWithError() {
 <div className="max-w-md my-4">
   <Field>
     <FieldLabel htmlFor="email-error">Email</FieldLabel>
-    <Input id="email-error" type="email" defaultValue="invalid-email" aria-invalid="true" />
+    <Input
+      id="email-error"
+      type="email"
+      defaultValue="invalid-email"
+      aria-invalid="true"
+    />
     <FieldDescription>We'll send updates to this address.</FieldDescription>
     <FieldError>Please enter a valid email address</FieldError>
   </Field>
@@ -104,7 +124,14 @@ export function FieldWithError() {
 Group multiple fields together with consistent spacing:
 
 ```tsx
-import { Field, FieldLabel, FieldDescription, FieldGroup, Input, Button } from "@prisma/eclipse";
+import {
+  Field,
+  FieldLabel,
+  FieldDescription,
+  FieldGroup,
+  Input,
+  Button,
+} from "@prisma/eclipse";
 
 export function FieldGroupExample() {
   return (
@@ -139,7 +166,11 @@ export function FieldGroupExample() {
     </Field>
     <Field>
       <FieldLabel htmlFor="email-group-live">Email</FieldLabel>
-      <Input id="email-group-live" type="email" placeholder="Enter your email" />
+      <Input
+        id="email-group-live"
+        type="email"
+        placeholder="Enter your email"
+      />
       <FieldDescription>We'll send updates to this address.</FieldDescription>
     </Field>
     <div className="flex gap-2">
@@ -232,7 +263,12 @@ export function MultipleErrors() {
   return (
     <Field>
       <FieldLabel htmlFor="password-multi">Password</FieldLabel>
-      <Input id="password-multi" type="password" defaultValue="abc" aria-invalid="true" />
+      <Input
+        id="password-multi"
+        type="password"
+        defaultValue="abc"
+        aria-invalid="true"
+      />
       <FieldError errors={errors} />
     </Field>
   );
@@ -244,7 +280,12 @@ export function MultipleErrors() {
 <div className="max-w-md my-4">
   <Field>
     <FieldLabel htmlFor="password-multi">Password</FieldLabel>
-    <Input id="password-multi" type="password" defaultValue="abc" aria-invalid="true" />
+    <Input
+      id="password-multi"
+      type="password"
+      defaultValue="abc"
+      aria-invalid="true"
+    />
     <FieldError
       errors={[
         { message: "Password must be at least 8 characters" },
@@ -281,8 +322,15 @@ export function CompleteForm() {
 
         <Field>
           <FieldLabel htmlFor="email-complete">Email</FieldLabel>
-          <Input id="email-complete" type="email" placeholder="john@example.com" required />
-          <FieldDescription>We'll never share your email with anyone.</FieldDescription>
+          <Input
+            id="email-complete"
+            type="email"
+            placeholder="john@example.com"
+            required
+          />
+          <FieldDescription>
+            We'll never share your email with anyone.
+          </FieldDescription>
         </Field>
 
         <Field>

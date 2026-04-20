@@ -58,19 +58,23 @@ You can stay up-to-date about all upcoming features on our [roadmap](https://pri
 The biggest news in this quarter certainly was the launch of Prisma Migrate for [General Availability](https://www.prisma.io/docs/about/prisma/releases#generally-available-ga). This means, you can now use Prisma Migrate without the `--preview-feature` option:
 
 **Before v2.19.0**
+
 ```
 npx prisma migrate <COMMAND> --preview-feature
 
 # for example:
 npx prisma migrate dev --preview-feature
 ```
+
 **Now**
+
 ```
 npx prisma migrate <COMMAND>
 
 # for example:
 npx prisma migrate dev
 ```
+
 You can learn more about this in the [release notes](https://github.com/prisma/prisma/releases/tag/2.19.0), the [announcement article](https://www.prisma.io/blog/prisma-migrate-ga-b5eno5g08d0b) and the [video demo](https://www.youtube.com/watch?v=Ac-HWBTtLAU&t=51s&ab_channel=Prisma) by [Daniel](https://twitter.com/daniel2color) and [Tom](https://twitter.com/_tomhoule).
 
 ### Use native database types in the Prisma schema
@@ -80,8 +84,6 @@ In this quarter, we made it possible to use a much broader range of native datab
 For example, you can now define `VARCHAR` types of a specific length or use other database-specific types like (in this case for PostgreSQL) `MONEY`, variations of date/time types like `TIME`, `TIMETZ` or `TIMESTAMPTZ` and a lot more.
 
 Here's an example:
-
-
 
 ```prisma
 datasource db {
@@ -96,6 +98,7 @@ model User {
   wealth   Decimal   @db.Money
 }
 ```
+
 ```sql
 CREATE TABLE "User" (
     "id" SERIAL NOT NULL,
@@ -108,7 +111,6 @@ CREATE TABLE "User" (
 
 CREATE UNIQUE INDEX "User.email_unique" ON "User"("email");
 ```
-
 
 For a full overview of available types, check out the type mapping sections in the docs:
 
@@ -134,29 +136,30 @@ Alternatively you can pass the `--schema` option to the CLI command in order to 
 ```ts
 // prisma/seed.ts
 
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient()
 
 // A `main` function so that we can use async/await
 async function main() {
-  const newUser = await prisma.user.create({
-    data: {
-      email: 'sarah@prisma.io',
-    },
-  })
-  console.log(`New user created`, newUser.id)
+const newUser = await prisma.user.create({
+data: {
+email: 'sarah@prisma.io',
+},
+})
+console.log(`New user created`, newUser.id)
 }
 
 main()
-  .catch(e => {
-    console.error(e)
-    process.exit(1)
-  })
-  .finally(async () => {
-    await prisma.$disconnect()
-  })
-```
+.catch(e => {
+console.error(e)
+process.exit(1)
+})
+.finally(async () => {
+await prisma.$disconnect()
+})
+
+````
   </Accordion>
 </Accordions>
 
@@ -180,7 +183,8 @@ cons posts = await prisma.post.findMany({
     },
   ],
 })
-```
+````
+
 ```prisma
 model Post {
   id       Int    @id @default(autoincrement())
@@ -196,20 +200,18 @@ model User {
 }
 ```
 
-
 Additionaly, the [2.19.0](https://github.com/prisma/prisma/releases/tag/2.19.0) release makes it possible to order by the aggregates (e.g. count) of relations as well. Here's is an example that orders a list of users by the number of the posts they created:
-
-
 
 ```ts
 const users = await prisma.user.findMany({
   orderBy: {
     posts: {
-      count: 'asc',
+      count: "asc",
     },
   },
-})
+});
 ```
+
 ```prisma
 model Post {
   id       Int    @id @default(autoincrement())
@@ -224,15 +226,12 @@ model User {
   posts Post[]
 }
 ```
-
 
 #### Count on relations (Preview)
 
 This [highly requested feature](https://github.com/prisma/prisma/issues/5079) is now Preview since [2.20.0](https://github.com/prisma/prisma/releases/tag/2.20.0). You can now count the number of related records by passing `_count` to the `select` or `include` options and then specifying which relation counts should be included in the resulting objects via another `select`.
 
 For example, counting the number of posts that an user has written:
-
-
 
 ```ts
 const users = await prisma.user.findMany({
@@ -241,8 +240,9 @@ const users = await prisma.user.findMany({
       select: { posts: true },
     },
   },
-})
+});
 ```
+
 ```js
 {
   id: 1,
@@ -252,7 +252,6 @@ const users = await prisma.user.findMany({
 }
 ```
 
-
 #### Efficient bulk creates with `createMany`
 
 The new `createMany` operation (introduced in [2.16.0](https://github.com/prisma/prisma/releases/tag/2.16.0)) enables you to insert data a whole lot faster:
@@ -260,15 +259,16 @@ The new `createMany` operation (introduced in [2.16.0](https://github.com/prisma
 ```ts
 const result = await prisma.user.createMany({
   data: [
-    { email: 'alice@prisma.io' },
-    { email: 'nilu@prisma.io' },
-    { email: 'mahmoud@prisma.io' },
-    { email: 'etel@prisma.io' },
+    { email: "alice@prisma.io" },
+    { email: "nilu@prisma.io" },
+    { email: "mahmoud@prisma.io" },
+    { email: "etel@prisma.io" },
   ],
-})
+});
 
-console.log(`Created ${result.count} users!`)
+console.log(`Created ${result.count} users!`);
 ```
+
 #### Directly set foreign keys
 
 Since [2.15.0](https://github.com/prisma/prisma/releases/tag/2.16.0), it is possible to dirctly set foreign keys instead of wiring up relations via the `connect` API:
@@ -277,42 +277,43 @@ Since [2.15.0](https://github.com/prisma/prisma/releases/tag/2.16.0), it is poss
 // An example of the new API that directly sets the foreign key
 const user = await prisma.profile.create({
   data: {
-    bio: 'Hello World',
+    bio: "Hello World",
     userId: 42,
   },
-})
+});
 
 // If you prefer, you can still use the previous API via `connect`
 const user = await prisma.profile.create({
   data: {
-    bio: 'Hello World',
+    bio: "Hello World",
     user: {
       connect: { id: 42 }, // sets userId of Profile record
     },
   },
-})
+});
 ```
+
 #### Group by
 
 Since [2.14.0](https://github.com/prisma/prisma/releases/tag/2.14.0), Prisma Client supports _group by_ queries:
 
-
-
 ```ts
 const locations = await client.agent.groupBy({
-  by: ['location'],
+  by: ["location"],
   min: {
     rate: true,
   },
-})
+});
 ```
+
 ```js
 [
-  { location: "Los Angeles", min: { rate: 10.00 } },
-  { location: "London", min: { rate: 20.00 } },
-  { location: "Tokyo", min: { rate: 30.00 } }
-]
+  { location: "Los Angeles", min: { rate: 10.0 } },
+  { location: "London", min: { rate: 20.0 } },
+  { location: "Tokyo", min: { rate: 30.0 } },
+];
 ```
+
 ```prisma
 model Agent {
    id         String @id
@@ -322,14 +323,11 @@ model Agent {
  }
 ```
 
-
 Additionally, you can further filter the result by using the `having` option:
-
-
 
 ```ts
 const locations = await client.agent.groupBy({
-  by: ['location', 'rate'],
+  by: ["location", "rate"],
   min: {
     rate: true,
   },
@@ -338,14 +336,16 @@ const locations = await client.agent.groupBy({
       gte: 20,
     },
   },
-})
+});
 ```
+
 ```js
 [
-  { location: "London", rate: 20.00, min: { rate: 20.00 } },
-  { location: "Tokyo", rate: 30.00, min: { rate: 30.00 } }
-]
+  { location: "London", rate: 20.0, min: { rate: 20.0 } },
+  { location: "Tokyo", rate: 30.0, min: { rate: 30.0 } },
+];
 ```
+
 ```prisma
 model Agent {
    id         String @id
@@ -354,7 +354,6 @@ model Agent {
    rate       Float
  }
 ```
-
 
 You can learn more about these queries in the [docs](https://www.prisma.io/docs/concepts/components/prisma-client/aggregation-grouping-summarizing).
 
@@ -395,6 +394,7 @@ post, _ := client.Post.UpsertOne(
     Post.Views.Increment(1),
 ).Exec(ctx)
 ```
+
 _Dynamic filters_
 
 ```go
@@ -414,6 +414,7 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
     // ... Handle the response
 }
 ```
+
 _Transactions_
 
 ```go
@@ -430,6 +431,7 @@ if err != nil {
 	return err
 }
 ```
+
 _New types: `BigInt`, `Decimal` and `Bytes`_
 
 ```go
@@ -442,6 +444,7 @@ created, err := client.User.CreateOne(
   db.User.Views.Set(views),
 ).Exec(ctx)
 ```
+
   </Accordion>
 </Accordions>
 
@@ -493,7 +496,7 @@ Our community has built custom generators for the following use cases:
 - [`prisma-dbml-generator`](https://notiz.dev/blog/prisma-dbml-generator#dbml-generator): DBML diagrams to visualize the Prisma schema
 - [`typegraphql-prisma`](https://github.com/MichalLytek/typegraphql-prisma#readme): CRUD resolvers for TypeGraphQL
 - [`prisma-json-schema-generator`](https://github.com/pantharshit00/prisma-docs-generator): Prisma schema into JSON schema
-</Accordion>
+  </Accordion>
 </Accordions>
 
 ### Bedrock SaaS Template by Max Stoiber
@@ -502,7 +505,7 @@ Our community has built custom generators for the following use cases:
 
 He recently announced [Bedrock](https://bedrock.mxstbr.com/), a modern full-stack boilerplate with user authentication, subscription payments, teams, invitations, emails and everything else you need to build a SaaS product. We are excited that Max chooses Prisma as his ORM for this project!
 
-<TweetEmbedComp tweets={["1372483017722187776"]}  />
+<TweetEmbedComp tweets={["1372483017722187776"]} />
 
 ---
 
@@ -620,57 +623,58 @@ You can get access to all the talk recordings [here](https://prisma-data.typefor
   meetupLink="https://www.prisma.io/enterprise-event-2021"
   talks={[
     {
-      title: 'Opening Keynote',
-      author: 'Søren Bramer Schmidt',
+      title: "Opening Keynote",
+      author: "Søren Bramer Schmidt",
     },
     {
-      title: 'Cloud Native Data: The Emergence of Enterprise Data Fabrics',
-      author: 'James Governor',
+      title: "Cloud Native Data: The Emergence of Enterprise Data Fabrics",
+      author: "James Governor",
     },
     {
-      title: 'Prisma at Rapha',
-      author: 'Tom Hutchinson',
+      title: "Prisma at Rapha",
+      author: "Tom Hutchinson",
     },
     {
-      title: 'Prisma Enterprise Demo',
-      author: 'Chris Matteson',
+      title: "Prisma Enterprise Demo",
+      author: "Chris Matteson",
     },
     {
-      title: 'Prisma Fireside Chat',
-      author: 'Hervé Labas, Chris Mateson, Søren Bramer Schmidt',
+      title: "Prisma Fireside Chat",
+      author: "Hervé Labas, Chris Mateson, Søren Bramer Schmidt",
     },
     {
-      title: 'Building Products That Scale',
-      author: 'Natalie Vais',
+      title: "Building Products That Scale",
+      author: "Natalie Vais",
     },
     {
-      title: 'Developer Experience Matters',
-      author: 'DeVaris Brown',
+      title: "Developer Experience Matters",
+      author: "DeVaris Brown",
     },
     {
-      title: 'Tearing Down Data Silos',
-      author: 'Hervé Labas',
+      title: "Tearing Down Data Silos",
+      author: "Hervé Labas",
     },
     {
-      title: 'Evolution of Application Data Platforms – From Facebook to Twitter',
-      author: 'Pete Hunt',
+      title:
+        "Evolution of Application Data Platforms – From Facebook to Twitter",
+      author: "Pete Hunt",
     },
   ]}
   imagePath="/blog/posts/meetup-prisma.png"
-/> 
+/>
 
 </MeetupList>
 
 <br />
 [Watch Talks](https://prisma-data.typeform.com/to/YUln0miL)
 
-
 ## Stickers
 
 We love seeing laptops that are decorated with Prisma stickers, so we're shipping sticker packs for free to our community members! In this quarter, we've sent out over 300 sticker packs to developers that are excited about Prisma!
 
 <br />
-[Order Stickers](https://gist.github.com/nikolasburk/5b64014d41bc21594808cea82621df83)
+[Order
+Stickers](https://gist.github.com/nikolasburk/5b64014d41bc21594808cea82621df83)
 
 ---
 
@@ -693,19 +697,13 @@ Every other Thursday, [Nikolas Burk](https://twitter.com/nikolasburk) and [Ryan 
 
 #### Prisma Chats - All About Transactions with Matt Mueller, Product Manager at Prisma
 
-
-
 <Youtube videoId="_8ex2PmdXPM" />
 
 #### Prisma in Production: How to Load Test Your API with k6 (Daniel Norman)
 
-
-
 <Youtube videoId="ZV01hyVR1yw" />
 
 #### Deploying a Prisma app to Vercel and setting up connection pooling with PgBouncer (Daniel Norman)
-
-
 
 <Youtube videoId="tsOHw2T1HvI" />
 
@@ -715,30 +713,13 @@ This quarter, several Prisma folks have appeared on external channels and livest
 
 - [Ryan Chenkie @ WarsawJS Meetup #79 Online](https://www.youtube.com/watch?v=-5iz9g3-MmQ&ab_channel=WarsawJS)
 
-
-
-
-
 - [Nikolas Burk @ Apollo livestream with Kurt Kemple](https://www.youtube.com/watch?v=I4IqM5dks2w&t=2588s&ab_channel=ApolloGraphQL)
-
-
-
-
 
 - [Mahmoud Abdelwahab @ ColbyFayock](https://www.youtube.com/watch?v=5UZBhWAlyTo&ab_channel=ColbyFayock)
 
-
-
-
-
 - [Jason Kuhrt @ SFNode](https://www.youtube.com/watch?v=WUz5JulzSDA&ab_channel=SFNode)
 
-
-
-
-
 - [Nikolas Burk @ Logrocket Podcast](https://podrocket.logrocket.com/8)
-
 
 ---
 
@@ -814,7 +795,6 @@ Also, **we are hiring** for various roles! If you're interested in joining us an
 
 The best places to stay up-to-date about what we are currently working on are [GitHub issues](https://github.com/prisma/prisma/issues) and our public [roadmap](https://pris.ly/roadmap).
 
-We are currently working on a [connector for MongoDB](https://www.notion.so/prismaio/Support-MongoDB-9f115ebf4a754069a7d7eaae94dc4651) and are hoping to have an Early Access version of it ready in the next three months. 
+We are currently working on a [connector for MongoDB](https://www.notion.so/prismaio/Support-MongoDB-9f115ebf4a754069a7d7eaae94dc4651) and are hoping to have an Early Access version of it ready in the next three months.
 
 Another major area we are focusing on is the development of a _cloud product_ that will make it easier for teams and larger organizations to collaborate on Prisma projects. To get an initial impression of what we are planning, you can [watch the talks from the Prisma Enterprise Event](https://prisma-data.typeform.com/to/YUln0miL). Stay tuned and keep an eye out for more articles on this blog in the next few weeks 👀
-

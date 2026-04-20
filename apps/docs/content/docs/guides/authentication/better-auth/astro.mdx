@@ -484,7 +484,12 @@ export const prerender = false;
       <form id="signup-form">
         <input type="text" name="name" placeholder="Name" required />
         <input type="email" name="email" placeholder="Email" required />
-        <input required type="password" name="password" placeholder="Password" />
+        <input
+          required
+          type="password"
+          name="password"
+          placeholder="Password"
+        />
         <button type="submit">Sign up</button>
       </form>
       <p>Already have an account? <a href="/sign-in">Sign in here</a>.</p>
@@ -535,7 +540,12 @@ if (Astro.locals.user?.id) return Astro.redirect("/dashboard"); // [!code ++]
       <form id="signup-form">
         <input type="text" name="name" placeholder="Name" required />
         <input type="email" name="email" placeholder="Email" required />
-        <input required type="password" name="password" placeholder="Password" />
+        <input
+          required
+          type="password"
+          name="password"
+          placeholder="Password"
+        />
         <button type="submit">Sign up</button>
       </form>
       <p>Already have an account? <a href="/sign-in">Sign in here</a>.</p>
@@ -636,7 +646,12 @@ export const prerender = false;
       <h1>Sign In</h1>
       <form id="signin-form">
         <input type="email" name="email" placeholder="Email" required />
-        <input required type="password" name="password" placeholder="Password" />
+        <input
+          required
+          type="password"
+          name="password"
+          placeholder="Password"
+        />
         <button type="submit">Sign In</button>
       </form>
       <p>Don't have an account? <a href="/sign-up">Sign up here</a>.</p>
@@ -683,7 +698,12 @@ if (Astro.locals.user?.id) return Astro.redirect("/dashboard"); // [!code ++]
       <h1>Sign In</h1>
       <form id="signin-form">
         <input type="email" name="email" placeholder="Email" required />
-        <input required type="password" name="password" placeholder="Password" />
+        <input
+          required
+          type="password"
+          name="password"
+          placeholder="Password"
+        />
         <button type="submit">Sign In</button>
       </form>
       <p>Don't have an account? <a href="/sign-up">Sign up here</a>.</p>

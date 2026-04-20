@@ -11,8 +11,8 @@ heroImageAlt: "GraphQL vs Firebase"
 ---
 
 With the variety of server-side technologies today, developers have a lot of choices when it comes to deciding what
-  kind of backend to use for the next app. In this article, we want to explore the differences between Firebase and
-  GraphQL, two very popular server-side technologies.
+kind of backend to use for the next app. In this article, we want to explore the differences between Firebase and
+GraphQL, two very popular server-side technologies.
 
 > If you’re just getting started with GraphQL, check out the [How to GraphQL](https://www.howtographql.com) fullstack tutorial website for a holistic and in-depth learning experience.
 
@@ -63,6 +63,7 @@ type Tweet {
   author: User
 }
 ```
+
 > **Note**: This is a data model as it's used by Prisma to create a `User` and a `Tweet` table in the database and generate corresponding CRUD operations in the GraphQL schema.
 
 Strong type systems have a number of advantages. First and foremost, they provide the ability to update and extend the data model in a safe way during any stage of the development process. That’s because types can be checked and validated at compile- and build-time. With this approach, many common errors that relate to the shape of the data flowing through an app are caught. In that sense, a strongly typed application brings together the best of both worlds when it comes to flexibility _and_ safety!
@@ -103,6 +104,7 @@ query {
   }
 }
 ```
+
 This query asks for all the tweets that are currently stored in the database. The server response will include all the pieces of information that are specified in the _selection set_ of the query. Here that’s the `text` of the `tweets` as well as the `username` of the `author`. A response could potentially look as follows:
 
 ```json
@@ -125,6 +127,7 @@ This query asks for all the tweets that are currently stored in the database. Th
   }
 }
 ```
+
 Another way of looking at a GraphQL query is as a _selection of JSON fields_. The query has the same _shape_ as the JSON response, so it can be seen as a JSON object that has _only keys_ but _no values_.
 
 This simple query already gives an idea about the power of GraphQL queries when it comes to retrieving _nested_ information. In the above example above, we’re only going one level deep by following the relation from `User` to `Tweet` (via the `author` field). However, we could extend the query and also ask for the last three `followers` of each `author`:
@@ -142,6 +145,7 @@ query {
   }
 }
 ```
+
 Having the ability to query nested structures by simply following the edges of the data graph is an immensely powerful feature that makes for much of the power and expressiveness of GraphQL!
 
 In addition to `last` a GraphQL API could accept a few more related arguments for pagination such as `first`, `before`, `after` and `skip` that can be passed when querying a _to-many-relation_. This capability of an API makes it very easy to implement pagination on the client by asking for a specific range of objects from the list.
@@ -160,6 +164,7 @@ query {
   }
 }
 ```
+
 Another query could retrieve all tweets that have been sent _after_ December 24, 2016:
 
 ```graphql
@@ -172,6 +177,7 @@ Another query could retrieve all tweets that have been sent _after_ December 24,
   }
 }
 ```
+
 It’s further possible to combine filter conditions arbitrarily using the `AND` and `OR` operators.
 
 ## Updating Data
@@ -191,6 +197,7 @@ const updates = { }
 updates['user/tweets/' + newTweetKey] = tweet
 firebase.database().ref().update(updates)
 ```
+
 With this approach, Firebase suffers from the same limitations that we’ve already noted with querying data. Most notably there isn’t a good way of performing more complex writes to the database in most scenarios, which means again that a lot of work will have to be done on the client-side to compensate for the lack of server-side capabilities.
 
 ### Updating and Saving Data with GraphQL Mutations
@@ -199,11 +206,17 @@ In GraphQL, changes to the backend are done using so-called [mutations](http://g
 
 ```graphql
 mutation {
-  createTweet(data: { text: "GraphQL is awesome!", author: { connect: { id: "abcdefghijklmnopq" } } }) {
+  createTweet(
+    data: {
+      text: "GraphQL is awesome!"
+      author: { connect: { id: "abcdefghijklmnopq" } }
+    }
+  ) {
     id
   }
 }
 ```
+
 This mutation creates a new `tweet`, associating it with the `author` that is identified by the ID `"abcdefghijklmnopq"` while also returning the `id` of the new `tweet`.
 
 Mutations, just like queries, allow to specify a _selection set_ that should be returned by the server after the mutation was performed. This allows for easily accessing the new data without additional server roundtrips!
@@ -212,7 +225,12 @@ Another handy side-effect of performing mutations in the GraphQL way is the abil
 
 ```graphql
 mutation {
-  createUser(data: { username: "lee", tweets: [{ create: { text: "This is my first Tweet 😎" } }] }) {
+  createUser(
+    data: {
+      username: "lee"
+      tweets: [{ create: { text: "This is my first Tweet 😎" } }]
+    }
+  ) {
     id
     tweets {
       id
@@ -220,6 +238,7 @@ mutation {
   }
 }
 ```
+
 ## Realtime Functionality
 
 ### Realtime Connection to the Firebase DB
@@ -232,6 +251,7 @@ The realtime functionality in Firebase can be used by subscribing to specific da
 var tweets = firebase.database().ref('user/tweets')
 tweets.on('value', snapshot => { console.log(snapshot.val()) }
 ```
+
 ### Sophisticated Realtime Updates with GraphQL Subscriptions
 
 Realtime functionality in GraphQL can be implemented using the concept of [_subscriptions_](http://graphql.org/blog/subscriptions-in-graphql-and-relay/). Subscriptions are syntactically similar to queries and mutations, thus again allowing the developer to specify their data requirements in a declarative fashion.
@@ -257,6 +277,7 @@ subscription {
   }
 }
 ```
+
 There are two things to note about how the payload of this subscription is specified:
 
 - the `mutation` field carries information about the kind of mutation that was performed (`CREATED`, `UPDATED` or `DELETED`)
@@ -276,6 +297,7 @@ subscription {
   }
 }
 ```
+
 By including `previousValues` in the payload, we're able to not only retrieve the new value for the tweet's text (which is nested under `node`) but also the value of `text` _before_ the change (this also works for `DELETE` mutations).
 
 If you want to know more about how subscriptions work in GraphQL and how they can be used in a _React_ application, you can check out these tutorials:
@@ -303,6 +325,7 @@ A simple version of such a JSON file could look as follows. Here _read_ permissi
   }
 }
 ```
+
 In general, it’s possible to specify rules for _reading_ and _writing_ data. However, it is not possible to distinguish out-of-the-box between different types of _writes_, such as _creating_, _updating_ or _deleting_ data.
 
 As an example, this restriction means that you can not express in a simple manner that only a specific audience should be able to create new tweets and a different audience should be able to create _and_ delete tweets. It’s generally still possible to write such permissions but they require getting into the weeds of the Firebase permission system and writing complex and long permission strings.
@@ -347,6 +370,7 @@ npm install -g graphql-cli
 # Create a fullstack app with React & GraphQL
 graphql create myapp -b react-fullstack-basic
 ```
+
 Also be sure to check out these resources for more awesome GraphQL content:
 
 - [How to GraphQL](https://www.howtographql.com/): Fullstack tutorial website
@@ -358,4 +382,3 @@ Also be sure to check out these resources for more awesome GraphQL content:
 Firebase’s roots as a realtime database still linger in the more evolved backend solution that it is today. Though many features like hosting and cloud storage have been added over time, many _essential API features_ like complex querying or specifying permission rules often feel unnatural and are difficult if not impossible to accomplish. The unstructured nature of the stored JSON data has severe implications for building and maintaining a sustainable codebase over time.
 
 With GraphQL, developers get the best of both worlds in terms of flexibility and safety. The strongly-typed schema can be used in many ways, in particular for optimizing performance and developer workflows between client and server. Prisma is the easiest way to build GraphQL servers by providing an open-source and performant ["GraphQL ORM" layer](https://github.com/prismagraphql/prisma#is-prisma-an-orm).
-

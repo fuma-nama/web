@@ -1,17 +1,17 @@
-'use client';
-import { Check, ChevronsUpDown } from 'lucide-react';
-import { type ComponentProps, type ReactNode, useMemo, useState } from 'react';
-import { usePathname } from 'fumadocs-core/framework';
-import { cn } from '@prisma-docs/ui/lib/cn';
-import { normalize, isActive } from '../../../../lib/urls';
-import { useSidebar } from '../base';
-import { Popover, PopoverContent, PopoverTrigger } from '../../../ui/popover';
-import type { SidebarTab } from './index';
-import type { LinkItemType } from '../../link-item';
-import { LinkItem } from '../../link-item';
+"use client";
+import { Check, ChevronsUpDown } from "lucide-react";
+import { type ComponentProps, type ReactNode, useMemo, useState } from "react";
+import { usePathname } from "fumadocs-core/framework";
+import { cn } from "@prisma-docs/ui/lib/cn";
+import { normalize, isActive } from "../../../../lib/urls";
+import { useSidebar } from "../base";
+import { Popover, PopoverContent, PopoverTrigger } from "../../../ui/popover";
+import type { SidebarTab } from "./index";
+import type { LinkItemType } from "../../link-item";
+import { LinkItem } from "../../link-item";
 
 export interface SidebarTabWithProps extends SidebarTab {
-  props?: ComponentProps<'a'>;
+  props?: ComponentProps<"a">;
 }
 
 export function SidebarTabsDropdown({
@@ -21,40 +21,40 @@ export function SidebarTabsDropdown({
 }: {
   placeholder?: ReactNode;
   links: LinkItemType[];
-} & ComponentProps<'button'>) {
+} & ComponentProps<"button">) {
   const [open, setOpen] = useState(false);
   const { closeOnRedirect } = useSidebar();
   const pathname = usePathname();
 
   function hasUrl(item: LinkItemType): item is LinkItemType & { url: string } {
     return (
-      'url' in item &&
-      typeof (item as any).url === 'string' &&
+      "url" in item &&
+      typeof (item as any).url === "string" &&
       !!(item as any).url
     );
   }
   function isMenu(
     item: LinkItemType,
-  ): item is Extract<LinkItemType, { type: 'menu' }> {
-    return (item as any)?.type === 'menu';
+  ): item is Extract<LinkItemType, { type: "menu" }> {
+    return (item as any)?.type === "menu";
   }
 
   const options = useMemo(() => {
     return links.filter(
-      (item) => item.type !== 'icon' && (hasUrl(item) || isMenu(item)),
+      (item) => item.type !== "icon" && (hasUrl(item) || isMenu(item)),
     );
   }, [links]);
 
   const isLinkActive = (item: LinkItemType & { url: string }) => {
     // Only items with a URL are considered
-    const activeMode = (item as any).active ?? 'url';
-    return isActive(item.url, pathname, activeMode === 'nested-url');
+    const activeMode = (item as any).active ?? "url";
+    return isActive(item.url, pathname, activeMode === "nested-url");
   };
   const isMenuAnyChildActive = (
-    item: Extract<LinkItemType, { type: 'menu' }>,
+    item: Extract<LinkItemType, { type: "menu" }>,
   ) => {
     for (const child of item.items) {
-      if ('url' in child && child.url && isLinkActive(child as any))
+      if ("url" in child && child.url && isLinkActive(child as any))
         return true;
     }
     return false;
@@ -72,17 +72,17 @@ export function SidebarTabsDropdown({
 
   const item = selected ? (
     <>
-      {'icon' in selected && (selected as any).icon && (
+      {"icon" in selected && (selected as any).icon && (
         <div className="size-9 shrink-0 empty:hidden md:size-5">
           {selected.icon}
         </div>
       )}
       <div>
         <p className="text-sm font-medium">
-          {'text' in selected ? (selected as any).text : null}
+          {"text" in selected ? (selected as any).text : null}
         </p>
         <p className="text-sm text-fd-muted-foreground empty:hidden md:hidden">
-          {'description' in selected ? (selected as any).description : null}
+          {"description" in selected ? (selected as any).description : null}
         </p>
       </div>
     </>
@@ -96,7 +96,7 @@ export function SidebarTabsDropdown({
         <PopoverTrigger
           {...props}
           className={cn(
-            'flex items-center gap-2 rounded-lg p-2 border bg-fd-secondary/50 text-start text-fd-secondary-foreground transition-colors hover:bg-fd-accent data-open:bg-fd-accent data-open:text-fd-accent-foreground',
+            "flex items-center gap-2 rounded-lg p-2 border bg-fd-secondary/50 text-start text-fd-secondary-foreground transition-colors hover:bg-fd-accent data-open:bg-fd-accent data-open:text-fd-accent-foreground",
             props.className,
           )}
         >
@@ -117,27 +117,27 @@ export function SidebarTabsDropdown({
                 item={opt as any}
                 onClick={onClick}
                 className={cn(
-                  'flex items-center gap-2 rounded-lg p-1.5 hover:bg-fd-accent hover:text-fd-accent-foreground',
+                  "flex items-center gap-2 rounded-lg p-1.5 hover:bg-fd-accent hover:text-fd-accent-foreground",
                 )}
               >
-                {'icon' in opt && (opt as any).icon && (
+                {"icon" in opt && (opt as any).icon && (
                   <div className="shrink-0 size-9 md:mb-auto md:size-5 empty:hidden">
                     {(opt as any).icon}
                   </div>
                 )}
                 <div>
                   <p className="text-sm font-medium leading-none">
-                    {'text' in opt ? (opt as any).text : null}
+                    {"text" in opt ? (opt as any).text : null}
                   </p>
                   <p className="text-[0.8125rem] text-fd-muted-foreground mt-1 empty:hidden">
-                    {'description' in opt ? (opt as any).description : null}
+                    {"description" in opt ? (opt as any).description : null}
                   </p>
                 </div>
 
                 <Check
                   className={cn(
-                    'shrink-0 ms-auto size-3.5 text-fd-primary',
-                    !active && 'invisible',
+                    "shrink-0 ms-auto size-3.5 text-fd-primary",
+                    !active && "invisible",
                   )}
                 />
               </LinkItem>
@@ -151,7 +151,7 @@ export function SidebarTabsDropdown({
                   {opt.text}
                 </div>
                 {opt.items.map((child, cIdx) => {
-                  if (!('url' in child) || !child.url) return null;
+                  if (!("url" in child) || !child.url) return null;
                   const childActive = isLinkActive(child as any);
                   return (
                     <LinkItem
@@ -159,28 +159,28 @@ export function SidebarTabsDropdown({
                       item={child as any}
                       onClick={onClick}
                       className={cn(
-                        'flex items-center gap-2 rounded-lg p-1.5 hover:bg-fd-accent hover:text-fd-accent-foreground',
+                        "flex items-center gap-2 rounded-lg p-1.5 hover:bg-fd-accent hover:text-fd-accent-foreground",
                       )}
                     >
-                      {'icon' in child && (child as any).icon && (
+                      {"icon" in child && (child as any).icon && (
                         <div className="shrink-0 size-9 md:mb-auto md:size-5 empty:hidden">
                           {(child as any).icon}
                         </div>
                       )}
                       <div>
                         <p className="text-sm font-medium leading-none">
-                          {'text' in child ? (child as any).text : null}
+                          {"text" in child ? (child as any).text : null}
                         </p>
                         <p className="text-[0.8125rem] text-fd-muted-foreground mt-1 empty:hidden">
-                          {'description' in child
+                          {"description" in child
                             ? (child as any).description
                             : null}
                         </p>
                       </div>
                       <Check
                         className={cn(
-                          'shrink-0 ms-auto size-3.5 text-fd-primary',
-                          !childActive && 'invisible',
+                          "shrink-0 ms-auto size-3.5 text-fd-primary",
+                          !childActive && "invisible",
                         )}
                       />
                     </LinkItem>

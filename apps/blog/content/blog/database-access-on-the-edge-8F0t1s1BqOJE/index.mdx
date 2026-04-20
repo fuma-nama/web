@@ -15,7 +15,6 @@ tags:
 
 The Edge enables application deployment across the globe. This article explores what Edge environments are, the challenges that arise when working in Edge environments and how to access databases on the Edge using Prisma Accelerate.
 
-
 ## What is the Edge?
 
 Traditionally, applications would be deployed to a single region or data center, in either a virtual machine, Platform as a Service (PaaS) like Heroku, or Functions as a Service (FaaS) like AWS Lambda. While this deployment pattern worked fine, the problem this created was that a user located on the other side of the globe would experience slightly longer response times.
@@ -29,7 +28,6 @@ We took this a step further and introduced Edge computing such as [Vercel's Edge
 {/* ![[Source] Cloudflare workers](https://user-images.githubusercontent.com/33921841/180796884-3636b4f4-c065-4a85-8682-f7ee7114e2f6.png) */}
 
 Edge computing works similarly to serverless functions, without the cold starts because they have a smaller runtime. This is great because web apps would perform better, but it comes at a cost: A smaller runtime on the Edge means that you don't have the exact same capabilities as you would have in regular Node.js runtime used in serverless functions.
-
 
 ### Edge functions can easily exhaust database connections
 
@@ -60,7 +58,6 @@ While the architecture shown in this article might not cater to real-world use c
 Here's a video from Jeff Delaney, [Fireship](https://fireship.io/), on whether "edge" computing is faster.
 
 <Youtube videoId="yOP5-3_WFus" />
-
 
 ## Demo: Database access on the Edge
 
@@ -93,6 +90,7 @@ model Quote {
 ### Prerequisites
 
 To successfully follow along, you will need:
+
 - Node.js
 - A cloud-hosted [PostgreSQL](https://postgresql.org/) database ([set up a free PostgreSQL database on Supabase](https://dev.to/prisma/set-up-a-free-postgresql-database-on-supabase-to-use-with-prisma-3pk6) or on [Neon](https://neon.tech/))
 - A [GitHub](https://github.com/) account to host your application code
@@ -117,8 +115,8 @@ The page and API Route are also configured to use Vercel’s [Edge Runtime](http
 
 ```ts
 export const config = {
-  runtime: 'experimental-edge',
-}
+  runtime: "experimental-edge",
+};
 ```
 
 ### Set up the database
@@ -176,20 +174,19 @@ git push -u origin main
 
 Once you’ve set up your repository, navigate to the [Platform Console](https://console.prisma.io/) and sign up for a free account if you don’t have one yet.
 
-
 After signing up:
 
 1. Create a new project by clicking the **New project** button
-  ![](/database-access-on-the-edge-8F0t1s1BqOJE/imgs/create-project.png)
+   ![](/database-access-on-the-edge-8F0t1s1BqOJE/imgs/create-project.png)
 
 2. Fill out your **Project’s name** and then click the **Create Project** button
-  ![](/database-access-on-the-edge-8F0t1s1BqOJE/imgs/name-your-project.png)
+   ![](/database-access-on-the-edge-8F0t1s1BqOJE/imgs/name-your-project.png)
 
 3. Enable Accelerate by clicking the **Enable Accelerate** button
-  ![](/database-access-on-the-edge-8F0t1s1BqOJE/imgs/project-dashboard.png)
+   ![](/database-access-on-the-edge-8F0t1s1BqOJE/imgs/project-dashboard.png)
 
 4. Add your database connection string to the **Database connection string** field and select a region close to your database from the **Region** drop-down
-  ![](/database-access-on-the-edge-8F0t1s1BqOJE/imgs/add-database-url.png)
+   ![](/database-access-on-the-edge-8F0t1s1BqOJE/imgs/add-database-url.png)
 
 5. Generate an Accelerate connection string by clicking the **Generate API key** button
 
@@ -207,7 +204,7 @@ MIGRATE_DATABASE_URL="postgresql://USER:PASSWORD@HOST:PORT/DATABASE"
 ```
 
 > The `MIGRATE_DATABASE_URL` variable will be used to apply any pending migrations during the build process.
-The `package.json` file uses the `vercel-build` hook script to run `prisma migrate deploy && next build`
+> The `package.json` file uses the `vercel-build` hook script to run `prisma migrate deploy && next build`
 
 Then install the [Prisma Accelerate client extension](https://www.npmjs.com/package/@prisma/extension-accelerate):
 

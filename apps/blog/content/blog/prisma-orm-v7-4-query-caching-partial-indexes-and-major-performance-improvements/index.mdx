@@ -63,10 +63,10 @@ One of the main pieces of feedback we’ve received about Prisma 7 is that perfo
 
 We’ve added a new query caching mechanism so that Prisma Client does not rebuild the SQL statement on every request. Let’s look at the numbers:
 
-| Metric                       | Without caching (7.3.0)  | With caching (7.4.0)   |
-| ---------------------------- | ------------------------ | ---------------------- |
-| Per-query compilation cost   | 0.1-1ms                  | 1-10µs                 |
-| Typical cache hit rate       | --                       | ~100%                  |
+| Metric                     | Without caching (7.3.0) | With caching (7.4.0) |
+| -------------------------- | ----------------------- | -------------------- |
+| Per-query compilation cost | 0.1-1ms                 | 1-10µs               |
+| Typical cache hit rate     | --                      | ~100%                |
 
 What this represents is that once a query has been built in Prisma Client, we can reuse its base structure and template out the dynamic parts, removing the need to rebuild subsequent queries.
 
@@ -102,20 +102,19 @@ Query caching is one part of solving this. Take these two queries:
 // Get Alice's user info
 const alice = await prisma.user.findUnique({
   where: {
-    email: 'alice@prisma.io',
+    email: "alice@prisma.io",
   },
 });
 
 // Get Bob's user infor
 const bob = await prisma.user.findUnique({
   where: {
-    email: 'bob@prisma.io',
+    email: "bob@prisma.io",
   },
 });
 ```
 
 These two queries have the exact same shape, the only dynamic part is the email. Prisma Client now parameterizes the query and reuses the static parts with minimal overhead. Parameterization separates the query structure from the values being passed:
- 
 
 ```tsx
 prisma.user.findUnique({
@@ -144,12 +143,12 @@ Structural parts of the query that affect the query plan (like field selections,
 Now, there are still other factors at play here that could impact overall performance. Node is single threaded, and doesn’t have the multi-threaded runtime provided by Rust/Tokio. Options to consider are to use the built-in `node:cluster` module, a process manager like PM2, or your deployment platform's scaling features if you wish to recover some of that parallelism. This benefits not just Prisma but your entire application's ability to handle concurrent load:
 
 ```tsx
-import cluster from 'node:cluster'
-import { availableParallelism } from 'node:os'
+import cluster from "node:cluster";
+import { availableParallelism } from "node:os";
 
 if (cluster.isPrimary) {
   for (let i = 0; i < availableParallelism(); i++) {
-    cluster.fork()
+    cluster.fork();
   }
 } else {
   // Start your application server here
@@ -159,7 +158,6 @@ if (cluster.isPrimary) {
 ## Keeping things moving
 
 We are continuing to improve Prisma 7 performance and want to hear from you if you are still experiencing performance issues after applying the recommendations above. Please open an issue on [GitHub](https://github.com/prisma/prisma/issues) with details about your setup and the performance characteristics you are seeing.
-
 
 Be sure to follow us on social media to stay up to date with the latest releases of Prisma ORM and Prisma Postgres:
 

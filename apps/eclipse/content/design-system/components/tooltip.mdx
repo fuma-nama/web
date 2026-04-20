@@ -3,7 +3,13 @@ title: Tooltip
 description: A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.
 ---
 
-import { Tooltip, TooltipContent, TooltipTrigger, TooltipExample, Button } from "@prisma/eclipse";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+  TooltipExample,
+  Button,
+} from "@prisma/eclipse";
 
 ## Usage
 
@@ -12,11 +18,11 @@ import { Tooltip, TooltipContent, TooltipTrigger, TooltipExample, Button } from 
 The Tooltip component displays helpful information when users hover over or focus on an element.
 
 ```tsx
-import { 
-  Tooltip, 
-  TooltipContent, 
-  TooltipProvider, 
-  TooltipTrigger 
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
 } from "@prisma/eclipse";
 
 export function BasicTooltip() {
@@ -53,12 +59,12 @@ export function BasicTooltip() {
 Use the `asChild` prop to apply the tooltip to a button component.
 
 ```tsx
-import { 
-  Tooltip, 
-  TooltipContent, 
-  TooltipProvider, 
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
   TooltipTrigger,
-  Button 
+  Button,
 } from "@prisma/eclipse";
 
 export function ButtonTooltip() {
@@ -105,12 +111,12 @@ export function ButtonTooltip() {
 Control where the tooltip appears using the `side` prop.
 
 ```tsx
-import { 
-  Tooltip, 
-  TooltipContent, 
-  TooltipProvider, 
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
   TooltipTrigger,
-  Button 
+  Button,
 } from "@prisma/eclipse";
 
 export function PositionedTooltips() {
@@ -202,12 +208,12 @@ export function PositionedTooltips() {
 Control the delay before the tooltip appears using the `delayDuration` prop on the Tooltip component.
 
 ```tsx
-import { 
-  Tooltip, 
-  TooltipContent, 
-  TooltipProvider, 
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
   TooltipTrigger,
-  Button 
+  Button,
 } from "@prisma/eclipse";
 
 export function DelayedTooltip() {
@@ -262,12 +268,12 @@ export function DelayedTooltip() {
 Tooltips can contain rich content including formatted text, links, and icons.
 
 ```tsx
-import { 
-  Tooltip, 
-  TooltipContent, 
-  TooltipProvider, 
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
   TooltipTrigger,
-  Button 
+  Button,
 } from "@prisma/eclipse";
 
 export function RichTooltip() {
@@ -280,7 +286,9 @@ export function RichTooltip() {
         <TooltipContent>
           <div className="space-y-1">
             <p className="font-semibold">Prisma Accelerate</p>
-            <p className="text-xs">Global database cache with scalable connection pooling</p>
+            <p className="text-xs">
+              Global database cache with scalable connection pooling
+            </p>
           </div>
         </TooltipContent>
       </Tooltip>
@@ -300,7 +308,9 @@ export function RichTooltip() {
       <TooltipContent>
         <div className="space-y-1">
           <p className="font-semibold">Prisma Accelerate</p>
-          <p className="text-xs">Global database cache with scalable connection pooling</p>
+          <p className="text-xs">
+            Global database cache with scalable connection pooling
+          </p>
         </div>
       </TooltipContent>
     </Tooltip>
@@ -312,12 +322,12 @@ export function RichTooltip() {
 When using multiple tooltips, wrap them all in a single `TooltipProvider` for better performance.
 
 ```tsx
-import { 
-  Tooltip, 
-  TooltipContent, 
-  TooltipProvider, 
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
   TooltipTrigger,
-  Button 
+  Button,
 } from "@prisma/eclipse";
 
 export function MultipleTooltips() {
@@ -361,12 +371,12 @@ export function MultipleTooltips() {
 When applying tooltips to disabled elements, wrap the element in a `span` with the tooltip trigger.
 
 ```tsx
-import { 
-  Tooltip, 
-  TooltipContent, 
-  TooltipProvider, 
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
   TooltipTrigger,
-  Button 
+  Button,
 } from "@prisma/eclipse";
 
 export function DisabledTooltip() {
@@ -576,9 +586,7 @@ export function App() {
 export function Toolbar() {
   return (
     <TooltipProvider>
-      <div className="flex gap-2">
-        {/* Multiple tooltips here */}
-      </div>
+      <div className="flex gap-2">{/* Multiple tooltips here */}</div>
     </TooltipProvider>
   );
 }

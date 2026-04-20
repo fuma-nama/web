@@ -11,7 +11,17 @@ export const symbols = {
   USD: "$",
 } as const;
 
-export type Symbol = "EUR" | "AUD" | "INR" | "GBP" | "CAD" | "BRL" | "JPY" | "CNY" | "KRW" | "USD";
+export type Symbol =
+  | "EUR"
+  | "AUD"
+  | "INR"
+  | "GBP"
+  | "CAD"
+  | "BRL"
+  | "JPY"
+  | "CNY"
+  | "KRW"
+  | "USD";
 
 export const exchangeRates: Record<Symbol, number> = {
   USD: 1,
@@ -26,7 +36,10 @@ export const exchangeRates: Record<Symbol, number> = {
   KRW: 1370,
 };
 
-export const currencyConfig: Record<Symbol, { decimals: number; microDecimals: number }> = {
+export const currencyConfig: Record<
+  Symbol,
+  { decimals: number; microDecimals: number }
+> = {
   USD: { decimals: 2, microDecimals: 4 },
   EUR: { decimals: 2, microDecimals: 4 },
   GBP: { decimals: 2, microDecimals: 4 },
@@ -68,7 +81,10 @@ export type UsagePricing = {
   yearlyDiscount: number;
 };
 
-export function formatAmountForAllCurrencies(amountUsd: number, digits: number): CurrencyMap {
+export function formatAmountForAllCurrencies(
+  amountUsd: number,
+  digits: number,
+): CurrencyMap {
   return Object.fromEntries(
     Object.entries(symbols).map(([code, symbol]) => {
       const typedCode = code as Symbol;
@@ -211,11 +227,35 @@ export const comparisonSections: Array<{
     rows: [
       ["Connection limit (direct)", "10", "10", "50", "100"],
       ["Connection limit (pooled)", "10", "100", "500", "1000"],
-      ["Connection idle timeout", "60 minutes", "60 minutes", "60 minutes", "60 minutes"],
+      [
+        "Connection idle timeout",
+        "60 minutes",
+        "60 minutes",
+        "60 minutes",
+        "60 minutes",
+      ],
       ["Auto-scaling", "✓", "✓", "✓", "✓"],
-      ["Operation response size", "unlimited", "unlimited", "unlimited", "unlimited"],
-      ["Operation duration for db queries", "unlimited", "unlimited", "unlimited", "unlimited"],
-      ["Operation duration for interactive", "unlimited", "unlimited", "unlimited", "unlimited"],
+      [
+        "Operation response size",
+        "unlimited",
+        "unlimited",
+        "unlimited",
+        "unlimited",
+      ],
+      [
+        "Operation duration for db queries",
+        "unlimited",
+        "unlimited",
+        "unlimited",
+        "unlimited",
+      ],
+      [
+        "Operation duration for interactive",
+        "unlimited",
+        "unlimited",
+        "unlimited",
+        "unlimited",
+      ],
     ],
   },
   {
@@ -234,7 +274,13 @@ export const comparisonSections: Array<{
           price: formatAmountForAllCurrencies(0.001, 3),
         },
       ],
-      ["Cache purge requests", "5 per hour", "5 per hour", "10 per hour", "20 per hour"],
+      [
+        "Cache purge requests",
+        "5 per hour",
+        "5 per hour",
+        "10 per hour",
+        "20 per hour",
+      ],
     ],
   },
   {
@@ -249,7 +295,13 @@ export const comparisonSections: Array<{
     title: "Platform",
     rows: [
       ["Support", "Community", "Community", "Standard", "Premium"],
-      ["Compliance", "GDPR", "GDPR", "GDPR / HIPAA", "GDPR / HIPAA / SOC2 / ISO:27001"],
+      [
+        "Compliance",
+        "GDPR",
+        "GDPR",
+        "GDPR / HIPAA",
+        "GDPR / HIPAA / SOC2 / ISO:27001",
+      ],
     ],
   },
 ];
@@ -276,12 +328,14 @@ export const faqs: Array<{ question: string; answer: string }> = [
       "<p>Yes, you can set limits to ensure you never get a surprise bill. We’ll send you alerts when you reach 75% of your set limit, and if you reach 100% we’ll pause access to your database. This ensures you’ll never have an unexpected bill, and you can always be in complete control of your spending.</p>",
   },
   {
-    question: "Why do you count usage on account level, rather than database level?",
+    question:
+      "Why do you count usage on account level, rather than database level?",
     answer:
       "<p>We record usage at the account level because it gives you, the developer, the most flexibility. You can spin up one database or 20 databases without any extra cost — pay only for the operations you make and storage you use across all of them.</p><p>This makes experimenting, prototyping and testing ideas super easy and seamless, because you don't have to think about how many databases you create.</p>",
   },
   {
-    question: "What’s the difference between usage pricing and traditional database pricing?",
+    question:
+      "What’s the difference between usage pricing and traditional database pricing?",
     answer:
       '<p>Traditional pricing is where you choose a fixed database size and price, and the amount you pay is generally predictable. But that comes at the expense of flexibility, meaning it’s much harder to scale up and down with your application’s demands. This is usually fine for a small test database, but for production workloads, it can be burdensome: If you have low-traffic periods, and high-traffic periods (most production apps do) then you either under-provision and risk having downtime in busy periods, or you over-provision and pay a lot more for your database.</p><p>With usage pricing, you only pay for what you need, when you need it. If your app has a quiet period, you’ll pay less. If things get busy, we can simply scale up to handle it for you. Prisma Postgres comes with budget controls, so you can always stay in control of your spending, while taking advantage of the flexibility. You can learn more <a class="underline underline-offset-2 decoration-[var(--color-foreground-ppg)] text-foreground-neutral hover:text-foreground-neutral-weak" href="https://www.prisma.io/blog/operations-based-billing#why-is-an-operations-based-pricing-model-better?utm_source=pricing_website&amp;utm_content=faq">on why operations-based pricing is better</a> in our blog post.</p>',
   },
@@ -306,7 +360,8 @@ export const faqs: Array<{ question: string; answer: string }> = [
       '<p>Building a startup is hard. Prisma helps you stay laser-focused on what matters the most, which is building features and winning users.</p><p>We offer $10k in credits to eligible startups. Learn more at <a class="underline underline-offset-2 decoration-[var(--color-foreground-ppg)] text-foreground-neutral hover:text-foreground-neutral-weak" href="https://prisma.io/startups">prisma.io/startups</a>.</p>',
   },
   {
-    question: "How do I upgrade my plan if I am using Prisma Postgres via Vercel?",
+    question:
+      "How do I upgrade my plan if I am using Prisma Postgres via Vercel?",
     answer:
       '<p>If you\'re using Prisma Postgres via Vercel, your billing is handled directly by Vercel. To upgrade your plan, you\'ll need to do so in the Vercel Dashboard. The instructions are available in our <a class="underline underline-offset-2 decoration-[var(--color-foreground-ppg)] text-foreground-neutral hover:text-foreground-neutral-weak" href="https://www.prisma.io/docs/postgres/more/faq#how-do-i-upgrade-my-plan-if-i-am-using-prisma-postgres-via-vercel">docs</a>.</p>',
   },

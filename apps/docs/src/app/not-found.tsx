@@ -1,8 +1,8 @@
-import { source } from "@/lib/source";
+import { getSource } from "@/lib/source";
 import { baseOptions, links } from "@/lib/layout.shared";
 import { VersionSwitcher } from "@/components/version-switcher";
 import type { LinkItemType } from "fumadocs-ui/layouts/shared";
-import { DocsLayout } from "@/components/layout/notebook";
+import { DocsLayout, DocsLayoutProps } from "@/components/layout/notebook";
 import { DocsBody, DocsPage } from "@/components/layout/notebook/page";
 import { LATEST_VERSION } from "@/lib/version";
 import { NotFoundTracker } from "@/components/not-found-tracker";
@@ -13,7 +13,8 @@ export const metadata: Metadata = {
   description: "The page you were looking for could not be found.",
 };
 
-export default function NotFound() {
+export default async function NotFound() {
+  const source = await getSource();
   const { nav, ...base } = baseOptions();
 
   const navbarLinks: LinkItemType[] = [
@@ -28,7 +29,7 @@ export default function NotFound() {
     <DocsLayout
       {...base}
       links={navbarLinks}
-      nav={{ ...nav }}
+      nav={{ ...nav } as DocsLayoutProps["nav"]}
       sidebar={{ collapsible: false }}
       tree={source.pageTree}
     >

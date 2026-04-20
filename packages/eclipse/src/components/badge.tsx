@@ -34,8 +34,7 @@ const badgeVariants = cva(
  * Badge props interface
  */
 export interface BadgeProps
-  extends
-    Omit<React.HTMLAttributes<HTMLSpanElement>, "children">,
+  extends Omit<React.HTMLAttributes<HTMLSpanElement>, "children">,
     VariantProps<typeof badgeVariants> {
   /**
    * The color variant of the badge

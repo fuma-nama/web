@@ -20,7 +20,7 @@ Since its initial release, [Prisma Accelerate](https://pris.ly/as-accelerate) ha
 
 Connection pooling is often overlooked or ignored for too long when it comes to database performance.
 
-When starting out, you can manage without it. Even small database servers can handle 1 or 2 application servers establishing 5-10 connections. As you grow, better connection management is a quick and easy win. 
+When starting out, you can manage without it. Even small database servers can handle 1 or 2 application servers establishing 5-10 connections. As you grow, better connection management is a quick and easy win.
 
 Most assume a connection pooler is only needed for massive scale, but it's beneficial to implement it well before that!
 
@@ -32,7 +32,7 @@ When your application interacts with a database, it typically follows these step
 2. Send queries to the database
 3. Close the TCP connection
 
-This process repeats for *every single database interaction*. Opening and closing database connections is notoriously slow and resource-intensive because it requires authentication, [3-way-handshake](https://developer.mozilla.org/en-US/docs/Glossary/TCP_handshake) and allocation of resources like memory and CPU.
+This process repeats for _every single database interaction_. Opening and closing database connections is notoriously slow and resource-intensive because it requires authentication, [3-way-handshake](https://developer.mozilla.org/en-US/docs/Glossary/TCP_handshake) and allocation of resources like memory and CPU.
 
 ![Requests to the database from around the globe](/introducing-auto-scaling-for-prisma-accelerate/imgs/4ffc6b8ef9456acfad56fa8a3f77bb148989afd3-1984x1132.png)
 
@@ -56,7 +56,6 @@ Using a connection pool:
 - **Scales effectively** as your data and number of users grow.
 
 > Learn more about the benefits of connection pooling in our recent article: [Saving Black Friday With Connection Pooling](https://www.prisma.io/blog/saving-black-friday-with-connection-pooling)
-> 
 
 ## Introducing auto-scaling for Prisma Accelerate
 
@@ -99,11 +98,10 @@ Here are some best practices that help you setting the right connection limit fo
 By understanding and leveraging connection limits, you're not just adjusting a configuration – you're directly influencing how Accelerate optimizes the performance for your application. Connection pooling isn't just for massive scale; it's a technique that can benefit applications at various stages of growth.
 
 > If you’re wondering if caching is another step you can take to improve application performance by reducing database round trips, you’re right and Accelerate supports that too! You can learn more about the benefits of databasse caching in our recent blog post: [Speed and Savings: Caching Database Queries with Prisma Accelerate](https://www.prisma.io/blog/caching-database-queries-with-prisma-accelerate)
->
 
 ## Try Accelerate today to boost your application performance
 
 If you want to see for yourself what performance gains you can get with Prisma Accelerate, check out the [Accelerate Speed Test](https://accelerate-speed-test.prisma.io/) or get started using one of our [starter projects](https://github.com/prisma/prisma-examples/tree/latest/accelerate).
 
-<br/>
+<br />
 [Get started with Accelerate](https://pris.ly/as-accelerate)

@@ -1,10 +1,10 @@
 ---
-title: "Try the New \"Rust-free\" Version of Prisma ORM (Early Access)"
+title: 'Try the New "Rust-free" Version of Prisma ORM (Early Access)'
 slug: "try-the-new-rust-free-version-of-prisma-orm-early-access"
 date: "2025-04-30"
 authors:
   - "Nikolas Burk"
-metaTitle: "Try the New \"Rust-free\" Version of Prisma ORM (Early Access)"
+metaTitle: 'Try the New "Rust-free" Version of Prisma ORM (Early Access)'
 metaImagePath: "/try-the-new-rust-free-version-of-prisma-orm-early-access/imgs/meta-ff0b26daee0a92c1135e8397f9af50c91aec798c-1266x711.png"
 heroImagePath: "/try-the-new-rust-free-version-of-prisma-orm-early-access/imgs/hero-72705c07c42651a759db9aab07ea8a062c671a46-844x474.svg"
 series:
@@ -39,14 +39,14 @@ If you're newer to the Prisma community, this may surprise you: Prisma ORM emerg
 
 ### Why the Rust query engine in the first place?
 
-When Prisma ORM was conceived in 2020, we had the ambition of building Prisma ORM for various languages. So, we chose an architecture that would support us in that effort and split the query layer of Prisma ORM into two parts: 
+When Prisma ORM was conceived in 2020, we had the ambition of building Prisma ORM for various languages. So, we chose an architecture that would support us in that effort and split the query layer of Prisma ORM into two parts:
 
 - A **query engine**: Does the heavy-lifting of generating SQL queries and managing DB connections.
 - A **lightweight language-specific client**: Lets developers easily send queries to the DB.
 
 ### Faster, more flexible, better DX
 
-Five years later, the developer ecosystem has changed a lot: TypeScript is becoming the predominant language for the web and developers gravitate towards serverless deployments. We also gained valuable insights into the friction points our approach with the Rust engine has caused, most notably _compatibility issues_ with modern runtimes, _deployment complexities_ (e.g., due to the engine binary size or the need to compile it for a specific target), and _performance overhead_ due to extra serialization steps between language boundaries. 
+Five years later, the developer ecosystem has changed a lot: TypeScript is becoming the predominant language for the web and developers gravitate towards serverless deployments. We also gained valuable insights into the friction points our approach with the Rust engine has caused, most notably _compatibility issues_ with modern runtimes, _deployment complexities_ (e.g., due to the engine binary size or the need to compile it for a specific target), and _performance overhead_ due to extra serialization steps between language boundaries.
 
 With all that knowledge, we embarked on a journey of removing Rust from the architecture to create a version of Prisma ORM that's faster, more flexible and provides an overall much better developer experience! If you want to learn more about the migration process, check out our previous two articles on the topic:
 
@@ -55,7 +55,7 @@ With all that knowledge, we embarked on a journey of removing Rust from the arch
 
 ## Prisma ORM v6.7.0: A new architecture without Rust engines (Early Access)
 
-Following our previous updates, we're excited to release the new, _Rust-free_ architecture in [Early Access](https://www.prisma.io/docs/orm/more/releases#early-access) for PostgreSQL and SQLite with this week's [v6.7.0](http://github.com/prisma/prisma/releases/6.7.0) release. Please try it out and let us know what you think! 
+Following our previous updates, we're excited to release the new, _Rust-free_ architecture in [Early Access](https://www.prisma.io/docs/orm/more/releases#early-access) for PostgreSQL and SQLite with this week's [v6.7.0](http://github.com/prisma/prisma/releases/6.7.0) release. Please try it out and let us know what you think!
 
 ### Usage with native JavaScript driver packages
 
@@ -74,42 +74,40 @@ generator client {
   output          = "../generated/prisma"
 }
 ```
+
 Next, you need to re-generate Prisma Client by running the following command:
 
 ```shell
 npx prisma generate
 ```
+
 Depending on whether you're using PostgreSQL or SQLite, you'll need to install the driver adapter for `pg` or `better-sqlite3`:
-
-
 
 ```shell
 npm install @prisma/adapter-pg
 ```
+
 ```shell
 npm install @prisma/better-sqlite3
 ```
 
-
 After installation, you can instantiate your `PrismaClient` instance as follows:
 
-
-
 ```ts
-import { PrismaPg } from '@prisma/adapter-pg'
-import { PrismaClient } from './generated/prisma'
+import { PrismaPg } from "@prisma/adapter-pg";
+import { PrismaClient } from "./generated/prisma";
 
-const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL })
-const prisma = new PrismaClient({ adapter })
-```
-```ts
-import { PrismaBetterSQLite3 } from '@prisma/adapter-better-sqlite3';
-import { PrismaClient } from './generated/prisma';
-
-const adapter = new PrismaBetterSQLite3({ url: process.env.DATABASE_URL })
+const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
 const prisma = new PrismaClient({ adapter });
 ```
 
+```ts
+import { PrismaBetterSQLite3 } from "@prisma/adapter-better-sqlite3";
+import { PrismaClient } from "./generated/prisma";
+
+const adapter = new PrismaBetterSQLite3({ url: process.env.DATABASE_URL });
+const prisma = new PrismaClient({ adapter });
+```
 
 At this point, you can use your `PrismaClient` instance as usual — there are no other changes to how you use it for interacting with your database. The switch will be especially useful if you're using Prisma ORM in monorepos, newer runtimes like Bun and Deno, or deploy your application to Serverless and Edge environments.
 
@@ -123,7 +121,7 @@ For details on that, you can check out our recent [article](https://www.prisma.i
 
 ## What's next for Prisma ORM?
 
-Prisma ORM is undergoing major changes at the moment. We've announced our [ORM manifesto](https://www.prisma.io/blog/prisma-orm-manifesto) a few months ago with all details about changes to our OSS governance process. Since then, we've been working hard at making Prisma ORM _simpler_, _more robust_, and _more flexible_ with features like the new [`prisma-client` generator,](https://www.prisma.io/docs/orm/prisma-schema/overview/generators#prisma-client-early-access) a [TypeScript-based configuration file](https://www.prisma.io/docs/orm/reference/prisma-config-reference) (called `prisma.config.ts`, and removing magic behaviors, like generating Prisma Client into `node_modules`). Check out our [roadmap](https://github.com/prisma/prisma/issues/26592) to see what's next!  
+Prisma ORM is undergoing major changes at the moment. We've announced our [ORM manifesto](https://www.prisma.io/blog/prisma-orm-manifesto) a few months ago with all details about changes to our OSS governance process. Since then, we've been working hard at making Prisma ORM _simpler_, _more robust_, and _more flexible_ with features like the new [`prisma-client` generator,](https://www.prisma.io/docs/orm/prisma-schema/overview/generators#prisma-client-early-access) a [TypeScript-based configuration file](https://www.prisma.io/docs/orm/reference/prisma-config-reference) (called `prisma.config.ts`, and removing magic behaviors, like generating Prisma Client into `node_modules`). Check out our [roadmap](https://github.com/prisma/prisma/issues/26592) to see what's next!
 
 ## Try out Prisma ORM without Rust
 
@@ -136,7 +134,8 @@ To summarize, the new Prisma ORM architecture without Rust:
 Give it a shot and let us know what you think of it on [X](https://pris.ly/x) and our [Discord](https://pris.ly/discord)!
 
 <br />
-[Try Prisma ORM without Rust engines](https://www.prisma.io/docs/orm/prisma-client/setup-and-configuration/no-rust-engine)
+[Try Prisma ORM without Rust
+engines](https://www.prisma.io/docs/orm/prisma-client/setup-and-configuration/no-rust-engine)
 
 ## Frequently Asked Questions (FAQ)
 

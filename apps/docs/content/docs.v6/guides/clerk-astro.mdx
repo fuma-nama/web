@@ -143,8 +143,12 @@ SignInButton,
   <body>
     <header>
       // [!code ++]
-      <SignedOut> // [!code ++] <SignInButton mode="modal" /> // [!code ++] </SignedOut> // [!code
-      ++] <SignedIn> // [!code ++] <UserButton /> // [!code ++] </SignedIn> // [!code ++]
+      <SignedOut>
+        // [!code ++] <SignInButton mode="modal" /> // [!code ++]
+      </SignedOut>
+      // [!code ++]
+      <SignedIn> // [!code ++] <UserButton /> // [!code ++] </SignedIn> //
+      [!code ++]
     </header>
     // [!code ++]
   </body>
@@ -310,7 +314,9 @@ export const POST: APIRoute = async ({ request }) => {
     }); // [!code ++]
     const { id } = evt.data; // [!code ++]
     const eventType = evt.type; // [!code ++]
-    console.log(`Received webhook with ID ${id} and event type of ${eventType}`); // [!code ++]
+    console.log(
+      `Received webhook with ID ${id} and event type of ${eventType}`,
+    ); // [!code ++]
   } catch (err) {
     // [!code ++]
     console.error("Error verifying webhook:", err); // [!code ++]
@@ -335,7 +341,9 @@ export const POST: APIRoute = async ({ request }) => {
     });
     const { id } = evt.data;
     const eventType = evt.type;
-    console.log(`Received webhook with ID ${id} and event type of ${eventType}`);
+    console.log(
+      `Received webhook with ID ${id} and event type of ${eventType}`,
+    );
 
     if (eventType === "user.created") {
       // [!code ++]
@@ -373,7 +381,9 @@ export const POST: APIRoute = async ({ request }) => {
     });
     const { id } = evt.data;
     const eventType = evt.type;
-    console.log(`Received webhook with ID ${id} and event type of ${eventType}`);
+    console.log(
+      `Received webhook with ID ${id} and event type of ${eventType}`,
+    );
 
     if (eventType === "user.created") {
       const { id, email_addresses, first_name, last_name } = evt.data;

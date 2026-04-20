@@ -92,27 +92,32 @@ Here’s what the function might look like:
 
 ```ts
 export const config = {
-  runtime: 'edge',
-}
+  runtime: "edge",
+};
 
 export default async function handler(req: Request) {
-  const user = await db.user.findUnique({ where: { id: req.id } })
+  const user = await db.user.findUnique({ where: { id: req.id } });
 
   if (!user) {
-    return new Response(JSON.stringify({ error: "User not found" }), { status: 404 })
+    return new Response(JSON.stringify({ error: "User not found" }), {
+      status: 404,
+    });
   }
 
-  const orders = await db.order.findMany({ where: { userId: user.id } })
+  const orders = await db.order.findMany({ where: { userId: user.id } });
 
   if (!orders || orders.length === 0) {
-    return new Response(JSON.stringify({ error: "No orders found" }), { status: 404 })
+    return new Response(JSON.stringify({ error: "No orders found" }), {
+      status: 404,
+    });
   }
 
-  const settings = await db.setting.findFirst({ where: { userId: user.id } })
+  const settings = await db.setting.findFirst({ where: { userId: user.id } });
 
-  return Response.json({ user, orders, settings })
+  return Response.json({ user, orders, settings });
 }
 ```
+
 If the function is **close to the user** (in Tokyo), but **far from the database** (in Virginia), each database query takes time—about **300ms** per round-trip due to trans-Pacific network latency, TLS handshakes, and DNS resolution.
 
 This handler runs **three dependent queries**, one after the other:
@@ -129,37 +134,41 @@ That means the entire response can come back in **under 90ms**, even if the requ
 
 ![Comparison of latency between a user in Tokyo accessing a database in Virginia versus using a co-located edge function in Virginia, showing reduced total latency from 300ms to 90ms.](/make-your-applications-fast-globally/imgs/d1a0428f86b58e713414612998ad51026aeea0cb-1042x948.png)
 
-
 ### Region pinning makes this work
 
-Platforms like Vercel, AWS Lambda, and others let you **pin your function to a specific region**—in this case, `us-east-1`. 
+Platforms like Vercel, AWS Lambda, and others let you **pin your function to a specific region**—in this case, `us-east-1`.
 
 For edge deployments in Vercel, the `region` config can enable you to pin a region:
 
 ```ts
 export const config = {
-  runtime: 'edge',
-  region: 'us-east-1',
-}
+  runtime: "edge",
+  region: "us-east-1",
+};
 
 export default async function handler(req: Request) {
-  const user = await db.user.findUnique({ where: { id: req.id } })
+  const user = await db.user.findUnique({ where: { id: req.id } });
 
   if (!user) {
-    return new Response(JSON.stringify({ error: "User not found" }), { status: 404 })
+    return new Response(JSON.stringify({ error: "User not found" }), {
+      status: 404,
+    });
   }
 
-  const orders = await db.order.findMany({ where: { userId: user.id } })
+  const orders = await db.order.findMany({ where: { userId: user.id } });
 
   if (!orders || orders.length === 0) {
-    return new Response(JSON.stringify({ error: "No orders found" }), { status: 404 })
+    return new Response(JSON.stringify({ error: "No orders found" }), {
+      status: 404,
+    });
   }
 
-  const settings = await db.setting.findFirst({ where: { userId: user.id } })
+  const settings = await db.setting.findFirst({ where: { userId: user.id } });
 
-  return Response.json({ user, orders, settings })
+  return Response.json({ user, orders, settings });
 }
 ```
+
 This setup is ideal when:
 
 - You run **multiple queries in sequence**
@@ -200,7 +209,7 @@ Set up monitoring early to track percentile latencies:
 - **p75** = slower queries, usually under light load
 - **p99** = the worst-case queries, often where performance problems hide
 
-For example, a p50 of 30ms is great—but if your p99 is 700ms, some users are still seeing painful delays. 
+For example, a p50 of 30ms is great—but if your p99 is 700ms, some users are still seeing painful delays.
 
 When identifying performance bottlenecks, also look for:
 
@@ -216,13 +225,13 @@ Improving just a few heavy queries can cut your overall latency in half. Tools l
 
 Here’s a quick look at the problems and how to solve them.
 
-| Problem | Fix it by |
-| --- | --- |
-| Long database round-trips | Colocate compute with your DB |
-| Too many connections | Add a connection pool |
-| Repeated reads | Cache at the edge |
-| Global latency | Consider multi-region DBs |
-| Slow queries | Use monitoring tools like Prisma Optimize or Datadog |
+| Problem                   | Fix it by                                            |
+| ------------------------- | ---------------------------------------------------- |
+| Long database round-trips | Colocate compute with your DB                        |
+| Too many connections      | Add a connection pool                                |
+| Repeated reads            | Cache at the edge                                    |
+| Global latency            | Consider multi-region DBs                            |
+| Slow queries              | Use monitoring tools like Prisma Optimize or Datadog |
 
 ## Final thoughts
 

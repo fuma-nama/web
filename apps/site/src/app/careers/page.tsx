@@ -208,7 +208,12 @@ export default function Careers() {
             Help us empower developers to build data-driven applications.
           </p>
           <div className="flex flex-col md:flex-row gap-4 items-center justify-center">
-            <Button asChild variant="orm" size="3xl" className="font-sans-display! font-[650]">
+            <Button
+              asChild
+              variant="orm"
+              size="3xl"
+              className="font-sans-display! font-[650]"
+            >
               <a href="#open-positions">
                 View open positions
                 <i className="fa-solid fa-arrow-down" />

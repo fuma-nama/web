@@ -1,4 +1,4 @@
-import { getPageImage, sourceV6 } from "@/lib/source";
+import { getPageImage, getSource } from "@/lib/source";
 import { withDocsBasePath } from "@/lib/urls";
 import { notFound, redirect } from "next/navigation";
 
@@ -32,11 +32,19 @@ export default async function Page({
   params: Promise<PageParams>;
 }) {
   const { slug } = await params;
-  const source = sourceV6;
+  const source = await getSource("v6");
   const page = source.getPage(slug);
   if (!page) redirect("/v6");
 
-  const MDX = page.data.body;
+  const { render } = await page.data.load();
+  const { body, toc } = await render(
+    getMDXComponents({
+      // this allows you to link to other pages with relative file paths
+      a: createRelativeLink(source as never, page),
+      // @ts-ignore - _pageContext is a special prop used by our components
+      _pageContext: { folder: page.slugs.join("/"), version: "v6" },
+    }),
+  );
 
   return (
     <>
@@ -44,8 +52,8 @@ export default async function Page({
       <BreadcrumbSchema page={page} />
       <DocsPage
         tableOfContent={{ style: "normal" }}
-        toc={page.data.toc}
-        full={page.data.full}
+        toc={toc}
+        full={page.data.frontmatter.full}
       >
         <div className="flex flex-row items-center gap-4 pt-2 pb-6 justify-between">
           <DocsTitle>{page.data.title}</DocsTitle>
@@ -58,25 +66,11 @@ export default async function Page({
           </div>
         </div>
         <DocsDescription>{page.data.description}</DocsDescription>
-        <DocsBody>
-          <MDX
-            components={getMDXComponents({
-              // this allows you to link to other pages with relative file paths
-              a: createRelativeLink(source, page),
-              // @ts-ignore - _pageContext is a special prop used by our components
-              _pageContext: { folder: page.slugs.join("/"), version: "v6" },
-            })}
-          />
-        </DocsBody>
+        <DocsBody>{body}</DocsBody>
         <div className="flex flex-row flex-wrap items-center justify-between gap-4 border-t pt-6 text-sm">
           <EditOnGitHub
             href={`https://github.com/prisma/docs/edit/main/content/docs/${page.path}`}
           />
-          {(page.data as { lastModified?: Date }).lastModified && (
-            <PageLastUpdate
-              date={(page.data as { lastModified: Date }).lastModified}
-            />
-          )}
         </div>
       </DocsPage>
     </>
@@ -84,7 +78,8 @@ export default async function Page({
 }
 
 export async function generateStaticParams() {
-  return sourceV6.generateParams();
+  const source = await getSource("v6");
+  return source.generateParams();
 }
 
 export async function generateMetadata({
@@ -92,12 +87,14 @@ export async function generateMetadata({
 }: {
   params: Promise<PageParams>;
 }): Promise<Metadata> {
+  const source = await getSource("v6");
   const { slug } = await params;
-  const page = sourceV6.getPage(slug);
+  const page = source.getPage(slug);
   if (!page) notFound();
 
-  const title = page.data.metaTitle ?? page.data.title;
-  const description = page.data.metaDescription ?? page.data.description;
+  const frontmatter = page.data.frontmatter;
+  const title = frontmatter.metaTitle ?? frontmatter.title;
+  const description = frontmatter.metaDescription ?? frontmatter.description;
 
   return {
     title,
@@ -109,7 +106,7 @@ export async function generateMetadata({
       title,
       description,
       url: withDocsBasePath(page.url),
-      images: page.data.image || withDocsBasePath(getPageImage(page).url),
+      images: frontmatter.image || withDocsBasePath(getPageImage(page).url),
     },
     twitter: {
       card: "summary_large_image",

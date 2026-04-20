@@ -163,13 +163,11 @@ const Footer = ({
                       </DropdownMenuTrigger>
                       <DropdownMenuContent>
                         {link.links.map(
-                          (
-                            dropLink: {
-                              title: string;
-                              url: string;
-                              external?: boolean;
-                            },
-                          ) => {
+                          (dropLink: {
+                            title: string;
+                            url: string;
+                            external?: boolean;
+                          }) => {
                             const dropdownHoverClass =
                               color === "orm"
                                 ? "hover:bg-background-orm-strong!"
@@ -182,7 +180,9 @@ const Footer = ({
                               >
                                 <a
                                   href={dropLink.url}
-                                  target={dropLink.external ? "_blank" : "_self"}
+                                  target={
+                                    dropLink.external ? "_blank" : "_self"
+                                  }
                                   rel={
                                     dropLink.external
                                       ? "noopener noreferrer"

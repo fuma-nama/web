@@ -34,7 +34,7 @@ In our [recently released ORM Manifesto](https://www.prisma.io/blog/prisma-orm-m
 
 This may have been only a sentence in our post, but it has caused quite a few reactions:
 
-<TweetEmbedComp tweets={['1863837970471784924']}/>
+<TweetEmbedComp tweets={["1863837970471784924"]} />
 For example we really loved this video from Theo:
 
 <Youtube videoId="vXvfrfqqDbU" />
@@ -45,7 +45,7 @@ In short, we want to let everyone in the community know **what is changing, the 
 
 ## Why did Prisma choose Rust?
 
-Before we can explore the future of Prisma ORM, we need to understand why Prisma ORM uses a Rust engine. When we started planning Prisma 2 (now known as Prisma ORM), we had a pretty clear vision: we wanted to build ORMs for as many languages as possible—TypeScript, Go, Python, Scala, Rust, and others. We needed a solution that would make adding support for new languages relatively straightforward. Rust’s performance benefits and systems-level approach made it a natural choice for this core query engine. 
+Before we can explore the future of Prisma ORM, we need to understand why Prisma ORM uses a Rust engine. When we started planning Prisma 2 (now known as Prisma ORM), we had a pretty clear vision: we wanted to build ORMs for as many languages as possible—TypeScript, Go, Python, Scala, Rust, and others. We needed a solution that would make adding support for new languages relatively straightforward. Rust’s performance benefits and systems-level approach made it a natural choice for this core query engine.
 
 This decision was also a continuation of the work done on GraphCool and Prisma 1. The core, deployable infrastructure of these earlier solutions evolved into the Rust-based query engine—a binary designed to handle the heavy lifting of generating SQL queries, managing connection pools, and returning results from your database. This freed up language-specific clients like `prisma-client-js` to remain lightweight layers on top of the engine.
 
@@ -71,8 +71,8 @@ To understand this change, let’s review the current query engine setup.
 
 Today, there are two ways that you can query a database with Prisma ORM:
 
-- Using a database driver written in *Rust*.
-- Using a [driver adapter](https://www.prisma.io/docs/orm/overview/databases/database-drivers#driver-adapters) and driver both written in *TypeScript*.
+- Using a database driver written in _Rust_.
+- Using a [driver adapter](https://www.prisma.io/docs/orm/overview/databases/database-drivers#driver-adapters) and driver both written in _TypeScript_.
 
 In the first approach, Prisma ORM queries are passed to the query engine, written in Rust. This engine manages everything from building the query plan to executing queries and returning results to the JavaScript client:
 
@@ -113,7 +113,7 @@ For instance, we plan to remove the requirement for `binaryTargets`, further str
 
 ### Unlocking future opportunities
 
-This transition isn’t just about addressing current challenges—it creates new opportunities for innovation. In fact, the query compiler enables many possibilities for our team and the community to explore. For example, the use of parameterized query plans could allow for **saving query plans for re-use** to speed up execution. Another avenue would be to build the initial query plans *at compile time*, further reducing runtime computation needs. 
+This transition isn’t just about addressing current challenges—it creates new opportunities for innovation. In fact, the query compiler enables many possibilities for our team and the community to explore. For example, the use of parameterized query plans could allow for **saving query plans for re-use** to speed up execution. Another avenue would be to build the initial query plans _at compile time_, further reducing runtime computation needs.
 
 We’re excited about these possibilities and eager to hear your thoughts! Join the discussion on our GitHub or Discord.
 
@@ -133,7 +133,7 @@ Finally, test our Early Access client! We’ll share updates on GitHub and Disco
 
 This is an exciting time for Prisma, with even more improvements and opportunities ahead. Thank you for inspiring us to grow and for being part of this journey.
 
-*Want to be among the first to try our new Early Access client? [Follow us on X](https://pris.ly/x) and [join our Discord](https://pris.ly/discord) to stay updated.*
+_Want to be among the first to try our new Early Access client? [Follow us on X](https://pris.ly/x) and [join our Discord](https://pris.ly/discord) to stay updated._
 
 ## Frequently Asked Questions (FAQ)
 

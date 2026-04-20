@@ -56,7 +56,7 @@ Today, we are releasing two driver adapters: `@prisma/adapter-neon` and `@prisma
   caption="Prisma Client using a driver adapter and serverless database driver to communicate with a database."
 />
 
- Now, the only requirement is the ability to make HTTP or WebSocket requests, dramatically simplifying Function-as-a-Service (FaaS) deployments.
+Now, the only requirement is the ability to make HTTP or WebSocket requests, dramatically simplifying Function-as-a-Service (FaaS) deployments.
 
 ## How to use Prisma ORM with serverless database drivers
 
@@ -73,6 +73,7 @@ npm install --save-dev prisma@^5.4.1
 npm install @prisma/client@^5.4.1
 npm install dotenv
 ```
+
 Now, you can set up Prisma Client as below.
 
 ### Use Neon with `@neondatabase/serverless`
@@ -90,11 +91,14 @@ npm install @prisma/adapter-neon
 npm install @neondatabase/serverless
 npm install ws
 ```
+
 Then make sure your [Neon database connection string](https://neon.tech/docs/connect/connect-from-any-app) is copied over to your `.env` file. The connection string will start with `postgres://`.
+
 ```
 // .env
 DATABASE_URL="postgres://..."
 ```
+
 You can now reference this environment variable in your `schema.prisma` datasource. Make sure you also include the `driverAdapters` Preview feature.
 
 ```prisma
@@ -109,6 +113,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 ```
+
 Now run `npx prisma generate` to re-generate Prisma Client and make the Preview feature available in your app.
 
 After the above setup, you can continue in your script:
@@ -120,14 +125,14 @@ After the above setup, you can continue in your script:
 
 ```ts
 // Import needed packages
-import { Pool, neonConfig } from '@neondatabase/serverless';
-import { PrismaNeon } from '@prisma/adapter-neon';
-import { PrismaClient } from '@prisma/client';
-import dotenv from 'dotenv';
-import ws from 'ws';
+import { Pool, neonConfig } from "@neondatabase/serverless";
+import { PrismaNeon } from "@prisma/adapter-neon";
+import { PrismaClient } from "@prisma/client";
+import dotenv from "dotenv";
+import ws from "ws";
 
 // Setup
-dotenv.config()
+dotenv.config();
 neonConfig.webSocketConstructor = ws;
 const connectionString = `${process.env.DATABASE_URL}`;
 
@@ -138,6 +143,7 @@ const prisma = new PrismaClient({ adapter });
 
 // Use Prisma Client as normal
 ```
+
 Now your code has built-in benefits of the Neon serverless driver, such as WebSocket connections and [message pipelining](https://neon.tech/blog/quicker-serverless-postgres), while Prisma covers connection creation and destruction, error handling, and type safety. If you have any feedback about our Neon Serverless Driver support, please leave a comment on our [dedicated GitHub issue](https://github.com/prisma/prisma/discussions/21346) and we'll use it as we continue development.
 
 ### Use PlanetScale with `@planetscale/database`
@@ -155,11 +161,14 @@ npm install @prisma/adapter-planetscale
 npm install @planetscale/database
 npm install undici
 ```
+
 Then make sure your [PlanetScale database connection string](https://planetscale.com/docs/concepts/connection-strings) is copied over to your `.env` file. The connection string will start with `mysql://`
+
 ```
 // .env
 DATABASE_URL="mysql://..."
 ```
+
 You can now reference this environment variable in your `schema.prisma` datasource. Make sure you also include the `driverAdapters` Preview feature.
 
 ```prisma
@@ -175,15 +184,16 @@ datasource db {
   relationMode = "prisma"
 }
 ```
+
 Now run `npx prisma generate` to re-generate Prisma Client and make the Preview feature available in your app.
 
 ```ts
 // Import needed packages
-import { connect } from '@planetscale/database';
-import { PrismaPlanetScale } from '@prisma/adapter-planetscale';
-import { PrismaClient } from '@prisma/client';
-import dotenv from 'dotenv';
-import { fetch as undiciFetch } from 'undici';
+import { connect } from "@planetscale/database";
+import { PrismaPlanetScale } from "@prisma/adapter-planetscale";
+import { PrismaClient } from "@prisma/client";
+import dotenv from "dotenv";
+import { fetch as undiciFetch } from "undici";
 
 // setup
 dotenv.config();
@@ -196,8 +206,8 @@ const prisma = new PrismaClient({ adapter });
 
 // Use Prisma Client as normal
 ```
-Your Prisma Client instance now uses PlanetScale's [`database-js`](https://github.com/planetscale/database-js) which can [improve connection reliability and performance](https://planetscale.com/blog/faster-mysql-with-http3). It uses HTTP requests instead of Prisma’s connection pool, but Prisma will continue to handle error handling and type safety. If you have any feedback about our PlanetScale Serverless Driver support, please leave a comment on our [dedicated GitHub issue](https://github.com/prisma/prisma/discussions/21347) and we'll use it as we continue development.
 
+Your Prisma Client instance now uses PlanetScale's [`database-js`](https://github.com/planetscale/database-js) which can [improve connection reliability and performance](https://planetscale.com/blog/faster-mysql-with-http3). It uses HTTP requests instead of Prisma’s connection pool, but Prisma will continue to handle error handling and type safety. If you have any feedback about our PlanetScale Serverless Driver support, please leave a comment on our [dedicated GitHub issue](https://github.com/prisma/prisma/discussions/21347) and we'll use it as we continue development.
 
 <hr />
 

@@ -11,7 +11,11 @@ type SitemapEntry = {
   priority?: number;
 };
 
-const HOST_SITEMAPS = ["/sitemap-site.xml", "/docs/sitemap.xml", "/blog/sitemap.xml"];
+const HOST_SITEMAPS = [
+  "/sitemap-site.xml",
+  "/docs/sitemap.xml",
+  "/blog/sitemap.xml",
+];
 const APP_DIRECTORY = path.join(process.cwd(), "src/app");
 
 /** Escape XML-sensitive characters before writing values into sitemap markup. */
@@ -31,7 +35,12 @@ export function getHostSitemapUrls(baseUrl = getBaseUrl()): string[] {
 
 type SegmentDisposition = "include" | "omit" | "exclude";
 
-const INTERCEPTING_ROUTE_PREFIXES = ["(.)", "(..)", "(...)", "(..)(..)"] as const;
+const INTERCEPTING_ROUTE_PREFIXES = [
+  "(.)",
+  "(..)",
+  "(...)",
+  "(..)(..)",
+] as const;
 
 /** Classify app segments for sitemap generation. */
 function getSegmentDisposition(segment: string): SegmentDisposition {
@@ -43,7 +52,9 @@ function getSegmentDisposition(segment: string): SegmentDisposition {
     return "exclude";
   }
 
-  if (INTERCEPTING_ROUTE_PREFIXES.some((prefix) => segment.startsWith(prefix))) {
+  if (
+    INTERCEPTING_ROUTE_PREFIXES.some((prefix) => segment.startsWith(prefix))
+  ) {
     return "exclude";
   }
 
@@ -84,11 +95,17 @@ type PageRoute = {
 };
 
 /** Recursively collect public page routes from the App Router tree. */
-async function collectPageRoutes(directory: string, segments: string[] = []): Promise<PageRoute[]> {
+async function collectPageRoutes(
+  directory: string,
+  segments: string[] = [],
+): Promise<PageRoute[]> {
   let entries: Dirent<string>[];
 
   try {
-    entries = await readdir(directory, { encoding: "utf8", withFileTypes: true });
+    entries = await readdir(directory, {
+      encoding: "utf8",
+      withFileTypes: true,
+    });
   } catch (error) {
     console.error(`Failed to read sitemap routes from ${directory}`, error);
     return [];
@@ -118,10 +135,13 @@ async function collectPageRoutes(directory: string, segments: string[] = []): Pr
         return [];
       }
 
-      return [{
-        pathname: routeSegments.length === 0 ? "/" : `/${routeSegments.join("/")}`,
-        filePath: entryPath,
-      }];
+      return [
+        {
+          pathname:
+            routeSegments.length === 0 ? "/" : `/${routeSegments.join("/")}`,
+          filePath: entryPath,
+        },
+      ];
     }),
   );
 
@@ -129,7 +149,9 @@ async function collectPageRoutes(directory: string, segments: string[] = []): Pr
 }
 
 /** Get the last modified date of a file as an ISO date string (YYYY-MM-DD). */
-async function getFileLastModified(filePath: string): Promise<string | undefined> {
+async function getFileLastModified(
+  filePath: string,
+): Promise<string | undefined> {
   try {
     const fileStat = await stat(filePath);
     return fileStat.mtime.toISOString().split("T")[0];
@@ -139,7 +161,9 @@ async function getFileLastModified(filePath: string): Promise<string | undefined
 }
 
 /** Generate sitemap entries for all public pages in the site app. */
-export async function getSiteSitemapEntries(baseUrl = getBaseUrl()): Promise<SitemapEntry[]> {
+export async function getSiteSitemapEntries(
+  baseUrl = getBaseUrl(),
+): Promise<SitemapEntry[]> {
   const [pageRoutes, changelogPages] = await Promise.all([
     collectPageRoutes(APP_DIRECTORY),
     changelogSource.getPages(),
@@ -156,9 +180,10 @@ export async function getSiteSitemapEntries(baseUrl = getBaseUrl()): Promise<Sit
   // Changelog entries use their frontmatter date as lastmod
   const changelogLastModMap = new Map<string, string>();
   for (const page of changelogPages) {
-    const date = page.data.date instanceof Date
-      ? page.data.date.toISOString().split("T")[0]
-      : String(page.data.date).split("T")[0];
+    const date =
+      page.data.date instanceof Date
+        ? page.data.date.toISOString().split("T")[0]
+        : String(page.data.date).split("T")[0];
     changelogLastModMap.set(page.url, date);
   }
 
@@ -173,7 +198,8 @@ export async function getSiteSitemapEntries(baseUrl = getBaseUrl()): Promise<Sit
     .sort((left, right) => left.localeCompare(right))
     .map((pathname) => ({
       url: new URL(pathname, baseUrl).toString(),
-      lastModified: changelogLastModMap.get(pathname) ?? pageLastModMap.get(pathname),
+      lastModified:
+        changelogLastModMap.get(pathname) ?? pageLastModMap.get(pathname),
       ...getEntryMetadata(pathname),
     }));
 }

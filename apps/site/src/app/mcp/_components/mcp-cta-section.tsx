@@ -17,8 +17,8 @@ export function McpCtaSection({
                 Start Building with AI
               </h3>
               <p className="max-w-[463px] text-base leading-6 text-foreground-neutral-weak">
-                Join thousands of developers, and agents, already using Prisma MCP for faster, more
-                intuitive database workflows.
+                Join thousands of developers, and agents, already using Prisma
+                MCP for faster, more intuitive database workflows.
               </p>
             </div>
 
@@ -27,13 +27,24 @@ export function McpCtaSection({
                 <Button asChild variant={"ppg"} size={"3xl"} className="gap-3">
                   <a href={docsHref}>
                     Add MCP Server
-                    <i className="fa-regular fa-arrow-right shrink-0 text-[16px]" aria-hidden />
+                    <i
+                      className="fa-regular fa-arrow-right shrink-0 text-[16px]"
+                      aria-hidden
+                    />
                   </a>
                 </Button>
-                <Button asChild variant={"default-strong"} size={"3xl"} className="gap-3">
+                <Button
+                  asChild
+                  variant={"default-strong"}
+                  size={"3xl"}
+                  className="gap-3"
+                >
                   <a href={readDocsHref}>
                     Read Docs
-                    <i className="fa-regular fa-book-open shrink-0 text-[16px]" aria-hidden />
+                    <i
+                      className="fa-regular fa-book-open shrink-0 text-[16px]"
+                      aria-hidden
+                    />
                   </a>
                 </Button>
               </div>

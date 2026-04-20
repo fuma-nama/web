@@ -27,7 +27,6 @@ Databases connection management in serverless functions is a major issue for man
 - [Announcing the Prisma Data Proxy 🎉](#announcing-the-prisma-data-proxy-)
 - [Let us know what you think](#let-us-know-what-you-think)
 
-
 ---
 
 <Youtube videoId="GWbzyyziH9A" />
@@ -58,7 +57,7 @@ Let's quickly understand the exact issues that arise when talking to a database 
 
 When a serverless function needs to access a database, it establishes a connection to it, submits a query and receives the response from the database. The response data is then delivered to the client that invoked the serverless function, the database connection is closed and the function is torn down again.
 
-<TweetEmbedComp tweets={["1430177184015073281"]} convState={false}/>
+<TweetEmbedComp tweets={["1430177184015073281"]} convState={false} />
 
 ### Serverless functions exhaust the connection limit
 
@@ -116,7 +115,4 @@ You can try out the Prisma Data Proxy today by enabling it on the [Prisma Data P
 <br />
 [Try the Prisma Data Proxy](https://cloud.prisma.io)
 
-
 We are hosting our first [Serverless Data Conference](https://www.prisma.io/serverless) on **November 18th** with fantastic speakers from companies like Vercel, Netlify, MongoDB and Cloudflare. Join us to learn more about the Data Proxy and other awesome features that are planned for the [Prisma Data Platform](https://cloud.prisma.io).
-
-

@@ -125,7 +125,7 @@ For this reason, we still recommend connecting the Prisma ORM to Prisma Postgres
 
 ## Wrapping Up
 
-I've seen so much conversation on the Web about moving apps to the edge, followed by conversations about moving back to be close to the data. The truth is, _it depends_. Your app will respond faster if it is closer to your users and database queries will be slower if your app is further from your database. 
+I've seen so much conversation on the Web about moving apps to the edge, followed by conversations about moving back to be close to the data. The truth is, _it depends_. Your app will respond faster if it is closer to your users and database queries will be slower if your app is further from your database.
 
 What you can do is to make as few round-trips to your database as possible and avoid sequential, waterfall queries. With Prisma Postgres, we can minimize the cost of those queries when they happen. **Don't give up on the edge yet.**
 

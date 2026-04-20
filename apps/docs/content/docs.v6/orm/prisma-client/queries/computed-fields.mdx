@@ -103,7 +103,9 @@ type WithFullName<T> = T & {
 };
 
 // Take objects that satisfy FirstLastName and computes a full name
-function computeFullName<User extends FirstLastName>(user: User): WithFullName<User> {
+function computeFullName<User extends FirstLastName>(
+  user: User,
+): WithFullName<User> {
   return {
     ...user,
     fullName: user.firstName + " " + user.lastName,

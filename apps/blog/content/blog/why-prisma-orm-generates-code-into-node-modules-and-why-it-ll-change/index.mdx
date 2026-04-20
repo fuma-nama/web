@@ -16,7 +16,7 @@ tags:
 
 Prisma ORM historically generated its database client code to `node_modules`. But why does it do this? Let's look at why this decision was made and why we're changing this in the future.
 
-Since its initial release, Prisma ORM has been using _code generation_ to generate a database client (called "Prisma Client") that's tailored to a database schema. The Prisma Client library is auto-generated based on the Prisma schema so that it's aware of their structure and can provide custom, type-safe queries for them. 
+Since its initial release, Prisma ORM has been using _code generation_ to generate a database client (called "Prisma Client") that's tailored to a database schema. The Prisma Client library is auto-generated based on the Prisma schema so that it's aware of their structure and can provide custom, type-safe queries for them.
 
 Code generation isn't the most conventional method in the TypeScript ecosystem and Prisma ORM was one of the first popular libraries to rely on it. To keep things familiar with develoeprs, we decided to generate Prisma Client into the `node_modules` folder by default because that's typically how they're used to integrate third party libraries in their applications.
 
@@ -25,11 +25,12 @@ While it was possible from the beginning to choose a custom location for the gen
 ```prisma
 generator client {
   provider = "prisma-client-js"
-  
+
   // generate code in custom folder, not `node_modules`
   output   = "../src/generated/prisma" // optional
 }
 ```
+
 Generating Prisma Client into `node_modules` by default ultimately led to a magical "it just works™️" developer experience for most people … except, when it didn't!
 
 ## Why and how are we changing the location of Prisma Client in v7
@@ -42,7 +43,7 @@ However, with Prisma ORM, you need to re-generate Prisma Client after every data
 
 Because many tools operate under the assumption that `node_modules` is only modified by a package manager, we (and others in the community) put in place _workarounds_ to ensure a smooth DX.
 
-For example, because the TS language server doesn't watch for changes in `node_modules`, we adjusted the Prisma VS Code extension to reboot the TS language server any time you run `prisma generate`. Another example is the [`@prisma/nextjs-monorepo-workaround-plugin`](https://www.npmjs.com/package/@prisma/nextjs-monorepo-workaround-plugin) package whose sole purpose is to ensure that files are copied properly from `node_modules` when Prisma ORM is used in monorepos with Next.js. 
+For example, because the TS language server doesn't watch for changes in `node_modules`, we adjusted the Prisma VS Code extension to reboot the TS language server any time you run `prisma generate`. Another example is the [`@prisma/nextjs-monorepo-workaround-plugin`](https://www.npmjs.com/package/@prisma/nextjs-monorepo-workaround-plugin) package whose sole purpose is to ensure that files are copied properly from `node_modules` when Prisma ORM is used in monorepos with Next.js.
 
 Workarounds for the core issue of the generated code living in `node_modules` exist in various shapes and forms, from dedicated packages to hardcoded code paths.
 
@@ -50,7 +51,7 @@ Workarounds for the core issue of the generated code living in `node_modules` ex
 
 While the initial decision of generating Prisma Client into `node_modules` helped a lot of developers getting started and provided a smooth, unified DX, we also saw that this kind of "magical" behavior often led to unexpected problems when developers were using Prisma ORM.
 
-We are currently in the process of [making the DX of using Prisma ORM simpler and more predictable](https://www.prisma.io/blog/prisma-orm-manifesto) by removing magical behavior or unnecessary abstraction layers. 
+We are currently in the process of [making the DX of using Prisma ORM simpler and more predictable](https://www.prisma.io/blog/prisma-orm-manifesto) by removing magical behavior or unnecessary abstraction layers.
 
 As part of this initiative, **we are going to remove the option to generate code into `node_modules` by always requiring an `output` path**.
 
@@ -72,7 +73,8 @@ generator client {
   output       = "../src/generated/prisma" // `output` is required
 }
 ```
-This new generator supports ESM, is compatible with various JS runtimes, overall is more flexible, and _requires_ the custom `output` path. 
+
+This new generator supports ESM, is compatible with various JS runtimes, overall is more flexible, and _requires_ the custom `output` path.
 
 In Prisma ORM v7, it will become the default generator to be used with Prisma ORM and the current `prisma-client-js` generator (with the magical `node_modules` generation) will be put in maintenance mode.
 
@@ -81,15 +83,17 @@ In Prisma ORM v7, it will become the default generator to be used with Prisma OR
 To anticipate the upcoming changes in v7, we wanted to help developers prepare for the breaking change of a required `output` path by nudging them to not rely on generating Prisma Client into `node_modules` any more.
 
 So, in the recent v6.6.0 release, we introduced the following deprecation warning in the Prisma CLI output when you were not using a custom `output` path with the `prisma-client-js` generator:
+
 ```
-Warning: You did not specify an output path for your `generator` in schema.prisma. 
-This behavior is deprecated and will no longer be supported in Prisma 7.0.0. 
+Warning: You did not specify an output path for your `generator` in schema.prisma.
+This behavior is deprecated and will no longer be supported in Prisma 7.0.0.
 To learn more visit https://pris.ly/cli/output-path
-✔ Generated Prisma Client (v6.7.0) to ./node_modules/@prisma/client in 343ms  
+✔ Generated Prisma Client (v6.7.0) to ./node_modules/@prisma/client in 343ms
 ```
+
 We also changed the default generated Prisma schema that was generated when running `prisma init` to include an `output` path and updated our documentation accordingly.
 
-While we expected this nudge to only have positive effects due to the removal of unpredictable, problematic behaviors and giving more control to developers, a lot of people actually reported issues after they saw the deprecation warning and switched to using a custom `output` path with the `prisma-client-js` generator. 
+While we expected this nudge to only have positive effects due to the removal of unpredictable, problematic behaviors and giving more control to developers, a lot of people actually reported issues after they saw the deprecation warning and switched to using a custom `output` path with the `prisma-client-js` generator.
 
 Users started reporting linting failures in `src/generated/prisma`, particularly problematic with e.g. the Next.js dev server which halts operations if linting errors are detected. Since the code is generated, linting errors don't really matter, but users didn't by default have `src/generated` excluded from their linting config.
 
@@ -102,8 +106,8 @@ All this happened on projects that had been working fine when Prisma Client live
 Here's a TLDR for what all of this means for you today:
 
 - **If you have an existing project with Prisma ORM and are using the `prisma-client-js` generator:**
-    - **If you recently added a custom `output` path and saw errors due to that change**, you can revert back to generating Prisma Client into `node_modules` as you did before.
-    - **If Prisma ORM is working for you today while generating Prisma Client into `node_modules`, there's no reason to change anything.** Prisma ORM v7 will introduce the new `prisma-client` generator as the default way for using Prisma ORM with an `output` path. When the time comes, there will be comprehensive documentation for your upgrade paths.
+  - **If you recently added a custom `output` path and saw errors due to that change**, you can revert back to generating Prisma Client into `node_modules` as you did before.
+  - **If Prisma ORM is working for you today while generating Prisma Client into `node_modules`, there's no reason to change anything.** Prisma ORM v7 will introduce the new `prisma-client` generator as the default way for using Prisma ORM with an `output` path. When the time comes, there will be comprehensive documentation for your upgrade paths.
 - **If you start with a new project today**, we recommend setting a custom `output` path to avoid bundling issues and prepare for the upcoming breaking changes in Prisma ORM v7. Since the generated assets are (mostly) source code, which is intended to be processed and included in your application's bundle, we suggest using a path within your application source tree (e.g. `src/generated/prisma`).
 - **If you experience issues with an `output` path** (regardless of whether you use the new `prisma-client` or the current `prisma-client-js` generator), please [open a new issue](https://github.com/prisma/prisma/issues) so we can help you resolve the problem.
 

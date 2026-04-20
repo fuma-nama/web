@@ -11,9 +11,9 @@ heroImageAlt: "GraphQL & Apollo"
 ---
 
 The easiest way to get started with React Native apps that are using a GraphQL backend is with create-react-native-app
-  and Apollo. In this tutorial we will learn how to build an Instagram app, where users can view and post images.
+and Apollo. In this tutorial we will learn how to build an Instagram app, where users can view and post images.
 
-> ⚠️ **This tutorial is outdated!** Check out the [Prisma examples](https://github.com/prisma/prisma-examples/) to learn how to build GraphQL servers with a database. ⚠️ 
+> ⚠️ **This tutorial is outdated!** Check out the [Prisma examples](https://github.com/prisma/prisma-examples/) to learn how to build GraphQL servers with a database. ⚠️
 
 The easiest way to get started with React Native apps that are using a GraphQL backend is with [`create-react-native-app`](https://github.com/react-community/create-react-native-app) and [Apollo](http://dev.apollodata.com/). In this tutorial we will learn how to build an Instagram app, where users can view and post images. The complete code for this tutorial is available on [GitHub](https://github.com/graphcool-examples/react-native-graphql/tree/master/quickstart-with-apollo).
 
@@ -30,6 +30,7 @@ type Post {
   imageUrl: String!
 }
 ```
+
 Using the [Graphcool CLI](https://www.npmjs.com/package/graphcool), you can generate a fully-fledged GraphQL server from your command line by providing this schema as an input argument to the `graphcool init` command:
 
 1. In case you haven’t already, install the Graphcool CLI: `npm install -g graphcool`
@@ -94,9 +95,9 @@ These are the three components that we need:
 - `ListPage` in `components/ListPage.js` that will list all posts from our backend
 
 ```js
-import React from 'react'
-import { ScrollView, View, Text, Button } from 'react-native'
-import { withRouter } from 'react-router-native'
+import React from "react";
+import { ScrollView, View, Text, Button } from "react-native";
+import { withRouter } from "react-router-native";
 
 class ListPage extends React.Component {
   render() {
@@ -106,9 +107,9 @@ class ListPage extends React.Component {
           <View
             style={{
               flex: 1,
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'center',
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
             }}
           >
             // here is where we will render our posts
@@ -116,103 +117,116 @@ class ListPage extends React.Component {
         </ScrollView>
         <Button onPress={this.createPost} title="Create Post" />
       </View>
-    )
+    );
   }
 
   createPost = () => {
-    this.props.router.push('/create')
-  }
+    this.props.router.push("/create");
+  };
 }
 ```
+
 - `CreatePage` in `components/CreatePage.js` to create new posts
 
 ```js
-import React from 'react'
-import { View, TextInput, Button, Image, Text } from 'react-native'
-import { withRouter } from 'react-router-native'
+import React from "react";
+import { View, TextInput, Button, Image, Text } from "react-native";
+import { withRouter } from "react-router-native";
 
 class CreatePage extends React.Component {
   state = {
-    description: '',
-    imageUrl: '',
-  }
+    description: "",
+    imageUrl: "",
+  };
 
   render() {
     return (
       <View>
         <TextInput
-          style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-          onChangeText={text => this.setState({ description: text })}
-          placeholder={'Description'}
+          style={{ height: 40, borderColor: "gray", borderWidth: 1 }}
+          onChangeText={(text) => this.setState({ description: text })}
+          placeholder={"Description"}
         />
         <TextInput
-          style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-          onChangeText={text => this.setState({ imageUrl: text })}
-          placeholder={'Image Url'}
+          style={{ height: 40, borderColor: "gray", borderWidth: 1 }}
+          onChangeText={(text) => this.setState({ imageUrl: text })}
+          placeholder={"Image Url"}
         />
         {this.renderImage()}
         {this.renderButton()}
       </View>
-    )
+    );
   }
 
   renderButton() {
     if (this.state.description && this.state.imageUrl) {
-      return <Button title={'Post'} onPress={this.handlePost} />
+      return <Button title={"Post"} onPress={this.handlePost} />;
     }
-    return null
+    return null;
   }
 
   renderImage() {
     if (this.state.imageUrl) {
-      return <Image source={{ uri: this.state.imageUrl }} style={{ width: 200, height: 200 }} />
+      return (
+        <Image
+          source={{ uri: this.state.imageUrl }}
+          style={{ width: 200, height: 200 }}
+        />
+      );
     }
-    return null
+    return null;
   }
 
   handlePost = () => {
     // we'll learn what to do here in a bit :)
-  }
+  };
 }
 ```
+
 - `Post` in `componens/Post.js` to display and delete a single post
 
 ```js
-import React from 'react'
-import { View, Image, Text } from 'react-native'
+import React from "react";
+import { View, Image, Text } from "react-native";
 export default class Post extends React.Component {
   static propTypes = {
     post: React.PropTypes.object,
-  }
+  };
   render() {
     return (
       <View style={{ flex: 1, width: 150, height: 150 }}>
-        <Image source={{ uri: this.props.post.imageUrl }} style={{ flex: 1, width: 150, height: 150 }} />
+        <Image
+          source={{ uri: this.props.post.imageUrl }}
+          style={{ flex: 1, width: 150, height: 150 }}
+        />
         <Text>{this.props.post.description}</Text>
       </View>
-    )
+    );
   }
 }
 ```
+
 ### Setting up React Router Native and Apollo Client
 
 First, we have to import all required dependencies in App.js:
 
 ```js
-import ApolloClient, { createNetworkInterface } from 'apollo-client'
-import { ApolloProvider } from 'react-apollo'
-import { nativeHistory, Route, Router } from 'react-router-native'
+import ApolloClient, { createNetworkInterface } from "apollo-client";
+import { ApolloProvider } from "react-apollo";
+import { nativeHistory, Route, Router } from "react-router-native";
 ```
+
 Next we can create a new instance of `ApolloClient` below the import statements:
 
 ```js
 const networkInterface = createNetworkInterface({
-  uri: 'https://api.graph.cool/simple/v1/__PROJECT_ID__',
-})
+  uri: "https://api.graph.cool/simple/v1/__PROJECT_ID__",
+});
 const client = new ApolloClient({
   networkInterface,
-})
+});
 ```
+
 > **Note**: The uri that we have to pass to the `createNetworkInterface` call is the GraphQL endpoint for the Simple API that we generated in the first step using `graphcool init`. You can also retrieve that endpoint from the Graphcool console by selecting your project and then clicking the **ENDPOINTS**-button in the bottom-left corner.
 
 Let’s now setup the routes for our application:
@@ -225,8 +239,9 @@ export default (
       <Route path="/create" component={CreatePage} />
     </Router>
   </ApolloProvider>
-)
+);
 ```
+
 Note that the `ApolloProvider` is wrapping `Router`, which enables all child components to use access the Apollo functionality to send queries and mutations.
 
 ## Using Apollo for Queries and Mutations
@@ -238,10 +253,11 @@ Now we are ready to use Apollo in our components to interact with the GraphQL AP
 To display all posts in `ListPage`, we're adding three new imports in `components/ListPage.js`:
 
 ```js
-import Post from '../src/components/Post'
-import { graphql } from 'react-apollo'
-import gql from 'graphql-tag'
+import Post from "../src/components/Post";
+import { graphql } from "react-apollo";
+import gql from "graphql-tag";
 ```
+
 Apart from the `Post` component that renders a single post, we import `gql` and `graphql`. `gql` is used to create queries and mutations. [`graphql`](http://dev.apollodata.com/react/api.html#graphql) actually is a higher-order component that takes as input arguments one or more queries and/or mutations that were created with `gql` as well as a React component and injects the data from the query and/or the mutation function into the component as a prop.
 
 First, let’s think about the query to display all posts:
@@ -255,13 +271,15 @@ query allPosts {
   }
 }
 ```
+
 We’re sorting the posts in descending order, so the latest posts appear on top of the list.
 
 Now we’re replacing the current export statement with this:
 
 ```js
-export default withRouter(graphql(FeedQuery)(ListPage))
+export default withRouter(graphql(FeedQuery)(ListPage));
 ```
+
 This injects a new prop called `data` to `ListPage`. Back in the render method of `ListPage`, we can first check if the data has already been loaded with `this.props.data.loading`. If `loading` is set to `false`, the data has arrived and we can map over `this.props.data.allPosts` to display the posts. We're also passing the `this.props.data.refetch` method to every post to re-execute the query after a post has been deleted.
 
 Putting it all together, this is the `render` method that we end up with:
@@ -297,14 +315,16 @@ render () {
     )
 }
 ```
+
 ### Creating Posts in CreatePage
 
 Adding mutations to React components is similar to adding queries, but instead of injected data, functions are injected for each mutation. Again, we need to import the Apollo related packages at the top of `components/CreatePage.js`:
 
 ```js
-import { graphql } from 'react-apollo'
-import gql from 'graphql-tag'
+import { graphql } from "react-apollo";
+import gql from "graphql-tag";
 ```
+
 The mutation to create a new post looks as follows:
 
 ```graphql
@@ -315,6 +335,7 @@ mutation addPost($description: String!, $imageUrl: String!) {
   }
 }
 ```
+
 Now, at the end of the file, outside of the `CreatePage` class, but before the `export default withRouter(CreatePage)` statement, we can add a new mutation with `gql`:
 
 ```js
@@ -326,24 +347,26 @@ const addMutation = gql`
       imageUrl
     }
   }
-`
+`;
 ```
+
 Similar to the `FeedQuery` before, we now have to replace the export statement like so:
 
 ```js
-const PageWithMutation = graphql(addMutation)(withRouter(CreatePage))
+const PageWithMutation = graphql(addMutation)(withRouter(CreatePage));
 ```
+
 This will inject a function called `mutate` into the props of the `CreatePage` component. This function takes a `description` and the `imageUrl` as arguments so that we can provide the necessary info for each post that's being created. Using that, we can implement the `handlePost` method of the `CreatePage` class to create a post:
 
 ```js
 handlePost = () => {
-  const { description, imageUrl } = this.state
+  const { description, imageUrl } = this.state;
   this.props.mutate({ variables: { description, imageUrl } }).then(() => {
-    this.props.router.replace('/')
-  })
-}
+    this.props.router.replace("/");
+  });
+};
 ```
+
 ## Conclusion
 
 That’s it! Using `create-react-native-app` and Apollo Client, it's easy to write React Native applications that work with a GraphQL backend. If you want to dive deeper in the example code, you can check it out on [GitHub](https://github.com/graphcool-examples/react-native-graphql/tree/master/quickstart-with-apollo).
-

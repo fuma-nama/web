@@ -3,7 +3,7 @@ title: Referential actions
 description: Referential actions let you define the update and delete behavior of related models on the database level
 url: /orm/prisma-schema/data-model/relations/referential-actions
 metaTitle: Special rules for referential actions in SQL Server and MongoDB
-metaDescription: 'Circular references or multiple cascade paths can cause validation errors on Microsoft SQL Server and MongoDB. Since the database does not handle these situations out of the box, learn how to solve this problem.'
+metaDescription: "Circular references or multiple cascade paths can cause validation errors on Microsoft SQL Server and MongoDB. Since the database does not handle these situations out of the box, learn how to solve this problem."
 ---
 
 Referential actions determine what happens to a record when your application deletes or updates a related record. They are defined in the [`@relation`](/orm/reference/prisma-schema-reference#relation) attribute and map to foreign key constraints in the database.
@@ -38,13 +38,12 @@ If you do not specify a referential action, Prisma ORM [uses a default](#referen
 
 </details>
 
-
 ## Available referential actions
 
 Prisma ORM supports five referential actions:
 
 - **[`Cascade`](#cascade)** - Deletes/updates cascade to related records
-- **[`Restrict`](#restrict)** - Prevents deletion/update if related records exist  
+- **[`Restrict`](#restrict)** - Prevents deletion/update if related records exist
 - **[`NoAction`](#noaction)** - Similar to Restrict, behavior varies by database
 - **[`SetNull`](#setnull)** - Sets foreign key to NULL (requires optional relation)
 - **[`SetDefault`](#setdefault)** - Sets foreign key to default value

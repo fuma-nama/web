@@ -38,12 +38,12 @@ With Platform Environments, you can now create multiple environments within a si
 
 This not only saves you time but also allows you to get more out of your existing projects. See the gains across all our plans:
 
-| Plan | Before Platform Environments | With Platform Environments |
-| --- | --- | --- |
-| Starter | 5 projects | 5 projects, 2 environments per project |
-| Pro | 10 projects | 10 projects, 6 environments per project |
-| Business | 15 projects | 15 projects, 12 environments per project |
-| Enterprise | Custom | Custom |
+| Plan       | Before Platform Environments | With Platform Environments               |
+| ---------- | ---------------------------- | ---------------------------------------- |
+| Starter    | 5 projects                   | 5 projects, 2 environments per project   |
+| Pro        | 10 projects                  | 10 projects, 6 environments per project  |
+| Business   | 15 projects                  | 15 projects, 12 environments per project |
+| Enterprise | Custom                       | Custom                                   |
 
 > For more information on pricing, visit our [pricing page](https://www.prisma.io/pricing).
 
@@ -53,16 +53,16 @@ We're also excited to announce that the Prisma Data Platform is now accessible t
 
 ![Prisma CLI x Prisma Data Platform](/introducing-platform-environments/imgs/8678791c42ed1bcbe418c3d592f64756a2e9a2cb-1344x1029.png)
 
-You can leverage the Prisma CLI to manage your databases for Prisma Accelerate and [Prisma Postgres](https://www.prisma.io/postgres). e.g. This works really well with workflows using branch-based databases. 
+You can leverage the Prisma CLI to manage your databases for Prisma Accelerate and [Prisma Postgres](https://www.prisma.io/postgres). e.g. This works really well with workflows using branch-based databases.
 
 > What is Database branching?
-Database branching lets you quickly create independent copies of your database for testing, development, data recovery, and other scenarios.
+> Database branching lets you quickly create independent copies of your database for testing, development, data recovery, and other scenarios.
 
 Some popular database providers that allow you to add database branching in your workflows are [PlanetScale](https://planetscale.com/docs/concepts/branching), [Neon](https://neon.tech/docs/introduction/branching), and [Railway](https://docs.railway.app/guides/environments):
 
 ![Database branching](/introducing-platform-environments/imgs/a804b1270d904b50d3dd60d10d1e3a6cb80d6ac6-2380x907.png)
 
-Now let’s look at a simple example below.  
+Now let’s look at a simple example below.
 
 ### Enabling Prisma Accelerate for an environment using Prisma CLI
 
@@ -72,13 +72,15 @@ Let's explore how to activate Prisma Accelerate for an Environment and tidy up r
 
 **Pre-requisites**
 
-Before diving in, ensure that you’ve installed the Prisma Accelerate client extension on the `feature` branch and meet all the [pre-requisites](https://www.prisma.io/docs/accelerate/getting-started#prerequisites) for using Prisma Accelerate. You also need to have [Prisma CLI](https://www.prisma.io/docs/orm/tools/prisma-cli)  version **`5.10.0`** or later installed.
+Before diving in, ensure that you’ve installed the Prisma Accelerate client extension on the `feature` branch and meet all the [pre-requisites](https://www.prisma.io/docs/accelerate/getting-started#prerequisites) for using Prisma Accelerate. You also need to have [Prisma CLI](https://www.prisma.io/docs/orm/tools/prisma-cli) version **`5.10.0`** or later installed.
 
 You should also have a `.env` containing the `DATABASE_URL` :
 
 ```tsx
-DATABASE_URL="postgresql://janedoe:mypassword@localhost:5432/mydb?schema=sample"
+DATABASE_URL =
+  "postgresql://janedoe:mypassword@localhost:5432/mydb?schema=sample";
 ```
+
 **Access Prisma Data Platform**
 
 Let’s get started by authenticating into the Platform Console:
@@ -86,6 +88,7 @@ Let’s get started by authenticating into the Platform Console:
 ```tsx
 npx prisma platform auth login --early-access
 ```
+
 > Note: The `--early-access` flag is essential until the feature is generally available.
 
 A browser window should pop-up prompting you to log in or create an account. Once authenticated, you will be instructed to head back to the CLI:
@@ -97,6 +100,7 @@ You can also check your login status by running:
 ```tsx
 npx prisma platform auth show --early-access
 ```
+
 And the CLI should output:
 
 ```shell
@@ -107,6 +111,7 @@ displayName : Ankur Datta
 id          : clsdsdsdn0hadsdsd8yc
 email       : datta@prisma.io
 ```
+
 **Managing workspaces**
 
 With authentication complete, retrieve your workspace information:
@@ -114,10 +119,11 @@ With authentication complete, retrieve your workspace information:
 ```tsx
 npx prisma platform workspace show --early-access
 ```
-You will get a list of all your workspaces: 
+
+You will get a list of all your workspaces:
 
 ```shell
-## Output 
+## Output
 displayName : dev-adv-id
 id          : $DEV_ADV_WORKSPACE_ID
 createdAt   : 12/14/2023
@@ -126,6 +132,7 @@ displayName : test-workspace
 id          : $TEST_WORKSPACE_ID
 createdAt   : 2/23/2024
 ```
+
 Let’s use the workspace id for `test-workspace` for the demo. Store the `$TEST_WORKSPACE_ID` for the next step.
 
 **Exploring projects**
@@ -135,6 +142,7 @@ View all projects within a workspace:
 ```tsx
 npx prisma platform project show --workspace $TEST_WORKSPACE_ID --early-access
 ```
+
 The CLI will output the list of projects in the specified workspace ( `test-workspace` ):
 
 ```shell
@@ -158,7 +166,8 @@ displayName : Gift shop
 id          : $PROJECT_ID_5
 createdAt   : 2/19/2024
 ```
-Now let’s set up a temporary environment in the `Gift shop` project. Store the project id (`$PROJECT_ID_5`), as we’ll also need that when creating a new environment. 
+
+Now let’s set up a temporary environment in the `Gift shop` project. Store the project id (`$PROJECT_ID_5`), as we’ll also need that when creating a new environment.
 
 **Creating environments**
 
@@ -167,18 +176,20 @@ To create an environment to test Prisma Accelerate, run:
 ```tsx
 npx prisma platform environment create --project $PROJECT_ID_5 --name "TEST PRISMA ACCELERATE" --early-access
 ```
+
 And we should have an output confirming the successfully creation of the environment:
 
 ```shell
 Success! Environment TEST PRISMA ACCELERATE - $ENVIRONMENT_ID created.
 ```
+
 Then copy the `$ENVIRONMENT_ID`, and then enable Prisma Accelerate for the `TEST PRISMA ACCELERATE` environment:
 
 ```tsx
 npx prisma platform accelerate enable -e $ENVIRONMENT_ID --url $PASTE_DATABASE_BRANCH_URL --region $REGION --apikey yes --early-access
 ```
+
 > Setting the `apikey` to `yes` generates a new API key when Prisma Accelerate is enabled.
-> 
 
 The output should provide us with a Prisma Accelerate connection string.
 
@@ -189,6 +200,7 @@ prisma://accelerate.prisma-data.net?api_key=$PRISMA_ACCELERATE_API_KEY
 
 For more information, check out the Getting started guide here: https://pris.ly/d/accelerate-getting-started
 ```
+
 **Testing Prisma Accelerate**
 
 Update the **`.env`** file with the Prisma Accelerate connection string:
@@ -196,6 +208,7 @@ Update the **`.env`** file with the Prisma Accelerate connection string:
 ```shell
 DATABASE_URL="prisma://accelerate.prisma-data.net/?api_key=__API_KEY__"
 ```
+
 And then run your project and it should be working as expected!
 
 **Cleaning up**
@@ -205,12 +218,13 @@ Once testing is complete, let’s delete the `TEST PRISMA ACCELERATE` environmen
 ```tsx
 npx prisma platform environment delete -p $INSERT_PROJECT_ID_5 -n "TEST PRISMA ACCELERATE" --early-access
 ```
+
 Mission accomplished ✅!
 
 You can see that it was a breeze creating a new environment, enabling Prisma Accelerate and also cleaning up the resources.
 
 ## Explore and share your feedback!
 
-To explore the comprehensive command list of the latest Prisma CLI integration, please refer to our documentation available [here](https://www.prisma.io/docs/platform/platform-cli/commands). 
+To explore the comprehensive command list of the latest Prisma CLI integration, please refer to our documentation available [here](https://www.prisma.io/docs/platform/platform-cli/commands).
 
 Integrate the enhanced Prisma CLI into your workflow and share your experience with us via a [tweet](https://pris.ly/x), and if you encounter any challenges, don't hesitate to reach out in our [Discord](http://pris.ly/discord) and let us know!

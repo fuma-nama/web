@@ -8,7 +8,7 @@ metaTitle: "Cache your database queries with Prisma Accelerate"
 metaDescription: "Achieve faster performance and cost savings with Prisma Accelerate's easy per-query caching, eliminating the need for maintaining caching infrastructure. Experience faster queries, without the hassle!"
 metaImagePath: "/caching-database-queries-with-prisma-accelerate/imgs/meta-959743e064c1771e65e078aa6ebee2b402c28578-1266x711.png"
 heroImagePath: "/caching-database-queries-with-prisma-accelerate/imgs/hero-69cd8d277e2307eb14396450817be41bb1e7c305-844x474.svg"
-heroImageAlt: "The word \"caching\" with a starburst behind it, showing that it is important."
+heroImageAlt: 'The word "caching" with a starburst behind it, showing that it is important.'
 ---
 
 Dive into the benefits of per-query caching, showcasing how it can make queries faster, handle traffic surges, minimize infrastructure costs, and keep your users satisfied. Learn how to easily implement Prisma Accelerate and achieve improved app performance and cost savings.
@@ -17,7 +17,7 @@ Picture this: You and your team just released your latest app, SuperWidget. Ever
 
 To solve this, your team jumps into action quickly. You dive into your application monitoring and realize that several queries in your application have a much larger impact than anticipated. After a long night, your team implements a number of infrastructure improvements, most notably a robust caching layer, which takes the load off the rest of your infrastructure. SuperWidget performance is no longer being negatively impacted, and your new customers are happy with their experience.
 
-So, what could you and your team have done better? 
+So, what could you and your team have done better?
 
 While your team was capable, fire drills and all-nighters are the last thing you want. The solution still required a coordinated effort and a lot of wasted engineering hours. Instead, you could have saved time and frustration by using [Prisma Accelerate](https://www.prisma.io/data-platform/accelerate?utm_source=website&utm_medium=blogpost&utm_campaign=caching) and caching your queries with ease.
 
@@ -42,13 +42,14 @@ const myExpensiveQuery = await prisma.widget.findMany({
     swr: 60 * 2, // serve from cache for 2 more minutes and revalidate in the background
   },
   // [...]
-})
+});
 ```
+
 In the first case, where expensive or frequently accessed queries can overwhelm your database, a per-query cache will prevent that load for as long as the data is cached. If cost is the concern, your data will be accessed from your database once and then cached in Accelerate’s collection of globally distributed nodes, preventing additional costs from further database reads while also making your app faster!
 
 ### When to cache
 
-Now that you know why and how to cache, you may be tempted to begin caching every query. Before you do that, note what happened in our example: you and your team monitored your application *before* implementing caching.
+Now that you know why and how to cache, you may be tempted to begin caching every query. Before you do that, note what happened in our example: you and your team monitored your application _before_ implementing caching.
 
 Caching is great, but any addition can incur a cost or cause unintended side effects. At Prisma, we’re big fans of observability-driven development: instrument your app and make informed decisions. Caching should be a carefully considered option among many. If, for example, you need a certain query to always contain exactly up-to-date data, then caching will probably not be the right fit. On the other hand, cases where data doesn’t change often or doesn’t need to be up-to-date are great fits.
 
@@ -74,16 +75,19 @@ When investigating any software, there are always a lot of options. We’ve foun
 
 Accelerate is also a great fit for teams that want to onboard engineers fast. Since Accelerate provides managed infrastructure and is built into Prisma Client, even new team members unfamiliar with your codebase can cache queries easily.
 
-<br />
-> Prisma Accelerate is more than just a cache! Accelerate is [edge distributed](https://accelerate-speed-test.prisma.io/) and also handles [connection pooling](https://www.prisma.io/docs/accelerate/connection-pooling). Be sure to check out [the full documentation](https://www.prisma.io/docs/accelerate/what-is-accelerate).
->
+<br />> Prisma Accelerate is more than just a cache! Accelerate is [edge
+distributed](https://accelerate-speed-test.prisma.io/) and also handles
+[connection pooling](https://www.prisma.io/docs/accelerate/connection-pooling).
+Be sure to check out [the full
+documentation](https://www.prisma.io/docs/accelerate/what-is-accelerate). >
 
 ### Wrapping up
 
-Caching is still one of the “hard” problems of software engineering and rightfully so! Simply caching more things won’t solve problems and a team needs to take the time to understand what can be cached and how it will impact their product. 
+Caching is still one of the “hard” problems of software engineering and rightfully so! Simply caching more things won’t solve problems and a team needs to take the time to understand what can be cached and how it will impact their product.
 
 While there are many different approaches to caching, Prisma Accelerate makes it easy to implement caching on a pre-query basis and gives you more time to focus on building great products. If you’d like to take the next step, [learn more about Accelerate](https://www.prisma.io/data-platform/accelerate?utm_source=website&utm_medium=blogpost&utm_campaign=caching) and [get started](https://www.prisma.io/docs/accelerate/getting-started) caching your Prisma ORM queries today.
 
 <br />
 <br />
-[Start caching with Accelerate](https://console.prisma.io/login?utm_source=website&utm_medium=blogpost&utm_campaign=caching)
+[Start caching with
+Accelerate](https://console.prisma.io/login?utm_source=website&utm_medium=blogpost&utm_campaign=caching)

@@ -105,6 +105,7 @@ The easiest way to handle a failed migration in a developer environment is to ad
   ```
 
 - If you introduced a change in the Prisma schema that cannot be applied to a database with data (for example, a mandatory column in a table with data):
+
   1. Delete the `migration.sql` file.
 
   2. Modify the schema - for example, add a default value to the mandatory field.

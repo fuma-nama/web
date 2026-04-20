@@ -3,7 +3,15 @@ title: Textarea
 description: A multi-line text input component for forms with optional character count and validation styles.
 ---
 
-import { Textarea, textareaVariants, Button, Field, FieldLabel, FieldDescription, FieldError } from "@prisma/eclipse";
+import {
+  Textarea,
+  textareaVariants,
+  Button,
+  Field,
+  FieldLabel,
+  FieldDescription,
+  FieldError,
+} from "@prisma/eclipse";
 
 ### Usage
 
@@ -84,21 +92,13 @@ export function TextareaLimits() {
 **Live Example:**
 
 <div className="space-y-4 max-w-md my-4">
-  <Textarea
-    placeholder="Short text (50 chars)"
-    maxLength={50}
-    showCharCount
-  />
+  <Textarea placeholder="Short text (50 chars)" maxLength={50} showCharCount />
   <Textarea
     placeholder="Medium text (150 chars)"
     maxLength={150}
     showCharCount
   />
-  <Textarea
-    placeholder="Long text (500 chars)"
-    maxLength={500}
-    showCharCount
-  />
+  <Textarea placeholder="Long text (500 chars)" maxLength={500} showCharCount />
 </div>
 
 **Textarea Sizes**
@@ -109,9 +109,24 @@ import { Textarea } from "@prisma/eclipse";
 export function TextareaSizes() {
   return (
     <div className="space-y-4 max-w-md">
-      <Textarea size="lg" placeholder="Large (default)" maxLength={150} showCharCount />
-      <Textarea size="xl" placeholder="Extra Large" maxLength={150} showCharCount />
-      <Textarea size="2xl" placeholder="2X Large" maxLength={150} showCharCount />
+      <Textarea
+        size="lg"
+        placeholder="Large (default)"
+        maxLength={150}
+        showCharCount
+      />
+      <Textarea
+        size="xl"
+        placeholder="Extra Large"
+        maxLength={150}
+        showCharCount
+      />
+      <Textarea
+        size="2xl"
+        placeholder="2X Large"
+        maxLength={150}
+        showCharCount
+      />
     </div>
   );
 }
@@ -120,7 +135,12 @@ export function TextareaSizes() {
 **Live Example:**
 
 <div className="space-y-4 max-w-md my-4">
-  <Textarea size="lg" placeholder="Large (default)" maxLength={150} showCharCount />
+  <Textarea
+    size="lg"
+    placeholder="Large (default)"
+    maxLength={150}
+    showCharCount
+  />
   <Textarea size="xl" placeholder="Extra Large" maxLength={150} showCharCount />
   <Textarea size="2xl" placeholder="2X Large" maxLength={150} showCharCount />
 </div>
@@ -170,7 +190,9 @@ export function TextareaFieldWithCount() {
         maxLength={300}
         showCharCount
       />
-      <FieldDescription>Provide a brief description (max 300 characters).</FieldDescription>
+      <FieldDescription>
+        Provide a brief description (max 300 characters).
+      </FieldDescription>
     </Field>
   );
 }
@@ -187,7 +209,9 @@ export function TextareaFieldWithCount() {
       maxLength={300}
       showCharCount
     />
-    <FieldDescription>Provide a brief description (max 300 characters).</FieldDescription>
+    <FieldDescription>
+      Provide a brief description (max 300 characters).
+    </FieldDescription>
   </Field>
 </div>
 
@@ -218,7 +242,13 @@ export function DisabledTextarea() {
 Use the Field component with FieldError for proper error handling:
 
 ```tsx
-import { Textarea, Field, FieldLabel, FieldDescription, FieldError } from "@prisma/eclipse";
+import {
+  Textarea,
+  Field,
+  FieldLabel,
+  FieldDescription,
+  FieldError,
+} from "@prisma/eclipse";
 
 export function InvalidTextareaWithField() {
   return (
@@ -532,14 +562,17 @@ import { useForm } from "react-hook-form";
 import { Textarea } from "@prisma/eclipse";
 
 export function FormWithValidation() {
-  const { register, formState: { errors } } = useForm();
+  const {
+    register,
+    formState: { errors },
+  } = useForm();
 
   return (
     <form>
       <Textarea
         {...register("description", {
           required: "Description is required",
-          minLength: { value: 10, message: "Too short" }
+          minLength: { value: 10, message: "Too short" },
         })}
         aria-invalid={errors.description ? "true" : "false"}
         maxLength={500}

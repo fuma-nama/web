@@ -24,7 +24,10 @@ function AccordionItem({
   const contentId = `${anchorId}-content-${index}`;
 
   return (
-    <div className="scroll-mt-16 md:scroll-mt-24 border-t border-stroke-neutral" id={anchorId}>
+    <div
+      className="scroll-mt-16 md:scroll-mt-24 border-t border-stroke-neutral"
+      id={anchorId}
+    >
       <button
         type="button"
         className="flex w-full items-center justify-between py-3 text-left cursor-pointer"

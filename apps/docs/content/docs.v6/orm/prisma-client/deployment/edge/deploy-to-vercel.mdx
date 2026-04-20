@@ -286,7 +286,9 @@ import { PrismaNeon } from "@prisma/adapter-neon";
 export const runtime = "nodejs"; // can also be set to 'edge'
 
 export async function GET(request: Request) {
-  const adapter = new PrismaNeon({ connectionString: process.env.POSTGRES_PRISMA_URL });
+  const adapter = new PrismaNeon({
+    connectionString: process.env.POSTGRES_PRISMA_URL,
+  });
   const prisma = new PrismaClient({ adapter });
 
   const users = await prisma.user.findMany();
@@ -551,7 +553,9 @@ import { PrismaNeon } from "@prisma/adapter-neon";
 export const runtime = "nodejs"; // can also be set to 'edge'
 
 export async function GET(request: Request) {
-  const adapter = new PrismaNeon({ connectionString: process.env.DATABASE_URL });
+  const adapter = new PrismaNeon({
+    connectionString: process.env.DATABASE_URL,
+  });
   const prisma = new PrismaClient({ adapter });
 
   const users = await prisma.user.findMany();

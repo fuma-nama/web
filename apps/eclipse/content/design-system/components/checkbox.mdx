@@ -3,7 +3,13 @@ title: Checkbox
 description: A checkbox component built on Radix UI with accessible state management and keyboard support.
 ---
 
-import { Checkbox, Field, FieldLabel, FieldDescription, FieldError } from "@prisma/eclipse";
+import {
+  Checkbox,
+  Field,
+  FieldLabel,
+  FieldDescription,
+  FieldError,
+} from "@prisma/eclipse";
 
 ### Usage
 
@@ -34,8 +40,8 @@ export function CheckboxWithLabel() {
   return (
     <div className="flex items-center gap-2">
       <Checkbox id="terms" />
-      <label 
-        htmlFor="terms" 
+      <label
+        htmlFor="terms"
         className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
       >
         Accept terms and conditions
@@ -49,8 +55,8 @@ export function CheckboxWithLabel() {
 
 <div className="flex items-center gap-2 my-4">
   <Checkbox id="terms-example" />
-  <label 
-    htmlFor="terms-example" 
+  <label
+    htmlFor="terms-example"
     className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
   >
     Accept terms and conditions
@@ -70,7 +76,9 @@ export function CheckboxWithField() {
       <Checkbox id="marketing" className="mt-0.5" />
       <div className="flex flex-col gap-1">
         <FieldLabel htmlFor="marketing">Marketing emails</FieldLabel>
-        <FieldDescription>Receive emails about new products and features.</FieldDescription>
+        <FieldDescription>
+          Receive emails about new products and features.
+        </FieldDescription>
       </div>
     </Field>
   );
@@ -84,7 +92,9 @@ export function CheckboxWithField() {
     <Checkbox id="marketing-field" />
     <div className="flex flex-col gap-1">
       <FieldLabel htmlFor="marketing-field">Marketing emails</FieldLabel>
-      <FieldDescription>Receive emails about new products and features.</FieldDescription>
+      <FieldDescription>
+        Receive emails about new products and features.
+      </FieldDescription>
     </div>
   </Field>
 </div>
@@ -103,8 +113,8 @@ export function ControlledCheckbox() {
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-2">
-        <Checkbox 
-          id="controlled" 
+        <Checkbox
+          id="controlled"
           checked={checked}
           onCheckedChange={setChecked}
         />
@@ -141,8 +151,8 @@ export function DisabledCheckbox() {
     <div className="space-y-4">
       <div className="flex items-center gap-2">
         <Checkbox id="disabled-unchecked" disabled />
-        <label 
-          htmlFor="disabled-unchecked" 
+        <label
+          htmlFor="disabled-unchecked"
           className="text-sm font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
         >
           Disabled unchecked
@@ -150,8 +160,8 @@ export function DisabledCheckbox() {
       </div>
       <div className="flex items-center gap-2">
         <Checkbox id="disabled-checked" disabled checked />
-        <label 
-          htmlFor="disabled-checked" 
+        <label
+          htmlFor="disabled-checked"
           className="text-sm font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
         >
           Disabled checked
@@ -167,8 +177,8 @@ export function DisabledCheckbox() {
 <div className="space-y-4 my-4">
   <div className="flex items-center gap-2">
     <Checkbox id="disabled-unchecked-example" disabled />
-    <label 
-      htmlFor="disabled-unchecked-example" 
+    <label
+      htmlFor="disabled-unchecked-example"
       className="text-sm font-medium opacity-70 cursor-not-allowed"
     >
       Disabled unchecked
@@ -176,8 +186,8 @@ export function DisabledCheckbox() {
   </div>
   <div className="flex items-center gap-2">
     <Checkbox id="disabled-checked-example" disabled checked />
-    <label 
-      htmlFor="disabled-checked-example" 
+    <label
+      htmlFor="disabled-checked-example"
       className="text-sm font-medium opacity-70 cursor-not-allowed"
     >
       Disabled checked
@@ -197,15 +207,21 @@ export function CheckboxGroup() {
     <div className="space-y-4">
       <div className="flex items-center gap-2 mb-2">
         <Checkbox id="notifications" defaultChecked />
-        <label htmlFor="notifications" className="text-sm font-medium">Notifications</label>
+        <label htmlFor="notifications" className="text-sm font-medium">
+          Notifications
+        </label>
       </div>
       <div className="flex items-center gap-2 mb-2">
         <Checkbox id="emails" />
-        <label htmlFor="emails" className="text-sm font-medium">Email updates</label>
+        <label htmlFor="emails" className="text-sm font-medium">
+          Email updates
+        </label>
       </div>
       <div className="flex items-center gap-2 mb-2">
         <Checkbox id="sms" />
-        <label htmlFor="sms" className="text-sm font-medium">SMS alerts</label>
+        <label htmlFor="sms" className="text-sm font-medium">
+          SMS alerts
+        </label>
       </div>
     </div>
   );
@@ -217,15 +233,21 @@ export function CheckboxGroup() {
 <div className="space-y-4 my-4">
   <div className="flex items-center gap-2 mb-2">
     <Checkbox id="notifications-example" defaultChecked />
-    <label htmlFor="notifications-example" className="text-sm font-medium">Notifications</label>
+    <label htmlFor="notifications-example" className="text-sm font-medium">
+      Notifications
+    </label>
   </div>
   <div className="flex items-center gap-2 mb-2">
     <Checkbox id="emails-example" />
-    <label htmlFor="emails-example" className="text-sm font-medium">Email updates</label>
+    <label htmlFor="emails-example" className="text-sm font-medium">
+      Email updates
+    </label>
   </div>
   <div className="flex items-center gap-2 mb-2">
     <Checkbox id="sms-example" />
-    <label htmlFor="sms-example" className="text-sm font-medium">SMS alerts</label>
+    <label htmlFor="sms-example" className="text-sm font-medium">
+      SMS alerts
+    </label>
   </div>
 </div>
 
@@ -234,7 +256,13 @@ export function CheckboxGroup() {
 Use with Field components for validation:
 
 ```tsx
-import { Checkbox, Field, FieldLabel, FieldDescription, FieldError } from "@prisma/eclipse";
+import {
+  Checkbox,
+  Field,
+  FieldLabel,
+  FieldDescription,
+  FieldError,
+} from "@prisma/eclipse";
 
 export function CheckboxWithValidation() {
   const [accepted, setAccepted] = useState(false);
@@ -252,14 +280,16 @@ export function CheckboxWithValidation() {
   return (
     <div className="space-y-4">
       <Field orientation="horizontal" className="items-start">
-        <Checkbox 
-          id="terms-validation" 
+        <Checkbox
+          id="terms-validation"
           checked={accepted}
           onCheckedChange={setAccepted}
           className="mt-0.5"
         />
         <div className="flex flex-col gap-1">
-          <FieldLabel htmlFor="terms-validation">I accept the terms and conditions</FieldLabel>
+          <FieldLabel htmlFor="terms-validation">
+            I accept the terms and conditions
+          </FieldLabel>
           <FieldDescription>You must accept to continue.</FieldDescription>
           {error && <FieldError>{error}</FieldError>}
         </div>
@@ -275,7 +305,9 @@ export function CheckboxWithValidation() {
   <Field orientation="horizontal" className="items-start">
     <Checkbox id="terms-validation-example" className="mt-0.5" />
     <div className="flex flex-col gap-1">
-      <FieldLabel htmlFor="terms-validation-example">I accept the terms and conditions</FieldLabel>
+      <FieldLabel htmlFor="terms-validation-example">
+        I accept the terms and conditions
+      </FieldLabel>
       <FieldDescription>You must accept to continue.</FieldDescription>
     </div>
   </Field>
@@ -291,23 +323,29 @@ export function CheckboxForm() {
     <form className="space-y-6 max-w-md">
       <div className="space-y-4">
         <h3 className="text-lg font-semibold">Privacy Settings</h3>
-        
+
         <div className="flex items-center gap-2 mb-2">
           <Checkbox id="analytics" defaultChecked />
-          <label htmlFor="analytics" className="text-sm font-medium">Allow analytics cookies</label>
+          <label htmlFor="analytics" className="text-sm font-medium">
+            Allow analytics cookies
+          </label>
         </div>
-        
+
         <div className="flex items-center gap-2 mb-2">
           <Checkbox id="marketing-cookies" />
-          <label htmlFor="marketing-cookies" className="text-sm font-medium">Allow marketing cookies</label>
+          <label htmlFor="marketing-cookies" className="text-sm font-medium">
+            Allow marketing cookies
+          </label>
         </div>
-        
+
         <div className="flex items-center gap-2 mb-2">
           <Checkbox id="third-party" />
-          <label htmlFor="third-party" className="text-sm font-medium">Allow third-party cookies</label>
+          <label htmlFor="third-party" className="text-sm font-medium">
+            Allow third-party cookies
+          </label>
         </div>
       </div>
-      
+
       <Button type="submit">Save preferences</Button>
     </form>
   );
@@ -319,20 +357,26 @@ export function CheckboxForm() {
 <form className="space-y-6 max-w-md my-4">
   <div className="space-y-4">
     <h3 className="text-lg font-semibold">Privacy Settings</h3>
-    
+
     <div className="flex items-center gap-2 mb-2">
       <Checkbox id="analytics-form" defaultChecked />
-      <label htmlFor="analytics-form" className="text-sm font-medium">Allow analytics cookies</label>
+      <label htmlFor="analytics-form" className="text-sm font-medium">
+        Allow analytics cookies
+      </label>
     </div>
-    
+
     <div className="flex items-center gap-2 mb-2">
       <Checkbox id="marketing-cookies-form" />
-      <label htmlFor="marketing-cookies-form" className="text-sm font-medium">Allow marketing cookies</label>
+      <label htmlFor="marketing-cookies-form" className="text-sm font-medium">
+        Allow marketing cookies
+      </label>
     </div>
-    
+
     <div className="flex items-center gap-2 mb-2">
       <Checkbox id="third-party-form" />
-      <label htmlFor="third-party-form" className="text-sm font-medium">Allow third-party cookies</label>
+      <label htmlFor="third-party-form" className="text-sm font-medium">
+        Allow third-party cookies
+      </label>
     </div>
   </div>
 </form>

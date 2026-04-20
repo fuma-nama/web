@@ -32,7 +32,7 @@ The schema is made up of two major components:
 Here is what a simple example looks like, using the `makeExecutableSchema` function from [`graphql-tools`](https://github.com/apollographql/graphql-tools):
 
 ```js
-const { makeExecutableSchema } = require('graphql-tools')
+const { makeExecutableSchema } = require("graphql-tools");
 
 // SCHEMA DEFINITION
 const typeDefs = `
@@ -42,23 +42,24 @@ type Query {
 type User {
   id: ID!
   name: String
-}`
+}`;
 
 // RESOLVERS
 const resolvers = {
   Query: {
     user: (root, args, context, info) => {
-      return fetchUserById(args.id)
+      return fetchUserById(args.id);
     },
   },
-}
+};
 
 // (EXECUTABLE) SCHEMA
 const schema = makeExecutableSchema({
   typeDefs,
   resolvers,
-})
+});
 ```
+
 `typeDefs` contains the schema definition, including the required `Query` and a simple `User` type. `resolvers` is an object containing the implementation for the `user` field defined on the `Query` type.
 
 `makeExecutableSchema` now maps the fields from the SDL types in the schema definition to the corresponding functions defined in the `resolvers` object. It returns an instance of `GraphQLSchema` which we can now use to [_execute_](https://www.prisma.io/blog/graphql-server-basics-the-schema-ac5e2950214e) actual GraphQL queries, for example using the [`graphql`](http://graphql.org/graphql-js/graphql/#graphql) function from GraphQL.js:
@@ -80,6 +81,7 @@ const query = `
 graphql(schema, query)
   .then(result => console.log(result))
 ```
+
 Because the `graphql` function is able to _execute_ a query against an instance of `GraphQLSchema`, it’s also referred to as a _GraphQL (execution) engine_.
 
 A GraphQL execution engine is a program (or function) that, given an executable schema and a query (or mutation), produces a valid response. Therefore, its main responsibility is to orchestrate the invocations of the resolver functions in the executable schema and properly package up the response data, [according to the GraphQL specification](https://spec.graphql.org/October2016/#sec-Response).
@@ -104,6 +106,7 @@ query {
   }
 }
 ```
+
 This would return the following JSON data:
 
 ```json
@@ -136,6 +139,7 @@ This would return the following JSON data:
   }
 }
 ```
+
 As you can see, the information in this JSON object is equivalent to our SDL-based schema definition from above (actually it’s not 100% equivalent as we haven’t asked for the _arguments_ on the fields, but we could simply extend the introspection query from above to include these as well).
 
 ## Creating a remote schema
@@ -156,12 +160,15 @@ Obviously, we can’t _download_ the resolvers in the same way we download the s
 Enough palaver, let’s see some code! Here is an example which is based on a Graphcool CRUD API for a type called `User` in order to create a remote schema which is then exposed through a dedicated server (using [`graphql-yoga`](https://github.com/prismagraphql/graphql-yoga)):
 
 ```js
-const fetch = require('node-fetch')
-const { makeRemoteExecutableSchema, introspectSchema } = require('graphql-tools')
-const { GraphQLServer } = require('graphql-yoga')
-const { createHttpLink } = require('apollo-link-http')
+const fetch = require("node-fetch");
+const {
+  makeRemoteExecutableSchema,
+  introspectSchema,
+} = require("graphql-tools");
+const { GraphQLServer } = require("graphql-yoga");
+const { createHttpLink } = require("apollo-link-http");
 
-const { DATABASE_SERVICE_ID } = require('./services')
+const { DATABASE_SERVICE_ID } = require("./services");
 
 async function run() {
   // 1. Create Apollo Link that's connected to the underlying GraphQL API
@@ -169,24 +176,27 @@ async function run() {
     createHttpLink({
       uri: `https://api.graph.cool/simple/v1/${DATABASE_SERVICE_ID}`,
       fetch,
-    })
+    });
 
   // 2. Retrieve schema definition of the underlying GraphQL API
-  const databaseServiceSchemaDefinition = await introspectSchema(makeDatabaseServiceLink())
+  const databaseServiceSchemaDefinition = await introspectSchema(
+    makeDatabaseServiceLink(),
+  );
 
   // 3. Create the executable schema based on schema definition and Apollo Link
   const databaseServiceExecutableSchema = makeRemoteExecutableSchema({
     schema: databaseServiceSchemaDefinition,
     link: makeDatabaseServiceLink(),
-  })
+  });
 
   // 4. Create and start proxy server based on the executable schema
-  const server = new GraphQLServer({ schema: databaseServiceExecutableSchema })
-  server.start(() => console.log('Server is running on http://localhost:4000'))
+  const server = new GraphQLServer({ schema: databaseServiceExecutableSchema });
+  server.start(() => console.log("Server is running on http://localhost:4000"));
 }
 
-run()
+run();
 ```
+
 > Find the working example for this code [here](https://github.com/nikolasburk/graphcool-remote-schema)
 
 For context, the CRUD API for the User type looks somewhat similar to this (the full version can be found [here](https://github.com/nikolasburk/graphcool-remote-schema/blob/master/user-db/database.graphql)):
@@ -208,6 +218,7 @@ type Mutation {
   deleteUser(id: ID!): User
 }
 ```
+
 ## Remote schemas under the hood
 
 Let’s investigate what `databaseServiceSchemaDefinition` and `databaseServiceExecutableSchema` from the above example look like under the covers.
@@ -255,6 +266,7 @@ function (root, args, context, info) {
   });
 }
 ```
+
 Line 12–16 is what’s interesting to us: a function called `fetcher` is invoked with three arguments: `query`, `variables` and `context`. The `fetcher` was generated based on the Link we provided earlier, it basically is a function that’s able to send a GraphQL operation to a specific endpoint (the one used to create the Link), which is exactly what it’s doing here. Notice that the actual GraphQL document that’s passed as the value for query in line 13 originates from the info argument passed into the resolver (see line 10). `info` contains the AST representation of the query .
 
 ### Non-root resolvers don’t make network calls
@@ -290,6 +302,7 @@ function (parent, args, context, info) {
     }
 }
 ```
+
 Interestingly, this time the generated resolver does not use a `fetcher` function — in fact it doesn’t call out to the network at all. The result being returned is simply retrieved from the `parent` argument (line 10) that’s passed into the function.
 
 ### Tracing resolver data in remote schemas
@@ -327,6 +340,7 @@ type Article {
   author: User!
 }
 ```
+
 Based on the `Query` type, it is possible to send the following query to the API:
 
 ```graphql
@@ -338,6 +352,7 @@ query {
   }
 }
 ```
+
 How would the corresponding resolvers typically be implemented? A standard approach for this looks as follows (assume functions starting with `fetch` in this code are loading resources from a database):
 
 ```js
@@ -347,17 +362,18 @@ const resolvers = {
     user: (root, args) => fetchUserById(args.id), // load from database
   },
   User: {
-    id: parent => parent.id,
-    name: parent => parent.name,
-    articles: parent => fetchArticlesForUser(parent.id), // load from database
+    id: (parent) => parent.id,
+    name: (parent) => parent.name,
+    articles: (parent) => fetchArticlesForUser(parent.id), // load from database
   },
   Article: {
-    id: parent => parent.id,
-    title: parent => parent.title,
-    author: parent => fetchAuthorForArticle(parent.id), // load from database
+    id: (parent) => parent.id,
+    title: (parent) => parent.title,
+    author: (parent) => fetchAuthorForArticle(parent.id), // load from database
   },
-}
+};
 ```
+
 With this approach, we’re resolving on a _type level_. This means that the actual object for a specific query (e.g. a particular `Article`) is fetched _before_ any resolvers of the `Article` type are called.
 
 Consider the resolver invocations for the query above:
@@ -382,4 +398,3 @@ In this article, we learned how to create a _proxy_ for any existing GraphQL API
 We also saw that this remote executable schema is implemented using a _multi-level_ resolver where nested data is fetched a single time by the first resolver rather than multiple times on a type level.
 
 There is still a lot to discover about remote schemas: How does this relate to schema stitching? How does this work with GraphQL subscriptions? What happens to my `context` object? Let us know in the comments what you’d like to learn next! 👋
-

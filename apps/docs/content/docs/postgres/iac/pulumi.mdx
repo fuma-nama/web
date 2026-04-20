@@ -108,9 +108,13 @@ const connection = new prismaPostgres.Connection("connection", {
   name: "api-key",
 });
 
-const availableRegions = prismaPostgres.getRegionsOutput().regions.apply((regions) =>
-  regions.filter((r) => r.status === "available").map((r) => `${r.id} (${r.name})`)
-);
+const availableRegions = prismaPostgres
+  .getRegionsOutput()
+  .regions.apply((regions) =>
+    regions
+      .filter((r) => r.status === "available")
+      .map((r) => `${r.id} (${r.name})`),
+  );
 
 export const projectId = project.id;
 export const databaseId = database.id;

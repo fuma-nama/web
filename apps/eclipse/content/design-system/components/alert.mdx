@@ -15,11 +15,7 @@ The Alert component displays important information with a default circle-exclama
 import { Alert } from "@prisma/eclipse";
 
 export function BasicAlert() {
-  return (
-    <Alert>
-      This is a basic alert message with regular content.
-    </Alert>
-  );
+  return <Alert>This is a basic alert message with regular content.</Alert>;
 }
 ```
 
@@ -27,9 +23,7 @@ export function BasicAlert() {
   <p className="text-sm font-semibold mb-4">Live Example:</p>
 </div>
 
-<Alert>
-  This is a basic alert message with regular content.
-</Alert>
+<Alert>This is a basic alert message with regular content.</Alert>
 
 **Alert Variants**
 
@@ -49,9 +43,7 @@ export function AlertVariants() {
         Success variant - for positive confirmations.
       </Alert>
 
-      <Alert variant="warning">
-        Warning variant - for important notices.
-      </Alert>
+      <Alert variant="warning">Warning variant - for important notices.</Alert>
 
       <Alert variant="error">
         Error variant - for errors and critical information.
@@ -64,17 +56,11 @@ export function AlertVariants() {
 <div className="not-prose my-6 space-y-4">
   <p className="text-sm font-semibold mb-4">Live Examples:</p>
 
-  <Alert variant="ppg">
-    PPG variant - for general information and tips.
-  </Alert>
+<Alert variant="ppg">PPG variant - for general information and tips.</Alert>
 
-  <Alert variant="success">
-    Success variant - for positive confirmations.
-  </Alert>
+<Alert variant="success">Success variant - for positive confirmations.</Alert>
 
-  <Alert variant="warning">
-    Warning variant - for important notices.
-  </Alert>
+<Alert variant="warning">Warning variant - for important notices.</Alert>
 
   <Alert variant="error">
     Error variant - for errors and critical information.
@@ -91,19 +77,33 @@ import { Alert } from "@prisma/eclipse";
 export function CustomIconAlerts() {
   return (
     <>
-      <Alert variant="ppg" icon={<i className="fa-regular fa-terminal h-4 w-4 mt-0.5" />}>
+      <Alert
+        variant="ppg"
+        icon={<i className="fa-regular fa-terminal h-4 w-4 mt-0.5" />}
+      >
         Alert with a custom terminal icon.
       </Alert>
 
-      <Alert variant="error" icon={<i className="fa-regular fa-circle-exclamation h-4 w-4 mt-0.5" />}>
+      <Alert
+        variant="error"
+        icon={<i className="fa-regular fa-circle-exclamation h-4 w-4 mt-0.5" />}
+      >
         Alert with a custom error icon.
       </Alert>
 
-      <Alert variant="success" icon={<i className="fa-regular fa-check h-4 w-4 mt-0.5" />}>
+      <Alert
+        variant="success"
+        icon={<i className="fa-regular fa-check h-4 w-4 mt-0.5" />}
+      >
         Alert with a custom success icon.
       </Alert>
 
-      <Alert variant="warning" icon={<i className="fa-regular fa-triangle-exclamation h-4 w-4 mt-0.5" />}>
+      <Alert
+        variant="warning"
+        icon={
+          <i className="fa-regular fa-triangle-exclamation h-4 w-4 mt-0.5" />
+        }
+      >
         Alert with a custom warning icon.
       </Alert>
 
@@ -136,6 +136,7 @@ export function CustomIconAlerts() {
     <Alert variant="ppg" icon={null}>
       Alert without an icon.
     </Alert>
+
 </div>
 
 **Rich MDX Content**
@@ -148,15 +149,10 @@ import { Alert } from "@prisma/eclipse";
 export function RichContentAlert() {
   return (
     <Alert variant="ppg">
-      **Getting Started**
-
-      Follow these steps to get started:
-
-      1. Install the package: `npm install @prisma/client`
-      2. Initialize Prisma: `npx prisma init`
-      3. Define your schema and run migrations
-
-      For more information, visit the [documentation](https://prisma.io/docs).
+      **Getting Started** Follow these steps to get started: 1. Install the
+      package: `npm install @prisma/client` 2. Initialize Prisma: `npx prisma
+      init` 3. Define your schema and run migrations For more information, visit
+      the [documentation](https://prisma.io/docs).
     </Alert>
   );
 }
@@ -167,9 +163,9 @@ export function RichContentAlert() {
 
 Follow these steps to get started:
 
- 1. Install the package: `npm install @prisma/client`
- 2. Initialize Prisma: `npx prisma init`
- 3. Define your schema and run migrations
+1.  Install the package: `npm install @prisma/client`
+2.  Initialize Prisma: `npx prisma init`
+3.  Define your schema and run migrations
 
 For more information, visit the [documentation](https://prisma.io/docs).
 :::
@@ -216,28 +212,37 @@ export function ComplexAlerts() {
 <div className="not-prose my-6 space-y-4">
   <p className="text-sm font-semibold mb-4">Live Examples:</p>
 
-  <Alert variant="warning">
-    <div>
-      <h3 className="text-base font-semibold mb-2">Important Update</h3>
-      <p className="mb-2">This feature will be deprecated in version 6.0. Please migrate to the new API:</p>
-      <ul className="list-disc list-inside space-y-1">
-        <li>Old: <code>prisma.user.findMany()</code></li>
-        <li>New: <code>prisma.user.findMany({`{ where: {} }`})</code></li>
-      </ul>
-    </div>
-  </Alert>
+<Alert variant="warning">
+  <div>
+    <h3 className="text-base font-semibold mb-2">Important Update</h3>
+    <p className="mb-2">
+      This feature will be deprecated in version 6.0. Please migrate to the new
+      API:
+    </p>
+    <ul className="list-disc list-inside space-y-1">
+      <li>
+        Old: <code>prisma.user.findMany()</code>
+      </li>
+      <li>
+        New: <code>prisma.user.findMany({`{ where: {} }`})</code>
+      </li>
+    </ul>
+  </div>
+</Alert>
 
-  <Alert variant="error">
-    <div>
-      <p className="font-bold mb-2">Connection Error</p>
-      <p className="mb-2">Unable to connect to the database. Please check:</p>
-      <ul className="list-disc list-inside space-y-1">
-        <li>Database credentials in <code>.env</code></li>
-        <li>Database server is running</li>
-        <li>Network connectivity</li>
-      </ul>
-    </div>
-  </Alert>
+<Alert variant="error">
+  <div>
+    <p className="font-bold mb-2">Connection Error</p>
+    <p className="mb-2">Unable to connect to the database. Please check:</p>
+    <ul className="list-disc list-inside space-y-1">
+      <li>
+        Database credentials in <code>.env</code>
+      </li>
+      <li>Database server is running</li>
+      <li>Network connectivity</li>
+    </ul>
+  </div>
+</Alert>
 
   <Alert variant="success">
     <div>
@@ -337,8 +342,6 @@ Maps to success variant.
 Maps to error variant.
 :::
 ```
-
-
 
 <div className="not-prose my-6 space-y-4">
   <p className="text-sm font-semibold mb-4">Live Example:</p>

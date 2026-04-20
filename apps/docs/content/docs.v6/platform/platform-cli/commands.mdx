@@ -1,10 +1,10 @@
 ---
 title: Commands
-description: 'Complete reference for Prisma Data Platform CLI commands, including authentication, project management, and database operations.'
+description: "Complete reference for Prisma Data Platform CLI commands, including authentication, project management, and database operations."
 displayed_sidebar: platformSidebar
 url: /v6/platform/platform-cli/commands
-metaTitle: 'Platform CLI: Commands'
-metaDescription: 'Complete reference for Prisma Data Platform CLI commands, including authentication, project management, and database operations.'
+metaTitle: "Platform CLI: Commands"
+metaDescription: "Complete reference for Prisma Data Platform CLI commands, including authentication, project management, and database operations."
 ---
 
 This document describes the Prisma Data Platform's integrated Prisma CLI commands, arguments, and options.
@@ -240,12 +240,12 @@ npx prisma platform accelerate enable \
 
 ##### <span>Arguments</span>
 
-| Argument             | Type      | Required | Description                                                                                                                                                                                                                                                                         |
-| -------------------- | --------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `--environment` `-e` | `string`  | yes      | The environment `id`.<br/><br/> **Hint:** You can view your environment ids with the [`environment show`](#environment-show) command.                                                                                                                                               |
-| `--url`              | `string`  | yes      | Your database connection string.                                                                                                                                                                                                                                                    |
+| Argument             | Type      | Required | Description                                                                                                                                                                                                                                                                    |
+| -------------------- | --------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `--environment` `-e` | `string`  | yes      | The environment `id`.<br/><br/> **Hint:** You can view your environment ids with the [`environment show`](#environment-show) command.                                                                                                                                          |
+| `--url`              | `string`  | yes      | Your database connection string.                                                                                                                                                                                                                                               |
 | `--region`           | `string`  | no       | The region for Prisma Accelerate’s managed connection pool.<br/><br/>View the list of available regions [here](/v6/accelerate/faq#what-regions-is-accelerates-connection-pool-available-in).<br/><br/>**Hint**: Select the region _nearest_ your database for optimal latency. |
-| `--apikey`           | `boolean` | no       | If yes, a new API key will be generated for the associated environment.                                                                                                                                                                                                             |
+| `--apikey`           | `boolean` | no       | If yes, a new API key will be generated for the associated environment.                                                                                                                                                                                                        |
 
 #### `accelerate disable`
 

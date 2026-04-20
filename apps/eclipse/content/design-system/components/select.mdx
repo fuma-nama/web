@@ -245,7 +245,10 @@ export function SelectWithField() {
       <FieldLabel htmlFor="country">Country</FieldLabel>
       <Select>
         <SelectTrigger id="country">
-          <SelectValue placeholder="Select your country" className="capitalize" />
+          <SelectValue
+            placeholder="Select your country"
+            className="capitalize"
+          />
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="us">United States</SelectItem>
@@ -390,6 +393,7 @@ export function SelectWithDisabledItems() {
 The root component that manages select state.
 
 **Props:**
+
 - `value` - Controlled value (string, optional)
 - `onValueChange` - Callback when value changes ((value: string) => void, optional)
 - `open` - Controlled open state (boolean, optional)
@@ -411,6 +415,7 @@ The root component that manages select state.
 The button that triggers the select dropdown.
 
 **Props:**
+
 - `size` - Size variant ("sm" | "default", default: "default")
 - `className` - Additional CSS classes (string or function, optional)
 - `disabled` - Disable the trigger (boolean, default: false)
@@ -427,6 +432,7 @@ The button that triggers the select dropdown.
 Displays the currently selected value or placeholder.
 
 **Props:**
+
 - `placeholder` - Text to show when no value is selected (string, optional)
 - `className` - Additional CSS classes (string or function, optional)
 
@@ -439,6 +445,7 @@ Displays the currently selected value or placeholder.
 The dropdown container that holds the list of options.
 
 **Props:**
+
 - `side` - Position relative to trigger ("top" | "bottom" | "left" | "right", default: "bottom")
 - `align` - Alignment relative to trigger ("start" | "center" | "end", default: "center")
 - `sideOffset` - Distance from trigger in pixels (number, default: 4)
@@ -457,6 +464,7 @@ The dropdown container that holds the list of options.
 An individual option in the select list.
 
 **Props:**
+
 - `value` - The value of the item (string, required)
 - `disabled` - Disable the item (boolean, default: false)
 - `className` - Additional CSS classes (string or function, optional)
@@ -472,6 +480,7 @@ An individual option in the select list.
 A container for grouping related items.
 
 **Props:**
+
 - `className` - Additional CSS classes (string or function, optional)
 - `children` - Group content (ReactNode)
 
@@ -487,6 +496,7 @@ A container for grouping related items.
 A label for a group of items.
 
 **Props:**
+
 - `className` - Additional CSS classes (string or function, optional)
 - `children` - Label content (ReactNode)
 
@@ -499,6 +509,7 @@ A label for a group of items.
 A visual separator between groups or items.
 
 **Props:**
+
 - `className` - Additional CSS classes (string or function, optional)
 
 ```tsx
@@ -650,6 +661,7 @@ export function SelectForm() {
 ### Controlled vs Uncontrolled
 
 **Uncontrolled (with defaultValue):**
+
 ```tsx
 <Select defaultValue="option1">
   <SelectTrigger>
@@ -663,6 +675,7 @@ export function SelectForm() {
 ```
 
 **Controlled (with value and onValueChange):**
+
 ```tsx
 const [value, setValue] = useState("option1");
 
@@ -674,7 +687,7 @@ const [value, setValue] = useState("option1");
     <SelectItem value="option1">Option 1</SelectItem>
     <SelectItem value="option2">Option 2</SelectItem>
   </SelectContent>
-</Select>
+</Select>;
 ```
 
 ### Performance Tips
@@ -692,12 +705,13 @@ import { useMemo } from "react";
 
 export function OptimizedSelect({ items }) {
   const memoizedItems = useMemo(
-    () => items.map((item) => (
-      <SelectItem key={item.id} value={item.id}>
-        {item.name}
-      </SelectItem>
-    )),
-    [items]
+    () =>
+      items.map((item) => (
+        <SelectItem key={item.id} value={item.id}>
+          {item.name}
+        </SelectItem>
+      )),
+    [items],
   );
 
   return (
@@ -705,9 +719,7 @@ export function OptimizedSelect({ items }) {
       <SelectTrigger>
         <SelectValue placeholder="Select..." />
       </SelectTrigger>
-      <SelectContent>
-        {memoizedItems}
-      </SelectContent>
+      <SelectContent>{memoizedItems}</SelectContent>
     </Select>
   );
 }

@@ -177,7 +177,12 @@ export async function GET() {
   const fonts = await getFonts();
 
   return new ImageResponse(
-    <PrismaOGImage title="Prisma Blog" description="Guides, announcements, and articles about Prisma, ORMs, databases, and the data access layer." />,
+    (
+      <PrismaOGImage
+        title="Prisma Blog"
+        description="Guides, announcements, and articles about Prisma, ORMs, databases, and the data access layer."
+      />
+    ),
     {
       width: 1200,
       height: 630,

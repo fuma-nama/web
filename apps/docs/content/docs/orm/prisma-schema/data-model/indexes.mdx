@@ -13,25 +13,28 @@ Prisma ORM allows configuration of database indexes, unique constraints and prim
 You can configure indexes, unique constraints, and primary key constraints with the following attribute arguments:
 
 - The [`length` argument](#configuring-the-length-of-indexes-with-length-mysql) allows you to specify a maximum length for the subpart of the value to be indexed on `String` and `Bytes` types
+
   - Available on the `@id`, `@@id`, `@unique`, `@@unique` and `@@index` attributes
   - MySQL only
 
 - The [`sort` argument](#configuring-the-index-sort-order-with-sort) allows you to specify the order that the entries of the constraint or index are stored in the database
+
   - Available on the `@unique`, `@@unique` and `@@index` attributes in all databases, and on the `@id` and `@@id` attributes in SQL Server
 
 - The [`type` argument](#configuring-the-access-type-of-indexes-with-type-postgresql) allows you to support index access methods other than PostgreSQL's default `BTree` access method
+
   - Available on the `@@index` attribute
   - PostgreSQL only
   - Supported index access methods: `Hash`, `Gist`, `Gin`, `SpGist` and `Brin`
 
 - The [`clustered` argument](#configuring-if-indexes-are-clustered-or-non-clustered-with-clustered-sql-server) allows you to configure whether a constraint or index is clustered or non-clustered
+
   - Available on the `@id`, `@@id`, `@unique`, `@@unique` and `@@index` attributes
   - SQL Server only
 
 - The [`map` argument](#configuring-the-name-of-indexes-with-map) allows you to specify a custom name for the index or constraint in the underlying database
   - Available on the `@id`, `@@id`, `@unique`, `@@unique` and `@@index` attributes
   - Supported in all databases
-
 
 ### Configuring the length of indexes with `length` (MySQL)
 
@@ -87,7 +90,6 @@ The `sort` argument allows you to specify the order that the entries of the inde
 - In MySQL/MariaDB, you can specify sort order (`ASC`/`DESC`) directly in unique constraints and indexes
 - In PostgreSQL, sort order can only be specified on indexes, not on unique constraints
 - In SQL Server, sort order is supported on all constraints and indexes including `@id` and `@@id`
-
 
 For example, in MySQL/MariaDB, the following table using a descending unique constraint:
 
@@ -713,4 +715,3 @@ model Post {
   @@fulltext([title(sort: Desc), content])
 }
 ```
-

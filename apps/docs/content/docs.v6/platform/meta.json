@@ -2,5 +2,12 @@
   "title": "Platform",
   "root": true,
   "defaultOpen": true,
-  "pages": ["index", "about", "maturity-levels", "support", "platform-cli", "concepts"]
+  "pages": [
+    "index",
+    "about",
+    "maturity-levels",
+    "support",
+    "platform-cli",
+    "concepts"
+  ]
 }

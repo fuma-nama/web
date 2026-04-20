@@ -49,14 +49,17 @@ The method is implemented as a [tagged template](https://developer.mozilla.org/e
 
 ```ts no-lines
 const email = "emelie@prisma.io";
-const result = await prisma.$queryRaw`SELECT * FROM User WHERE email = ${email}`;
+const result =
+  await prisma.$queryRaw`SELECT * FROM User WHERE email = ${email}`;
 ```
 
 You can also use the [`Prisma.sql`](#tagged-template-helpers) helper, in fact, the `$queryRaw` method will **only accept** a template string or the `Prisma.sql` helper:
 
 ```ts no-lines
 const email = "emelie@prisma.io";
-const result = await prisma.$queryRaw(Prisma.sql`SELECT * FROM User WHERE email = ${email}`);
+const result = await prisma.$queryRaw(
+  Prisma.sql`SELECT * FROM User WHERE email = ${email}`,
+);
 ```
 
 :::warning
@@ -201,7 +204,10 @@ const result = await prisma.$queryRawUnsafe("SELECT * FROM User");
 You can also run a parameterized query. The following example returns all users whose email contains the string `emelie@prisma.io`:
 
 ```ts
-prisma.$queryRawUnsafe("SELECT * FROM users WHERE email = $1", "emelie@prisma.io");
+prisma.$queryRawUnsafe(
+  "SELECT * FROM users WHERE email = $1",
+  "emelie@prisma.io",
+);
 ```
 
 > **Note**: Prisma sends JavaScript integers to PostgreSQL as `INT8`. This might conflict with your user-defined functions that accept only `INT4` as input. If you use a parameterized `$queryRawUnsafe` query in conjunction with a PostgreSQL database, update the input types to `INT8`, or cast your query parameters to `INT4`.
@@ -332,11 +338,11 @@ $executeRawUnsafe<T = unknown>(query: string, ...values: any[]): PrismaPromise<n
 
 Prisma maps any database values returned by `$queryRaw` and `$queryRawUnsafe`to their corresponding [JavaScript types](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures). This behavior is the same as for regular Prisma query methods like `findMany()`.
 
-
 As an example, take a raw query that selects columns with `BigInt`, `Bytes`, `Decimal` and `Date` types from a table:
 
 ```ts
-const result = await prisma.$queryRaw`SELECT bigint, bytes, decimal, date FROM "Table";`;
+const result =
+  await prisma.$queryRaw`SELECT bigint, bytes, decimal, date FROM "Table";`;
 
 console.log(result);
 ```
@@ -349,22 +355,22 @@ In the `result` object, the database values have been mapped to the correspondin
 
 The following table shows the conversion between types used in the database and the JavaScript type returned by the raw query:
 
-| Database type           | JavaScript type                                                                                                                 |
-| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| Text                    | `String`                                                                                                                        |
-| 32-bit integer          | `Number`                                                                                                                        |
-| 32-bit unsigned integer | `BigInt`                                                                                                                        |
-| Floating point number   | `Number`                                                                                                                        |
-| Double precision number | `Number`                                                                                                                        |
-| 64-bit integer          | `BigInt`                                                                                                                        |
-| Decimal / numeric       | `Decimal`                                                                                                                       |
-| Bytes                   | `Uint8Array`                                                                                                  |
-| Json                    | `Object`                                                                                                                        |
-| DateTime                | `Date`                                                                                                                          |
-| Date                    | `Date`                                                                                                                          |
-| Time                    | `Date`                                                                                                                          |
-| Uuid                    | `String`                                                                                                                        |
-| Xml                     | `String`                                                                                                                        |
+| Database type           | JavaScript type |
+| ----------------------- | --------------- |
+| Text                    | `String`        |
+| 32-bit integer          | `Number`        |
+| 32-bit unsigned integer | `BigInt`        |
+| Floating point number   | `Number`        |
+| Double precision number | `Number`        |
+| 64-bit integer          | `BigInt`        |
+| Decimal / numeric       | `Decimal`       |
+| Bytes                   | `Uint8Array`    |
+| Json                    | `Object`        |
+| DateTime                | `Date`          |
+| Date                    | `Date`          |
+| Time                    | `Date`          |
+| Uuid                    | `String`        |
+| Xml                     | `String`        |
 
 Note that the exact name for each database type will vary between databases – for example, the boolean type is known as `boolean` in PostgreSQL and `STRING` in CockroachDB. See the [Scalar types reference](/orm/reference/prisma-schema-reference#model-field-scalar-types) for full details of type names for each database.
 
@@ -390,7 +396,6 @@ The solution in this case is to explicitly cast `42` to the `text` type:
 ```ts
 await prisma.$queryRaw`SELECT LENGTH(${42}::text);`;
 ```
-
 
 ### Transactions
 
@@ -424,7 +429,8 @@ Prisma Client specifically uses [SQL Template Tag](https://github.com/blakeembre
 import { Prisma } from "@prisma/client";
 
 const ids = [1, 3, 5, 10, 20];
-const result = await prisma.$queryRaw`SELECT * FROM User WHERE id IN (${Prisma.join(ids)})`;
+const result =
+  await prisma.$queryRaw`SELECT * FROM User WHERE id IN (${Prisma.join(ids)})`;
 ```
 
 The following example uses the `empty` and `sql` helpers to change the query depending on whether `userName` is empty:
@@ -444,7 +450,9 @@ PostgreSQL [does not support using `ALTER` in a prepared statement](https://www.
 
 ```ts
 await prisma.$executeRaw`ALTER USER prisma WITH PASSWORD "${password}"`;
-await prisma.$executeRaw(Prisma.sql`ALTER USER prisma WITH PASSWORD "${password}"`);
+await prisma.$executeRaw(
+  Prisma.sql`ALTER USER prisma WITH PASSWORD "${password}"`,
+);
 ```
 
 You can use the following query, but be aware that this is potentially **unsafe** as `${password}` is not escaped:
@@ -504,7 +512,8 @@ The following example is safe ✅ from SQL Injection:
 
 ```ts
 const inputString = `'Sarah' UNION SELECT id, title FROM "Post"`;
-const result = await prisma.$queryRaw`SELECT id, name FROM "User" WHERE name = ${inputString}`;
+const result =
+  await prisma.$queryRaw`SELECT id, name FROM "User" WHERE name = ${inputString}`;
 
 console.log(result);
 ```
@@ -542,9 +551,10 @@ The following examples are all vulnerable ❌ to SQL Injection:
 
 ```ts
 const inputString = `'Sarah' UNION SELECT id, title FROM "Post"`;
-const result = await prisma.$queryRaw`SELECT id, name FROM "User" WHERE name = ${Prisma.raw(
-  inputString,
-)}`;
+const result =
+  await prisma.$queryRaw`SELECT id, name FROM "User" WHERE name = ${Prisma.raw(
+    inputString,
+  )}`;
 console.log(result);
 ```
 
@@ -558,7 +568,9 @@ console.log(result);
 
 ```ts
 const inputString = `'Sarah' UNION SELECT id, title FROM "Post"`;
-const query = Prisma.raw(`SELECT id, name FROM "User" WHERE name = ${inputString}`);
+const query = Prisma.raw(
+  `SELECT id, name FROM "User" WHERE name = ${inputString}`,
+);
 const result = await prisma.$queryRaw(query);
 console.log(result);
 ```

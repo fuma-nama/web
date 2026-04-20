@@ -17,11 +17,11 @@ tags:
 ---
 
 <center>
-      <i>8 min read</i>
-  </center>
+  <i>8 min read</i>
+</center>
 
-  Welcome to the fourth tutorial in this series about building a REST API with NestJS, Prisma and PostgreSQL!
-  In this tutorial, you will learn how to handle relational data in your NestJS REST API.
+Welcome to the fourth tutorial in this series about building a REST API with NestJS, Prisma and PostgreSQL!
+In this tutorial, you will learn how to handle relational data in your NestJS REST API.
 
 ## Table Of Contents
 
@@ -51,12 +51,9 @@ In this chapter, you will learn how to handle relational data in your data layer
 
 1. First, you will add a `User` model to your database schema which will have a one-to-many relationship `Article` records (i.e. one user can have multiple articles).
 2. Next, you will implement the API routes for the `User` endpoints to perform CRUD (create, read, update and delete) operations on `User` records.
-2. Finally, you will learn how to model the `User-Article` relation in your API layer.
-
+3. Finally, you will learn how to model the `User-Article` relation in your API layer.
 
 In this tutorial, you will use the REST API built in the [second chapter](/nestjs-prisma-validation-7D056s1kOla1).
-
-
 
 ### Development environment
 
@@ -78,23 +75,38 @@ The starting point for this tutorial is available in the [`end-validation`](http
 ```shell
 git clone -b end-validation git@github.com:prisma/blog-backend-rest-api-nestjs-prisma.git
 ```
+
 Now, perform the following actions to get started:
 
 1. Navigate to the cloned directory:
-  ```shell   cd blog-backend-rest-api-nestjs-prisma
-  ```
+
+```shell cd blog-backend-rest-api-nestjs-prisma
+
+```
+
 2. Install dependencies:
-  ```shell   npm install
-  ```
+
+```shell npm install
+
+```
+
 3. Start the PostgreSQL database with Docker:
-  ```shell   docker-compose up -d
-  ```
+
+```shell docker-compose up -d
+
+```
+
 4. Apply database migrations:
-  ```shell   npx prisma migrate dev
-  ```
+
+```shell npx prisma migrate dev
+
+```
+
 5. Start the project:
-  ```shell   npm run start:dev
-  ```
+
+```shell npm run start:dev
+
+```
 
 > **Note**: Step 4 will also generate Prisma Client and seed the database.
 
@@ -103,6 +115,7 @@ Now, you should be able to access the API documentation at [`http://localhost:30
 ### Project structure and files
 
 The repository you cloned should have the following structure:
+
 ```
 median
   ├── node_modules
@@ -130,6 +143,7 @@ median
   ├── tsconfig.build.json
   └── tsconfig.json
 ```
+
 > **Note**: You might notice that this folder comes with a `test` directory as well. Testing won't be covered in this tutorial. However, if you want to learn about how best practices for testing your applications with Prisma, be sure to check out this tutorial series: [The Ultimate Guide to Testing with Prisma](https://www.prisma.io/blog/series/ultimate-guide-to-testing-eTzz0U4wwV)
 
 The notable files and directories in this repository are:
@@ -146,7 +160,6 @@ The notable files and directories in this repository are:
 - The `.env` file contains the database connection string for your PostgreSQL database.
 
 > **Note**: For more information about these components, go through [chapter one](/nestjs-prisma-rest-api-7D056s1BmOL0) of this tutorial series.
-
 
 ## Add a `User` model to the database
 
@@ -179,6 +192,7 @@ model Article {
 +  articles  Article[]
 +}
 ```
+
 The `User` model has a few fields that you might expect, like `id`, `email`, `password`, etc. It also has a one to many relationship with the `Article` model. This means that a user can have many articles, but an article can only have one author. For simplicity, the `author` relation is made optional, so it's still possible to create an article without an author.
 
 Now, to apply the changes to your database, run the migration command:
@@ -186,7 +200,9 @@ Now, to apply the changes to your database, run the migration command:
 ```shell
 npx prisma migrate dev --name "add-user-model"
 ```
+
 If the migration runs successfully, you should see the following output:
+
 ```
 ...
 The following migration(s) have been created and applied from new schema changes:
@@ -198,6 +214,7 @@ migrations/
 Your database is now in sync with your schema.
 ...
 ```
+
 ### Update your seed script
 
 The seed script is responsible for populating your database with dummy data. You will update the seed script to create a few users in your database.
@@ -273,21 +290,24 @@ async function main() {
   console.log({ user1, user2, post1, post2, post3 });
 }
 ```
+
 The seed script now creates two users and three articles. The first article is written by the first user, the second article is written by the second user, and the third article is written by no one.
 
 > **Note**: At the moment, you are storing passwords in plain text. You should never do this in a real application. You will learn more about salting passwords and hashing them in the next chapter.
-
 
 To execute the seed script, run the following command:
 
 ```shell
 npx prisma db seed
 ```
+
 If the seed script runs successfully, you should see the following output:
+
 ```
 ...
 🌱  The seed command has been executed.
 ```
+
 ### Add an `authorId` field to `ArticleEntity`
 
 After running the migration, you might have noticed a new TypeScript error. The `ArticleEntity` class `implements` the `Article` type generated by Prisma. The `Article` type has a new `authorId` field, but the `ArticleEntity` class does not have that field defined. TypeScript recognizes this mismatch in types and is raising an error. You will fix this error by adding the `authorId` field to the `ArticleEntity` class.
@@ -326,10 +346,10 @@ export class ArticleEntity implements Article {
 +  authorId: number | null;
 }
 ```
+
 In a weakly typed language like JavaScript, you would have to identify and fix things like this yourself. One of the big advantages of having a strongly typed language like TypeScript is that it can quickly help you catch type-related issues.
 
 ## Implement CRUD endpoints for Users
-
 
 In this section, you will implement the `/users` resource in your REST API. This will allow you to perform CRUD operations on the users in your database.
 
@@ -342,6 +362,7 @@ To generate a new REST resource for `users` run the following command:
 ```shell
 npx nest generate resource
 ```
+
 You will be given a few CLI prompts. Answer the questions accordingly:
 
 1. `What name would you like to use for this resource (plural, e.g., "users")?` **users**
@@ -374,6 +395,7 @@ import { UsersController } from './users.controller';
 })
 export class UsersModule {}
 ```
+
 You can now inject the `PrismaService` inside the `UsersService` and use it to access the database. To do this, add a constructor to `users.service.ts` like this:
 
 ```ts
@@ -391,15 +413,15 @@ export class UsersService {
 // CRUD operations
 }
 ```
+
 ### Define the `User` entity and DTO classes
 
 Just like `ArticleEntity`, you are going to define a `UserEntity` class that will be used to represent the `User` entity in the API layer. Define the `UserEntity` class in the `user.entity.ts` file as follows:
 
-
 ```ts
 // src/users/entities/user.entity.ts
-import { ApiProperty } from '@nestjs/swagger';
-import { User } from '@prisma/client';
+import { ApiProperty } from "@nestjs/swagger";
+import { User } from "@prisma/client";
 
 export class UserEntity implements User {
   @ApiProperty()
@@ -420,6 +442,7 @@ export class UserEntity implements User {
   password: string;
 }
 ```
+
 The `@ApiProperty` decorator is used to make properties visible to Swagger. Notice that you did not add the `@ApiProperty` decorator to the `password` field. This is because this field is sensitive, and you do not want to expose it in your API.
 
 > **Note**: Omitting the `@ApiProperty` decorator will only hide the `password` property from the Swagger documentation. The property will still be visible in the response body. You will handle this issue in a later section.
@@ -429,8 +452,8 @@ A DTO (Data Transfer Object) is an object that defines how the data will be sent
 ```ts
 // src/users/dto/create-user.dto.ts
 
-import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString, MinLength } from 'class-validator';
+import { ApiProperty } from "@nestjs/swagger";
+import { IsNotEmpty, IsString, MinLength } from "class-validator";
 
 export class CreateUserDto {
   @IsString()
@@ -450,6 +473,7 @@ export class CreateUserDto {
   password: string;
 }
 ```
+
 `@IsString`, `@MinLength` and `@IsNotEmpty` are validation decorators that will be used to validate the data sent to the API. Validation is covered in more detail in the [second chapter](/nestjs-prisma-validation-7D056s1kOla1) of this series.
 
 The definition of `UpdateUserDto` is automatically inferred from the `CreateUserDto` definition, so it does not need to be defined explicitly.
@@ -491,6 +515,7 @@ export class UsersService {
   }
 }
 ```
+
 ### Define the `UsersController` class
 
 The `UsersController` is responsible for handling requests and responses to the `users` endpoints. It will leverage the `UsersService` to access the database, the `UserEntity` to define the response body and the `CreateUserDto` and `UpdateUserDto` to define the request body.
@@ -563,6 +588,7 @@ export class UsersController {
   }
 }
 ```
+
 The updated controller uses the `@ApiTags` decorator to group the endpoints under the `users` tag. It also uses the `@ApiCreatedResponse` and `@ApiOkResponse` decorators to define the response body for each endpoint.
 
 The updated Swagger [API page](http://localhost:3000/api) should look like this
@@ -581,7 +607,6 @@ You have two options to fix this issue:
 
 1. Manually remove the password from the response body in the controller route handlers
 2. Use an [interceptor](https://docs.nestjs.com/interceptors) to automatically remove the password from the response body
-
 
 The first option is error prone and results in unnecessary code duplication. So, you will use the second method.
 
@@ -619,10 +644,10 @@ async function bootstrap() {
 }
 bootstrap();
 ```
+
 > **Note:** It's also possible to bind an interceptor to a method or controller instead of globally. You can read more about it in the [NestJS documentation](https://docs.nestjs.com/interceptors#binding-interceptors).
 
 The `ClassSerializerInterceptor` uses the `class-transformer` package to define how to transform objects. Use the `@Exclude()` decorator to exclude the `password` field in the `UserEntity` class:
-
 
 ```ts
 // src/users/entities/user.entity.ts
@@ -651,6 +676,7 @@ export class UserEntity implements User {
   password: string;
 }
 ```
+
 If you try using the `GET /users/:id` endpoint again, you'll notice that the `password` field is still being exposed 🤔. This is because, currently the route handlers in your controller returns the `User` type generated by Prisma Client. The `ClassSerializerInterceptor` only works with classes decorated with the `@Exclude()` decorator. In this case, it's the `UserEntity` class. So, you need to update the route handlers to return the `UserEntity` type instead.
 
 First, you need to create a constructor that will instantiate a `UserEntity` object.
@@ -686,10 +712,10 @@ export class UserEntity implements User {
   password: string;
 }
 ```
+
 The constructor takes an object and uses the `Object.assign()` method to copy the properties from the `partial` object to the `UserEntity` instance. The type of `partial` is `Partial<UserEntity>`. This means that the `partial` object can contain any subset of the properties defined in the `UserEntity` class.
 
 Next, update the `UsersController` route handlers to return `UserEntity` instead of `Prisma.User` objects:
-
 
 ```ts
 // src/users/users.controller.ts
@@ -734,10 +760,10 @@ export class UsersController {
   }
 }
 ```
+
 Now, the password should be omitted from the response object.
 
 ![`GET /users/:id` does not reveal password](/nestjs-prisma-relational-data-7D056s1kOabc/imgs/password-omitted.png)
-
 
 ## Returning the author along with an article
 
@@ -757,13 +783,12 @@ The data access logic is implemented inside the `ArticlesService`. Update the `f
 +    });
   }
 ```
+
 If you test the `GET /articles/:id` endpoint, you'll notice that the author of an article, if present, is included in the response object. However, there's a problem. The `password` field is exposed again 🤦.
 
 ![`GET /articles/:id` reveals password](/nestjs-prisma-relational-data-7D056s1kOabc/imgs/password-revealed-get-articles.png)
 
 The reason for this issue is very similar to last time. Currently, the `ArticlesController` returns instances of Prisma generated types, whereas the `ClassSerializerInterceptor` works with the `UserEntity` class. To fix this, you will update the implementation of the `ArticleEntity` class and make sure it initializes the `author` property with an instance of `UserEntity`.
-
-
 
 ```ts
 // src/articles/entities/article.entity.ts
@@ -809,8 +834,8 @@ export class ArticleEntity implements Article {
 +  }
 }
 ```
-Once again, you are using the `Object.assign()` method to copy the properties from the `data` object to the `ArticleEntity` instance. The `author` property, if it is present, is initialized as an instance of `UserEntity`.
 
+Once again, you are using the `Object.assign()` method to copy the properties from the `data` object to the `ArticleEntity` instance. The `author` property, if it is present, is initialized as an instance of `UserEntity`.
 
 Now update the `ArticlesController` to return instances of `ArticleEntity` objects:
 
@@ -883,19 +908,13 @@ export class ArticlesController {
   }
 }
 ```
+
 Now, `GET /articles/:id` returns the `author` object without the `password` field:
 
 ![`GET /articles/:id` does not reveal password](/nestjs-prisma-relational-data-7D056s1kOabc/imgs/password-omitted-get-articles.png)
 
-
-
-
-
 ## Summary and final remarks
-
 
 In this chapter, you learned how to model relational data in a NestJS application using Prisma. You also learned about the `ClassSerializerInterceptor` and how to use entity classes to control the data that is returned to the client.
 
 You can find the finished code for this tutorial in the [`end-relational-data`](https://github.com/prisma/blog-backend-rest-api-nestjs-prisma/tree/end-relational-data) branch of the [GitHub repository](https://github.com/prisma/blog-backend-rest-api-nestjs-prisma). Please feel free to raise an issue in the repository or submit a PR if you notice a problem. You can also reach out to me directly on [Twitter](https://twitter.com/tasinishmam).
-
-

@@ -1,9 +1,9 @@
 ---
 title: SDK
-description: 'A TypeScript SDK for the Prisma Data Platform Management API. Use the simple client for direct API access, or the full SDK with built-in OAuth authentication and automatic token refresh'
+description: "A TypeScript SDK for the Prisma Data Platform Management API. Use the simple client for direct API access, or the full SDK with built-in OAuth authentication and automatic token refresh"
 url: /management-api/sdk
-metaTitle: 'Prisma Postgres: Management API SDK'
-metaDescription: 'A TypeScript SDK for the Prisma Data Platform Management API. Use the simple client for direct API access, or the full SDK with built-in OAuth authentication and automatic token refresh.'
+metaTitle: "Prisma Postgres: Management API SDK"
+metaDescription: "A TypeScript SDK for the Prisma Data Platform Management API. Use the simple client for direct API access, or the full SDK with built-in OAuth authentication and automatic token refresh."
 ---
 
 ## Overview
@@ -42,25 +42,34 @@ const { data: project } = await client.GET("/v1/projects/{id}", {
 });
 
 // Create a new project
-const { data: newProject } = await client.POST("/v1/workspaces/{workspaceId}/projects", {
-  params: { path: { workspaceId: "workspace-id" } },
-  body: { name: "My New Project" },
-});
+const { data: newProject } = await client.POST(
+  "/v1/workspaces/{workspaceId}/projects",
+  {
+    params: { path: { workspaceId: "workspace-id" } },
+    body: { name: "My New Project" },
+  },
+);
 
 // Create a new database
-const { data: newDatabase } = await client.POST("/v1/projects/{projectId}/databases", {
-  params: { path: { projectId: "project-id" } },
-  body: {
-    name: "my-new-db-instance",
-    region: "us-east-1",
-    isDefault: true,
+const { data: newDatabase } = await client.POST(
+  "/v1/projects/{projectId}/databases",
+  {
+    params: { path: { projectId: "project-id" } },
+    body: {
+      name: "my-new-db-instance",
+      region: "us-east-1",
+      isDefault: true,
+    },
   },
-});
+);
 
 // Delete a database
-const { error: deleteError } = await client.DELETE("/v1/databases/{databaseId}", {
-  params: { path: { databaseId: "database-id" } },
-});
+const { error: deleteError } = await client.DELETE(
+  "/v1/databases/{databaseId}",
+  {
+    params: { path: { databaseId: "database-id" } },
+  },
+);
 ```
 
 ### Customizing the client
@@ -97,7 +106,10 @@ The SDK uses OAuth 2.0 with PKCE for secure authentication. The flow is stateles
 #### 1. Create the SDK instance
 
 ```typescript
-import { createManagementApiSdk, type TokenStorage } from "@prisma/management-api-sdk";
+import {
+  createManagementApiSdk,
+  type TokenStorage,
+} from "@prisma/management-api-sdk";
 
 // Implement token storage for your environment
 const tokenStorage: TokenStorage = {
@@ -219,7 +231,11 @@ const tokenStorage: TokenStorage = {
 
     if (!workspaceId || !accessToken) return null;
 
-    return { workspaceId, accessToken, refreshToken: refreshToken || undefined };
+    return {
+      workspaceId,
+      accessToken,
+      refreshToken: refreshToken || undefined,
+    };
   },
   async setTokens(tokens) {
     await context.secrets.store("workspaceId", tokens.workspaceId);
@@ -264,6 +280,7 @@ const tokenStorage: TokenStorage = {
 ```
 
 For other environments:
+
 - **VS Code extensions** - Use `context.secrets` for secure storage
 - **Stateless web servers** - Store PKCE state/verifier in encrypted cookies or a database
 
@@ -338,7 +355,9 @@ try {
   if (error instanceof AuthError) {
     if (error.refreshTokenInvalid) {
       // Token is invalid/expired, user needs to log in again
-      const { url } = await api.getLoginUrl({ scope: "workspace:admin offline_access" });
+      const { url } = await api.getLoginUrl({
+        scope: "workspace:admin offline_access",
+      });
       // redirect to url...
     } else {
       // Other auth errors (e.g., "access_denied: User cancelled")

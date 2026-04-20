@@ -115,8 +115,8 @@ main();
 
 In local tests with Postgres, MySQL, and SQLite, each Prisma CLI command typically uses a single connection. The table below shows the ranges observed in these tests. Your environment _may_ produce slightly different results.
 
-| Command                                                                        | Connections | Description                                      |
-| ------------------------------------------------------------------------------ | ----------- | ------------------------------------------------ |
+| Command                                                                   | Connections | Description                                      |
+| ------------------------------------------------------------------------- | ----------- | ------------------------------------------------ |
 | [`migrate status`](/v6/orm/reference/prisma-cli-reference#migrate-status) | 1           | Checks the status of migrations                  |
 | [`migrate dev`](/v6/orm/reference/prisma-cli-reference#migrate-dev)       | 1–4         | Applies pending migrations in development        |
 | [`migrate diff`](/v6/orm/reference/prisma-cli-reference#migrate-diff)     | 1–2         | Compares database schema with migration history  |

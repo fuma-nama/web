@@ -1,4 +1,12 @@
-import { Button, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@prisma/eclipse";
+import {
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@prisma/eclipse";
 import {
   publicHolidays,
   responseTimes,
@@ -9,14 +17,17 @@ import { createPageMetadata } from "@/lib/page-metadata";
 
 export const metadata = createPageMetadata({
   title: "Prisma Support Policy | Prisma",
-  description:
-    "Read our support policy and see how it relates to you.",
+  description: "Read our support policy and see how it relates to you.",
   path: "/support-policy",
   ogImage: "/og/og-support.png",
 });
 
 function SupportPolicyTableCheck({ enabled }: { enabled: boolean }) {
-  return enabled ? <span aria-label="Included">Yes</span> : <span aria-label="Not included">-</span>;
+  return enabled ? (
+    <span aria-label="Included">Yes</span>
+  ) : (
+    <span aria-label="Not included">-</span>
+  );
 }
 
 export default function SupportPolicyPage() {
@@ -40,21 +51,13 @@ export default function SupportPolicyPage() {
             available, and how requests are prioritized.
           </p>
           <div className="flex flex-col md:flex-row gap-4 items-center justify-center">
-            <Button
-              asChild
-              variant="orm"
-              size="3xl"
-            >
+            <Button asChild variant="orm" size="3xl">
               <a href="https://www.prisma.io/docs">
                 <span>Read the docs</span>
                 <i className="fa-regular fa-book-open" />
               </a>
             </Button>
-            <Button
-              asChild
-              variant="default-strong"
-              size="3xl"
-            >
+            <Button asChild variant="default-strong" size="3xl">
               <a href="/support">
                 <span>Visit support</span>
                 <i className="fa-regular fa-arrow-right" />
@@ -159,7 +162,10 @@ export default function SupportPolicyPage() {
                 </TableHeader>
                 <TableBody>
                   {supportChannels.map((row) => (
-                    <TableRow key={row.platformPlan} className="hover:bg-transparent">
+                    <TableRow
+                      key={row.platformPlan}
+                      className="hover:bg-transparent"
+                    >
                       <TableCell className="font-semibold text-foreground-neutral">
                         {row.platformPlan}
                       </TableCell>
@@ -176,7 +182,9 @@ export default function SupportPolicyPage() {
                         <SupportPolicyTableCheck enabled={row.email} />
                       </TableCell>
                       <TableCell className="text-foreground-neutral-weak">
-                        <SupportPolicyTableCheck enabled={row.dedicatedContact} />
+                        <SupportPolicyTableCheck
+                          enabled={row.dedicatedContact}
+                        />
                       </TableCell>
                     </TableRow>
                   ))}
@@ -214,7 +222,10 @@ export default function SupportPolicyPage() {
                 </TableHeader>
                 <TableBody>
                   {responseTimes.map((row) => (
-                    <TableRow key={row.platformPlan} className="hover:bg-transparent">
+                    <TableRow
+                      key={row.platformPlan}
+                      className="hover:bg-transparent"
+                    >
                       <TableCell className="font-semibold text-foreground-neutral">
                         {row.platformPlan}
                       </TableCell>
@@ -278,7 +289,10 @@ export default function SupportPolicyPage() {
                   </TableHeader>
                   <TableBody>
                     {severityLevels.map((row) => (
-                      <TableRow key={row.level} className="hover:bg-transparent">
+                      <TableRow
+                        key={row.level}
+                        className="hover:bg-transparent"
+                      >
                         <TableCell className="font-semibold text-foreground-neutral">
                           {row.level}
                         </TableCell>

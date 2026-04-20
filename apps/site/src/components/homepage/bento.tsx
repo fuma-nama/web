@@ -86,7 +86,11 @@ export const Bento = ({ bentoSection, hero, color }: BentoProps) => {
 
         <div className="hidden lg:flex gap-8 mb-4 items-center justify-between">
           {firstCenterCard && (
-            <Card color={color} key={firstCenterCard.id} card={firstCenterCard} />
+            <Card
+              color={color}
+              key={firstCenterCard.id}
+              card={firstCenterCard}
+            />
           )}
 
           {secondCenterCard && (

@@ -74,11 +74,13 @@ If you're using Visual Studio Code, the [Prisma extension](https://marketplace.v
 The source code for the series can be found on [GitHub](https://github.com/2color/real-world-grading-app).
 
 To get started, clone the repository and install the dependencies:
+
 ```
 git clone -b part-1 git@github.com:2color/real-world-grading-app.git
 cd real-world-grading-app
 npm install
 ```
+
 > **Note:** By checking out the `part-1` branch you'll be able to follow the article from the same starting point.
 
 ## Start PostgreSQL
@@ -88,6 +90,7 @@ To start PostgreSQL, run the following command from the `real-world-grading-app`
 ```sh
 docker-compose up -d
 ```
+
 > **Note:** Docker will use the [`docker-compose.yml`](https://github.com/2color/real-world-grading-app/blob/21de326008776144ced60427a055c9fc54a32840/docker-compose.yml) file to start the PostgreSQL container.
 
 ## Data model for a grading system for online courses
@@ -151,14 +154,15 @@ model User {
   social    Json?
 }
 ```
+
 Here you define a `User` model with several [fields](https://www.prisma.io/docs/concepts/components/prisma-schema/data-model#fields). Each field has a name followed by a type and optional field attributes. For example, the `id` field could be broken down as follows:
 
-| Name        | Type     | Scalar vs Relation | Type modifier                                                                                                         | Attributes                                                                                          |
-| :---------- | :------- | :----------------- | :-------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------- |
-| `id`        | `Int`    | Scalar             | -                                                                                                                     | `@id` (denote the primary key) and `@default(autoincrement())` (set a default auto-increment value) |
-| `email`     | `String` | Scalar             | -                                                                                                                     | `@unique`                                                                                           |
-| `firstName` | `String` | Scalar             | -                                                                                                                     | -                                                                                                   |
-| `lastName`  | `String` | Scalar             | -                                                                                                                     | -                                                                                                   |
+| Name        | Type     | Scalar vs Relation | Type modifier                                                                                                  | Attributes                                                                                          |
+| :---------- | :------- | :----------------- | :------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------- |
+| `id`        | `Int`    | Scalar             | -                                                                                                              | `@id` (denote the primary key) and `@default(autoincrement())` (set a default auto-increment value) |
+| `email`     | `String` | Scalar             | -                                                                                                              | `@unique`                                                                                           |
+| `firstName` | `String` | Scalar             | -                                                                                                              | -                                                                                                   |
+| `lastName`  | `String` | Scalar             | -                                                                                                              | -                                                                                                   |
 | `social`    | `Json`   | Scalar             | `?` ([optional](https://www.prisma.io/docs/concepts/components/prisma-schema/data-model#optional-vs-required)) | -                                                                                                   |
 
 Prisma defines a [set of data types](https://www.prisma.io/docs/concepts/components/prisma-schema/data-model#scalar-types) that map to the native database types depending on the database used.
@@ -195,6 +199,7 @@ model TestResult {
   result    Int // Percentage precise to one decimal point represented as `result * 10^-1`
 }
 ```
+
 Each model has all the relevant fields while ignoring relations (which will be defined in the next step).
 
 ### Define relations
@@ -219,6 +224,7 @@ model TestResult {
   result    Int // Percentage precise to one decimal point represented result * 10^-1
 }
 ```
+
 To define a one-to-many relation between the two models, add the following three fields:
 
 - `testId` field of type `Int` ([_relation scalar_](https://www.prisma.io/docs/concepts/components/prisma-schema/relations#annotated-relation-fields-and-relation-scalar-fields)) on the "many" side of the relation: `TestResult`. This field represents the _foreign key_ in the underlying database table.
@@ -244,6 +250,7 @@ model TestResult {
 +  test      Test @relation(fields: [testId], references: [id]) // relation field
 }
 ```
+
 Relation fields like `test` and `testResults` can be identified by their value type pointing to another model, e.g. `Test` and `TestResult`. Their name will affect the way that relations are accessed programmatically with Prisma Client, however, they don't represent a real database column.
 
 ### Many-to-many relations
@@ -269,6 +276,7 @@ model Course {
   courseDetails String?
 }
 ```
+
 To create an implicit many-to-many relation, define relation fields as lists on both sides of the relations:
 
 ```prisma
@@ -289,6 +297,7 @@ model Course {
 +  members       User[]
 }
 ```
+
 With this, Prisma will create the relation table so the grading system can maintain the properties defined above:
 
 - A single course can have many associated users.
@@ -336,6 +345,7 @@ model Course {
 +  TEACHER
 +}
 ```
+
 Things to note about the `CourseEnrollment` model:
 
 - It uses the `UserRole` enum to denote whether a user is a student or a teacher of a course.
@@ -421,6 +431,7 @@ enum UserRole {
   TEACHER
 }
 ```
+
 Note that `TestResult` has two relations to the `User` model: `student` and `gradedBy` to represent both the teacher who graded the test and the student who took the test. The `name` argument on the `@relation` attribute is necessary to [disambiguate the relation](https://www.prisma.io/docs/concepts/components/prisma-schema/relations#disambiguating-relations) when a single model has more than one relation to the same model.
 
 ## Migrating the database
@@ -432,6 +443,7 @@ First, set the `DATABASE_URL` environment variable locally so that Prisma can co
 ```sh
 export DATABASE_URL="postgresql://prisma:prisma@127.0.0.1:5432/grading-app"
 ```
+
 > **Note**: The username and password for the local database are both defined as `prisma` in [`docker-compose.yml`](https://github.com/2color/real-world-grading-app/blob/21de326008776144ced60427a055c9fc54a32840/docker-compose.yml#L12-L13).
 
 To create and run a migration with Prisma Migrate, run the following command in your terminal:
@@ -439,14 +451,16 @@ To create and run a migration with Prisma Migrate, run the following command in 
 ```npm
 npx prisma migrate dev --preview-feature --skip-generate --name "init"
 ```
+
 The command will do two things:
+
 - **Save the migration:** Prisma Migrate will take a snapshot of your schema and figure out the SQL necessary to carry out the migration. The migration file containing the SQL will be saved to `prisma/migrations`
 - **Run the migration:** Prisma Migrate will execute the SQL in the migration file to run the migration and alter (or create) the database schema
 
 > **Note:** Prisma Migrate is currently in [preview](https://www.prisma.io/docs/about/prisma/releases#preview) mode. This means that it is not recommended to use Prisma Migrate in production.
 
-
 **Checkpoint:** You should see something like the following in the output:
+
 ```
 Prisma Migrate created and applied the following migration(s) from new schema changes:
 
@@ -456,6 +470,7 @@ migrations/
 
 Everything is now in sync.
 ```
+
 Congratulations, you have successfully designed the data model and created the database schema. In the next step, you will use Prisma Client to perform CRUD and aggregation queries against your database.
 
 ## Generating Prisma Client
@@ -471,13 +486,16 @@ Generating Prisma Client, typically requires three steps:
     }
    ```
 1. Install the `@prisma/client` npm package
+
 ```
    npm install --save @prisma/client
-   ```
+```
+
 1. Generate Prisma Client with the following command:
+
 ```
    npx prisma generate
-   ```
+```
 
 **Checkpoint:** You should see the following in the output: `✔ Generated Prisma Client to ./node_modules/@prisma/client in 57ms`
 
@@ -496,40 +514,45 @@ Begin by creating a user as follows in `main` function:
 ```ts
 const grace = await prisma.user.create({
   data: {
-    email: 'grace@hey.com',
-    firstName: 'Grace',
-    lastName: 'Bell',
+    email: "grace@hey.com",
+    firstName: "Grace",
+    lastName: "Bell",
     social: {
-      facebook: 'gracebell',
-      twitter: 'therealgracebell',
+      facebook: "gracebell",
+      twitter: "therealgracebell",
     },
   },
-})
+});
 ```
+
 The operation will create a row in the _User_ table and return the created user (including the created `id`). It's worth noting that `user` will infer the type `User` which is defined in `@prisma/client`:
 
 ```ts
 export type User = {
-  id: number
-  email: string
-  firstName: string
-  lastName: string
-  social: JsonValue | null
-}
+  id: number;
+  email: string;
+  firstName: string;
+  lastName: string;
+  social: JsonValue | null;
+};
 ```
+
 To execute the seed script and create the `User` record, you can use the [`seed` script in the `package.json`](https://github.com/2color/real-world-grading-app/blob/part-1/package.json#L25) as follows:
+
 ```
 npm run seed
 ```
+
 As you follow the next steps, you will run the seed script more than once. To avoid hitting unique constraint errors, you can delete the contents of the database in the beginning of the `main` functions as follows:
 
 ```ts
-await prisma.testResult.deleteMany({})
-await prisma.courseEnrollment.deleteMany({})
-await prisma.test.deleteMany({})
-await prisma.user.deleteMany({})
-await prisma.course.deleteMany({})
+await prisma.testResult.deleteMany({});
+await prisma.courseEnrollment.deleteMany({});
+await prisma.test.deleteMany({});
+await prisma.user.deleteMany({});
+await prisma.course.deleteMany({});
 ```
+
 > **Note:** These commands delete all rows in each database table. Use carefully and avoid this in production!
 
 ### Creating a course and related tests and users
@@ -539,32 +562,33 @@ In this step, you will create a _course_ and use a nested write to create relate
 Add the following to the `main` function:
 
 ```ts
-const weekFromNow = add(new Date(), { days: 7 })
-const twoWeekFromNow = add(new Date(), { days: 14 })
-const monthFromNow = add(new Date(), { days: 28 })
+const weekFromNow = add(new Date(), { days: 7 });
+const twoWeekFromNow = add(new Date(), { days: 14 });
+const monthFromNow = add(new Date(), { days: 28 });
 
 const course = await prisma.course.create({
   data: {
-    name: 'CRUD with Prisma',
+    name: "CRUD with Prisma",
     tests: {
       create: [
         {
           date: weekFromNow,
-          name: 'First test',
+          name: "First test",
         },
         {
           date: twoWeekFromNow,
-          name: 'Second test',
+          name: "Second test",
         },
         {
           date: monthFromNow,
-          name: 'Final exam',
+          name: "Final exam",
         },
       ],
     },
   },
-})
+});
 ```
+
 This will create a row in the `Course` table and three related rows in the `Tests` table (`Course` and `Tests` have a one-to-many relationship which allows this).
 
 What if you wanted to create a relation between the user created in the previous step to this course as a teacher?
@@ -574,32 +598,32 @@ What if you wanted to create a relation between the user created in the previous
 This can be done as follows (adding to the query from the previous step):
 
 ```ts
-const weekFromNow = add(new Date(), { days: 7 })
-const twoWeekFromNow = add(new Date(), { days: 14 })
-const monthFromNow = add(new Date(), { days: 28 })
+const weekFromNow = add(new Date(), { days: 7 });
+const twoWeekFromNow = add(new Date(), { days: 14 });
+const monthFromNow = add(new Date(), { days: 28 });
 
 const course = await prisma.course.create({
   data: {
-    name: 'CRUD with Prisma',
+    name: "CRUD with Prisma",
     tests: {
       create: [
         {
           date: weekFromNow,
-          name: 'First test',
+          name: "First test",
         },
         {
           date: twoWeekFromNow,
-          name: 'Second test',
+          name: "Second test",
         },
         {
           date: monthFromNow,
-          name: 'Final exam',
+          name: "Final exam",
         },
       ],
     },
     members: {
       create: {
-        role: 'TEACHER',
+        role: "TEACHER",
         user: {
           connect: {
             email: grace.email,
@@ -611,8 +635,9 @@ const course = await prisma.course.create({
   include: {
     tests: true,
   },
-})
+});
 ```
+
 > **Note:** the [`include`](https://www.prisma.io/docs/concepts/components/prisma-client/select-fields#include) argument allows you to fetch relations in the result. This will be useful in a later step to relate test results with tests
 
 When using nested writes (as with `members` and `tests`) there are two options:
@@ -633,36 +658,37 @@ Add the following statements:
 ```ts
 const shakuntala = await prisma.user.create({
   data: {
-    email: 'devi@prisma.io',
-    firstName: 'Shakuntala',
-    lastName: 'Devi',
+    email: "devi@prisma.io",
+    firstName: "Shakuntala",
+    lastName: "Devi",
     courses: {
       create: {
-        role: 'STUDENT',
+        role: "STUDENT",
         course: {
           connect: { id: course.id },
         },
       },
     },
   },
-})
+});
 
 const david = await prisma.user.create({
   data: {
-    email: 'david@prisma.io',
-    firstName: 'David',
-    lastName: 'Deutsch',
+    email: "david@prisma.io",
+    firstName: "David",
+    lastName: "Deutsch",
     courses: {
       create: {
-        role: 'STUDENT',
+        role: "STUDENT",
         course: {
           connect: { id: course.id },
         },
       },
     },
   },
-})
+});
 ```
+
 ### Adding test results for the students
 
 Looking at the `TestResult` model, it has three relations: `student`, `gradedBy`, and `test`. To add test results for Shakuntala and David, you will use nested writes similarly to the previous steps.
@@ -684,6 +710,7 @@ model TestResult {
   test      Test @relation(fields: [testId], references: [id])
 }
 ```
+
 Adding a single test result would look as follows:
 
 ```ts
@@ -700,15 +727,16 @@ await prisma.testResult.create({
     },
     result: 950,
   },
-})
+});
 ```
+
 To add a test result for both David and Shakuntala for each of the three tests, you can create a loop:
 
 ```ts
-const testResultsDavid = [650, 900, 950]
-const testResultsShakuntala = [800, 950, 910]
+const testResultsDavid = [650, 900, 950];
+const testResultsShakuntala = [800, 950, 910];
 
-let counter = 0
+let counter = 0;
 for (const test of course.tests) {
   await prisma.testResult.create({
     data: {
@@ -723,7 +751,7 @@ for (const test of course.tests) {
       },
       result: testResultsShakuntala[counter],
     },
-  })
+  });
 
   await prisma.testResult.create({
     data: {
@@ -738,17 +766,20 @@ for (const test of course.tests) {
       },
       result: testResultsDavid[counter],
     },
-  })
+  });
 
-  counter++
+  counter++;
 }
 ```
+
 Congratulations, if you have reached this point, you successfully created sample data for users, courses, tests, and test results in your database.
 
 To explore the data in the database, you can run [Prisma Studio](https://www.prisma.io/docs/concepts/components/prisma-studio). Prisma Studio is a visual editor for your database. To run Prisma Studio, run the following command in your terminal:
+
 ```
 npx prisma studio
 ```
+
 ## Aggregating the test results with Prisma Client
 
 Prisma Client allows you to perform aggregate operations on number fields (such as `Int` and `Float`) of a model. Aggregate operations compute a single result from a set of input values, i.e. multiple rows in a table. For example, calculating the _minimum_, _maximum_, and _average_ value of the `result` column over a set of `TestResult` rows.
@@ -767,8 +798,8 @@ In this step, you will run two kinds of aggregate operations:
        max: { result: true },
        min: { result: true },
        count: true,
-     })
-     console.log(`test: ${test.name} (id: ${test.id})`, results)
+     });
+     console.log(`test: ${test.name} (id: ${test.id})`, results);
    }
    ```
 
@@ -807,8 +838,8 @@ In this step, you will run two kinds of aggregate operations:
      max: { result: true },
      min: { result: true },
      count: true,
-   })
-   console.log(`David's results (email: ${david.email})`, davidAggregates)
+   });
+   console.log(`David's results (email: ${david.email})`, davidAggregates);
 
    // Get aggregates for Shakuntala
    const shakuntalaAggregates = await prisma.testResult.aggregate({
@@ -819,8 +850,11 @@ In this step, you will run two kinds of aggregate operations:
      max: { result: true },
      min: { result: true },
      count: true,
-   })
-   console.log(`Shakuntala's results (email: ${shakuntala.email})`, shakuntalaAggregates)
+   });
+   console.log(
+     `Shakuntala's results (email: ${shakuntala.email})`,
+     shakuntalaAggregates,
+   );
    ```
 
    This results in the following terminal output:

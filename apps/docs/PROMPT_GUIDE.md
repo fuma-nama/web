@@ -6,7 +6,7 @@ This document explains how to add a "Copy prompt" banner to a Prisma docs guide 
 
 1. A prompt MDX file lives at `content/docs/ai/prompts/{slug}.mdx`
 2. The guide page's frontmatter references it via `aiPrompt: "{slug}"`
-3. The banner automatically appears on the guide page, extracting the prompt text from inside the ```` ````md ```` ```` code fence in the prompt MDX file
+3. The banner automatically appears on the guide page, extracting the prompt text from inside the ` `md ` ` code fence in the prompt MDX file
 
 ## Step-by-step: Adding a prompt to a new guide
 
@@ -16,7 +16,7 @@ Create `content/docs/ai/prompts/{slug}.mdx` where `{slug}` matches the framework
 
 Use the following structure — copy this template and adapt it:
 
-````mdx
+`````mdx
 ---
 title: "{Framework} + Prisma"
 description: "Step-by-step guide for integrating Prisma ORM and Prisma Postgres in a {Framework} project"
@@ -46,10 +46,12 @@ Include this prompt in your AI assistant to guide consistent code generation for
 
 ## Prompt
 
-````md
+```md
 (your full prompt content here — see "Writing the prompt" below)
-````
-````
+```
+`````
+
+`````
 
 ### 2. Write the prompt content
 
@@ -192,3 +194,4 @@ The value must match the slug of the prompt file (the filename without `.mdx`).
 - **Manual validation is required every time.** The prompt content is hand-written and must be tested with real AI assistants (Cursor, Copilot, Claude, etc.) to verify it produces working code. There is no automated way to validate prompt quality.
 - **Keep prompts up to date.** When Prisma APIs change, the prompts must be updated manually. Outdated prompts are worse than no prompt at all.
 - **The `content/docs/ai/prompts/nextjs.mdx` file is the reference implementation.** Always check it when writing a new prompt.
+`````

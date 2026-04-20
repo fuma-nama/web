@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
-import { source, sourceV6 } from "@/lib/source";
 import { getBaseUrl, withDocsBasePath } from "@/lib/urls";
+import { getSource } from "@/lib/source";
 
 export const revalidate = 3600;
 
@@ -12,7 +12,10 @@ function getPriority(slugCount: number) {
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = getBaseUrl();
-  const url = (path: string): string => new URL(withDocsBasePath(path), baseUrl).toString();
+  const source = await getSource();
+  const sourceV6 = await getSource("v6");
+  const url = (path: string): string =>
+    new URL(withDocsBasePath(path), baseUrl).toString();
 
   // v7 pages (default)
   const items = source.getPages().map((page) => {
@@ -43,4 +46,3 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...v6Items.filter((v) => v !== undefined),
   ];
 }
-

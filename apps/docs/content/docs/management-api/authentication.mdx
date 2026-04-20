@@ -2,7 +2,7 @@
 title: Authentication
 description: Learn how to authenticate with the Prisma Management API using service tokens or OAuth 2.0
 metaTitle: Management API Authentication | Service Tokens & OAuth 2.0
-metaDescription: 'Authenticate with Prisma Management API: service tokens for scripts and CI/CD, or OAuth 2.0 with PKCE for user-facing apps. Bearer token in Authorization header.'
+metaDescription: "Authenticate with Prisma Management API: service tokens for scripts and CI/CD, or OAuth 2.0 with PKCE for user-facing apps. Bearer token in Authorization header."
 url: /management-api/authentication
 ---
 
@@ -76,6 +76,7 @@ This provides enhanced security, especially for mobile and single-page applicati
 :::note[Development redirect URIs]
 
 For local development, the following redirect URIs are accepted with any port via wildcard matching:
+
 - `localhost` (e.g., `http://localhost:3000/callback`)
 - `127.0.0.1` (e.g., `http://127.0.0.1:3000/callback`)
 - `[::1]` - IPv6 loopback (e.g., `http://[::1]:3000/callback`)
@@ -84,11 +85,11 @@ For local development, the following redirect URIs are accepted with any port vi
 
 ### OAuth Endpoints
 
-| Endpoint | URL |
-|----------|-----|
-| Authorization | `https://auth.prisma.io/authorize` |
-| Token | `https://auth.prisma.io/token` |
-| Discovery | `https://auth.prisma.io/.well-known/oauth-authorization-server` |
+| Endpoint      | URL                                                             |
+| ------------- | --------------------------------------------------------------- |
+| Authorization | `https://auth.prisma.io/authorize`                              |
+| Token         | `https://auth.prisma.io/token`                                  |
+| Discovery     | `https://auth.prisma.io/.well-known/oauth-authorization-server` |
 
 :::tip
 
@@ -98,17 +99,17 @@ The discovery endpoint provides OAuth server metadata that can be used for autom
 
 ### Available Scopes
 
-| Scope | Description |
-|-------|-------------|
-| `workspace:admin` | Full access to workspace resources |
-| `offline_access` | Enables refresh tokens for long-lived sessions |
+| Scope             | Description                                    |
+| ----------------- | ---------------------------------------------- |
+| `workspace:admin` | Full access to workspace resources             |
+| `offline_access`  | Enables refresh tokens for long-lived sessions |
 
 ### Token Lifetimes
 
-| Token Type | Expiration |
-|-----------|------------|
-| Access tokens | 1 hour |
-| Refresh tokens | 90 days |
+| Token Type     | Expiration |
+| -------------- | ---------- |
+| Access tokens  | 1 hour     |
+| Refresh tokens | 90 days    |
 
 ### OAuth Authorization Flow
 
@@ -116,12 +117,12 @@ The discovery endpoint provides OAuth server metadata that can be used for autom
 
 Redirect users to the authorization endpoint with the following query parameters:
 
-| Parameter | Description |
-|-----------|-------------|
-| `client_id` | Your OAuth application's Client ID |
-| `redirect_uri` | The callback URL where users will be redirected after authorization |
-| `response_type` | Must be `code` for the authorization code flow |
-| `scope` | Permissions to request (e.g., `workspace:admin`) |
+| Parameter       | Description                                                         |
+| --------------- | ------------------------------------------------------------------- |
+| `client_id`     | Your OAuth application's Client ID                                  |
+| `redirect_uri`  | The callback URL where users will be redirected after authorization |
+| `response_type` | Must be `code` for the authorization code flow                      |
+| `scope`         | Permissions to request (e.g., `workspace:admin`)                    |
 
 ```
 https://auth.prisma.io/authorize?client_id=$CLIENT_ID&redirect_uri=$REDIRECT_URI&response_type=code&scope=workspace:admin

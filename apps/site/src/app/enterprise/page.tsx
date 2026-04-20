@@ -371,7 +371,12 @@ export default function EnterprisePage() {
             developers can focus on business logic.
           </p>
           <div className="flex flex-col md:flex-row gap-4 items-center justify-center">
-            <Button asChild variant="orm" size="3xl" className="font-sans-display! font-[650]">
+            <Button
+              asChild
+              variant="orm"
+              size="3xl"
+              className="font-sans-display! font-[650]"
+            >
               <a href="#contact-us">
                 Get in touch
                 <i className="fa-regular fa-envelope" />
@@ -595,7 +600,7 @@ export default function EnterprisePage() {
       {/* Connect with us */}
       <section className="my-12 px-4" id="contact-us">
         <div className="py-12 gap-8 flex flex-col max-w-221 mx-auto">
-          <h2  className="text-foreground-neutral stretch-display text-center text-4xl font-black! font-sans-display my-0">
+          <h2 className="text-foreground-neutral stretch-display text-center text-4xl font-black! font-sans-display my-0">
             Connect with us
           </h2>
           <p className="text-center text-foreground-neutral max-w-3xl mx-auto">

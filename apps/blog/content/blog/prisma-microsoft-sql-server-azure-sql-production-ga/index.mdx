@@ -25,7 +25,6 @@ Today we are excited to announce that Prisma support for SQL Server and Azure SQ
 - [Open-source and beyond](#open-source-and-beyond)
 - [Thank you to our community 💚](#thank-you-to-our-community)
 
-
 ## Support for SQL Server and Azure SQL in Prisma is Generally Available
 
 Today we are excited to announce that Prisma support for SQL Server and Azure SQL is Generally Available and ready for production workloads as part of the [3.0.1 release](https://github.com/prisma/prisma/releases/tag/3.0.1)! 🎉
@@ -45,7 +44,7 @@ _Data modeling_, _schema migrations_ and writing _database queries_ are common t
 
 At Prisma, we found that the Node.js ecosystem –while becoming increasingly popular to build database-backed applications– does not provide modern tools for application developers to deal with these tasks.
 
-Even though there are many existing ORMs, developers still face the challenges of confidently deploying code changes that interact with the database – especially without tooling to statically verify code changes and database schema changes in tandem. 
+Even though there are many existing ORMs, developers still face the challenges of confidently deploying code changes that interact with the database – especially without tooling to statically verify code changes and database schema changes in tandem.
 
 ## Prisma – making databases easy
 
@@ -64,12 +63,12 @@ There are three core concepts central to the development workflow with Prisma:
 - [**The Prisma schema**](https://www.prisma.io/docs/concepts/components/prisma-schema): A single source of truth for your database schema and application models which can be written by hand or populated by introspecting an existing database.
 - **Type safety**: A way to ensure that all application code interacting with the database can only do so safely. Attempting to query a non-existent column will immediately raise a type error. Prisma gives you type safety without the burden of manually defining types based on your database schema using TypeScript and code generation.
 - **Code generation**: You should only need to write things once. Prisma saves you time by auto-generating two artifacts that you would otherwise have to write by hand:
-  - Fully typed TypeScript database client 
+  - Fully typed TypeScript database client
   - SQL migrations based on changes in the Prisma schema.
 
 Today's [release](https://github.com/prisma/prisma/releases/tag/3.0.1) brings Prisma support for Microsoft SQL Server and Azure SQL to General Availability. We couldn't be more excited to welcome new developers to the Prisma community so that you can reap the benefits of productivity and confidence.
 
-{/* <UsingCompanyListCarousel initialActiveIndex={0} itemsToShow={2} outerSpacing={100}>
+{/\* <UsingCompanyListCarousel initialActiveIndex={0} itemsToShow={2} outerSpacing={100}>
 
   <UsingCompany
     title="CargOn"
@@ -97,24 +96,25 @@ Today's [release](https://github.com/prisma/prisma/releases/tag/3.0.1) brings Pr
   />
 </UsingCompanyListCarousel> */}
 
-
 ## Getting started
 
-Prisma can be adopted in new projects using SQL Server or Azure SQL with [Prisma Migrate](https://www.prisma.io/migrate) and existing projects using [introspection](https://www.prisma.io/docs/concepts/components/introspection). 
+Prisma can be adopted in new projects using SQL Server or Azure SQL with [Prisma Migrate](https://www.prisma.io/migrate) and existing projects using [introspection](https://www.prisma.io/docs/concepts/components/introspection).
 
 ### Adding Prisma to an existing SQL Server/Azure SQL project
 
 To add Prisma to an existing project, you will use Prisma's introspection workflow, where you begin by introspecting (`prisma db pull`) an existing SQL Server database that populates the Prisma schema with models mirroring the tables of your database schema. Then you can generate Prisma Client (`prisma generate`) and interact with your database in a type-safe manner with Node.js or TypeScript.
 
 <br />
-[Add Prisma to an existing SQL Server project](https://www.prisma.io/docs/getting-started/setup-prisma/add-to-existing-project/relational-databases-typescript-sqlserver?utm_source=blog&utm_medium=blog&utm_campaign=sqlserver-ga)
+[Add Prisma to an existing SQL Server
+project](https://www.prisma.io/docs/getting-started/setup-prisma/add-to-existing-project/relational-databases-typescript-sqlserver?utm_source=blog&utm_medium=blog&utm_campaign=sqlserver-ga)
 
 ### Using Prisma in a new SQL Server/Azure SQL project
 
 To start a new project with Prisma and SQL Server, you define your data model with the Prisma schema and then use Prisma Migrate to create the database tables with Prisma Migrate. Then you can generate Prisma Client (`prisma generate`) and interact with your database in a type-safe manner with Node.js or TypeScript.
 
 <br />
-[Start a new Prisma project with SQL Server](https://www.prisma.io/docs/getting-started/setup-prisma/start-from-scratch/relational-databases-typescript-sqlserver?utm_source=blog&utm_medium=blog&utm_campaign=sqlserver-ga)
+[Start a new Prisma project with SQL
+Server](https://www.prisma.io/docs/getting-started/setup-prisma/start-from-scratch/relational-databases-typescript-sqlserver?utm_source=blog&utm_medium=blog&utm_campaign=sqlserver-ga)
 
 You can also dig into our ready-to-run [example](https://github.com/prisma/prisma-examples/tree/latest/databases/sql-server) in the [`prisma-examples`](https://github.com/prisma/prisma-examples) repo which includes the Prisma schema, an initial migration to create a database, and instructions on how to query the database with Prisma Client.
 
@@ -136,7 +136,7 @@ To get a better feel for what it's like to modernize an existing application usi
 
 ## Open-source and beyond
 
-With SQL Server and Azure SQL support in Prisma reaching General Availability, it is ready for adoption in production. But it doesn't stop here – beyond the open-source Prisma ORM, our long-term vision for Prisma is much broader. 
+With SQL Server and Azure SQL support in Prisma reaching General Availability, it is ready for adoption in production. But it doesn't stop here – beyond the open-source Prisma ORM, our long-term vision for Prisma is much broader.
 
 During our recent Prisma Day conference, we [started sharing this vision](https://www.youtube.com/watch?v=vTgvePrccas), which we call the [**Prisma Data Platform**](https://cloud.prisma.io/).
 

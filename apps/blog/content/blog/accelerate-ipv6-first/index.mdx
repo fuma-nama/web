@@ -57,9 +57,10 @@ function applyDNS64(ipv4: string): string {
   return `[64:ff9b::${octets[0]}${octets[1]}:${octets[2]}${octets[3]}]`;
 }
 ```
+
 ## IPv6-first
 
-Prisma Accelerate takes advantage of NAT64 in an approach we call IPv6-first. Every region Prisma Accelerate supports operates an AWS NAT gateway with NAT64 enabled. EC2 instances are placed into an IPv6-only VPC subnet, which automatically provisions a ***public*** IPv6 address from a specific address range and ***no*** IPv4 address. When the EC2 instance attempts to connect to a user’s database, it will prefer a direct connection over the public IPv6 address if the database also advertises an IPv6 address. Otherwise, a DNS64 address will be resolved instead, routing the request through the attached NAT gateway and to the database over IPv4. All internal traffic, including the request from Cloudflare to AWS, is always IPv6.
+Prisma Accelerate takes advantage of NAT64 in an approach we call IPv6-first. Every region Prisma Accelerate supports operates an AWS NAT gateway with NAT64 enabled. EC2 instances are placed into an IPv6-only VPC subnet, which automatically provisions a **_public_** IPv6 address from a specific address range and **_no_** IPv4 address. When the EC2 instance attempts to connect to a user’s database, it will prefer a direct connection over the public IPv6 address if the database also advertises an IPv6 address. Otherwise, a DNS64 address will be resolved instead, routing the request through the attached NAT gateway and to the database over IPv4. All internal traffic, including the request from Cloudflare to AWS, is always IPv6.
 
 Unfortunately, while this removes the IPv4 address cost, it does add additional data transfer costs over the NAT gateway. Prisma has decided to absorb this cost while the ecosystem adjusts to the new IPv6 landscape. We made this decision so that the transition is as seamless for our users as possible (you see now why we picked the title for this post? 😉). This decision is also in alignment with several of the developer experience focused principles that we’ve put across on our [Data DX manifesto](https://www.datadx.io/#manifesto).
 

@@ -25,7 +25,7 @@ As high sales seasons approaches, your team anticipates traffic surges due to in
 
 Serverless environments offer the perfect solution for scaling servers based on real-time demand. They optimize costs by dynamically scaling down during periods of low traffic and scaling up during peaks. Each serverless function, however, initiates a separate database connection for API requests, which can lead to issues we'll discuss in this blog.
 
-To make sure your app automatically meets scaling needs, your team decides to migrate your app to a serverless environment. To further reduce page loading times for users worldwide, your team decides to use an edge runtime for some APIs so that the data is served to your users from a server closest to their location. Because Prisma ORM and Next.js have support for edge runtimes, migrating some of the APIs is straightforward. 
+To make sure your app automatically meets scaling needs, your team decides to migrate your app to a serverless environment. To further reduce page loading times for users worldwide, your team decides to use an edge runtime for some APIs so that the data is served to your users from a server closest to their location. Because Prisma ORM and Next.js have support for edge runtimes, migrating some of the APIs is straightforward.
 
 However, during weekends or small sales seasons, when traffic increases, your team starts seeing error messages from the database that say, “**Sorry! Too many clients already.**”
 
@@ -35,7 +35,7 @@ This error occurs due to the database being overloaded as each serverless functi
 
 ### The unprecedented traffic on Black Friday
 
-It is Black Friday, bringing a huge wave of shoppers to Mega Electronics. Just as the holidays kick off, disaster strikes: Mega Electronics goes down. 
+It is Black Friday, bringing a huge wave of shoppers to Mega Electronics. Just as the holidays kick off, disaster strikes: Mega Electronics goes down.
 
 The culprit? The database connection pool is overwhelmed again, and despite the upgrades to the database, the error message “**Sorry! too many clients already**” reappears, especially from the API endpoints using an edge runtime. The database connection pool was overwhelmed again from those routes as the database connections weren’t reused at all and the traffic was significantly higher than expected. Your team figured that upgrading the database again to handle more connections would become very expensive and wasn’t a practical solution. The aftermath of the event led to unhappy customers and a loss of potential sales.
 
@@ -70,15 +70,16 @@ Your team believes Prisma Accelerate is the best solution for tackling the conne
 Prisma Accelerate offers a connection pooler across 16 regions and an opt-in global cache. It helps you ensure your database connections aren’t easily exhausted and enables your app to run smoothly during periods of high load. To add Prisma Accelerate to a project, follow the [getting started guide](https://www.prisma.io/docs/accelerate/getting-started) and install all the required dependencies. Then, adding connection pooling with Prisma Accelerate to your Prisma ORM project will look like this:
 
 ```typescript
-import { PrismaClient } from '@prisma/client/edge'
-import { withAccelerate } from '@prisma/extension-accelerate'
+import { PrismaClient } from "@prisma/client/edge";
+import { withAccelerate } from "@prisma/extension-accelerate";
 
 // This will route all Prisma ORM queries through the connection pool
-const prisma = new PrismaClient().$extends(withAccelerate())
+const prisma = new PrismaClient().$extends(withAccelerate());
 ```
+
 You can also see Prisma Accelerate improving the performance of a serverless function under high load by watching the video below:
 
-<Youtube videoId="cnL75if6Aq0"/>
+<Youtube videoId="cnL75if6Aq0" />
 
 ### Bonus: Cache your queries with Accelerate
 
@@ -90,8 +91,8 @@ In addition to connection pooling, Prisma Accelerate’s global caching vastly i
 
 In Mega Electronics' story, the lesson is clear: connection pooling is crucial for handling peak traffic spikes and scaling your serverless and edge apps. Prisma Accelerate makes this easier, ensuring your app stays fast and reliable, even when faced with crazy traffic.
 
-Prisma Accelerate reduces the need for constant manual intervention, freeing up valuable time for your team to focus on innovation and business growth. With improved reliability and great DX, adopting Prisma Accelerate isn't just a technical upgrade—it's a strategic investment in the success of your online business. This means fewer instances of downtime for your business, keeping customers satisfied and potential sales intact. 
+Prisma Accelerate reduces the need for constant manual intervention, freeing up valuable time for your team to focus on innovation and business growth. With improved reliability and great DX, adopting Prisma Accelerate isn't just a technical upgrade—it's a strategic investment in the success of your online business. This means fewer instances of downtime for your business, keeping customers satisfied and potential sales intact.
 
-<br/>
+<br />
 
 [Get started with Prisma Accelerate now](https://www.prisma.io/data-platform/accelerate?utm_source=website&utm_medium=blogpost&utm_campaign=pooling)

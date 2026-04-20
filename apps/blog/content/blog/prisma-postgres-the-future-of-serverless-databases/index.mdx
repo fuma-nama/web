@@ -31,6 +31,7 @@ Try it now by following the [**Quickstart**](https://pris.ly/ppg-quickstart) or 
 # Create a new database
 npx prisma@latest init --db
 ```
+
 ## The serverless database that's built for the future
 
 Prisma Postgres has been designed from first principles and with the developer in mind. No more complicated setup flows or database configurations—set up your Prisma Postgres instance and start querying in a minute.
@@ -41,7 +42,7 @@ Prisma Postgres has been designed from first principles and with the developer i
 
 Serverless databases are awesome because of their pay-as-as-you go pricing models that only incur costs when the database is used. However, one downside of this approach is that, once a database was scaled down to zero, it needs to be "woken up" again. This wake-up process is known as _cold start_ and can cause serious delays for your users.
 
-Prisma Postgres is the [first serverless database without cold starts](https://www.prisma.io/blog/announcing-prisma-postgres-early-access#why-are-there-no-cold-starts-with-prisma-postgres) thanks to its innovative architecture and milli-second cloud stack running on bare metal machines. 
+Prisma Postgres is the [first serverless database without cold starts](https://www.prisma.io/blog/announcing-prisma-postgres-early-access#why-are-there-no-cold-starts-with-prisma-postgres) thanks to its innovative architecture and milli-second cloud stack running on bare metal machines.
 
 ### For free: 100k operations, 1GiB storage & 10 databases
 
@@ -55,7 +56,7 @@ As a user, this means you can create an up to ten databases per workspace for fr
 
 ### Simple & predictable: Pricing anyone can understand
 
-[Pricing](https://www.prisma.io/pricing?utm_campaign=ppg-ga&utm_source=blog&utm_medium=ga-announcement) for Prisma Postgres is different than for other database providers. Unlike traditional pricing models, it charges for **number of database operations** and **GiB storage**, _not_ for upfront resource allocation, compute hours or egress. 
+[Pricing](https://www.prisma.io/pricing?utm_campaign=ppg-ga&utm_source=blog&utm_medium=ga-announcement) for Prisma Postgres is different than for other database providers. Unlike traditional pricing models, it charges for **number of database operations** and **GiB storage**, _not_ for upfront resource allocation, compute hours or egress.
 
 > An **operation** is counted each time you do a create, read, update or delete with Prisma ORM against your Prisma Postgres instance.
 
@@ -69,7 +70,7 @@ With Prisma Postgres' usage-based pricing, you truly pay only for what you need!
 
 ### Serve data from a global cache close to your users
 
-One major benefit of Prisma Postgres is that you can configure database caching on a _per-query_ level. Database results are then cached at the edge and will be served to your application from a close, physical location. 
+One major benefit of Prisma Postgres is that you can configure database caching on a _per-query_ level. Database results are then cached at the edge and will be served to your application from a close, physical location.
 
 Here's how easy it is to configure a cache strategy, just add the `cacheStrategy` option with `ttl` and/or `swr` options:
 
@@ -79,12 +80,13 @@ const users = await prisma.post.findMany({
   cacheStrategy: {
     ttl: 60,
     swr: 30,
-  }
-})
+  },
+});
 ```
+
 The `ttl` ([Time-To-Live](https://www.prisma.io/docs/accelerate/caching#time-to-live-ttl)) and `swr` ([Stale-While-Revalidate](https://www.prisma.io/docs/accelerate/caching#stale-while-revalidate-swr)) options indicate to Prisma Postgres how long the currently cached data should be considered _fresh_ and whether an update of the cache should happen in the background. Prisma Postgres' cache also supports advanced use cases like [on-demand cache invalidation](https://www.prisma.io/docs/accelerate/caching#on-demand-cache-invalidation).
 
-You can learn more about different [caching strategies and their use cases](https://www.prisma.io/docs/accelerate/caching#selecting-a-cache-strategy) in our docs. 
+You can learn more about different [caching strategies and their use cases](https://www.prisma.io/docs/accelerate/caching#selecting-a-cache-strategy) in our docs.
 
 ### Scale effortlessly with built-in connection pooling
 
@@ -96,10 +98,9 @@ This is especially important if your app is deployed via serverless or edge func
 
 Prisma Postgres' built-in connection pool helps you prevent these failure scenarios and deal with traffic spikes without any extra effort! It also prevents query delays due to the need of establishing new connections because connections are opened once and will be _reused_ upon future requests.
 
-
 ### First-class integration with Prisma ORM
 
-Prisma ORM is the [most popular ORM](https://www.prisma.io/blog/how-prisma-orm-became-the-most-downloaded-orm-for-node-js) in the Node.js and TypeScript ecosystem. Developers love it for the human-readable schema, automated migrations and type-safe queries. 
+Prisma ORM is the [most popular ORM](https://www.prisma.io/blog/how-prisma-orm-became-the-most-downloaded-orm-for-node-js) in the Node.js and TypeScript ecosystem. Developers love it for the human-readable schema, automated migrations and type-safe queries.
 
 Here is an example of how you model your data with Prisma ORM:
 
@@ -120,63 +121,65 @@ model Post {
   authorId  Int
 }
 ```
+
 Prisma ORM then translates this schema into a SQL migration and updates the schema in your database. Once the tables are created, you can read and write data with Prisma ORM's intuitive query API:
-
-
 
 ```ts
 const usersWithPosts = await prisma.user.findMany({
   include: { posts: true },
-})
+});
 ```
+
 ```ts
 const posts = await prisma.post.findMany({
   where: {
     OR: [
-      { title: { contains: 'prisma' } },
-      { content: { contains: 'prisma' } },
+      { title: { contains: "prisma" } },
+      { content: { contains: "prisma" } },
     ],
   },
   skip: 100,
   take: 5,
-})
+});
 ```
+
 ```ts
 const user = await prisma.user.create({
   data: {
-    name: 'Alice',
-    email: 'alice@prisma.io',
+    name: "Alice",
+    email: "alice@prisma.io",
     posts: {
-      create: { title: 'Prisma Postgres is the most innovative database' },
+      create: { title: "Prisma Postgres is the most innovative database" },
     },
   },
-})
+});
 ```
+
 ```ts
 const posts = await prisma.post.findMany({
   include: {
     author: {
       where: {
-        email: { endsWith: "prisma.io" }
-      }
-    }
-  }
-})
+        email: { endsWith: "prisma.io" },
+      },
+    },
+  },
+});
 ```
+
 ```ts
 const posts = await prisma.post.updateMany({
   where: { published: false },
   data: { published: true },
-})
+});
 ```
-
 
 > Prisma Postgres is designed to work seamlessly with Prisma ORM, leveraging its tightly integrated connection pool for optimal performance and scalability. While direct TCP connections for other ORMs aren't currently available, we're actively working on expanding compatibility in the future.
 > If you want to use query editors or other tooling, you can use our [local TCP tunnel](https://prisma.io/docs/postgres/tcp-tunnel) to interact with Prisma Postgres outside of the ORM.
 
 ### Netlify, Vercel & IDX: Try one of our integrations
 
-Prisma Postgres is available via a [Netlify extension](https://pris.ly/ppg-netlify-ext) which allows you to easily connect your Prisma Postgres instance with a Netlify site. If you're curious, you can follow our [tutorial to deploy a Next.js site](https://www.prisma.io/docs/postgres/integrations/netlify#example-deploy-a-nextjs-template-with-prisma-postgres) with Prisma Postgres to Netlify. 
+Prisma Postgres is available via a [Netlify extension](https://pris.ly/ppg-netlify-ext) which allows you to easily connect your Prisma Postgres instance with a Netlify site. If you're curious, you can follow our [tutorial to deploy a Next.js site](https://www.prisma.io/docs/postgres/integrations/netlify#example-deploy-a-nextjs-template-with-prisma-postgres) with Prisma Postgres to Netlify.
 
 An integration for Vercel Marketplace is coming soon. In the meantime, you can check out our official [Next.js 15 with Prisma Postgres example](https://github.com/prisma/nextjs-prisma-postgres-demo).
 
@@ -184,7 +187,7 @@ We've also collaborated with the folks from Google's [Project IDX](https://idx.g
 
 ## Built on next-generation infrastructure
 
-Let's talk about the underlying technology that enables these unique benefits and features. 
+Let's talk about the underlying technology that enables these unique benefits and features.
 
 ### The first database running on unikernels
 
@@ -195,7 +198,7 @@ We're very excited about advancements in the unikernel technology that is behind
 Unikernels have been around for a while and we have observed them as an emerging technology trend for a long time. As we started our collaboration with [Unikraft](https://unikraft.cloud/)—a company that's pioneering the unikernel landscape—we found that they're finally ready for high-performance production workloads! So we decided to build Prisma Postgres on top of them.
 
 > Unikernels are famous for providing excellent performance in terms of boot times, throughput and memory consumption, to name a few metrics.
-> 
+>
 > [Unikraft: Fast, Specialized Unikernels the Easy Way](https://dl.acm.org/doi/abs/10.1145/3447786.3456248) (Research paper, EuroSys 21)Announcing: Prisma Postgres Integration for Vercel Marketplace
 
 Together with Unikraft, we were able to reduce the Prisma Postgres binary image to [less than 20%](https://www.prisma.io/blog/announcing-prisma-postgres-early-access#the-prisma-postgres-unikernel-binary-is-5-times-smaller-than-the-original-postgresql-image) of the size of the original PostgreSQL image, making the Prisma Postgres architecture even more efficient.
@@ -206,7 +209,7 @@ These specialized binary images are deployed as unikernels on our own bare metal
 
 At Prisma, we're huge fans of Cloudflare and strong believers that it'll leave a major mark on the cloud computing landscape. That's why we've built the Prisma Postgres caching layer on top of the global Cloudflare infrastructure.
 
-The cache is implemented via Cloudflare Workers (so it caches data at the edge) and uses the official Cloudflare Caching API. 
+The cache is implemented via Cloudflare Workers (so it caches data at the edge) and uses the official Cloudflare Caching API.
 
 > If you're curious about the details of the Prisma Postgres technology stack and how it works under the hood, check out this technical deep dive: [**Cloudflare, Unikernels & Bare Metal: Life of a Prisma Postgres Query**](https://www.prisma.io/blog/cloudflare-unikernels-and-bare-metal-life-of-a-prisma-postgres-query).
 
@@ -214,13 +217,13 @@ The cache is implemented via Cloudflare Workers (so it caches data at the edge) 
 
 The official General Availability launch of Prisma Postgres today is a major milestone for us as a company! We are incredibly grateful for the strong support, valuable feedback and overall excitement shared by our community in the past months. Without all of you, we would not have been able to bring Prisma Postgres to this point. Thank you 💚
 
-But we are not stopping here: Get ready for some more exciting announcements in the next weeks. 
+But we are not stopping here: Get ready for some more exciting announcements in the next weeks.
 
-**Also, this week we'll continue sharing amazing news and resources about Prisma Postgres every day!** 
+**Also, this week we'll continue sharing amazing news and resources about Prisma Postgres every day!**
 
 We'd also love to see you during our [livestream](https://www.youtube.com/live/JYLSdLrKL1k?feature=shared) on Friday, 10am ET | 4pm CET. We're going to explore what you can build with Prisma Postgres and have an engineer join us for a technical deep dive.
 
-Let us know what features you'd like to see us add to Prisma Postgres next: Reach out to us on [X](https://pris.ly/x) and [LinkedIn](https://pris.ly/linkedin), subscribe to our [YouTube channel](https://pris.ly/youtube), and join our [Discord](https://pris.ly/discord). 
+Let us know what features you'd like to see us add to Prisma Postgres next: Reach out to us on [X](https://pris.ly/x) and [LinkedIn](https://pris.ly/linkedin), subscribe to our [YouTube channel](https://pris.ly/youtube), and join our [Discord](https://pris.ly/discord).
 
 <br />
 [Try Prisma Postgres](https://pris.ly/ppg-quickstart)

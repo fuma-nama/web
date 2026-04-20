@@ -35,25 +35,26 @@ The following scenario simulates a change that creates a seemingly harmless inco
 
 - Modify an **existing migration** that has **already been applied** in a development environment by changing the value of `VARCHAR(550)` to `VARCHAR(560)`:
 
-   ```sql title="migrations.sql"
-     -- AlterTable
-    ALTER TABLE "Post" ALTER COLUMN "content" SET DATA TYPE VARCHAR(560);
-   ```
+  ```sql title="migrations.sql"
+    -- AlterTable
+   ALTER TABLE "Post" ALTER COLUMN "content" SET DATA TYPE VARCHAR(560);
+  ```
 
-   After making this change, the end state of the migration history no longer matches the Prisma schema, which still has `@db.VarChar(550)`.
+  After making this change, the end state of the migration history no longer matches the Prisma schema, which still has `@db.VarChar(550)`.
+
 - Running `prisma migrate dev` results in an error because a migration has been changed and suggests resetting the database.
 - Run `prisma migrate reset` - Prisma Migrate resets the database and replays all migrations, including the migration you edited.
 - After applying all existing migrations, Prisma Migrate compares the end state of the migration history to the Prisma schema and detects a discrepancy:
-   - Prisma schema has `@db.VarChar(550)`
-   - Database schema has `VARCHAR(560)`
+  - Prisma schema has `@db.VarChar(550)`
+  - Database schema has `VARCHAR(560)`
 - Prisma Migrate generates a new migration to change the value back to `550`, because the end state of the migration history should match the Prisma schema.
 - From now on, when you use `prisma migrate deploy` to deploy migrations to production and test environments, Prisma Migrate will always **warn you** that migration histories do not match (and continue to warn you each time you run the command ) - even though the schema end states match:
 
-   ```
-   6 migrations found in prisma/migrations
-   WARNING The following migrations have been modified since they were applied:
-   20210310143435_change_type
-   ```
+  ```
+  6 migrations found in prisma/migrations
+  WARNING The following migrations have been modified since they were applied:
+  20210310143435_change_type
+  ```
 
 A change that does not appear to break anything after a `migrate reset` can hide problems - you may end up with a bug in production that you cannot replicate in development, or the other way around - particularly if the change concerns a highly customized migration.
 

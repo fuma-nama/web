@@ -43,22 +43,16 @@ To take advantage of the type system, we need to provide it some information abo
 
 To apply a type annotation to a variable, we put a colon after the variable name followed by the type.
 
-
-
 ```ts
-let companyName: string = 'Prisma'
+let companyName: string = "Prisma";
 ```
-
 
 In this example, we're telling the type system that `companyName` has a type of `string`. If we were to later try to assign something to `companyName` _other_ than a `string`, we would get a type error.
 
-
-
 ```ts
-companyName = 12
+companyName = 12;
 // Type 'number' is not assignable to type 'string'
 ```
-
 
 In this case, type-hinting our variable has prevented us from misusing it. This is a trivial example, but the benefits are clear. As codebases and teams grow and become more disparate, the type system becomes invaluable as a way to ensure code is used in the way it should be.
 
@@ -74,16 +68,13 @@ The most common spots we might see types applied include:
 
 Let's consider the following function for getting the length of a string:
 
-
-
 ```ts
 function getWordLength(word: string): number {
-  return word.length
+  return word.length;
 }
 
-const wordLength: number = getWordLength('hello world')
+const wordLength: number = getWordLength("hello world");
 ```
-
 
 We're applying types to all three of the spots listed above. The `word` parameter is typed as a `string`, meaning that we'll get a type error if we try to pass in anything but a string. Type-hinting this parameter is done much like how we type-hint a variable. We put a colon next to the parameter followed by the type.
 
@@ -93,25 +84,19 @@ Finally, the variable we're declaring called `wordLength` is typed as a `number`
 
 We can see the type system at work if try to use this function in a way that isn't valid. For example, if we try to pass a number as the argument, we are immediately stopped with a type error.
 
-
-
 ```ts
-getWordLength(42)
+getWordLength(42);
 // Argument of type 'number' is not assignable to parameter of type 'string'.
 ```
 
-
 We can also see issues if we make changes to the body of the function that throws off the return type. For example, if we try to return a string instead of a number, we'll get a type error.
-
-
 
 ```ts
 function getWordLength(word: string): number {
-  return word[0]
+  return word[0];
 }
 // Type 'string' is not assignable to type 'number'.
 ```
-
 
 In both cases, TypeScript is protecting us from code misuse.
 
@@ -123,19 +108,16 @@ TypeScript does a good job of _inferring_ type information from the code we writ
 
 Let's take the example of the `getWordLength` function from above.
 
-
-
 ```ts
-const word = 42
+const word = 42;
 
 function getWordLength(word: string): number {
-  return word.length
+  return word.length;
 }
 
-getWordLength(word)
+getWordLength(word);
 // Argument of type 'number' is not assignable to parameter of type 'string'.
 ```
-
 
 When we set a variable to hold a value of `42` and then try to pass that variable to the `getWordLength` function, we get a type error. This makes sense since `42` is a `number` and the function expects a `string`. But we didn't explicitly set the variable `word` to be of type `number`, so how is this being caught?
 
@@ -151,16 +133,13 @@ There are many cases where assigning a single type to parts of our code would be
 
 Let's take the example of a function that is responsible for converting a number value into a formatted currency string. If we were to just accept `number` types as input, this would be fairly straight-forward.
 
-
-
 ```ts
 function formatAsCurrency(value: number): string {
-  return `$${value.toFixed(2).toString()}`
+  return `$${value.toFixed(2).toString()}`;
 }
 
-formatAsCurrency(1000) // "$1000.00"
+formatAsCurrency(1000); // "$1000.00"
 ```
-
 
 This function gives us strong type safety for its input and output.
 
@@ -172,34 +151,28 @@ The union literal is a bit like the OR operator (`||`) in JavaScript. It denotes
 
 We can allow the `formatAsCurrency` function to accept a `number` _or_ a `string` as input but we'll need to be sure to do some work in the function itself to handle these types appropriately.
 
-
-
 ```ts
 function formatAsCurrency(value: number | string): string {
-  if (typeof value === 'string') {
-    const parsed = parseFloat(value)
+  if (typeof value === "string") {
+    const parsed = parseFloat(value);
     if (isNaN(parsed)) {
-      throw new Error('Invalid value')
+      throw new Error("Invalid value");
     }
-    return `$${parsed.toFixed(2).toString()}`
+    return `$${parsed.toFixed(2).toString()}`;
   }
-  return `$${value.toFixed(2).toString()}`
+  return `$${value.toFixed(2).toString()}`;
 }
 ```
-
 
 Now that the function accepts either a `number` or a `string`, we need to be careful that any strings passed in are actually representable as a number. If someone were to pass in a string with letters instead of just numbers, the result of `parseFloat` would be `NaN` which is almost certainly not what we want.
 
 Running a check on the argument type is a good way to get us on a path where we can do the appropriate checks for strings validity.
 
-
-
 ```ts
-formatAsCurrency(1000) // "$1000.00"
-formatAsCurrency('2000') // "$2000.00"
-formatAsCurrency('foo') // ERR: Invalid value
+formatAsCurrency(1000); // "$1000.00"
+formatAsCurrency("2000"); // "$2000.00"
+formatAsCurrency("foo"); // ERR: Invalid value
 ```
-
 
 ## Intersection Types
 
@@ -209,38 +182,32 @@ Intersection types are useful for composing together two or more _different_ typ
 
 Let's say we have a `User` type and an associated `user` object.
 
-
-
 ```ts
 type User = {
-  id: string
-  firstName: string
-  lastName: string
-  email: string
-}
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+};
 
 const user: User = {
-  id: '123',
-  firstName: 'Ryan',
-  lastName: 'Chenkie',
-  email: 'chenkie@prisma.io',
-}
+  id: "123",
+  firstName: "Ryan",
+  lastName: "Chenkie",
+  email: "chenkie@prisma.io",
+};
 ```
 
-
 Let's also say we have a function for accessing this data. However, instead of simply returning the `user` directly, we want to add an additional `role` property to it.
-
-
 
 ```ts
 function getUserInfo() {
   return {
     ...user,
-    role: 'admin',
-  }
+    role: "admin",
+  };
 }
 ```
-
 
 To make our function type-safe, we should apply a return type to it. But how should we go about doing so? Our `User` type lacks the `role` property that we're returning with the `user` object.
 
@@ -248,25 +215,22 @@ We could add `role` to the `User` type, but this may not be what we want. In fac
 
 We might then think about creating a new type which would represent the data as we want to.
 
-
-
 ```ts
 type UserWithRole = {
-  id: string
-  firstName: string
-  lastName: string
-  email: string
-  role: 'user' | 'admin' | 'superadmin'
-}
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  role: "user" | "admin" | "superadmin";
+};
 
 function getUserInfo(): UserWithRole {
   return {
     ...user,
-    role: 'admin',
-  }
+    role: "admin",
+  };
 }
 ```
-
 
 This approach works but we're creating a whole new type that is quite specific to this one task. We may not be able to reuse it in other places.
 
@@ -276,65 +240,59 @@ A more flexible approach is to use **intersection types**. This allows us to use
 
 An intersection is done by using `&` in-between multiple types. We can think of it a little bit like the `&&` operator in JavaScript.
 
-
-
 ```ts
 type User = {
-  id: string
-  firstName: string
-  lastName: string
-  email: string
-}
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+};
 
 type UserAccess = {
-  role: 'user' | 'admin' | 'superadmin'
-}
+  role: "user" | "admin" | "superadmin";
+};
 
 const user: User = {
-  id: '123',
-  firstName: 'Ryan',
-  lastName: 'Chenkie',
-  email: 'chenkie@prisma.io',
-}
+  id: "123",
+  firstName: "Ryan",
+  lastName: "Chenkie",
+  email: "chenkie@prisma.io",
+};
 
 function getUserInfo(): User & UserAccess {
   return {
     ...user,
-    role: 'admin',
-  }
+    role: "admin",
+  };
 }
 ```
 
-
 We aren't limited to just two types for intersections. We can intersect together as many types as we like.
-
-
 
 ```ts
 type User = {
-  id: string
-  firstName: string
-  lastName: string
-  email: string
-}
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+};
 
 type UserAccess = {
-  role: 'user' | 'admin' | 'superadmin'
-}
+  role: "user" | "admin" | "superadmin";
+};
 
 type SocialMedia = {
-  socialAccounts: string[]
-}
+  socialAccounts: string[];
+};
 
 function getUserInfo(): User & UserAccess & SocialMedia {
   return {
     ...user,
-    role: 'admin',
-    socialAccounts: ['Twitter', 'LinkedIn'],
-  }
+    role: "admin",
+    socialAccounts: ["Twitter", "LinkedIn"],
+  };
 }
 ```
-
 
 ## Generics
 
@@ -344,30 +302,24 @@ TypeScript Generics allow us to write code that can work with a variety of diffe
 
 Let's say we have a function that returns an array of the _first three_ items from an array passed in as an argument.
 
-
-
 ```ts
 function getFirstThree(items) {
-  return items.slice(0, 3)
+  return items.slice(0, 3);
 }
 
-getFirstThree(['one', 'two', 'three', 'four', 'five'])
+getFirstThree(["one", "two", "three", "four", "five"]);
 // ['one', 'two', 'three']
 ```
-
 
 We give the `getFirstThree` function an array of `items` and it gives us back the first three.
 
 Since we want to be type-safe with this code, we should apply type hints. We're dealing with strings here so we can tell the function that it should expect strings as input and give back strings as output.
 
-
-
 ```ts
 function getFirstThree(items: string[]): string[] {
-  return items.slice(0, 3)
+  return items.slice(0, 3);
 }
 ```
-
 
 Our function now expects the `items` argument to be an array of strings and that it should also return an array of strings.
 
@@ -375,18 +327,15 @@ This works great for arrays of strings, but what if we want to also use it for a
 
 We could make two separate functions to deal with these two cases.
 
-
-
 ```ts
 function getFirstThreeStrings(items: string[]): string[] {
-  return items.slice(0, 3)
+  return items.slice(0, 3);
 }
 
 function getFirstThreeNumbers(items: number[]): number[] {
-  return items.slice(0, 3)
+  return items.slice(0, 3);
 }
 ```
-
 
 It's a shame that we're duplicating the function just to suit the two different type-safety cases. Also, what happens if we wanted the function to also work for other types of arrays?
 
@@ -400,39 +349,30 @@ With generics, we can define our function with a "placeholder" type. Most often,
 
 Here's what our function looks like with a generic type:
 
-
-
 ```ts
 function getFirstThree<T>(items: T[]): T[] {
-  return items.slice(0, 3)
+  return items.slice(0, 3);
 }
 ```
 
-
 The generic type `T` is a placeholder for a type that we supply when we call the function. It's like a parameter for us to supply an argument to.
 
-
-
 ```ts
-getFirstThree<string>(['one', 'two', 'three', 4, 5])
+getFirstThree<string>(["one", "two", "three", 4, 5]);
 // Type 'number' is not assignable to type 'string'
 ```
-
 
 Since we're passing `string` as the type to apply to this function at call-time, the `getFirstThree` function expects an array of strings as the `items` argument and also expects to return an array of strings as well. If we pass an array of mixed types, we'll get a type error.
 
 We can now reuse this function with other types, including `number`.
 
-
-
 ```ts
-getFirstThree<string>(['one', 'two', 'three', 'four', 'five'])
+getFirstThree<string>(["one", "two", "three", "four", "five"]);
 // ['one', 'two', 'three']
 
-getFirstThree<number>([1, 2, 3, 4, 5])
+getFirstThree<number>([1, 2, 3, 4, 5]);
 // [1, 2, 3]
 ```
-
 
 ## Type Assertions
 
@@ -446,89 +386,74 @@ A type assertion is an instruction we give to the TypeScript compiler for it to 
 
 Let's say we have two types: `Person` and `Contact` and a variable that is type-hinted as `Person`.
 
-
-
 ```ts
 type Person = {
-  firstName: string
-  lastName: string
-}
+  firstName: string;
+  lastName: string;
+};
 
 type Contact = {
-  firstName: string
-  lastName: string
-  email: string
-  phone: string
-}
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+};
 
 const person: Person = {
-  firstName: 'Ryan',
-  lastName: 'Chenkie',
-}
+  firstName: "Ryan",
+  lastName: "Chenkie",
+};
 ```
-
 
 Let's also say that somewhere later in our code we have a function that is responsbile for returning an object shaped as a `Contact`. We know that we want the result of this function call to be shaped as a `Contact` because we need to access certain properties such as `email` and `phone` later on.
 
 If we tried to return `person` from this function, we'd get a type error.
 
-
-
 ```ts
 function getContact(): Contact {
-  return person
+  return person;
 }
 // Type 'Person' is missing the following properties from type 'Contact': email, phone
 ```
 
-
 We could adjust the `Contact` type to say that `email` and `phone` are nullable and then include these properties in the funtion return:
-
-
 
 ```ts
 type Contact = {
-  firstName: string
-  lastName: string
-  email: string | null
-  phone: string | null
-}
+  firstName: string;
+  lastName: string;
+  email: string | null;
+  phone: string | null;
+};
 
 function getContact(): Contact {
   return {
     ...person,
     email: null,
     phone: null,
-  }
+  };
 }
 ```
-
 
 This case is rather trivial. For real-world cases where our data and code get more complex, this approach may not be feasible.
 
 To get around this, we can tell the TypeScript compiler to treat `person` as a `Contact` _just_ this one time. To do so, we _assert_ that `person` is a `Contact`.
 
-
-
 ```ts
 function getContact(): Contact {
-  return person as Contact
+  return person as Contact;
 }
 ```
-
 
 The syntax here is fairly straight-forward: we use the `as` keyword such that the thing on the left should be "treated as" the thing on the right.
 
 The result of doing this is that we'll get `undefined` for `email` and `phone` and thus this operation is **unsound**.
 
-
-
 ```ts
-const contact = getContact()
+const contact = getContact();
 
-console.log(contact.email) // undefined
+console.log(contact.email); // undefined
 ```
-
 
 However, this might be fine for our needs. Perhaps we're rendering a list of contacts and they happen to not have an `email` or `phone` defined, we just deal with that in the render.
 
@@ -548,47 +473,38 @@ This can be useful if we can't know the type for something. It should, however, 
 
 Let's consider a function called `addOne` which takes in a number and adds `1` to it.
 
-
-
 ```ts
 function addOne(num: number): number {
-  return num + 1
+  return num + 1;
 }
 
-addOne(1) // 2
+addOne(1); // 2
 ```
-
 
 If we were to declare a variable that holds a string that should be passed to `addOne`, type inference would prevent us from doing so.
 
-
-
 ```ts
-const companyName = 'Prisma'
+const companyName = "Prisma";
 
 function addOne(num: number): number {
-  return num + 1
+  return num + 1;
 }
 
-addOne(companyName)
+addOne(companyName);
 // Argument of type 'string' is not assignable to parameter of type 'number'.
 ```
 
-
 However, if we were to apply `any` as the type for the `companyName` variable, we would get passed the type checker.
 
-
-
 ```ts
-const companyName: any = 'Prisma'
+const companyName: any = "Prisma";
 
 function addOne(num: number): number {
-  return num + 1
+  return num + 1;
 }
 
-addOne(companyName) // "Prisma1"
+addOne(companyName); // "Prisma1"
 ```
-
 
 The result from the function here is obviously not what we intend and is indeed a cause for concern since it produces a bug.
 
@@ -602,18 +518,15 @@ The `unknown` type is similar to `any` in some ways but with a key distinction: 
 
 The `unknown` type would make a good alternative for our contrived example above where we don't want to type-hint `companyName` with its proper type.
 
-
-
 ```ts
-const companyName: unknown = 'Prisma'
+const companyName: unknown = "Prisma";
 
 function addOne(num: number): number {
-  return num + 1
+  return num + 1;
 }
 
-addOne(companyName) // Argument of type 'unknown' is not assignable to parameter of type 'number'.
+addOne(companyName); // Argument of type 'unknown' is not assignable to parameter of type 'number'.
 ```
-
 
 In this example, we are able to assign a string value to a variable with type `unknown`, but we are not able to use that variable in a function that expects a `number`.
 
@@ -635,29 +548,21 @@ Let's see how to wire up Prisma in a Node.js project.
 
 Assuming you already have a TypeScript-based Node.js project, you can get started by installing the Prisma CLI.
 
-
-
 ```shell
 npm install -D @prisma/cli
 ```
-
 
 The CLI is installed as a dev dependency since we won't need it for production.
 
 With the Prisma CLI insatlled, initialize Prisma in your project.
 
-
-
 ```shell
 npx prisma init
 ```
 
-
 This will create a `prisma` directory in your project. Inside, you'll find a `schema.prisma` file. This is where you define the model for your database.
 
 Let's start with a simple SQLite database and table to hold some blog posts.
-
-
 
 ```prisma
 datasource db {
@@ -676,7 +581,6 @@ model Post {
 }
 ```
 
-
 In this schema, we're telling Prisma that we want to use SQLite as our database. SQLite is a filesystem-based database that may not be suitable for production but is great for development.
 
 > **Note**: Prisma [currently supports](https://www.prisma.io/docs/reference/database-reference/supported-databases) PostgreSQL, MySQL, MS SQL Server, and SQLite.
@@ -687,23 +591,17 @@ The `id` field has a type of `Int` which will map to the `INTEGER` type in SQLit
 
 With the model in place, run the command to create the database and wire up the table.
 
-
-
 ```shell
 npx prisma db push --preview-feature
 ```
-
 
 The `prisma db push` command does two things: it creates the `dev.db` database in the `prisma` directory and it also creates the `Post` table within.
 
 You can see this database and table working with Prisma studio.
 
-
-
 ```shell
 npx prisma studio
 ```
-
 
 ![Prisma studio entry screen](/learn-typescript-a-pocketguide-tutorial-q329XmXQHUjz/imgs/typescript-pocketguide-prisma-studio-1.png)
 ![Prisma studio Post table](/learn-typescript-a-pocketguide-tutorial-q329XmXQHUjz/imgs/typescript-pocketguide-prisma-studio-2.png)
@@ -712,57 +610,48 @@ Prisma Studio is a fully-featured database client that is useful for debugging a
 
 With the database and table in place, install [Prisma Client](https://www.prisma.io/docs/concepts/components/prisma-client) and generate it to get access to the database.
 
-
-
 ```shell
 npm install @prisma/client
 ```
-
 
 After installing the `@prisma/client` package, the Prisma Client will automatically be generated using `prisma generate`. This command is responsible for looking into the Prisma schema file and creating TypeScript types which allow for type-safe database access.
 
 In a TypeScript file within your Node.js project, import the Prisma Client and create an instance.
 
-
-
 ```ts
-import { PrismaClient, Post } from '@prisma/client'
+import { PrismaClient, Post } from "@prisma/client";
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 
 const createPost = async (): Promise<Post> => {
   return await prisma.post.create({
     data: {
-      title: 'Prisma gives you easy database type safety!',
-      body: '...',
+      title: "Prisma gives you easy database type safety!",
+      body: "...",
     },
-  })
-}
+  });
+};
 ```
-
 
 The `Post` type that is imported from `@prisma/client` was generated when the `npx prisma generate` ran. It can now be used in various places across the application. In this case, it's being applied as the type for the `Promise` that the `createPost` function returns.
 
 The value of a type-safe database client can be seen if you try to input something to the `Post` table that shouldn't be there. For example, if you try to include an author name, a type error would be raised:
 
-
-
 ```ts
 const createPost = async (): Promise<Post> => {
   return await prisma.post.create({
     data: {
-      title: 'Prisma gives you easy database type safety!',
-      body: '...',
-      author: 'Ryan Chenkie',
+      title: "Prisma gives you easy database type safety!",
+      body: "...",
+      author: "Ryan Chenkie",
       // Type '{ title: string; body: string; author: string; }' is not
       // assignable to type 'PostCreateInput'. Object literal may
       // only specify known properties, and 'author' does not exist
       // in type 'PostCreateInput'.
     },
-  })
-}
+  });
+};
 ```
-
 
 Since mistakes like this are caught before the code runs, it becomes difficult to make mistakes when it comes to data input. This is very helpful because it eliminates a whole class of potential bugs before the code is even shipped.
 
@@ -771,4 +660,3 @@ Since mistakes like this are caught before the code runs, it becomes difficult t
 Type safety is increasingly becoming a primary measure of defence for writing durable code. Making the switch from JavaScript to TypeScript can come with some stumbling blocks and points of frustration. However, using TypeScript pays dividends in the long run, especially when there's a need to make sweeping changes to a codebase and when there are many developers working within it.
 
 If you have any questions on how TypeScript can fit into your project or how you can benefit from using Prisma for type-safe database access, please feel free to reach out to us on [Twitter](https://pris.ly/x).
-

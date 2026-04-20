@@ -11,7 +11,7 @@ heroImageAlt: "How to wrap a REST API with GraphQL - A 3-step tutorial"
 ---
 
 REST APIs have been the standard for building web APIs for the past decade. In 2015, Facebook introduced a new and
-  open-source query language for APIs that comes with notable advantages compared to REST: GraphQL!
+open-source query language for APIs that comes with notable advantages compared to REST: GraphQL!
 
 Since then, many developers want to start using GraphQL but are stuck with their legacy REST APIs. In this article, we’re going to introduce a lightweight process for turning REST into GraphQL APIs. No special tooling required!
 
@@ -32,6 +32,7 @@ When using GraphQL, the core component of each API is a strongly typed [schema](
 In this article, we’ll take the example of a simple blogging application. Assume there are two models, _users_ and _posts_. There is a one-to-many relationship between them in that _one user can be associated with multiple posts_.
 
 For that example, we’d have the following endpoints:
+
 ```
 1. /users
 2. /users/<id>
@@ -40,6 +41,7 @@ For that example, we’d have the following endpoints:
 5. /blog/posts/<id>
 6. /blog/posts/<id>/user
 ```
+
 > If you want to play around with this API, you can check out the code in [this repository](https://github.com/nikolasburk/rest-demo).
 
 With this design, we’re able to query:
@@ -83,6 +85,7 @@ For example, a call to the `/users` endpoint would return a number of _user_ obj
   }
 ]
 ```
+
 ### REST API Design: Nested layout
 
 The flat API design might be preferred because its generally more slim than the nested one — however, it’s very likely that your clients will be running into the infamous N+1-requests problem with it: Imagine the client (e.g. a web app) needs to display a view with a list of users and the _titles_ of their latest post.
@@ -148,6 +151,7 @@ To circumvent this problem, you can go with a _nested_ API design. With that app
   }
 ]
 ```
+
 This is a lot more verbose but avoids that clients run into the N+1-problem.
 
 However, the nested approach certainly comes with its own problems! For APIs with larger model objects, bandwidth (especially on mobile devices) is likely to become a bottleneck. Another problematic aspect of this is the fact that clients in all likelihood won’t even need most of the data they’re downloading and thus are wasting the user’s bandwidth — this is referred to as _overfetching_.
@@ -230,6 +234,7 @@ type Post {
   author: User!
 }
 ```
+
 The SDL syntax is concise and straightforward. It allows to define _types_ with _fields_. Each field on a type also has a type. This can be a _scalar_ type like `Int` and `String` or an _object_ type like `Post` and `User`. The exclamation point following the type of a field means that this field can never be `null`.
 
 The types that we defined in that schema will be the foundation for the GraphQL API that we’re going to develop in the next step.
@@ -266,6 +271,7 @@ type Post {
   author: User!
 }
 ```
+
 To invoke the `users` query that we now added to the schema, you can put the following query into the body of an HTTP POST request that’s sent to the endpoint of the GraphQL API:
 
 ```graphql
@@ -276,6 +282,7 @@ query {
   }
 }
 ```
+
 Don’t worry, we’ll show you in a bit how you can actually _send_ that query.
 
 The neat thing here is that the fields you’re nesting under the `users` query determine what fields will be included in the JSON payload of the server’s response. This means you could remove the `name` field if you don’t need the user’s names on the client-side. Even cooler: If you like, you can also query the related `Post` items of each user with as many fields as you like, for example:
@@ -292,6 +299,7 @@ query {
   }
 }
 ```
+
 Let’s now add the second endpoint to our API:`/users/<id>`. The parameter that’s part of the URL of the REST endpoint now simply becomes an _argument_ for the field we’re introducing on the `Query` type (for brevity, we’re now omitting the `User` and `Post` types from the schema, but they’re still part of the schema):
 
 ```graphql
@@ -300,6 +308,7 @@ type Query {
   user(id: ID!): User
 }
 ```
+
 Here’s what a potential query looks like (again, we can add as many or as few fields of the `User` type as we like and thus dictate what data the server is going to return):
 
 ```graphql
@@ -313,6 +322,7 @@ query {
   }
 }
 ```
+
 As for the `/users/<id>/posts` endpoint, we actually don’t even need it because the ability to query posts of a specific user is already taken care of by the `user(id: ID!): User` field we just added. Groovy!
 
 Let’s now complete the API by adding the ability to query `Post` items. We’ll add the queries for all three REST endpoints at once:
@@ -325,6 +335,7 @@ type Query {
   post(id: ID!): Post
 }
 ```
+
 This is it — we have now created the _schema definition_ for a GraphQL API that is equivalent to the previous REST API. Next, we need to implement the resolver functions for the schema!
 
 ### A note on mutations
@@ -349,6 +360,7 @@ type Query {
   post(id: ID!): Post
 }
 ```
+
 Note that the `createUser`, `updateUser` and `deleteUser` mutations would correspond to POST, PUT and DELETE HTTP requests made against the `/users/<id>` endpoint. Implementing the resolvers for mutations is equivalent to implementing resolvers for queries, so there’s no need to learn anything new for mutations as they follow the exact same mechanics as queries — the only difference is that mutation resolvers will have side-effects.
 
 ### Step 3: Implementing resolvers for the schema
@@ -364,48 +376,50 @@ The _behaviour_ of a GraphQL API is the implementation of the schema definition 
 The implementation of the resolvers is fairly straightforward. All we do is making calls to the corresponding REST endpoints and immediately return the responses we receive:
 
 ```js
-const baseURL = `https://rest-demo-hyxkwbnhaz.now.sh`
+const baseURL = `https://rest-demo-hyxkwbnhaz.now.sh`;
 
 const resolvers = {
   Query: {
     users: () => {
-      return fetch(`${baseURL}/users`).then(res => res.json())
+      return fetch(`${baseURL}/users`).then((res) => res.json());
     },
     user: (parent, args) => {
-      const { id } = args
-      return fetch(`${baseURL}/users/${id}`).then(res => res.json())
+      const { id } = args;
+      return fetch(`${baseURL}/users/${id}`).then((res) => res.json());
     },
     posts: () => {
-      return fetch(`${baseURL}/posts`).then(res => res.json())
+      return fetch(`${baseURL}/posts`).then((res) => res.json());
     },
     post: (parent, args) => {
-      const { id } = args
-      return fetch(`${baseURL}/blog/posts/${id}`).then(res => res.json())
+      const { id } = args;
+      return fetch(`${baseURL}/blog/posts/${id}`).then((res) => res.json());
     },
   },
-}
+};
 ```
+
 For the `user` and `post` resolvers, we’re also extracting the `id` argument that’s provided in the query and include it in the URL.
 
 All you need now to get this up-and-running is to instantiate a `GraphQLServer` from the [`graphql-yoga`](https://github.com/graphcool/graphql-yoga) NPM package, pass the `resolvers` and the schema definition to it and invoke the `start` method on the `server` instance:
 
 ```js
-const { GraphQLServer } = require('graphql-yoga')
-const fetch = require('node-fetch')
+const { GraphQLServer } = require("graphql-yoga");
+const fetch = require("node-fetch");
 
-const baseURL = `https://rest-demo-hyxkwbnhaz.now.sh`
+const baseURL = `https://rest-demo-hyxkwbnhaz.now.sh`;
 
 const resolvers = {
   // ... the resolver implementation from above ...
-}
+};
 
 const server = new GraphQLServer({
-  typeDefs: './src/schema.graphql',
+  typeDefs: "./src/schema.graphql",
   resolvers,
-})
+});
 
-server.start(() => console.log(`Server is running on http://localhost:4000`))
+server.start(() => console.log(`Server is running on http://localhost:4000`));
 ```
+
 If you want to follow along, you can copy the code from the above `index.js` and `schema.graphql` snippets into corresponding files inside a `src` directory in a Node project, add `graphql-yoga` as a dependency and then run `node src/index.js`. If you do so and then open your browser at [http://localhost:4000](http://localhost:4000), you’ll see the following [GraphQL Playground](https://github.com/graphcool/graphql-playground):
 
 ![](/how-to-wrap-a-rest-api-with-graphql-8bf3fb17547d/imgs/1*sGvSvA1yKloKDpXNb3jfBw.png)
@@ -430,6 +444,7 @@ user: (parent, args) => {
   return fetch(`${baseURL}/users/${id}`).then(res => res.json())
 },
 ```
+
 The resolver only returns the data it receives from the `/users/<id>` endpoint and because we’re using the _flat_ version of the REST API, there are no associated `Post` elements! So, one way out of that problem would be to use the _nested_ version — but that’s not what we want here!
 
 A better solution is to implement a dedicated resolver for the `User` type (and in fact, for the `Post` type as well since we’ll have the same problem the other way around):
@@ -440,19 +455,22 @@ const resolvers = {
     // ... the resolver implementation from above ...
   },
   Post: {
-    author: parent => {
-      const { id } = parent
-      return fetch(`${baseURL}/blog/posts/${id}/user`).then(res => res.json())
+    author: (parent) => {
+      const { id } = parent;
+      return fetch(`${baseURL}/blog/posts/${id}/user`).then((res) =>
+        res.json(),
+      );
     },
   },
   User: {
-    posts: parent => {
-      const { id } = parent
-      return fetch(`${baseURL}/users/${id}/posts`).then(res => res.json())
+    posts: (parent) => {
+      const { id } = parent;
+      return fetch(`${baseURL}/users/${id}/posts`).then((res) => res.json());
     },
   },
-}
+};
 ```
+
 The implementation of the resolver is bug free and you can nest your queries as you wish. Pleasing!
 
 ![](/how-to-wrap-a-rest-api-with-graphql-8bf3fb17547d/imgs/1*0mbKo-p6qfrBKgAaJb0gOQ.png)
@@ -498,4 +516,3 @@ Wrapping REST APIs with GraphQL is probably one of the most exciting application
 If you’d like to explore this area yourself, you can already check out the [graphql-binding-openapi](https://github.com/graphql-binding/graphql-binding-openapi) package which allows to automatically generate GraphQL APIs (in the form of a [GraphQL binding](https://github.com/dotansimha/graphql-binding)) based on a Swagger / Open API specification.
 
 > The sample code code that was used in this article can be found in these repositories: [rest-demo](https://github.com/nikolasburk/rest-demo) and [graphql-rest-wrapper](https://github.com/nikolasburk/graphql-rest-wrapper)
-

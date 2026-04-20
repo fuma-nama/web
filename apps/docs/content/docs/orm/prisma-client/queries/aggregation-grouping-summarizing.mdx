@@ -1,9 +1,9 @@
 ---
-title: 'Aggregation, grouping, and summarizing'
-description: 'Use Prisma Client to aggregate, group by, count, and select distinct.'
+title: "Aggregation, grouping, and summarizing"
+description: "Use Prisma Client to aggregate, group by, count, and select distinct."
 url: /orm/prisma-client/queries/aggregation-grouping-summarizing
-metaTitle: 'Aggregation, grouping, and summarizing (Concepts)'
-metaDescription: 'Use Prisma Client to aggregate, group by, count, and select distinct.'
+metaTitle: "Aggregation, grouping, and summarizing (Concepts)"
+metaDescription: "Use Prisma Client to aggregate, group by, count, and select distinct."
 ---
 
 Prisma Client allows you to count records, aggregate number fields, and select distinct field values.
@@ -17,7 +17,7 @@ const aggregations = await prisma.user.aggregate({
   _avg: { age: true },
 });
 
-console.log('Average age:' + aggregations._avg.age);
+console.log("Average age:" + aggregations._avg.age);
 ```
 
 You can combine aggregation with filtering and ordering. For example, the following query returns the average age of users:
@@ -31,14 +31,14 @@ const aggregations = await prisma.user.aggregate({
   _avg: { age: true },
   where: {
     email: {
-      contains: 'prisma.io',
+      contains: "prisma.io",
     },
   },
-  orderBy: { age: 'asc' },
+  orderBy: { age: "asc" },
   take: 10,
 });
 
-console.log('Average age:' + aggregations._avg.age);
+console.log("Average age:" + aggregations._avg.age);
 ```
 
 ### Aggregate values are nullable
@@ -76,7 +76,7 @@ The following example groups all users by the `country` field and returns the to
 
 ```ts
 const groupUsers = await prisma.user.groupBy({
-  by: ['country'],
+  by: ["country"],
   _sum: { profileViews: true },
 });
 ```
@@ -92,7 +92,7 @@ If you have a single element in the `by` option, you can use the following short
 
 ```ts
 const groupUsers = await prisma.user.groupBy({
-  by: 'country',
+  by: "country",
 });
 ```
 
@@ -106,12 +106,12 @@ Use `where` to filter all records **before grouping**. The following example gro
 
 ```ts
 const groupUsers = await prisma.user.groupBy({
-  by: ['country'],
+  by: ["country"],
   where: {
     // [!code highlight]
     email: {
       // [!code highlight]
-      contains: 'prisma.io', // [!code highlight]
+      contains: "prisma.io", // [!code highlight]
     }, // [!code highlight]
   }, // [!code highlight]
   _sum: {
@@ -126,13 +126,13 @@ Use `having` to filter **entire groups** by an aggregate value such as the sum o
 
 ```ts
 const groupUsers = await prisma.user.groupBy({
-  by: ['country'],
+  by: ["country"],
   where: {
     email: {
-      contains: 'prisma.io',
+      contains: "prisma.io",
     },
   },
-  _sum: { profileViews: true, },
+  _sum: { profileViews: true },
   having: {
     // [!code highlight]
     profileViews: {
@@ -154,11 +154,11 @@ For example, the following query groups all users that are _not_ from Sweden or 
 
 ```ts
 const fd = await prisma.user.groupBy({
-  by: ['country'],
+  by: ["country"],
   where: {
     country: {
       // [!code highlight]
-      notIn: ['Sweden', 'Ghana'], // [!code highlight]
+      notIn: ["Sweden", "Ghana"], // [!code highlight]
     }, // [!code highlight]
   },
   _sum: {
@@ -178,11 +178,11 @@ The following query technically achieves the same result, but excludes users fro
 
 ```ts
 const groupUsers = await prisma.user.groupBy({
-  by: ['country'],
+  by: ["country"],
   where: {
     country: {
       // [!code highlight]
-      not: 'Sweden', // [!code highlight]
+      not: "Sweden", // [!code highlight]
     }, // [!code highlight]
   },
   _sum: {
@@ -191,7 +191,7 @@ const groupUsers = await prisma.user.groupBy({
   having: {
     country: {
       // [!code highlight]
-      not: 'Ghana', // [!code highlight]
+      not: "Ghana", // [!code highlight]
     }, // [!code highlight]
     profileViews: {
       _min: {
@@ -218,13 +218,13 @@ You can **order by aggregate group**. The following example sorts each `city` gr
 
 ```ts
 const groupBy = await prisma.user.groupBy({
-  by: ['city'],
+  by: ["city"],
   _count: {
     city: true,
   },
   orderBy: {
     _count: {
-      city: 'desc',
+      city: "desc",
     },
   },
 });
@@ -244,12 +244,12 @@ The following query orders groups by country, skips the first two groups, and re
 
 ```ts
 const groupBy = await prisma.user.groupBy({
-  by: ['country'],
+  by: ["country"],
   _sum: {
     profileViews: true,
   },
   orderBy: {
-    country: 'desc',
+    country: "desc",
   },
   skip: 2,
   take: 2,
@@ -391,7 +391,7 @@ await prisma.user.findMany({
   select: {
     _count: {
       select: {
-        posts: { where: { title: 'Hello!' } },
+        posts: { where: { title: "Hello!" } },
       },
     },
   },
@@ -408,7 +408,7 @@ await prisma.user.findMany({
     _count: {
       select: {
         posts: {
-          where: { comments: { some: { author: { is: { name: 'Alice' } } } } },
+          where: { comments: { some: { author: { is: { name: "Alice" } } } } },
         },
       },
     },
@@ -469,7 +469,7 @@ The following example returns all fields for all `User` records with distinct `n
 ```ts
 const result = await prisma.user.findMany({
   where: {},
-  distinct: ['name'],
+  distinct: ["name"],
 });
 ```
 
@@ -477,7 +477,7 @@ The following example returns distinct `role` field values (for example, `ADMIN`
 
 ```ts
 const distinctRoles = await prisma.user.findMany({
-  distinct: ['role'],
+  distinct: ["role"],
   select: {
     role: true,
   },
@@ -537,9 +537,9 @@ model Play {
 
 ```ts
 const distinctScores = await prisma.play.findMany({
-  distinct: ['playerId', 'gameId'],
+  distinct: ["playerId", "gameId"],
   orderBy: {
-    score: 'desc',
+    score: "desc",
   },
   select: {
     score: true,

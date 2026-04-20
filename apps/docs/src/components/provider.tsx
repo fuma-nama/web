@@ -4,8 +4,6 @@ import { NextProvider } from "fumadocs-core/framework/next";
 import { KapaProvider } from "@kapaai/react-sdk";
 import CustomSearchDialog from "@/components/search";
 import type { ReactNode } from "react";
-import { source } from "@/lib/source";
-import { TreeContextProvider } from "fumadocs-ui/contexts/tree";
 import { TrackingProvider } from "@/components/tracking-provider";
 
 const KAPA_INTEGRATION_ID = "1b51bb03-43cc-4ef4-95f1-93288a91b560";

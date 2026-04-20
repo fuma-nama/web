@@ -14,12 +14,12 @@ Common questions about how Prisma Postgres works, how queries are billed, and ho
 
 Yes, you can use Prisma Postgres with any database library or tool via a [direct connection](/postgres/database/connection-pooling).
 
-You can find examples of using Prisma Postgres with various ORMs below: 
+You can find examples of using Prisma Postgres with various ORMs below:
+
 - [Prisma ORM](https://github.com/prisma/prisma-examples/tree/latest/databases/prisma-postgres)
 - [Drizzle](https://github.com/prisma/prisma-examples/tree/latest/databases/drizzle-prisma-postgres)
 - [Kysely](https://github.com/prisma/prisma-examples/tree/latest/databases/kysely-prisma-postgres)
 - [TypeORM](https://github.com/prisma/prisma-examples/tree/latest/databases/typeorm-prisma-postgres)
-
 
 ### How do I switch from GitHub login to email and password login?
 
@@ -258,7 +258,6 @@ Under the hood, Prisma Postgres's cache layer uses Cloudflare, which uses [Anyca
 ### How can I invalidate a cache for Prisma Postgres?
 
 You can invalidate the cache on-demand via the [`$accelerate.invalidate` API](/accelerate/reference/api-reference#accelerateinvalidate) if you're on a [paid plan](https://www.prisma.io/pricing#accelerate), or you can invalidate your entire cache, on a project level, a maximum of five times a day. This limit is set based on [your plan](https://www.prisma.io/pricing). You can manage this via the Accelerate configuration page.
-
 
 ### How is Prisma Postgres's caching layer different from other caching tools, such as Redis?
 

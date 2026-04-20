@@ -132,22 +132,26 @@ const [userList, updateUser] = await prisma.$transaction([
 ```
 
 ```ts tab="MongoDB"
-const [findRawData, aggregateRawData, commandRawData] = await prisma.$transaction([
-  prisma.user.findRaw({
-    filter: { age: { $gt: 25 } },
-  }),
-  prisma.user.aggregateRaw({
-    pipeline: [
-      { $match: { status: "registered" } },
-      { $group: { _id: "$country", total: { $sum: 1 } } },
-    ],
-  }),
-  prisma.$runCommandRaw({
-    aggregate: "User",
-    pipeline: [{ $match: { name: "Bob" } }, { $project: { email: true, _id: false } }],
-    explain: false,
-  }),
-]);
+const [findRawData, aggregateRawData, commandRawData] =
+  await prisma.$transaction([
+    prisma.user.findRaw({
+      filter: { age: { $gt: 25 } },
+    }),
+    prisma.user.aggregateRaw({
+      pipeline: [
+        { $match: { status: "registered" } },
+        { $group: { _id: "$country", total: { $sum: 1 } } },
+      ],
+    }),
+    prisma.$runCommandRaw({
+      aggregate: "User",
+      pipeline: [
+        { $match: { name: "Bob" } },
+        { $project: { email: true, _id: false } },
+      ],
+      explain: false,
+    }),
+  ]);
 ```
 
 Instead of immediately awaiting the result of each operation when it's performed, the operation itself is stored in a variable first which later is submitted to the database with a method called `$transaction`. Prisma Client will ensure that either all three `create` operations succeed or none of them succeed.
@@ -164,7 +168,10 @@ For example:
 
 ```ts
 await prisma.$transaction(
-  [prisma.resource.deleteMany({ where: { name: "name" } }), prisma.resource.createMany({ data })],
+  [
+    prisma.resource.deleteMany({ where: { name: "name" } }),
+    prisma.resource.createMany({ data }),
+  ],
   {
     isolationLevel: Prisma.TransactionIsolationLevel.Serializable, // optional, default defined by database configuration
   },
