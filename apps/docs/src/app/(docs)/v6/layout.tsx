@@ -1,10 +1,9 @@
 import { baseOptions } from "@/lib/layout.shared";
 import { VersionSwitcher } from "@/components/version-switcher";
-import type { LinkItemType } from "fumadocs-ui/layouts/shared";
+import type { LinkItemType } from "@/components/layout/shared";
 import { DocsLayout } from "@/components/layout/notebook";
 import { getSource } from "@/lib/source";
 import { DiscordIcon } from "@/components/icons/discord";
-import { NavOptions } from "@/components/layout/shared";
 
 export default async function Layout({
   children,
@@ -70,7 +69,7 @@ export default async function Layout({
     <DocsLayout
       {...base}
       links={navbarLinks}
-      nav={{ ...nav } as NavOptions}
+      nav={{ ...nav }}
       sidebar={{ collapsible: false }}
       tree={source.pageTree}
     >

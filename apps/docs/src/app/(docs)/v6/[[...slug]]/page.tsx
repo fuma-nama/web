@@ -40,10 +40,12 @@ export default async function Page({
   const { body, toc } = await render(
     getMDXComponents({
       // this allows you to link to other pages with relative file paths
-      a: createRelativeLink(source as never, page),
-      // @ts-ignore - _pageContext is a special prop used by our components
-      _pageContext: { folder: page.slugs.join("/"), version: "v6" },
+      a: createRelativeLink(source, page),
     }),
+    {
+      //_pageContext is a special prop used by our components
+      _pageContext: { folder: page.slugs.join("/"), version: "v6" },
+    },
   );
 
   return (

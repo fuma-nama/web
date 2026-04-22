@@ -2,7 +2,7 @@ import type { ComponentProps } from "react";
 import { getSource } from "@/lib/source";
 import { baseOptions, links } from "@/lib/layout.shared";
 import { VersionSwitcher } from "@/components/version-switcher";
-import type { LinkItemType } from "fumadocs-ui/layouts/shared";
+import type { LinkItemType } from "@/components/layout/shared";
 import { DocsLayout } from "@/components/layout/notebook";
 import { LATEST_VERSION } from "@/lib/version";
 import { StatusIndicator } from "@/components/status-indicator";
@@ -63,7 +63,7 @@ export default async function Layout({
       <DocsLayout
         {...base}
         links={navbarLinks}
-        nav={{ ...nav } as NavOptions}
+        nav={{ ...nav }}
         sidebar={{
           collapsible: false,
           components: { Item: SidebarBadgeItem },

@@ -6,6 +6,7 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import Script from "next/script";
 import { FontAwesomeScript as EclipseFA } from "@prisma/eclipse";
+import { DevClient } from "@fumadocs/local-md/dev/react-client";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -49,7 +50,10 @@ export default function Layout({ children }: { children: ReactNode }) {
         />
       </head>
       <body className="flex flex-col min-h-screen">
-        <Provider>{children}</Provider>
+        <Provider>
+          {process.env.NODE_ENV === "development" && <DevClient />}
+          {children}
+        </Provider>
         <Script
           async
           src="https://cdn.tolt.io/tolt.js"

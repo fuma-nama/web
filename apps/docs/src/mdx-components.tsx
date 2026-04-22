@@ -40,8 +40,6 @@ function withDocsBasePathForImageSrc(src: unknown): unknown {
 }
 
 export function getMDXComponents(components?: MDXComponents): MDXComponents {
-  const pageContext = (components as any)?._pageContext;
-
   return {
     ...(icons as unknown as MDXComponents),
     ...defaultMdxComponents,

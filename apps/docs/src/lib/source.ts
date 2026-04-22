@@ -1,6 +1,6 @@
 import { lucideIconsPlugin } from "fumadocs-core/source/lucide-icons";
 import { openapiPlugin } from "fumadocs-openapi/server";
-import { localMd } from "@fumadocs/local-md";
+import { localMd, type MDXProcessorOptions } from "@fumadocs/local-md";
 import { pageSchema } from "fumadocs-core/source/schema";
 import z from "zod";
 import remarkDirective from "remark-directive";
@@ -12,6 +12,39 @@ import {
 import { dynamicLoader } from "fumadocs-core/source/dynamic";
 import remarkConsoleUtm from "@/lib/remark-console-utm";
 
+const mdxOptions: MDXProcessorOptions = {
+  remarkPlugins: [
+    remarkDirective,
+    [remarkImage, { useImport: false }],
+    [
+      remarkDirectiveAdmonition,
+      {
+        types: {
+          note: "info",
+          tip: "info",
+          info: "info",
+          warn: "warning",
+          warning: "warning",
+          danger: "error",
+          success: "success",
+          ppg: "ppg",
+          error: "error",
+        },
+      },
+    ],
+    remarkMdxFiles,
+    remarkConsoleUtm,
+  ],
+  remarkCodeTabOptions: {
+    parseMdx: true,
+  },
+  remarkNpmOptions: {
+    persist: {
+      id: "package-manager",
+    },
+  },
+};
+
 const docs = localMd({
   dir: "content/docs",
   frontmatterSchema: pageSchema.extend({
@@ -22,38 +55,7 @@ const docs = localMd({
     metaDescription: z.string(),
     aiPrompt: z.string().optional(),
   }),
-  mdxOptions: {
-    remarkPlugins: [
-      remarkDirective,
-      [remarkImage, { useImport: false }],
-      [
-        remarkDirectiveAdmonition,
-        {
-          types: {
-            note: "info",
-            tip: "info",
-            info: "info",
-            warn: "warning",
-            warning: "warning",
-            danger: "error",
-            success: "success",
-            ppg: "ppg",
-            error: "error",
-          },
-        },
-      ],
-      remarkMdxFiles,
-      remarkConsoleUtm,
-    ],
-    remarkCodeTabOptions: {
-      parseMdx: true,
-    },
-    remarkNpmOptions: {
-      persist: {
-        id: "package-manager",
-      },
-    },
-  },
+  mdxOptions,
 });
 
 // v6 docs collection
@@ -67,39 +69,13 @@ const docsV6 = localMd({
     metaDescription: z.string().optional(),
     aiPrompt: z.string().optional(),
   }),
-  mdxOptions: {
-    remarkPlugins: [
-      remarkDirective,
-      [remarkImage, { useImport: false }],
-      [
-        remarkDirectiveAdmonition,
-        {
-          types: {
-            note: "info",
-            tip: "info",
-            info: "info",
-            warn: "warning",
-            warning: "warning",
-            danger: "error",
-            success: "success",
-            ppg: "ppg",
-            error: "error",
-          },
-        },
-      ],
-      remarkMdxFiles,
-      remarkConsoleUtm,
-    ],
-    remarkCodeTabOptions: {
-      parseMdx: true,
-    },
-    remarkNpmOptions: {
-      persist: {
-        id: "package-manager",
-      },
-    },
-  },
+  mdxOptions,
 });
+
+if (process.env.NODE_ENV === "development") {
+  void docs.devServer();
+  void docsV6.devServer();
+}
 
 // See https://fumadocs.dev/docs/headless/source-api for more info
 const source = dynamicLoader(docs.dynamicSource(), {
